@@ -95,6 +95,20 @@
     
     
     
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    
     
     <title>
         
@@ -138,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -154,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/2021/04/23/tracking/transform-tracking/" class="toc-header">Table of Contents</a>
+            <a href="/2021/04/23/tracking/transform-tracking/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Transformer-Tracking"><span class="toc-number">1.</span> <span class="toc-text">Transformer Tracking</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%9C%BA"><span class="toc-number">1.1.</span> <span class="toc-text">动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">结构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Transformer-Meets-Tracker-Exploiting-Temporal-Context-for-Robust-Visual-Tracking"><span class="toc-number">2.</span> <span class="toc-text">Transformer Meets Tracker: Exploiting Temporal Context for Robust Visual Tracking</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%9C%BA-1"><span class="toc-number">2.1.</span> <span class="toc-text">动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84-1"><span class="toc-number">2.2.</span> <span class="toc-text">结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%9F%E8%B8%AA%E6%A1%86%E6%9E%B6"><span class="toc-number">2.2.1.</span> <span class="toc-text">跟踪框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%BA%E7%82%B9"><span class="toc-number">2.2.2.</span> <span class="toc-text">缺点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Learning-Spatio-Temporal-Transformer-for-Visual-Tracking"><span class="toc-number">3.</span> <span class="toc-text">Learning Spatio-Temporal Transformer for Visual Tracking</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%9C%BA-2"><span class="toc-number">3.1.</span> <span class="toc-text">动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84-2"><span class="toc-number">3.2.</span> <span class="toc-text">结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Baseline-spatial-only"><span class="toc-number">3.2.1.</span> <span class="toc-text">Baseline (spatial-only)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spatio-Temporal-Transformer-Tracking"><span class="toc-number">3.2.2.</span> <span class="toc-text">Spatio-Temporal Transformer Tracking</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E6%96%87%E7%BB%93%E6%9E%84%E4%B8%8EDETR%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">3.2.3.</span> <span class="toc-text">本文结构与DETR的区别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Target-Transformed-Regression-for-Accurate-Tracking"><span class="toc-number">4.</span> <span class="toc-text">Target Transformed Regression for Accurate Tracking</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%9C%BA-3"><span class="toc-number">4.1.</span> <span class="toc-text">动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E6%9E%84-3"><span class="toc-number">4.2.</span> <span class="toc-text">结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B6%88%E8%9E%8D%E5%AE%9E%E9%AA%8C"><span class="toc-number">4.3.</span> <span class="toc-text">消融实验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A5%E5%85%85"><span class="toc-number">4.4.</span> <span class="toc-text">补充</span></a></li></ol></li></ol>
             </div>
@@ -179,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -247,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2021-04-23
+      发布于:&nbsp;2021-04-23
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-04-23
+      更新于:&nbsp;2021-04-23
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -402,6 +416,51 @@
 </v-card>
 
 
+
+    <v-card class="comment-card elevation-2">
+        <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
+            
+                <v-tab><span id="comment-tab-0">g</span></v-tab>
+            
+                <v-tab><span id="comment-tab-1">i</span></v-tab>
+            
+                <v-tab><span id="comment-tab-2">t</span></v-tab>
+            
+                <v-tab><span id="comment-tab-3">a</span></v-tab>
+            
+                <v-tab><span id="comment-tab-4">l</span></v-tab>
+            
+                <v-tab><span id="comment-tab-5">k</span></v-tab>
+            
+        </v-tabs>
+        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOiJnaXRhbGsiLCJnaXRhbGtfY2xpZW50X2lkIjoiNjk0NTEyYzU2MWU3ZDY0MjEzOWYiLCJnaXRhbGtfY2xpZW50X3NlY3JldCI6IjIxNjkyOTE0ZGFiNmFiYThiOWU2Y2Q1MmU2NmVhZGNhMTAyMjY2ZWIiLCJnaXRhbGtfcmVwbyI6ImtvbmdiaWEuZ2l0aHViLmlvIiwiZ2l0YWxrX293bmVyIjoia29uZ2JpYSIsImdpdGFsa19zaWRfdHlwZSI6bnVsbCwiZ2l0YWxrX2Rpc3RyYWN0aW9uRnJlZU1vZGUiOnRydWUsImRpc3F1c19zaG9ydG5hbWUiOm51bGwsImxpdmVyZV9kYXRhX3VpZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfaWQiOm51bGwsInZhbGluZV9sZWFuY2xvdWRfYXBwX2tleSI6bnVsbCwidmFsaW5lX29wdGlvbiI6bnVsbCwiY2hhbmd5YW5fYXBwX2lkIjpudWxsLCJjaGFuZ3lhbl9hcHBfa2V5IjpudWxsLCJjaGFuZ3lhbl9zaWRfdHlwZSI6bnVsbH0= >
+            
+                <v-tab-item eager=true>
+                    
+                </v-tab-item>
+            
+                <v-tab-item eager=true>
+                    
+                </v-tab-item>
+            
+                <v-tab-item eager=true>
+                    
+                </v-tab-item>
+            
+                <v-tab-item eager=true>
+                    
+                </v-tab-item>
+            
+                <v-tab-item eager=true>
+                    
+                </v-tab-item>
+            
+                <v-tab-item eager=true>
+                    
+                </v-tab-item>
+            
+        </v-tabs-items>
+    </v-card>
 
         
                             <div id="mobile-footer" class="d-block d-md-none">
