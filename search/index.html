@@ -41,8 +41,8 @@
     
     
     <title>
-          
-            CV home
+        
+            search | CV home
         
     </title>
     
@@ -192,34 +192,18 @@
   </v-col>
 </v-row>
 
-                            
-<v-card class="elevation-2 index-card">
-    <v-timeline class="timeline" dense>
+                            <v-card class="elevation-2 post-card">
+    <div class="post-header">
+        <a class="post-header-title font-weight-medium" href="/search/index.html">Search</a>
+    </div>
+    <div class="post-content typo">
         
-            
-            
-                <v-timeline-item class="timeline-header" color="secondary lighten-2">
-                    <a href="/archives/2021" class="timeline-title">2021</a>
-                    <span class="timeline-subtitle">Archives</span>
-                </v-timeline-item>
-                
-            
-            <v-timeline-item fill-dot small color="secondary lighten-2">
-                <div class="timeline-item-post d-none d-md-block">
-                    <span class="timeline-item-time">2021.04.23</span>
-                    <a href="/2021/04/23/tracking/transform-tracking/" class="timeline-item-title">Transform与目标跟踪</a>
-                </div>
-                <div class="timeline-item-post-mobile d-block d-md-none">
-                    <span class="timeline-item-time">2021.04.23</span><br>
-                    <a href="/2021/04/23/tracking/transform-tracking/" class="timeline-item-title">Transform与目标跟踪</a>
-                </div>
-                <v-divider></v-divider>
-            </v-timeline-item>
+            <v-text-field label="Search" v-model="searchPageValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchPageValue,true)"></v-text-field>
+            <v-card class="elevation-0" id="search-result"></v-card>
         
-    </v-timeline>
+    </div>
 </v-card>
-
-         
+        
                             <div id="mobile-footer" class="d-block d-md-none">
                                 <v-divider></v-divider>
                                 <div id="mobile-footer-content">
