@@ -39,16 +39,10 @@
     
     
     
-        
-    
-        
-    
-        
-    
-        
-    
-        
-    
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+            <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+            <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
         
     
 
@@ -249,42 +243,14 @@
     <v-card class="comment-card elevation-2">
         <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
             
-                <v-tab><span id="comment-tab-0">g</span></v-tab>
-            
-                <v-tab><span id="comment-tab-1">i</span></v-tab>
-            
-                <v-tab><span id="comment-tab-2">t</span></v-tab>
-            
-                <v-tab><span id="comment-tab-3">a</span></v-tab>
-            
-                <v-tab><span id="comment-tab-4">l</span></v-tab>
-            
-                <v-tab><span id="comment-tab-5">k</span></v-tab>
+                <v-tab><span id="comment-tab-0">gitalk</span></v-tab>
             
         </v-tabs>
-        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOiJnaXRhbGsiLCJnaXRhbGtfY2xpZW50X2lkIjoiNjk0NTEyYzU2MWU3ZDY0MjEzOWYiLCJnaXRhbGtfY2xpZW50X3NlY3JldCI6IjIxNjkyOTE0ZGFiNmFiYThiOWU2Y2Q1MmU2NmVhZGNhMTAyMjY2ZWIiLCJnaXRhbGtfcmVwbyI6ImtvbmdiaWEuZ2l0aHViLmlvIiwiZ2l0YWxrX293bmVyIjoia29uZ2JpYSIsImdpdGFsa19zaWRfdHlwZSI6bnVsbCwiZ2l0YWxrX2Rpc3RyYWN0aW9uRnJlZU1vZGUiOnRydWUsImRpc3F1c19zaG9ydG5hbWUiOm51bGwsImxpdmVyZV9kYXRhX3VpZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfaWQiOm51bGwsInZhbGluZV9sZWFuY2xvdWRfYXBwX2tleSI6bnVsbCwidmFsaW5lX29wdGlvbiI6bnVsbCwiY2hhbmd5YW5fYXBwX2lkIjpudWxsLCJjaGFuZ3lhbl9hcHBfa2V5IjpudWxsLCJjaGFuZ3lhbl9zaWRfdHlwZSI6bnVsbH0= >
+        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOlsiZ2l0YWxrIl0sImdpdGFsa19jbGllbnRfaWQiOiI2OTQ1MTJjNTYxZTdkNjQyMTM5ZiIsImdpdGFsa19jbGllbnRfc2VjcmV0IjoiMjE2OTI5MTRkYWI2YWJhOGI5ZTZjZDUyZTY2ZWFkY2ExMDIyNjZlYiIsImdpdGFsa19yZXBvIjoia29uZ2JpYS5naXRodWIuaW8iLCJnaXRhbGtfb3duZXIiOiJrb25nYmlhIiwiZ2l0YWxrX3NpZF90eXBlIjpudWxsLCJnaXRhbGtfZGlzdHJhY3Rpb25GcmVlTW9kZSI6dHJ1ZSwiZGlzcXVzX3Nob3J0bmFtZSI6bnVsbCwibGl2ZXJlX2RhdGFfdWlkIjpudWxsLCJ2YWxpbmVfbGVhbmNsb3VkX2FwcF9pZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfa2V5IjpudWxsLCJ2YWxpbmVfb3B0aW9uIjpudWxsLCJjaGFuZ3lhbl9hcHBfaWQiOm51bGwsImNoYW5neWFuX2FwcF9rZXkiOm51bGwsImNoYW5neWFuX3NpZF90eXBlIjpudWxsfQ== >
             
                 <v-tab-item eager=true>
                     
-                </v-tab-item>
-            
-                <v-tab-item eager=true>
-                    
-                </v-tab-item>
-            
-                <v-tab-item eager=true>
-                    
-                </v-tab-item>
-            
-                <v-tab-item eager=true>
-                    
-                </v-tab-item>
-            
-                <v-tab-item eager=true>
-                    
-                </v-tab-item>
-            
-                <v-tab-item eager=true>
+                        <div id="gitalk-container"></div>
                     
                 </v-tab-item>
             
