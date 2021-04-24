@@ -314,9 +314,9 @@
 <p>Line 5-6 将当前帧结果 $ det_{S_t} $ 与上一帧结果 $ det_{S_{t-1}} $ 送入redetection head计算每一对检测结果的相似性得分（为了减少计算，仅把当前帧与上一帧框的归一化空间距离小于 r 时才送入head计算，否则相似性得分设为负无穷。如图2，上一帧有3个结果，当前帧有2个结果，理论上两两之间应该计算6个相似得分，但通过框的空间距离约束，实际参与相似得分计算的只有4组）；</p>
 <p>Line 7-20 扩展tracklets。遍历当前帧的检测结果 $d_t \in det_{S_t}$ 加入tracklet需要满足：</p>
 <ol>
-<li> 当前结果 $d_t$ 与上一帧结果 $ \hat{d}<em>{t-1} $ 的最大相似性得分 $s</em>{1}$ 大于阈值 $\alpha$</li>
-<li>当前帧没有其他检测结果与 $ \hat{d}<em>{t-1} $ 具有同样高的相似性，即当前帧除 $d_t$ 以外的结果与 $ \hat{d}</em>{t-1} $ 的相似性要满足 $s_{2} \leq s_{1}-\beta$</li>
-<li> 上一帧没有其他检测结果与当前的 $d_t$ 具有同样高的相似性，即上一帧除 $ \hat{d}<em>{t-1} $ 以外的结果与 $d_t$ 的相似性要满足 $s</em>{3} \leq s_{1}-\beta$</li>
+<li> 当前结果 $d_t$ 与上一帧结果 $\hat{d} _ {t-1}$ 的最大相似性得分 $s_{1}$ 大于阈值 $\alpha$</li>
+<li>当前帧没有其他检测结果与 $ \hat{d} _ {t-1} $ 具有同样高的相似性，即当前帧除 $d_t$ 以外的结果与 $ \hat{d} _ {t-1} $ 的相似性要满足 $s_{2} \leq s_{1}-\beta$</li>
+<li> 上一帧没有其他检测结果与当前的 $d_t$ 具有同样高的相似性，即上一帧除 $ \hat{d} _ {t-1} $ 以外的结果与 $d_t$ 的相似性要满足 $s_{3} \leq s_{1}-\beta$</li>
 </ol>
 <ul>
 <li><strong>Scoring</strong>  </li>
@@ -339,9 +339,9 @@
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111909.png"></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111922.png"></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424112042.png"></p>
-<p><img src="C:%5CUsers%5Czjp%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210424112017892.png" alt="image-20210424112017892"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424113951.png"></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111947.png"></p>
-<p><img src="C:%5CUsers%5Czjp%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20210424112111780.png" alt="image-20210424112111780"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424114012.png"></p>
 <p>消融实验比较了 使用hard example mining的效果，TPDA与直接使用每一帧最大的重检测得分(Argmax)的对比，和专门用于测试VOT2018的short-term版本；以及改变backbone和ROI的参数量来提速的验证。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文最大的贡献在于将两阶段结构和重检测用于跟踪，设计了一套适合长时跟踪的算法。两阶段结构在SPM-Tracker已经证明了其对于鲁棒性和判别性之间有较好的平衡；而重检测这类检索的方法同样对于目标变化的适应性更强。整套算法做的非常完善，美中不足在于速度太慢。</p>
 <p>P.S. SiamRCNN很长一段时间都作为各类跟踪数据集的天花板，直到CVPR2021各类transform架构的跟踪算法出现后才被超过，可以参考 <a target="_blank" rel="noopener" href="https://kongbia.github.io/2021/04/23/tracking/transform-tracking/">Transform与目标跟踪</a></p>
