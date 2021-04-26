@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Transform与目标跟踪</title>
+    <url>/2021/04/23/tracking/33-transform-tracking/</url>
+    <content><![CDATA[<p>Transform在视觉领域遍地开花，终于目标跟踪也没能逃过。并行的长距离依赖（空间和时间皆可）对于目标跟踪似乎有着天然的优势，本篇笔记简要概述今年CVPR2021关于Transform在目标跟踪中的应用，主要介绍动机和结构，细节和实验部分以后有空再补充。</p>
+<span id="more"></span>
+
+<p>论文列表：</p>
+<ul>
+<li>Transformer Tracking</li>
+<li>Transformer Meets Tracker: Exploiting Temporal Context for Robust Visual Tracking</li>
+<li>Learning Spatio-Temporal Transformer for Visual Tracking</li>
+<li>Target Transformed Regression for Accurate Tracking</li>
+</ul>
+<h1 id="Transformer-Tracking"><a href="#Transformer-Tracking" class="headerlink" title="Transformer Tracking"></a>Transformer Tracking</h1><p><a href="https://arxiv.org/abs/2103.15436">论文</a><br><a href="https://github.com/chenxin-dlut/TransT">代码</a><br><a href="http://naotu.baidu.com/file/0348e011f8d04a784134e3329a328076?token=53a180e3aa5251ab">代码框架解析</a></p>
+<h2 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h2><p>跟踪中常用的correlation存在问题：<br>是一个局部线性匹配过程，没有利用全局上下文，容易陷入局部最优；<br>得到的相似图丢失一定程度的语义信息，导致对目标边界预测不准。</p>
+<p>利用transform的attention有效融合模板特征和ROI特征，相比correlation能产生更多的语义特征。作者提出了基于self-attention的ego-context augment module (ECA)和基于cross-attention的cross-feature augment module (CFA)<br><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/1.png"></p>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><p>重复N=4次fusion layer最后再接一个CFA<br><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/2.png"></p>
+<center>整体跟踪框架</center>
+
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/3.png"></p>
+<center>ECA和CFA结构</center>
+
+<p>transform工作过程</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/4.png"></p>
+<ul>
+<li>n=1 self search 没有来自模板的信息，因此会看到所有目标，而self template关注模板的关键信息（蚂蚁上的红点）；cross search和template同时具有目标和搜索的特征，因此可以更关注重要信息；</li>
+<li>n=2 每一个attention输入都同时包含目标和搜索特征，self search对相似物的响应被抑制了，而cross search此时非常确信其预测。template的注意力此时开始关注目标边界；</li>
+<li>n=3 进一步强化，模板特征成为包含大量目标边界信息的信息库，而搜索区域特征保留了目标的空间信息；</li>
+<li>n=4 模板的分布变得混乱，这可能是因为，在目标确定之后，模板分支的特征不再需要保留模板本身的信息，而是存储了大量目标的边界信息，成为一个为回归服务的特征库。</li>
+</ul>
+<hr>
+<h1 id="Transformer-Meets-Tracker-Exploiting-Temporal-Context-for-Robust-Visual-Tracking"><a href="#Transformer-Meets-Tracker-Exploiting-Temporal-Context-for-Robust-Visual-Tracking" class="headerlink" title="Transformer Meets Tracker: Exploiting Temporal Context for Robust Visual Tracking"></a>Transformer Meets Tracker: Exploiting Temporal Context for Robust Visual Tracking</h1><p><a href="https://arxiv.org/abs/2103.11681">论文</a><br><a href="https://github.com/594422814/TransformerTrack">代码</a></p>
+<h2 id="动机-1"><a href="#动机-1" class="headerlink" title="动机"></a>动机</h2><p>现有的跟踪器常常忽略连续帧之间的 temporal contexts</p>
+<ol>
+<li><p>单帧独立检测方法： 对时域信息的利用只有运动先验（余弦窗）</p>
+</li>
+<li><p>模型更新方法：视频帧是独立的，没有相互推理关系；噪声会污染模型更新</p>
+</li>
+</ol>
+<p>transform中的注意机制，能够建立跨帧的像素对应关系，在时间域内自由传递各种信号。</p>
+<p>本文将各个独立的视频帧进行桥接，并通过 transformer 架构来探索它们之间的 temporal contexts，以实现鲁棒的目标跟踪。与经典的 transformer 的结构不同，作者将其编码器和解码器分离成两个平行的分支，并在 Siamese-like 跟踪管道中对其精心设计。</p>
+<h2 id="结构-1"><a href="#结构-1" class="headerlink" title="结构"></a>结构</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/5.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/10.png"></p>
+<p>编码器通过基于注意力的特征强化来促进目标模板，有利于高质量的跟踪模型生成；</p>
+<p>解码器将之前模板中的跟踪线索传播到当前帧，有利于目标搜索过程。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/6.png"></p>
+<p>与经典transform结构的差异：</p>
+<ol>
+<li>Encoder-decoder Separation. 没有将编码器和解码器级联，而是将编码器和解码器分离为两个分支，以适应Siamese-like跟踪方法；</li>
+<li>Block Weight-sharing. 编码器和解码器中的self-attention(图4中的黄色方框)共享权值，将模板和搜索转换到同一特征空间中，便于进一步cross-attention；</li>
+<li>Instance Normalization. 将Layer Norm换成Instance Norm；</li>
+<li>Slimming Design. 移除FFN，并且使用single-head attention。</li>
+</ol>
+<p>图4编码器解码器结构细节：</p>
+<p>编码器： 输入模板特征 $T \in [N_T, C], N_T=n \times H \times W $, $n$为模板数量；</p>
+<p>解码器： 输入搜索特征 $S \in [N_S, C], N_S=H \times W $</p>
+<p>高斯Mask     $M \in [N_T, 1] $</p>
+<p>Mask Transformation 关注空间注意力，Feature Transformation 关注上下文信息</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/7.png"></p>
+<h3 id="跟踪框架"><a href="#跟踪框架" class="headerlink" title="跟踪框架"></a>跟踪框架</h3><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/8.png"></p>
+<ul>
+<li><p>Siamese框架将编码器特征crop后和解码器特征做相关；</p>
+</li>
+<li><p>DCF框架用编码器特征训练Dimp的kernel，作用于解码器特征；</p>
+</li>
+<li><p>预测框通过probabilistic IoUNet输出；</p>
+</li>
+<li><p>模板池每5帧更新一次，先入先出。</p>
+</li>
+</ul>
+<h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>严重（完全）遮挡，出视野，高计算量</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/9.png"></p>
+<hr>
+<h1 id="Learning-Spatio-Temporal-Transformer-for-Visual-Tracking"><a href="#Learning-Spatio-Temporal-Transformer-for-Visual-Tracking" class="headerlink" title="Learning Spatio-Temporal Transformer for Visual Tracking"></a>Learning Spatio-Temporal Transformer for Visual Tracking</h1><p><a href="https://arxiv.org/abs/2103.17154">论文</a><br><a href="https://github.com/researchmm/Stark">代码</a></p>
+<h2 id="动机-2"><a href="#动机-2" class="headerlink" title="动机"></a>动机</h2><p>卷积只处理空间或时间上的局部关系，不擅长建立长距离的全局依赖关系。因此在面对目标发生较大形变或频繁进出视野时容易失败。另外，当前的方法将空间和时间分离处理，并没有明确建模空间和时间之间的关系。</p>
+<p>考虑到transform在建模全局依赖方面的优势，作者利用它整合空间和时间信息进行跟踪，生成判别的时空特征用于目标定位。</p>
+<p>编码器对目标对象和搜索区域之间的全局时空特征依赖关系进行建模，而解码器学习一个查询嵌入来预测目标对象的空间位置。该方法将目标跟踪作为一个直接的边框预测问题（角点预测），没有后处理。</p>
+<h2 id="结构-2"><a href="#结构-2" class="headerlink" title="结构"></a>结构</h2><h3 id="Baseline-spatial-only"><a href="#Baseline-spatial-only" class="headerlink" title="Baseline (spatial-only)"></a>Baseline (spatial-only)</h3><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/11.png"></p>
+<p><strong>编码器</strong>输入将模板和搜索特征拉平拼接；</p>
+<p><strong>解码器</strong>中query可以注意到模板和搜索区域的所有位置的特征，从而学习鲁棒表示，以进行边框预测；</p>
+<p><strong>预测头</strong>将Encoder输出中的搜索特征和decoder输出经过图3的结构，通过概率预测两个角点，最后输出唯一的框，用L1和IOU loss优化。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/12.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/13.png"></p>
+<h3 id="Spatio-Temporal-Transformer-Tracking"><a href="#Spatio-Temporal-Transformer-Tracking" class="headerlink" title="Spatio-Temporal Transformer Tracking"></a>Spatio-Temporal Transformer Tracking</h3><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/14.png"></p>
+<p>相比baseline的改变：三元输入、增加分数预测头、训练&amp;推理策略</p>
+<p>训练分为两阶段：第一阶段不训练score head，搜索图像全部包含目标；第二阶段固定其他参数单独训练score head，搜索图像中有一半不包含目标（训练时只要搜索图像包含目标则认为可以更新）；</p>
+<p>推理时达到更新间隔且分数大于阈值更新模板</p>
+<h3 id="本文结构与DETR的区别"><a href="#本文结构与DETR的区别" class="headerlink" title="本文结构与DETR的区别"></a>本文结构与DETR的区别</h3><ol>
+<li>任务不同，检测vs跟踪</li>
+<li>输入不同，detr输入整个图像，本文输入三元组，一个search和两个template；</li>
+<li>query和训练策略，detr有100个query并且每个都需要匈牙利匹配gt，而本文只有一个query和唯一gt；</li>
+<li>预测头不同，detr三层感知器，本文基于角点预测</li>
+</ol>
+<hr>
+<h1 id="Target-Transformed-Regression-for-Accurate-Tracking"><a href="#Target-Transformed-Regression-for-Accurate-Tracking" class="headerlink" title="Target Transformed Regression for Accurate Tracking"></a>Target Transformed Regression for Accurate Tracking</h1><p><a href="https://arxiv.org/abs/2104.00403">论文</a><br><a href="https://github.com/MCG-NJU/TREG">代码</a></p>
+<h2 id="动机-3"><a href="#动机-3" class="headerlink" title="动机"></a>动机</h2><p>如何将目标信息整合到回归分支中，<strong>保留精确的边界信息</strong>并<strong>及时处理各种目标变化</strong>对于跟踪是至关重要的。</p>
+<p>dw-corr将整个目标当成滤波器，只有目标的全局信息，面对物体变形时难以准确反映边界；</p>
+<p>pix-corr忽略了目标模板中的少量背景会对目标外部区域赋予较大的注意力权重。</p>
+<p>作者利用transform的交叉注意力来建模模板和搜索区域的每个元素之间的pair-wise关系，并用其增强原始特征。这种特征表达能够增强目标相关信息，帮助精确定位边界，并由于其局部和密集匹配机制，在一定程度上适应目标变形。</p>
+<p>此外，设计了一个简单的在线模板更新机制来选择可靠的模板，提高了对目标外观变化和几何变形的鲁棒性。</p>
+<h2 id="结构-3"><a href="#结构-3" class="headerlink" title="结构"></a>结构</h2><p>设计准则：</p>
+<ol>
+<li>目标集成模块，保留充足的目标信息以生成精确目标边界；</li>
+<li>像素级的上下文建模，以增强目标相关的特征和处理形变；</li>
+<li>高效的在线机制，以处理连续序列中的外观变化。</li>
+</ol>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/15.png"></p>
+<center>TREG整体结构，核心是黄色的target-aware transformer，其余结构参考FCOT</center>
+
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/16.png"></p>
+<center>Online Target-aware Transformer for Regression. (a) Target-aware transformer (b) Online template update mechanism</center>
+
+<p>将搜索特征看成query，目标被编码成key和value，对每一个query，都利用所有key和value为其提供加权聚合响应。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/17.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/18.png"></p>
+<p>$x_i$是搜索特征，$t_j$是目标特征，$Ω_k$表示目标模板的所有位置，$k$表示模板池的序号；</p>
+<p>$\theta_{x_i}, \phi_{t_j}, \omega_{t_j}$ 分别表示 query, key, value；</p>
+<p>注意这里归一化使用1/N而不是softmax。</p>
+<blockquote>
+<p>The reason lies in that some positions in background and distractors of the search region are expected to have low dependency with target, while Softmax function will amplify this noise influence as the sum of attention weights between the query and all the keys is always 1.</p>
+</blockquote>
+<p>在线更新模板，构建模板序列，包含3个静态模板和4个动态模板，静态的由第一帧变换增广生成，动态的取每n帧中得分最高的。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/20.png"></p>
+<h2 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/19.png"></p>
+<p>图4展示物体在序列发生了变化，本文的transform增强了目标包括头部和脚在内的边界。</p>
+<p>表1 TAT-Cls表示将transform用于分类，效果稍微下降，因为pixel-to-pixel的匹配方法往往忽略了目标的整体信息，不适合区分相似的对象。</p>
+<h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>本文的结构和CVPR2021另外一篇文章也有些类似，即Graph Attention Tracking，可以参考我在b站的<a href="https://www.bilibili.com/read/cv8692025">笔记</a>。作者将模板和搜索特征的每个位置看成节点，使用图注意力构建局部密集的匹配关系用于加强原始特征。实现方式也和transform的交叉注意力类似，可以说是殊途同归。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>transform</tag>
+        <tag>CVPR2021</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Siam R-CNN: Visual Tracking by Re-Detection</title>
+    <url>/2021/04/24/tracking/1-siamrcnn/</url>
+    <content><![CDATA[<p>Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。</p>
+<span id="more"></span>
+
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424105346.png"></p>
+<p><a href="https://arxiv.org/abs/1911.12836">论文</a><br><a href="https://github.com/SJTU-DL-lab/SiamRCNN">代码</a></p>
+<h1 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h1><ol>
+<li>将重检测思想用于跟踪。通过判断建议区域（region proposal）是否与模板区域（template region）相同，重检测图像中任何位置的模板对象，并对该对象的边界框进行回归，这种方法对目标大小和长宽比变化比较鲁棒；</li>
+<li>提出一种新颖的 hard example mining 方法，专门针对困难干扰物训练；</li>
+<li>提出 Tracklet Dynamic Programming Algorithm (TDPA)，可以同时跟踪所有潜在的目标，包括干扰物。通过重检测前一帧所有目标候选框，并将这些候选框随时间分组到tracklets(短目标轨迹)中。然后利用动态规划的思想，根据视频中所有目标和干扰物tracklets的完整历史选择当前时间步长的最佳对象。Siam R-CNN通过明确地建模所有潜在对象的运动和交互作用，并将检测到的相似信息汇集到tracklets中，能够有效地进行长时跟踪，同时抵抗跟踪器漂移，在物体消失后可以立即重检测目标。</li>
+</ol>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424105651.png"></p>
+<p>上图为Siam RCNN整体框架，作者设计了一个Siamese two-stage detection network作为跟踪器。第一阶段是RPN，第二阶段通过将感兴趣区域(RoI)的特征和参考特征拼接起来，包括以第一帧的GT作为参考和以前一帧的检测结果作为参考的两个redetction head。最后构建Tracklet Dynamic Programming Algorithm (TDPA)去跟踪所有潜在目标。</p>
+<p>接下来按照论文结构对每一部分进行说明：</p>
+<h2 id="Siam-RCNN"><a href="#Siam-RCNN" class="headerlink" title="Siam RCNN"></a>Siam RCNN</h2><p>本小节主要是讲如何将 Faster RCNN 的那一套用于重检测，核心是将固定类别的detection head换成本文的re-detection head。re-detection head的输出只有两类，即候选区域是否是参考对象目标。训练时backbone和RPN的参数冻结，只有re-detection head参与训练。</p>
+<h2 id="Video-Hard-Example-Mining"><a href="#Video-Hard-Example-Mining" class="headerlink" title="Video Hard Example Mining"></a>Video Hard Example Mining</h2><p>在传统 Faster RCNN 训练中，负样本是从RPN得到的区域中采样得到的。但是，在许多图像中，仅有少量负样本。为了最大化 re-detection head 的判别能力，作者认为需要在难负样本（hard negative samples）上训练。并且与检测中的通用难样本不同，这里的难样本是从其他视频中检索出来的与参考目标类似的样本。</p>
+<ul>
+<li><p><strong>Embedding Network</strong> 最直接的方法就是从其他视频中寻找与当前对象属于同一个类别的对象作为难负样本。然而，物体的类别标签并不总是可靠，一些同类的物体很容易区分，不同类别的物体反而可能是理想的难负样本。所以，本文受到行人重识别的启发，提出利用 embedding network 的方法，将 GT Box 中的物体映射为 embedding vector。这个网络来源于 PReMVOS，用 batch-hard triplet loss 来训练，期望达到的效果是消除单个对象实例之间的歧义，例如，两个不同的人在嵌入空间中应该离得很远，而同一个人在不同帧中的向量距离应该很近。</p>
+</li>
+<li><p><strong>Index Structure</strong> 接下来为近邻 queries 构建一个有效的索引结构，将其用于寻找所需要跟踪的物体在 embedding space 中的最近邻。图 3 展示了一些检索得到的难负样本。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424105907.png"></p>
+</li>
+<li><p><strong>Training Procedure</strong> 训练时在其他视频上实时检索当前视频帧的难负样本过于耗时。本文预先对训练数据的每一个 GT Box 都提取其 RoI-aligned  features。在训练的每一步，随机选择一个 video 和 object，然后随机的选择一个 reference 和 target frame。在此之后，用上一节提到的 indexing structure 来检索 10000 个最近邻的 reference box，从中选择出 100 个 negative training examples。</p>
+</li>
+</ul>
+<h2 id="Tracklet-Dynamic-Programming-Algorithm"><a href="#Tracklet-Dynamic-Programming-Algorithm" class="headerlink" title="Tracklet Dynamic Programming Algorithm"></a>Tracklet Dynamic Programming Algorithm</h2><p>本文所提出的 片段动态规划算法（Tracklet Dynamic Programming Algorithm）隐式地跟踪感兴趣目标和潜在干扰物，从而持续抑制干扰对象。为此，TDPA 维护一组 tracklets，即：short sequences of detections。然后利用动态规划的评分算法为模板对象在第一帧和当前帧之间选择最可能的 tracklets序列。每个detection都定义为：a bounding box, a re-dection score 和 RoI-aligned features。此外，每个 detection 都是 tracklet 的组成部分。tracklet有一个开始时间和一个结束时间，并由一组 detection 定义，从开始到结束时间的每一个时间步对应一个detection ，也就是说，在tracklet中不允许有空隙。</p>
+<ul>
+<li><strong>Tracklet Building</strong> </li>
+</ul>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424110139.png"></p>
+<p>Line 2 提取backbone特征</p>
+<p>Line 3 RPN得到感兴趣区域，为了补偿潜在的假负例影响，加入上一帧的结果；</p>
+<p>Line 4 将Roi和gt送入redetection head得到第一帧的重检测结果 $ det_{S_t} $（包括相似性得分和目标框）；</p>
+<p>Line 5-6 将当前帧结果 $ det_{S_t} $ 与上一帧结果 $ det_{S_{t-1}} $ 送入redetection head计算每一对检测结果的相似性得分（为了减少计算，仅把当前帧与上一帧框的归一化空间距离小于 r 时才送入head计算，否则相似性得分设为负无穷。如图2，上一帧有3个结果，当前帧有2个结果，理论上两两之间应该计算6个相似得分，但通过框的空间距离约束，实际参与相似得分计算的只有4组）；</p>
+<p>Line 7-20 扩展tracklets。遍历当前帧的检测结果 $d_t \in det_{S_t}$ 加入tracklet需要满足：</p>
+<ol>
+<li> 当前结果 $d_t$ 与上一帧结果 $\hat{d} _ {t-1}$ 的最大相似性得分 $s_{1}$ 大于阈值 $\alpha$</li>
+<li>当前帧没有其他检测结果与 $ \hat{d} _ {t-1} $ 具有同样高的相似性，即当前帧除 $d_t$ 以外的结果与 $ \hat{d} _ {t-1} $ 的相似性要满足 $s_{2} \leq s_{1}-\beta$</li>
+<li> 上一帧没有其他检测结果与当前的 $d_t$ 具有同样高的相似性，即上一帧除 $ \hat{d} _ {t-1} $ 以外的结果与 $d_t$ 的相似性要满足 $s_{3} \leq s_{1}-\beta$</li>
+</ol>
+<br/>
+
+<ul>
+<li><strong>Scoring</strong>  </li>
+</ul>
+<p>轨迹 $A=(a_1,…,a_N)$ 是一个包含N个不重复tracklets的序列，其中 $end(a_i) &lt; start(a_{i+1}), \forall i∈{1,…,N-1}$ ，即后一个tracklet的开始帧一定比前一个tracklet的结束帧大。一个轨迹的总分由衡量单个轨迹质量的一元分数 unuary 和惩罚轨迹之间空间距离的位置分数 loc_score 组成。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111306.png"></p>
+<p>其中 ff_score 表示tracklet $a_{i}$ 在 t 时刻以第一帧gt为参考的重检测分数；</p>
+<p>而 ff_tracklet_score 表示 $a_{i}$ 以gt所在tracklet的最后一个检测结果为参考的重检测分数（因为一个tracklet的所有检测结果都有很高概率与这个tracklet的第一个检测结果相同，否则这个tracklet就会终止，所以gt所在的tracklet的最后一个检测结果也有很大概率是正确的）；</p>
+<p>Location score是计算前一个tracklet最后一个检测结果和后一个tracklet的第一个检测结果的bbox之间的L1距离，是负的，作为惩罚项，越小越好。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111534.png"></p>
+<ul>
+<li><strong>Online Dynamic Programming</strong> </li>
+</ul>
+<p>这一节介绍如何高效找到具有最大总得分的tracklets序列。</p>
+<p>定义 $\theta[a]$ 表示从第一个tracklet开始到第a个tracklet的总得分。由于一旦tracklet不被扩展，就会终止。因此当新的一帧到来时，只有被扩展或者新建的tracklet需要重新计算score。</p>
+<p>首先设置 $\theta[a_{ff}]=0$，$a_{ff}$ 是first-frame tracklet（即包含gt的tracklet），当每一个tracklet a被创建或需要更新时</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111717.png"></p>
+<p>在更新了当前帧的 $\theta$ 后，选择最大动态规划得分的tracklet $\hat{a}=arg max_{a} \theta[a]$；如果被选中的tracklet在当前帧中没有检测结果，则算法会指出目标不存在。由于benchmarks要求每帧都输出结果，所以我们用选定的tracklet最近一次的检测的box，并且将其得分置0。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>实验做的很充分，在目前主流数据集中都有结果。在short-term的测试中，大部分达到SOTA水平或者比SOTA稍低一些，在long-term的测试效果则非常好，基本吊打第二名。其中VOT的测试因为其自带一个重启，会与算法本身的重启冲突，所以作者专门做了一个short-term版本的用于VOT测试。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111909.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111922.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424112042.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424113951.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111947.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424114012.png"></p>
+<p>消融实验比较了 使用hard example mining的效果，TPDA与直接使用每一帧最大的重检测得分(Argmax)的对比，和专门用于测试VOT2018的short-term版本；以及改变backbone和ROI的参数量来提速的验证。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文最大的贡献在于将两阶段结构和重检测用于跟踪，设计了一套适合长时跟踪的算法。两阶段结构在SPM-Tracker已经证明了其对于鲁棒性和判别性之间有较好的平衡；而重检测这类检索的方法同样对于目标变化的适应性更强。整套算法做的非常完善，美中不足在于速度太慢。</p>
+<p>P.S. SiamRCNN很长一段时间都作为各类跟踪数据集的天花板，直到CVPR2021各类transform架构的跟踪算法出现后才被超过，可以参考 <a href="https://kongbia.github.io/2021/04/23/tracking/33-transform-tracking/">Transform与目标跟踪</a></p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>CVPR2020</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>目标检测框架在目标跟踪中的应用</title>
+    <url>/2021/04/24/tracking/2-detection-in-tracking/</url>
+    <content><![CDATA[<p>从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。</p>
+<p>本篇笔记关注如何将目标检测框架应用在跟踪中，主要介绍其思想，细节部分不做过多描述，记录论文包含：</p>
+<span id="more"></span>
+
+<ul>
+<li><a href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Huang_Bridging_the_Gap_Between_Detection_and_Tracking_A_Unified_Approach_ICCV_2019_paper.pdf">Bridging the Gap Between Detection and Tracking: A Unified Approach</a></li>
+<li><a href="https://arxiv.org/abs/1912.08531">GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</a></li>
+<li><a href="https://arxiv.org/abs/1910.11844">Learning to Track Any Object</a></li>
+<li><a href="https://arxiv.org/abs/1911.12836">Siam R-CNN: Visual Tracking by Re-Detection</a></li>
+<li><a href="https://arxiv.org/abs/2004.00830">Tracking by Instance Detection: A Meta-Learning Approach</a></li>
+</ul>
+<h1 id="Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><a href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach" class="headerlink" title="Bridging the Gap Between Detection and Tracking: A Unified Approach"></a>Bridging the Gap Between Detection and Tracking: A Unified Approach</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234243.png"></p>
+<p>从结构图可以很直观的看出这就是Faster RCNN的框架，作者将目标跟踪任务看成是one-shot object detection 和 few-shot instance classification 的组合。前者是一个class-level的子任务用来寻找和目标相似的候选框，后者是instance-level的任务用来区分目标和干扰物。主要有两个模块：Target-guidence module(TGM) 和 few-shot instance classifier。</p>
+<p>TGM对目标和搜索区域的特征以及它们在主干中的相互作用进行编码，相当于让网络更关注于与目标相关的instance，后面几篇文章也用了不同的方法来实现这个目的。</p>
+<p>TGM虽然使检测器聚焦于与目标相关的物体，但忽略了周围的背景干扰。为了弥补这一点，提出了few-shot instance classifier。 然而，直接从头开始训练耗时且容易导过拟合。因此作者通过Model-Agnostic Meta Learning (MAML)进行few-shot finetune，增强判别性进一步消除distractors。</p>
+<p>MAML的目的是训练一组初始化参数，<strong>通过在初始参数的基础上进行一或多步的梯度调整，来达到仅用少量数据就能快速适应新task的目的，</strong>示意图如下：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234331.png"></p>
+<p>域自适应的检测器整体训练流程如下图：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234353.png"></p>
+<p>输入是三元组，包括examplar, support, query，训练分为inner and outer optimization loops。对于Inner optimization loop中，在support image上计算的loss用来微调meta-layers即detector heads的参数，然后用微调后的参数计算meta-loss其梯度用于更新outer optimization loop。具体公式可以参考原文。</p>
+<p>在线跟踪中将之前帧的检测结果作为训练样本在线更新detector head的参数。</p>
+<p>作者称这是第一篇将目标检测框架应用到跟踪上的通用框架，检测模型可以用Faster RCNN，SSD等，速度上SSD模型为10FPS   Faster RCNN模型为3FPS。</p>
+<hr>
+<h1 id="GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><a href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking" class="headerlink" title="GlobalTrack: A Simple and Strong Baseline for Long-term Tracking"></a>GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234652.png"></p>
+<p>这篇文章构建了一个global instance search tracker，主要思想是利用target来引导网络搜索特定instance，与上一篇的TGM模块思想类似，不过这里对在RPN阶段和分类回归阶段都加入了target信息进行引导。对应的就是Query-guided RPN 和 Query-guided RCNN。</p>
+<p><strong>Query-guided RPN</strong></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234747.png"></p>
+<p>$z \in [k,k,c]$ 是query的ROI特征，$x \in [h,w,c]$ 是搜索图像的特征。$f_z$ 用 $k \times k$ 0-padding的卷积将 $z$ 转换为 $1 \times 1$ 的核作用于搜索区域，$f_x$ 使用 $3 \times 3$ 1-padding的卷积。$f_{out}$ 是 $1 \times 1 \times c$  的卷积将通道数变回为c，这个过程不使用正则化和激活函数。</p>
+<p><strong>Query-guided RCNN</strong></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424235530.png"></p>
+<p> $z$ 定义同上，$x_i \in [k,k,c]$ 是提取的proposal的特征。$h_z$ 和 $h_x$ 均为 $3 \times 3$ 1-padding的卷积，$h_{out}$ 为$1 \times 1 \times c$  卷积。</p>
+<p>GlobalTrack 对视频每一帧的跟踪完全不依赖相邻帧，没有累计误差使得它在长期跟踪问题中准确率保持稳定。速度为6FPS。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426092832.png"></p>
+<center>车牌在长期跟踪过程中消失了一段时间，当车牌再次出现的时候，其他跟踪算法就再也无法恢复跟踪了，而没有累计误差的 GlobalTrack不受前面的影响立刻跟踪到了目标。</center>
+
+<hr>
+<h1 id="Learning-to-Track-Any-Object"><a href="#Learning-to-Track-Any-Object" class="headerlink" title="Learning to Track Any Object"></a>Learning to Track Any Object</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426093105.png"></p>
+<center>图1 (a)从基于图像的数据集学习一个通用对象先验，(b)通过计算一个封闭形式的目标和背景之间的线性判别器使其适应于一个感兴趣的特定对象(例如左上角的总线)。这允许跟踪物体通过显著的变形，而不捕获干扰物</center>
+
+<p>本文重点在于将category-specific object detector 变成 category-agnostic, object-specific detector来做跟踪。想达到这个目的，需要处理如下两个关键的问题，如图1所示：</p>
+<ol>
+<li>如何将 category specific prior 改为 generic objectness prior？</li>
+<li>如何进一步的将这种 generic prior 改为 particular instance of interst？</li>
+</ol>
+<p>针对问题1，作者构建了 a joint model for category-specific object detection and category-agnostic tracking。和之前类似，也是添加了目标特征的检测框架（基于 Mask R-CNN）如下图2所示 。其将目标模板作为输入，计算 feature embedding。然后该模板特征与测试图像计算相似性得到attention mask。attention mask又被用于重新加权空间特征，以检测感兴趣的物体。另外这个框架可以同时用于检测、跟踪和分割。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100348.png"></p>
+<p>针对问题 2，本文计算一个线性分类器来区分第一帧的感兴趣目标和其他目标，通过最小二乘方法得到闭式解从而可以学习到一个更关注感兴趣instance的鲁棒特征。下图3通过一个例子说明，左下是直接用feature embedding计算的attention map，右下是用线性分类器计算的attention map，显然右下效果更好。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100433.png"></p>
+<p>最后运行速度为7FPS。</p>
+<hr>
+<h1 id="Siam-R-CNN-Visual-Tracking-by-Re-Detection"><a href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection" class="headerlink" title="Siam R-CNN: Visual Tracking by Re-Detection"></a>Siam R-CNN: Visual Tracking by Re-Detection</h1><p>这个就是用重检测的思想做跟踪，也是基于RCNN框架的，同时使用Tracklet Dynamic Programming Algorithm去跟踪所有潜在的目标。</p>
+<p>具体解读见前一篇笔记</p>
+<p><a href="https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection | CV home (kongbia.github.io)</a></p>
+<hr>
+<h1 id="Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><a href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach" class="headerlink" title="Tracking by Instance Detection: A Meta-Learning Approach"></a>Tracking by Instance Detection: A Meta-Learning Approach</h1><p>同样是域自适应方法将检测器转化成跟踪器，此篇更像是第一篇Bridging the Gap Between Detection and Tracking: A Unified Approach的进阶，不同的是本文没有额外添加模板引导分支，而是直接用标准的检测器通过元学习的方式做域自适应。避免了冗余结构使得速度大幅提升，达到40FPS。另外就是训练的时候加入了很多来自MAML++喝MetaSGD的技巧，效果更好。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100802.png"></p>
+<p>具体的解读可以参考我b站的笔记，后续会搬运到博客。</p>
+<p>[<a href="https://www.bilibili.com/read/cv5521209/">Note7] Tracking by Instance Detection: A Meta-Learning Approach - 哔哩哔哩专栏 (bilibili.com)</a></p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这几篇文章的一个共同思路都是融合了Siamese架构和目标检测框架，将目标实例信息以各种形式加入待检测图像中，从而将class-level的通用检测转变成instance-level的实例检测（跟踪）。借助目标检测对尺度，形变等复杂条件的优越性来解决跟踪中的问题，同时将跟踪转变成one-shot的检测任务也避免了更新带来的漂移（第一篇里面使用了MAML进行更新，主要原因猜测是单纯往RPN中融合目标信息还不够work，像globaltracker在head上也添加了instance，而第三篇则是构建一个分类器增强鲁棒性）。当然引入检测框架带来的计算开销也是很大的，最后一种方法避免了额外的模板分支相当于跳出了Siamese框架，给实时带来了可能。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Anchor Free的孪生目标跟踪</title>
+    <url>/2021/04/26/tracking/3-anchorfree-siamese/</url>
+    <content><![CDATA[<p>Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。</p>
+<p>[<a href="https://www.bilibili.com/read/cv4987634/?from=readlist">Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)</a></p>
+<p>[<a href="https://www.bilibili.com/read/cv6518222/?from=readlist">Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)</a></p>
+<p>跟踪任务可以看成是分类任务与状态估计任务的结合。分类任务的目的是精确定位目标的位置，而状态估计获得目标的姿态（即目标框）。SiamFC++一文将当前的跟踪器按照不同<strong>状态估计</strong>的方法分为三类：</p>
+<span id="more"></span>
+
+<ol>
+<li>以DCF和SiamFC为主的跟踪器，构建多尺度金字塔，将搜索区域缩放到多个比例，选择最高得分对应的尺度，这种方式是最不精确的同时先验的固定长宽比不适合现实任务；</li>
+<li>以ATOM为主的跟踪器，借鉴IOUNet，通过IOU的梯度迭代来细化box，提升精度的同时带来了较多的超参数以及时间上的消耗；</li>
+<li>以SiamRPN为主的追踪器，通过RPN预设anchor来回归框，这类方法虽然很高效，但是anchor的设定不但会引入模糊的相似性得分，而且anchor的设置需要有大量的数据分布先验信息，与通用跟踪的目的不符合。</li>
+</ol>
+<p>本文主要记录用Anchor Free的思想来解决上述目标跟踪状态估计中存在的问题。目前比较主流的都是基于FCOS和CenterNet两种无锚框方式展开的。</p>
+<h1 id="FCOS类"><a href="#FCOS类" class="headerlink" title="FCOS类"></a>FCOS类</h1><h2 id="SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines"><a href="#SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines" class="headerlink" title="SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines"></a>SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines</h2><p><a href="https://arxiv.org/abs/1911.06188">论文</a> <a href="https://github.com/MegviiDetection/video_analyst">代码</a></p>
+<p>针对siam网络分析了之前的工作不合理的地方，提出了4条guidelines：</p>
+<p>G1：decomposition of classification and state estimation：跟踪任务可以分解为分类与状态估计。分类影响鲁棒性，状态估计影响精确性。多尺度金字塔的方式忽略了状态估计所以精确性很低；</p>
+<p>G2：non-ambiguous scoring：分类得分应该直接表示为目标在视野中存在的置信度分数，而不是像预定义的anchor那样匹配anchor和目标，这样容易产False positive；</p>
+<p>G3：prior knowledge-free：跟踪器不应该依赖过多的先验知识（如尺度/长宽比）。现有的方法普遍存在对数据分布先验知识的依赖，阻碍了其泛化能力；</p>
+<p>G4：estimation quality assessment：不能直接使用分类置信度来评价状态估计，需要使用独立于分类的质量评估方式。（如RPN系列直接就是选择分类置信度最高的位置进行边框预测，而ATOM，DIMP则另外加入了IOU信息来指导边框调整）</p>
+<p>作者依据这4条guidelines设计了SiamFC++，将目标检测中的Anchor Free的FCOS应用到Siamese框架中，整体结构如下，细节部分可以去开头我在b站的专栏。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426104215.png"></p>
+<hr>
+<h2 id="SiamCAR-Siamese-Fully-Convolutional-Classification-and-Regression-for-Visual-Tracking"><a href="#SiamCAR-Siamese-Fully-Convolutional-Classification-and-Regression-for-Visual-Tracking" class="headerlink" title="SiamCAR: Siamese Fully Convolutional Classification and Regression for Visual Tracking"></a>SiamCAR: Siamese Fully Convolutional Classification and Regression for Visual Tracking</h2><p><a href="https://arxiv.org/abs/1911.07241v2">论文</a> <a href="https://github.com/ohhhyeahhh/SiamCAR">代码</a></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426111123.png"></p>
+<p>这一篇和SiamFC++很类似，这里仅标注一些实践细节的差异。</p>
+<ul>
+<li>backbone采用了改造的resnet50；</li>
+<li>multi-stage融合先对特征融合再做相关，而不是像siamrpn++那样先对每个stage做相关再融合；</li>
+<li>分类和回归均由一个相关引出，而不是每个分支对应一个相关。这样计算量更小效率更高，而性能差不多；</li>
+<li>inference阶段为了避免抖动取了中心点周围top-k的均值作为最终结果。</li>
+</ul>
+<p>细节同样参照开头b站专栏。</p>
+<hr>
+<h2 id="Siamese-Box-Adaptive-Network-for-Visual-Tracking"><a href="#Siamese-Box-Adaptive-Network-for-Visual-Tracking" class="headerlink" title="Siamese Box Adaptive Network for Visual Tracking"></a>Siamese Box Adaptive Network for Visual Tracking</h2><p><a href="https://arxiv.org/abs/2003.06761">论文</a> <a href="https://github.com/hqucv/siamban">代码</a> <a href="https://www.bilibili.com/read/cv5400217">解读</a></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426112506.png"></p>
+<p>同样是FCOS的应用，比较insight的地方是打标签的时候使用椭圆标签，两个椭圆，小椭圆E2内的点是positive，大椭圆E1外的点是negative，两个椭圆中间的部分为ignore。椭圆标签能够更紧凑地标注正负样本，并且设置了缓冲(ignore)以忽略模棱两可的样本。</p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426112854.png" style="zoom:67%;" />
+
+<hr>
+<h2 id="Fully-Conventional-Anchor-Free-Siamese-Networks-for-Object-Tracking"><a href="#Fully-Conventional-Anchor-Free-Siamese-Networks-for-Object-Tracking" class="headerlink" title="Fully Conventional Anchor-Free Siamese Networks for Object Tracking"></a>Fully Conventional Anchor-Free Siamese Networks for Object Tracking</h2><p><a href="https://www.researchgate.net/publication/335467780_Fully_Conventional_Anchor-Free_Siamese_Networks_for_Object_Tracking">论文</a></p>
+<p>将FCOS与级联结构结合，另一个就是分配GT到AFPN层时采用了FCOS一样的思路（划分[0,64], [64,128], [128,∞]）</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426114147.png"></p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426114239.png" style="zoom: 50%;" />
+
+<hr>
+<h2 id="Ocean-Object-aware-Anchor-free-Tracking"><a href="#Ocean-Object-aware-Anchor-free-Tracking" class="headerlink" title="Ocean: Object-aware Anchor-free Tracking"></a>Ocean: Object-aware Anchor-free Tracking</h2><p><a href="https://arxiv.org/abs/2006.10721">论文</a> <a href="https://github.com/researchmm/TracKit">代码</a> <a href="https://www.bilibili.com/read/cv6615313">解读</a></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426115451.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426115537.png"></p>
+<ul>
+<li>anchor-base方法对于弱预测的修正能力较差，因为训练时只考虑了IOU大于阈值的anchor的回归，对于跟踪过程中如果出现overlap很小的anchor很难去refine。而anchor-free可以针对每个点进行预测；</li>
+<li>作者设计了一个feature alignment module来从预测框中学习object-aware feature（图2c），从而对物体尺度敏感；</li>
+<li>特征融合上采用xy轴膨胀系数不同的膨胀卷积进行融合，不同膨胀的卷积可以捕获不同尺度的特征，提高最终融合特征的尺度不变性。</li>
+</ul>
+<hr>
+<h1 id="CenterNet类"><a href="#CenterNet类" class="headerlink" title="CenterNet类"></a>CenterNet类</h1><h2 id="Siamese-Attentional-Keypoint-Network-for-High-Performance-Visual-Tracking"><a href="#Siamese-Attentional-Keypoint-Network-for-High-Performance-Visual-Tracking" class="headerlink" title="Siamese Attentional Keypoint Network for High Performance Visual Tracking"></a>Siamese Attentional Keypoint Network for High Performance Visual Tracking</h2><p><a href="https://arxiv.org/abs/1904.10128v2">论文</a></p>
+<p>这篇将CenterNet和CornerNet结合到跟踪中，分别预测中心点和两个角点，以及运用了CBAM注意力机制强化上下文信息，应该是第一个将CenterNet/CornerNet用进来的，遗憾的是性能没有刷的很高。细节同样参照开头b站专栏。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426164747.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426164810.png"></p>
+<hr>
+<h2 id="Accurate-Anchor-Free-Tracking"><a href="#Accurate-Anchor-Free-Tracking" class="headerlink" title="Accurate Anchor Free Tracking"></a>Accurate Anchor Free Tracking</h2><p><a href="https://arxiv.org/abs/2006.07560">论文</a></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426165201.png"></p>
+<p>这篇就是比较典型的CenterNet模式了，预测中心点，中心偏移以及宽高。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426165235.png"></p>
+<p>作者另外设计了backbone，最后在VOT2018性能虽然比siamrpn++略低但是速度是它的3.9倍（136FPS v.s. 35FPS）。</p>
+<hr>
+<h2 id="Siamese-Keypoint-Prediction-Network-for-Visual-Object-Tracking"><a href="#Siamese-Keypoint-Prediction-Network-for-Visual-Object-Tracking" class="headerlink" title="Siamese Keypoint Prediction Network for Visual Object Tracking"></a>Siamese Keypoint Prediction Network for Visual Object Tracking</h2><p><a href="https://arxiv.org/abs/2006.04078">论文</a> <a href="https://github.com/ZekuiQin/SiamKPN">代码</a></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171705.png"></p>
+<p>这一篇将casscade的思想结合在centernet类的siamese跟踪器中，看上面图2结构已经很清晰了，KPN结构如下：</p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171748.png" style="zoom:80%;" />
+
+<p>还有一个需要关注的就是每个stage训练的时候分类标签的高斯方差不一样，遵循的原则就是越高的stage峰值越收束。目的即随着级联的进行，监管信号越来越严格。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171845.png"></p>
+<hr>
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Correlation-Guided-Attention-for-Corner-Detection-Based-Visual-Tracking"><a href="#Correlation-Guided-Attention-for-Corner-Detection-Based-Visual-Tracking" class="headerlink" title="Correlation-Guided Attention for Corner Detection Based Visual Tracking"></a>Correlation-Guided Attention for Corner Detection Based Visual Tracking</h2><p><a href="https://openaccess.thecvf.com/content_CVPR_2020/papers/Du_Correlation-Guided_Attention_for_Corner_Detection_Based_Visual_Tracking_CVPR_2020_paper.pdf">论文</a> <a href="https://www.bilibili.com/read/cv6647311">解读</a></p>
+<p>作者为了解决跟踪中回归框估计不准确的问题，引入角点检测来得到更紧致的回归框。分析了之前一些角点检测方法在目标跟踪中无法取得好性能的原因，并提出了两阶段的correlation-guided attentional corner detection (CGACD)方法。第一阶段使用siamese网络得到目标区域的粗略ROI，第二阶段通过空间和通道两个correlation-guided attention来探索模板和ROI之间的关系，突出角点区域进行检测。速度可以达到70FPS。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173132.png"></p>
+<hr>
+<h2 id="RPT-Learning-Point-Set-Representation-for-Siamese-Visual-Tracking"><a href="#RPT-Learning-Point-Set-Representation-for-Siamese-Visual-Tracking" class="headerlink" title="RPT: Learning Point Set Representation for Siamese Visual Tracking"></a>RPT: Learning Point Set Representation for Siamese Visual Tracking</h2><p><a href="https://arxiv.org/abs/2008.03467">论文</a> <a href="https://github.com/zhanght021/RPT">代码</a> <a href="https://zhuanlan.zhihu.com/p/257854666">原作者解读</a></p>
+<p>现有的跟踪方法往往采用矩形框或四边形来表示目标的状态（位置和大小），这种方式忽略了目标自身会变化的特点（形变、姿态变化），因此作者受启发自Reppoints检测方法，采用表示点（Representative Points）方法来描述目标的外观特征，学习表示点的特征，根据表示点的分布确定目标的状态，实现更精确的目标状态估计。</p>
+<p>具体可以参考原作者在知乎的解读，该方法取得了VOT2020-ST的冠军。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173720.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173734.png"></p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173759.png" style="zoom:80%;" />]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>Anchor-free</tag>
+        <tag>Siamese</tag>
+      </tags>
+  </entry>
+</search>
