@@ -259,7 +259,7 @@
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      更新于:&nbsp;2021-04-24
+      更新于:&nbsp;2021-04-26
     </span>
     <span>
       <v-icon color="">folder</v-icon>
@@ -306,6 +306,7 @@
 <li>n=3 进一步强化，模板特征成为包含大量目标边界信息的信息库，而搜索区域特征保留了目标的空间信息；</li>
 <li>n=4 模板的分布变得混乱，这可能是因为，在目标确定之后，模板分支的特征不再需要保留模板本身的信息，而是存储了大量目标的边界信息，成为一个为回归服务的特征库。</li>
 </ul>
+<hr>
 <h1 id="Transformer-Meets-Tracker-Exploiting-Temporal-Context-for-Robust-Visual-Tracking"><a href="#Transformer-Meets-Tracker-Exploiting-Temporal-Context-for-Robust-Visual-Tracking" class="headerlink" title="Transformer Meets Tracker: Exploiting Temporal Context for Robust Visual Tracking"></a>Transformer Meets Tracker: Exploiting Temporal Context for Robust Visual Tracking</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.11681">论文</a><br><a target="_blank" rel="noopener" href="https://github.com/594422814/TransformerTrack">代码</a></p>
 <h2 id="动机-1"><a href="#动机-1" class="headerlink" title="动机"></a>动机</h2><p>现有的跟踪器常常忽略连续帧之间的 temporal contexts</p>
 <ol>
@@ -323,7 +324,7 @@
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/6.png"></p>
 <p>与经典transform结构的差异：</p>
 <ol>
-<li>Encoder-decoer Separation. 没有将编码器和解码器级联，而是将编码器和解码器分离为两个分支，以适应Siamese-like跟踪方法；</li>
+<li>Encoder-decoder Separation. 没有将编码器和解码器级联，而是将编码器和解码器分离为两个分支，以适应Siamese-like跟踪方法；</li>
 <li>Block Weight-sharing. 编码器和解码器中的self-attention(图4中的黄色方框)共享权值，将模板和搜索转换到同一特征空间中，便于进一步cross-attention；</li>
 <li>Instance Normalization. 将Layer Norm换成Instance Norm；</li>
 <li>Slimming Design. 移除FFN，并且使用single-head attention。</li>
@@ -335,11 +336,19 @@
 <p>Mask Transformation 关注空间注意力，Feature Transformation 关注上下文信息</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/7.png"></p>
 <h3 id="跟踪框架"><a href="#跟踪框架" class="headerlink" title="跟踪框架"></a>跟踪框架</h3><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/8.png"></p>
-<p>siamese框架将编码器特征crop后和解码器特征做相关；</p>
-<p>dcf框架用编码器特征生成dimp的kernel，作用于解码器特征；</p>
-<p>预测框通过probabilistic IoUNet输出。</p>
+<ul>
+<li><p>Siamese框架将编码器特征crop后和解码器特征做相关；</p>
+</li>
+<li><p>DCF框架用编码器特征训练Dimp的kernel，作用于解码器特征；</p>
+</li>
+<li><p>预测框通过probabilistic IoUNet输出；</p>
+</li>
+<li><p>模板池每5帧更新一次，先入先出。</p>
+</li>
+</ul>
 <h3 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h3><p>严重（完全）遮挡，出视野，高计算量</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/9.png"></p>
+<hr>
 <h1 id="Learning-Spatio-Temporal-Transformer-for-Visual-Tracking"><a href="#Learning-Spatio-Temporal-Transformer-for-Visual-Tracking" class="headerlink" title="Learning Spatio-Temporal Transformer for Visual Tracking"></a>Learning Spatio-Temporal Transformer for Visual Tracking</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.17154">论文</a><br><a target="_blank" rel="noopener" href="https://github.com/researchmm/Stark">代码</a></p>
 <h2 id="动机-2"><a href="#动机-2" class="headerlink" title="动机"></a>动机</h2><p>卷积只处理空间或时间上的局部关系，不擅长建立长距离的全局依赖关系。因此在面对目标发生较大形变或频繁进出视野时容易失败。另外，当前的方法将空间和时间分离处理，并没有明确建模空间和时间之间的关系。</p>
 <p>考虑到transform在建模全局依赖方面的优势，作者利用它整合空间和时间信息进行跟踪，生成判别的时空特征用于目标定位。</p>
@@ -360,6 +369,7 @@
 <li>query和训练策略，detr有100个query并且每个都需要匈牙利匹配gt，而本文只有一个query和唯一gt；</li>
 <li>预测头不同，detr三层感知器，本文基于角点预测</li>
 </ol>
+<hr>
 <h1 id="Target-Transformed-Regression-for-Accurate-Tracking"><a href="#Target-Transformed-Regression-for-Accurate-Tracking" class="headerlink" title="Target Transformed Regression for Accurate Tracking"></a>Target Transformed Regression for Accurate Tracking</h1><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2104.00403">论文</a><br><a target="_blank" rel="noopener" href="https://github.com/MCG-NJU/TREG">代码</a></p>
 <h2 id="动机-3"><a href="#动机-3" class="headerlink" title="动机"></a>动机</h2><p>如何将目标信息整合到回归分支中，<strong>保留精确的边界信息</strong>并<strong>及时处理各种目标变化</strong>对于跟踪是至关重要的。</p>
 <p>dw-corr将整个目标当成滤波器，只有目标的全局信息，面对物体变形时难以准确反映边界；</p>
