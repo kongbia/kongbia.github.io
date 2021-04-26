@@ -258,12 +258,14 @@
 <h2 id="Siamese-Box-Adaptive-Network-for-Visual-Tracking"><a href="#Siamese-Box-Adaptive-Network-for-Visual-Tracking" class="headerlink" title="Siamese Box Adaptive Network for Visual Tracking"></a>Siamese Box Adaptive Network for Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2003.06761">论文</a> <a target="_blank" rel="noopener" href="https://github.com/hqucv/siamban">代码</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv5400217">解读</a></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426112506.png"></p>
 <p>同样是FCOS的应用，比较insight的地方是打标签的时候使用椭圆标签，两个椭圆，小椭圆E2内的点是positive，大椭圆E1外的点是negative，两个椭圆中间的部分为ignore。椭圆标签能够更紧凑地标注正负样本，并且设置了缓冲(ignore)以忽略模棱两可的样本。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426112854.png"></p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426112854.png" style="zoom:67%;" />
+
 <hr>
 <h2 id="Fully-Conventional-Anchor-Free-Siamese-Networks-for-Object-Tracking"><a href="#Fully-Conventional-Anchor-Free-Siamese-Networks-for-Object-Tracking" class="headerlink" title="Fully Conventional Anchor-Free Siamese Networks for Object Tracking"></a>Fully Conventional Anchor-Free Siamese Networks for Object Tracking</h2><p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/335467780_Fully_Conventional_Anchor-Free_Siamese_Networks_for_Object_Tracking">论文</a></p>
 <p>将FCOS与级联结构结合，另一个就是分配GT到AFPN层时采用了FCOS一样的思路（划分[0,64], [64,128], [128,∞]）</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426114147.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426114239.png"></p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426114239.png" style="zoom: 50%;" />
+
 <hr>
 <h2 id="Ocean-Object-aware-Anchor-free-Tracking"><a href="#Ocean-Object-aware-Anchor-free-Tracking" class="headerlink" title="Ocean: Object-aware Anchor-free Tracking"></a>Ocean: Object-aware Anchor-free Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.10721">论文</a> <a target="_blank" rel="noopener" href="https://github.com/researchmm/TracKit">代码</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6615313">解读</a></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426115451.png"></p>
@@ -288,7 +290,8 @@
 <h2 id="Siamese-Keypoint-Prediction-Network-for-Visual-Object-Tracking"><a href="#Siamese-Keypoint-Prediction-Network-for-Visual-Object-Tracking" class="headerlink" title="Siamese Keypoint Prediction Network for Visual Object Tracking"></a>Siamese Keypoint Prediction Network for Visual Object Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.04078">论文</a> <a target="_blank" rel="noopener" href="https://github.com/ZekuiQin/SiamKPN">代码</a></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171705.png"></p>
 <p>这一篇将casscade的思想结合在centernet类的siamese跟踪器中，看上面图2结构已经很清晰了，KPN结构如下：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171748.png"></p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171748.png" style="zoom:80%;" />
+
 <p>还有一个需要关注的就是每个stage训练的时候分类标签的高斯方差不一样，遵循的原则就是越高的stage峰值越收束。目的即随着级联的进行，监管信号越来越严格。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171845.png"></p>
 <hr>
@@ -301,8 +304,7 @@
 <p>具体可以参考原作者在知乎的解读，该方法取得了VOT2020-ST的冠军。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173720.png"></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173734.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173759.png"></p>
-
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173759.png" style="zoom:80%;" />
     </div>
     <!--文末结束语-->
     
