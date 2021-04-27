@@ -149,7 +149,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -165,7 +165,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/2021/04/24/tracking/1-siamrcnn/" class="toc-header">Table of Contents</a>
+            <a href="/2021/04/24/tracking/1-siamrcnn/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Contributions"><span class="toc-number">1.</span> <span class="toc-text">Contributions</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Siam-RCNN"><span class="toc-number">2.1.</span> <span class="toc-text">Siam RCNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Video-Hard-Example-Mining"><span class="toc-number">2.2.</span> <span class="toc-text">Video Hard Example Mining</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tracklet-Dynamic-Programming-Algorithm"><span class="toc-number">2.3.</span> <span class="toc-text">Tracklet Dynamic Programming Algorithm</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C"><span class="toc-number">3.</span> <span class="toc-text">实验</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
             </div>
@@ -190,7 +190,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -258,20 +258,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2021-04-24
+      发布于:&nbsp;2021-04-24
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-04-24
+      更新于:&nbsp;2021-04-27
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -327,18 +327,21 @@
 <li><strong>Scoring</strong>  </li>
 </ul>
 <p>轨迹 $A=(a_1,…,a_N)$ 是一个包含N个不重复tracklets的序列，其中 $end(a_i) &lt; start(a_{i+1}), \forall i∈{1,…,N-1}$ ，即后一个tracklet的开始帧一定比前一个tracklet的结束帧大。一个轨迹的总分由衡量单个轨迹质量的一元分数 unuary 和惩罚轨迹之间空间距离的位置分数 loc_score 组成。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111306.png"></p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111306.png" style="zoom:80%;" />
+
 <p>其中 ff_score 表示tracklet $a_{i}$ 在 t 时刻以第一帧gt为参考的重检测分数；</p>
 <p>而 ff_tracklet_score 表示 $a_{i}$ 以gt所在tracklet的最后一个检测结果为参考的重检测分数（因为一个tracklet的所有检测结果都有很高概率与这个tracklet的第一个检测结果相同，否则这个tracklet就会终止，所以gt所在的tracklet的最后一个检测结果也有很大概率是正确的）；</p>
 <p>Location score是计算前一个tracklet最后一个检测结果和后一个tracklet的第一个检测结果的bbox之间的L1距离，是负的，作为惩罚项，越小越好。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111534.png"></p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111534.png" style="zoom:80%;" />
+
 <ul>
 <li><strong>Online Dynamic Programming</strong> </li>
 </ul>
 <p>这一节介绍如何高效找到具有最大总得分的tracklets序列。</p>
 <p>定义 $\theta[a]$ 表示从第一个tracklet开始到第a个tracklet的总得分。由于一旦tracklet不被扩展，就会终止。因此当新的一帧到来时，只有被扩展或者新建的tracklet需要重新计算score。</p>
 <p>首先设置 $\theta[a_{ff}]=0$，$a_{ff}$ 是first-frame tracklet（即包含gt的tracklet），当每一个tracklet a被创建或需要更新时</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111717.png"></p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111717.png" style="zoom:80%;" />
+
 <p>在更新了当前帧的 $\theta$ 后，选择最大动态规划得分的tracklet $\hat{a}=arg max_{a} \theta[a]$；如果被选中的tracklet在当前帧中没有检测结果，则算法会指出目标不存在。由于benchmarks要求每帧都输出结果，所以我们用选定的tracklet最近一次的检测的box，并且将其得分置0。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>实验做的很充分，在目前主流数据集中都有结果。在short-term的测试中，大部分达到SOTA水平或者比SOTA稍低一些，在long-term的测试效果则非常好，基本吊打第二名。其中VOT的测试因为其自带一个重启，会与算法本身的重启冲突，所以作者专门做了一个short-term版本的用于VOT测试。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111909.png"></p>

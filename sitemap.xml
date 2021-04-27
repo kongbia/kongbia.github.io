@@ -2,14 +2,21 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://kongbia.github.io/README.html</loc>
+    <loc>https://kongbia.github.io/2021/04/27/tracking/35-FSL-tracking/</loc>
     
     <lastmod>2021-04-27</lastmod>
     
   </url>
   
   <url>
-    <loc>https://kongbia.github.io/2021/04/27/tracking/35-FSL-tracking/</loc>
+    <loc>https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/</loc>
+    
+    <lastmod>2021-04-27</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kongbia.github.io/README.html</loc>
     
     <lastmod>2021-04-27</lastmod>
     
@@ -40,13 +47,6 @@
     <loc>https://kongbia.github.io/2021/04/23/tracking/33-transform-tracking/</loc>
     
     <lastmod>2021-04-26</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/</loc>
-    
-    <lastmod>2021-04-24</lastmod>
     
   </url>
   
