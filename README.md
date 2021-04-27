@@ -16,3 +16,7 @@ gitalk评论：
 
 [https://www.cnblogs.com/qisi007/p/13731562.html](https://www.cnblogs.com/qisi007/p/13731562.html)
 
+给 Hexo 搭建的博客增加搜索引擎验证：
+
+[https://www.jianshu.com/p/1ae43e700c45?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation](https://www.jianshu.com/p/1ae43e700c45?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation)
+
