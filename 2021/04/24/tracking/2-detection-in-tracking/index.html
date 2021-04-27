@@ -148,7 +148,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -164,7 +164,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/2021/04/24/tracking/2-detection-in-tracking/" class="toc-header">文章目录</a>
+            <a href="/2021/04/24/tracking/2-detection-in-tracking/" class="toc-header">Table of Contents</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><span class="toc-number">1.</span> <span class="toc-text">Bridging the Gap Between Detection and Tracking: A Unified Approach</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><span class="toc-number">2.</span> <span class="toc-text">GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Learning-to-Track-Any-Object"><span class="toc-number">3.</span> <span class="toc-text">Learning to Track Any Object</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection"><span class="toc-number">4.</span> <span class="toc-text">Siam R-CNN: Visual Tracking by Re-Detection</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><span class="toc-number">5.</span> <span class="toc-text">Tracking by Instance Detection: A Meta-Learning Approach</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
             </div>
@@ -189,7 +189,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -257,20 +257,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      发布于:&nbsp;2021-04-24
+      Posted on:&nbsp;2021-04-24
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      更新于:&nbsp;2021-04-26
+      Edited on:&nbsp;2021-04-26
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -333,7 +333,7 @@
 <hr>
 <h1 id="Siam-R-CNN-Visual-Tracking-by-Re-Detection"><a href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection" class="headerlink" title="Siam R-CNN: Visual Tracking by Re-Detection"></a>Siam R-CNN: Visual Tracking by Re-Detection</h1><p>这个就是用重检测的思想做跟踪，也是基于RCNN框架的，同时使用Tracklet Dynamic Programming Algorithm去跟踪所有潜在的目标。</p>
 <p>具体解读见前一篇笔记</p>
-<p><a target="_blank" rel="noopener" href="https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection | CV home (kongbia.github.io)</a></p>
+<p><a href="https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection | CV home (kongbia.github.io)</a></p>
 <hr>
 <h1 id="Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><a href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach" class="headerlink" title="Tracking by Instance Detection: A Meta-Learning Approach"></a>Tracking by Instance Detection: A Meta-Learning Approach</h1><p>同样是域自适应方法将检测器转化成跟踪器，此篇更像是第一篇Bridging the Gap Between Detection and Tracking: A Unified Approach的进阶，不同的是本文没有额外添加模板引导分支，而是直接用标准的检测器通过元学习的方式做域自适应。避免了冗余结构使得速度大幅提升，达到40FPS。另外就是训练的时候加入了很多来自MAML++喝MetaSGD的技巧，效果更好。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100802.png"></p>

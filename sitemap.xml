@@ -2,77 +2,77 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://example.com/2021/04/27/tracking/35-FSL-tracking/</loc>
+    <loc>https://kongbia.github.io/2021/04/27/tracking/35-FSL-tracking/</loc>
     
     <lastmod>2021-04-27</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/2021/04/27/tracking/34-stmtrack/</loc>
+    <loc>https://kongbia.github.io/2021/04/27/tracking/34-stmtrack/</loc>
     
     <lastmod>2021-04-27</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/2021/04/26/tracking/3-anchorfree-siamese/</loc>
+    <loc>https://kongbia.github.io/2021/04/26/tracking/3-anchorfree-siamese/</loc>
     
     <lastmod>2021-04-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/2021/04/24/tracking/2-detection-in-tracking/</loc>
+    <loc>https://kongbia.github.io/2021/04/24/tracking/2-detection-in-tracking/</loc>
     
     <lastmod>2021-04-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/2021/04/23/tracking/33-transform-tracking/</loc>
+    <loc>https://kongbia.github.io/2021/04/23/tracking/33-transform-tracking/</loc>
     
     <lastmod>2021-04-26</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/2021/04/24/tracking/1-siamrcnn/</loc>
+    <loc>https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/</loc>
     
     <lastmod>2021-04-24</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/about/index.html</loc>
+    <loc>https://kongbia.github.io/about/index.html</loc>
     
     <lastmod>2021-04-24</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/README.html</loc>
+    <loc>https://kongbia.github.io/README.html</loc>
     
     <lastmod>2021-04-23</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/search/index.html</loc>
+    <loc>https://kongbia.github.io/search/index.html</loc>
     
     <lastmod>2021-04-23</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/categories/index.html</loc>
+    <loc>https://kongbia.github.io/categories/index.html</loc>
     
     <lastmod>2021-04-23</lastmod>
     
   </url>
   
   <url>
-    <loc>http://example.com/tags/index.html</loc>
+    <loc>https://kongbia.github.io/tags/index.html</loc>
     
     <lastmod>2021-04-23</lastmod>
     
@@ -80,7 +80,7 @@
   
 
   <url>
-    <loc>http://example.com/</loc>
+    <loc>https://kongbia.github.io/</loc>
     <lastmod>2021-04-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -88,49 +88,49 @@
 
   
   <url>
-    <loc>http://example.com/tags/CVPR2020/</loc>
+    <loc>https://kongbia.github.io/tags/CVPR2020/</loc>
     <lastmod>2021-04-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/Anchor-free/</loc>
+    <loc>https://kongbia.github.io/tags/Anchor-free/</loc>
     <lastmod>2021-04-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/Siamese/</loc>
+    <loc>https://kongbia.github.io/tags/Siamese/</loc>
     <lastmod>2021-04-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/transform/</loc>
+    <loc>https://kongbia.github.io/tags/transform/</loc>
     <lastmod>2021-04-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/CVPR2021/</loc>
+    <loc>https://kongbia.github.io/tags/CVPR2021/</loc>
     <lastmod>2021-04-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/%E6%97%B6%E5%BA%8F/</loc>
+    <loc>https://kongbia.github.io/tags/%E6%97%B6%E5%BA%8F/</loc>
     <lastmod>2021-04-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://example.com/tags/FSL/</loc>
+    <loc>https://kongbia.github.io/tags/FSL/</loc>
     <lastmod>2021-04-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -139,7 +139,7 @@
 
   
   <url>
-    <loc>http://example.com/categories/tracking/</loc>
+    <loc>https://kongbia.github.io/categories/tracking/</loc>
     <lastmod>2021-04-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
