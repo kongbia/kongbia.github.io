@@ -9,6 +9,20 @@
   </url>
   
   <url>
+    <loc>https://kongbia.github.io/2021/04/27/tracking/35-FSL-tracking/</loc>
+    
+    <lastmod>2021-04-28</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://kongbia.github.io/2021/04/27/tracking/34-stmtrack/</loc>
+    
+    <lastmod>2021-04-28</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://kongbia.github.io/README.html</loc>
     
     <lastmod>2021-04-28</lastmod>
@@ -23,21 +37,7 @@
   </url>
   
   <url>
-    <loc>https://kongbia.github.io/2021/04/27/tracking/35-FSL-tracking/</loc>
-    
-    <lastmod>2021-04-28</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/</loc>
-    
-    <lastmod>2021-04-27</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://kongbia.github.io/2021/04/27/tracking/34-stmtrack/</loc>
     
     <lastmod>2021-04-27</lastmod>
     
@@ -131,6 +131,13 @@
   
   <url>
     <loc>https://kongbia.github.io/tags/%E6%97%B6%E5%BA%8F/</loc>
+    <lastmod>2021-04-28</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://kongbia.github.io/tags/arxiv/</loc>
     <lastmod>2021-04-28</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

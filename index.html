@@ -11,6 +11,7 @@
     <meta name="force-rendering" content="webkit"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="baidu-site-verification" content="code-54i0P0kFnh" />
+    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
     <meta name="google-site-verification" content="jAgA9G_RhGFVRhMp5R2gY3IzRyGZrMGqwJo5bkDbIRs" />
     <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
     
@@ -160,7 +161,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="6" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="7" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -265,19 +266,35 @@
           <v-spacer></v-spacer>
           <v-col cols="auto">
             
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
+                  </span>
+                
+              </v-card>
+            
           </v-col>
         </v-row>
         <span>
           
-            <a class="index-article-header-category font-weight-bold" href="/2021/04/28/tracking/36-learning-target-candidate-association/">Uncategorized></a>
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
            
         </span> 
-        <a class="index-article-header-title font-weight-medium" href="/2021/04/28/tracking/36-learning-target-candidate-association/">36-learning-target-candidate-association</a>
+        <a class="index-article-header-title font-weight-medium" href="/2021/04/28/tracking/36-learning-target-candidate-association/">Learning Target Candidate Association to Keep Track of What Not to Track</a>
       </div>
       
       <div class="index-article-content">
         
           
+论文 代码
+MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅外观模型不足以区分目标和干扰物，因此需要对所有潜在目标保持跟踪。不同的是KYS是通过一个传播模块隐式地跟踪候选目标，最后作用于外观模型的输出来抑制干扰响应；而本文则是借助SuperGlue显式地匹配帧间所有的候选目标，构建跟踪链，有点多目标跟踪的意思，可解释性也更强。
+
+主流跟踪方法大多聚焦于建立强大的外观模型，然而仅依靠外观模型对于干扰物的鲁棒性较差；
+作者提出另一种思路，即对干扰物也保持跟踪。为此构建一个可学习的关联网络（受启发自SuperGlue），允许在帧与帧之间传播所有候选目标；
+针对跟踪数据集没有对干扰物标注的问题，提出了一种结合部分标注和自监督的训练策略。
+
         
       </div>
       
@@ -304,6 +321,11 @@
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
                     <a rel="tag" href = /tags/Siamese/ >Siamese</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
                   </span>
                 
                   <span class="index-article-header-tag-content">
@@ -359,6 +381,11 @@
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
                     <a rel="tag" href = /tags/%E6%97%B6%E5%BA%8F/ >时序</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
                   </span>
                 
               </v-card>
