@@ -1,7 +1,7 @@
 # Hexo个人博客
 
-个人博客网址：[https://kongbia.github.io](https://kongbia.github.io/)
-自定义域名：[http://zjp97.top](http://zjp97.top/)
+个人博客网址：[kongbia.github.io](https://kongbia.github.io/)
+自定义域名：[www.zjp97.top/](https://www.zjp97.top/)
 
 
 - [搭建教程1](https://www.cnblogs.com/liuxianan/p/build-blog-website-by-hexo-github.html) [搭建教程2](https://xiuxiuing.gitee.io/blog/2018/08/08/giteepage/)
