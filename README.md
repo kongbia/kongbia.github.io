@@ -10,8 +10,9 @@
 
 - [gitalk评论](https://www.cnblogs.com/qisi007/p/13731562.html)
 
-- [增加搜索引擎验证](https://www.jianshu.com/p/1ae43e700c45?utm_campaign=maleskine&utm_content=note&utm_medium=seo_notes&utm_source=recommendation)
+- [百度，必应，谷歌收录](https://blog.csdn.net/weixin_41800884/article/details/103750683)
 
 - [自定义域名](https://www.cnblogs.com/LandWind/articles/8232033.html)
+
 - [github/coding](https://zhuanlan.zhihu.com/p/142545818)
 
