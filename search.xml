@@ -405,11 +405,11 @@
 <p>实际操作中，并不是每个候选都能找到相应的匹配，因此引入dustbin来处理未匹配的节点。大致的想法就是额外增加一行一列来存放未匹配的节点。比如候选$v_j$只在集合$V$中出现，则$A_{N’+1,j}=1$；类似的，若$v’<em>i$ 在集合$V$中没有匹配对象，则$A</em>{i,N+1}=1$。</p>
 <p>作者设计了一种可学习方法来预测这个分配矩阵A，首先需要提取候选对象的特征表示，接下来讨论。</p>
 <h2 id="Target-Candidate-Extraction"><a href="#Target-Candidate-Extraction" class="headerlink" title="Target Candidate Extraction"></a>Target Candidate Extraction</h2><p>目标候选对象需要满足两个条件，响应得分是局部最大，且要超过一定阈值。</p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428170210.png" style="zoom:80%;" />
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428170210.png"  />
 
 <p>实现时使用$5 \times 5$ max-pooling找到局部极值，阈值$\tau=0.05$。</p>
 <p>接下来为目标候选构建特征编码</p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428170144.png" style="zoom:80%;" />
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428170144.png"  />
 
 <p>包括响应得分$s_i$，位置$c_i$，和 backbone在该位置提取的外观模型$f_i$。$\psi$ 表示MLP，将 s 和 c 变换到和 f 一样的维度。</p>
 <h2 id="Candidate-Embedding-Network"><a href="#Candidate-Embedding-Network" class="headerlink" title="Candidate Embedding Network"></a>Candidate Embedding Network</h2><p>为了进一步丰富编码特征，特别是便于提取特征的同时又能识别邻近的候选特征，作者引入了候选嵌入网络。这里借鉴了SuperGlue中的self-attention和cross-attention交换不同节点的信息。最后经过一个线性变换，得到每个候选$v_i$的编码$h_i$。</p>
@@ -439,7 +439,7 @@
 <h2 id="Object-Association"><a href="#Object-Association" class="headerlink" title="Object Association"></a>Object Association</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428205314.png"></p>
 <p>在线跟踪时对所有潜在对象保持跟踪，并构建跟踪链，如图3所示。若当前的候选对象都与该对象没有关联，那么该对象就会从场景中消失。若有新的对象出现则新增链并赋予新的对象id。对于关联上的对象，将得分$s_i$添加到历史分数中。此外，当候选对应关系不确定，即分配概率小于$\tau=0.75$时，我们删除旧的对象并创建一个新的对象。</p>
 <p>这样所有候选对象都与一个已经存在的或新创建的对象相关联，若上一帧检测到的真实目标在当前帧有关联对象，则暂定该关联对象是目标。为了避免该关联对象是干扰，还需将它的历史得分与当前其他候选对象的得分进行比较，如果另一个对象在当前帧中获得的分类分数高于当前选择对象在过去获得的所有分数，我们就选择这个对象作为目标；否则还是保持当前选择对象不变。</p>
-<p>若上一帧检测到的真实目标在当前帧没有关联对象，则进行重检测，需要满足：1. 分类得分最高；2. 分类得分大于阈值$\eta =0.25$。</p>
+<p>若上一帧检测到的真实目标在当前帧没有关联对象，则进行重检测，需满足：1. 分类得分最高；2. 分类得分大于阈值$\eta =0.25$。</p>
 <p>整个算法流程如下图：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429161216.png"></p>
 <center>'.' 表示访问对象的属性</center>
