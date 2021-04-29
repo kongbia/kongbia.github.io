@@ -391,7 +391,8 @@
     <url>/2021/04/28/tracking/36-learning-target-candidate-association/</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428110851.png"></p>
 <p><a href="https://arxiv.org/abs/2103.16556">论文</a> <a href="https://github.com/visionml/pytracking">代码</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>Martin参与的新作，出发点和之前的<a href="https://arxiv.org/abs/2003.11014">KYS</a>类似，均指出仅外观模型不足以区分目标和干扰物，因此需要对所有潜在目标保持跟踪。不同的是KYS是通过一个传播模块隐式地跟踪所有对象，最后作用于外观模型的输出来抑制干扰响应；而本文则是借助SuperGlue显式地匹配帧间所有的候选对象，构建跟踪链，有点多目标跟踪的意思，可解释性也更强。</p>
+<ul>
 <li>主流跟踪方法大多聚焦于建立强大的外观模型，然而仅依靠外观模型对于干扰物的鲁棒性较差；</li>
 <li>作者提出另一种思路，即对干扰物也保持跟踪。为此构建一个可学习的关联网络（受启发自SuperGlue），允许在帧与帧之间传播所有候选目标；</li>
 <li>针对跟踪数据集没有对干扰物标注的问题，提出了一种结合部分标注和自监督的训练策略。</li>
@@ -461,8 +462,6 @@
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429172214.png"></p>
 <p>对LaSOT数据集，$T&lt;0.7$时本文方法指标明显更高，证明其鲁棒性。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429172329.png"></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>出发点和之前的<a href="https://arxiv.org/abs/2003.11014">KYS</a>类似，均指出仅外观模型不足以区分目标和干扰物，因此需要对所有潜在目标保持跟踪。不同的是KYS是通过一个传播模块隐式地跟踪所有对象，最后作用于外观模型的输出来抑制干扰响应；而本文则是借助SuperGlue显式地匹配帧间所有的候选对象，构建跟踪链，有点多目标跟踪的意思，可解释性也更强。</p>
-<p>Martin永远的神！</p>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
