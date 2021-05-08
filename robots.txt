@@ -1,0 +1,9 @@
+# hexo robots.txt
+User-agent: * Allow: /
+Allow: /archives/
+Disallow: /vendors/
+Disallow: /js/
+Disallow: /css/
+
+Sitemap: https://www.zjp97.top/sitemap.xml
+Sitemap: https://www.zjp97.top/baidusitemap.xml
