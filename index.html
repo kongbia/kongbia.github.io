@@ -162,7 +162,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="9" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="10" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -271,6 +271,65 @@
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/ >模型更新</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%B9%BF/ >数据增广</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/ICME2021/ >ICME2021</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/05/10/tracking/39-deepmix/">DeepMix: Online Auto Data Augmentation for Robust Visual Object Tracking</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文
+Motivation
+通过历史帧样本在线更新目标模型对跟踪具有重要意义。最近的研究主要集中在构建有效的更新方法，而忽略了用于学习判别模型的训练样本；
+本文提出DeepMix，对历史帧样本的特征进行在线增广，从而强化模型的在线更新能力。具体包括通过object-aware filtering在线增强历史样本，以及通过离线训练的MixNet混合多个样本进行数据增强；
+最后通过三个典型的跟踪器DiMP, DSiam和SiamRPN++验证提出的方法。
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/05/10/tracking/39-deepmix/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-05-10
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
                     <a rel="tag" href = /tags/Siamese/ >Siamese</a>
                   </span>
                 
@@ -282,6 +341,11 @@
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
                     <a rel="tag" href = /tags/FSL/ >FSL</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/ >模型更新</a>
                   </span>
                 
               </v-card>
