@@ -143,7 +143,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -162,7 +162,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="10" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="11" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,6 +261,66 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-05-19
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/CVPR2021/ >CVPR2021</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Natural-Language/ >Natural Language</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/05/19/tracking/40-snlt/">Siamese Natural Language Tracker: Tracking by Natural Language Descriptions with Siamese Trackers</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文
+Introduction本文研究的课题为tracking by natural language(NL) 。人类的学习过程是视觉和语言共同作用的，而在基于外观的跟踪过程中引入语言描述同样可以使得跟踪器更加精确、灵活和鲁棒（如图1的例子）。因此，本文将孪生跟踪器与语言描述结合，将语言描述编码成一个卷积核嵌入到孪生框架中（SNL-RPN），并将视觉和语言的预测进行动态聚合（Dynamic Aggregation），为tracking by NL任务提供了一个新的baseline。具体贡献总结如下：
+
+提出一种新的tracking by NL的baseline，Siamese Natural Language Region Proposal Network (SNL-RPN)；
+提出了一种基于视觉和语言预测的动态聚合（Dynamic Aggregation），将SNL-RPN转换为Siamese Natural Language Tracker (SNLT)；
+在NL标注的数据集上将孪生跟踪器的性能提升了3-7个百分点，并且性能超过其他NL tracker，速度为50FPS。
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/05/19/tracking/40-snlt/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-05-10
             </div>
           </v-col>
@@ -309,7 +369,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/10/tracking/39-deepmix/">Read More</v-btn>
+        <v-btn text href="/2021/05/10/tracking/39-deepmix/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -370,7 +430,7 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/10/tracking/38-siamtol/">Read More</v-btn>
+        <v-btn text href="/2021/05/10/tracking/38-siamtol/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -433,7 +493,7 @@ Refinement Module (RM) 将RD和分类分支获得的信息进行整合，细化�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/08/tracking/37-siamrn/">Read More</v-btn>
+        <v-btn text href="/2021/05/08/tracking/37-siamrn/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -483,7 +543,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/28/tracking/36-learning-target-candidate-association/">Read More</v-btn>
+        <v-btn text href="/2021/04/28/tracking/36-learning-target-candidate-association/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -538,7 +598,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/27/tracking/35-FSL-tracking/">Read More</v-btn>
+        <v-btn text href="/2021/04/27/tracking/35-FSL-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -564,12 +624,12 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E6%97%B6%E5%BA%8F/ >时序</a>
+                    <a rel="tag" href = /tags/CVPR2021/ >CVPR2021</a>
                   </span>
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
+                    <a rel="tag" href = /tags/%E6%97%B6%E5%BA%8F/ >时序</a>
                   </span>
                 
               </v-card>
@@ -598,7 +658,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/27/tracking/34-stmtrack/">Read More</v-btn>
+        <v-btn text href="/2021/04/27/tracking/34-stmtrack/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -649,7 +709,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/26/tracking/3-anchorfree-siamese/">Read More</v-btn>
+        <v-btn text href="/2021/04/26/tracking/3-anchorfree-siamese/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -684,7 +744,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/24/tracking/2-detection-in-tracking/">Read More</v-btn>
+        <v-btn text href="/2021/04/24/tracking/2-detection-in-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -727,61 +787,24 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/24/tracking/1-siamrcnn/">Read More</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-04-23
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/transform/ >transform</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/CVPR2021/ >CVPR2021</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/2021/04/23/tracking/33-transform-tracking/">Transform与目标跟踪</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          Transform在视觉领域遍地开花，终于目标跟踪也没能逃过。并行的长距离依赖（空间和时间皆可）对于目标跟踪似乎有着天然的优势，本篇笔记简要概述今年CVPR2021关于Transform在目标跟踪中的应用，主要介绍动机和结构，细节和实验部分以后有空再补充。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/23/tracking/33-transform-tracking/">Read More</v-btn>
+        <v-btn text href="/2021/04/24/tracking/1-siamrcnn/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
    
 </v-card>  
 
+
+  <div id="pagination" class="text-center">
+    <v-pagination 
+      v-model="currentPage" 
+      :length=2 
+      @input="PageChange" 
+      prev-icon="chevron_left"
+      next-icon="chevron_right"
+      color="secondary"
+    ></v-pagination>
+  </div>
          
                             <div id="mobile-footer" class="d-block d-md-none">
                                 <v-divider></v-divider>
