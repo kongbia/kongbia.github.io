@@ -143,7 +143,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -162,7 +162,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="11" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="12" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,6 +261,56 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-05-26
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/IJCAI2021/ >IJCAI2021</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/05/26/tracking/41-siamrcr/">SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文
+本文解决的是老生常谈的分类和回归不匹配的问题。作者提出在分类和回归之间建立双向的连接，可以动态地重新加权每个正样本的损失。此外，增加了一个定位分支用于预测定位精度，可以在推理过程中替代回归辅助连接(regression assistance link)，使得训练和测试更加一致。最终运行速度为65FPS。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/05/26/tracking/41-siamrcr/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-05-19
             </div>
           </v-col>
@@ -310,7 +360,7 @@ Introduction本文研究的课题为tracking by natural language(NL) 。人类�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/19/tracking/40-snlt/">阅读更多</v-btn>
+        <v-btn text href="/2021/05/19/tracking/40-snlt/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -369,7 +419,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/10/tracking/39-deepmix/">阅读更多</v-btn>
+        <v-btn text href="/2021/05/10/tracking/39-deepmix/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -430,7 +480,7 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/10/tracking/38-siamtol/">阅读更多</v-btn>
+        <v-btn text href="/2021/05/10/tracking/38-siamtol/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -493,7 +543,7 @@ Refinement Module (RM) 将RD和分类分支获得的信息进行整合，细化�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/08/tracking/37-siamrn/">阅读更多</v-btn>
+        <v-btn text href="/2021/05/08/tracking/37-siamrn/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -543,7 +593,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/28/tracking/36-learning-target-candidate-association/">阅读更多</v-btn>
+        <v-btn text href="/2021/04/28/tracking/36-learning-target-candidate-association/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -598,7 +648,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/27/tracking/35-FSL-tracking/">阅读更多</v-btn>
+        <v-btn text href="/2021/04/27/tracking/35-FSL-tracking/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -658,7 +708,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/27/tracking/34-stmtrack/">阅读更多</v-btn>
+        <v-btn text href="/2021/04/27/tracking/34-stmtrack/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -709,7 +759,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/26/tracking/3-anchorfree-siamese/">阅读更多</v-btn>
+        <v-btn text href="/2021/04/26/tracking/3-anchorfree-siamese/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -744,50 +794,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/24/tracking/2-detection-in-tracking/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-04-24
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/CVPR2020/ >CVPR2020</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/24/tracking/1-siamrcnn/">阅读更多</v-btn>
+        <v-btn text href="/2021/04/24/tracking/2-detection-in-tracking/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
