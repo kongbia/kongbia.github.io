@@ -302,6 +302,7 @@
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608204616.png"></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608204711.png"></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608204741.png"></p>
+<hr>
 <h1 id="Learning-Policies-for-Adaptive-Tracking-with-Deep-Feature-Cascades"><a href="#Learning-Policies-for-Adaptive-Tracking-with-Deep-Feature-Cascades" class="headerlink" title="Learning Policies for Adaptive Tracking with Deep Feature Cascades"></a>Learning Policies for Adaptive Tracking with Deep Feature Cascades</h1><h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>第一篇来自ICCV2017，出发点是不同复杂程度的跟踪场景对特征的需求是不同的，对于简单场景使用浅层特征（甚至像素特征）就能处理，而对于一些复杂场景才需要具有更强语义信息的深度特征。这个<strong>自适应决策</strong>的问题可以通过基于Q-learning的强化学习完成，如图1所示，学习一个agent来判断当前特征是否已经可以以较高的置信度定位目标，还是需要继续计算更深层的特征来寻找目标。</p>
 <p>这样对简单目标提前终止的策略可以大幅提升推理速度，相比baseline平均速度提升了大约10倍，GPU速度158.9FPS，并且在cpu上也能以23.2FPS的速度接近实时运行。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629104958.png"></p>
