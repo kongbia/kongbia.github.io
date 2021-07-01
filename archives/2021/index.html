@@ -87,7 +87,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -106,7 +106,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="13" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="14" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -137,7 +137,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -205,9 +205,23 @@
             
                 <v-timeline-item class="timeline-header" color="secondary lighten-2">
                     <a href="/archives/2021" class="timeline-title">2021</a>
-                    <span class="timeline-subtitle">Archives</span>
+                    <span class="timeline-subtitle">归档</span>
                 </v-timeline-item>
                 
+            
+            <v-timeline-item fill-dot small color="secondary lighten-2">
+                <div class="timeline-item-post d-none d-md-block">
+                    <span class="timeline-item-time">2021.06.30</span>
+                    <a href="/2021/06/30/tracking/43-Crop-Transform-Paste/" class="timeline-item-title">43-Crop-Transform-Paste</a>
+                </div>
+                <div class="timeline-item-post-mobile d-block d-md-none">
+                    <span class="timeline-item-time">2021.06.30</span><br>
+                    <a href="/2021/06/30/tracking/43-Crop-Transform-Paste/" class="timeline-item-title">43-Crop-Transform-Paste</a>
+                </div>
+                <v-divider></v-divider>
+            </v-timeline-item>
+        
+            
             
             <v-timeline-item fill-dot small color="secondary lighten-2">
                 <div class="timeline-item-post d-none d-md-block">
@@ -329,20 +343,6 @@
                 <div class="timeline-item-post-mobile d-block d-md-none">
                     <span class="timeline-item-time">2021.04.27</span><br>
                     <a href="/2021/04/27/tracking/34-stmtrack/" class="timeline-item-title">STMTrack: Template-free Visual Tracking with Space-time Memory Networks</a>
-                </div>
-                <v-divider></v-divider>
-            </v-timeline-item>
-        
-            
-            
-            <v-timeline-item fill-dot small color="secondary lighten-2">
-                <div class="timeline-item-post d-none d-md-block">
-                    <span class="timeline-item-time">2021.04.26</span>
-                    <a href="/2021/04/26/tracking/3-anchorfree-siamese/" class="timeline-item-title">Anchor Free的孪生目标跟踪</a>
-                </div>
-                <div class="timeline-item-post-mobile d-block d-md-none">
-                    <span class="timeline-item-time">2021.04.26</span><br>
-                    <a href="/2021/04/26/tracking/3-anchorfree-siamese/" class="timeline-item-title">Anchor Free的孪生目标跟踪</a>
                 </div>
                 <v-divider></v-divider>
             </v-timeline-item>

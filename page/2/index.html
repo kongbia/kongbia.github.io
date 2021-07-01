@@ -143,7 +143,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -162,7 +162,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="13" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="14" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,6 +261,62 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-04-26
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Anchor-free/ >Anchor-free</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/04/26/tracking/3-anchorfree-siamese/">Anchor Free的孪生目标跟踪</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。
+[Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)
+[Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)
+跟踪任务可以看成是分类任务与状态估计任务的结合。分类任务的目的是精确定位目标的位置，而状态估计获得目标的姿态（即目标框）。SiamFC++一文将当前的跟踪器按照不同状态估计的方法分为三类：
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/04/26/tracking/3-anchorfree-siamese/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-04-24
             </div>
           </v-col>
@@ -294,7 +350,7 @@
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/24/tracking/2-detection-in-tracking/">Read More</v-btn>
+        <v-btn text href="/2021/04/24/tracking/2-detection-in-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -337,7 +393,7 @@
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/24/tracking/1-siamrcnn/">Read More</v-btn>
+        <v-btn text href="/2021/04/24/tracking/1-siamrcnn/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -390,7 +446,7 @@
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/23/tracking/33-transform-tracking/">Read More</v-btn>
+        <v-btn text href="/2021/04/23/tracking/33-transform-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
