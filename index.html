@@ -143,7 +143,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -162,7 +162,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="14" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="15" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,6 +261,55 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-07-01
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Domain-adaption/ >Domain adaption</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2021/07/01/tracking/44-DASiamRPN/">Domain Adaptive SiamRPN++ for Object Tracking in the Wild</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文
+Motivation基于孪生网络的跟踪算法均假定训练和测试数据遵循相同的分布，然而在正常图像上训练的跟踪器并不能保证在其他领域的数据上（如雨雾天气的序列）也表现良好，即存在域偏移（domain shift）问题，如图1和图2。作者称本文是首次将域分布差异问题引入视觉跟踪领域。
+针对这一问题，本文提出一种域自适应方法，包括Pixel Domain Adaptation (PDA) 和 Semantic Domain Adaptation (SDA)。PDA分别对（不同域的）模板和搜索图像的特征对齐，消除天气、光照等引起的像素级域偏移；SDA将（不同域的）跟踪目标的特征表达对齐，以消除语义级的域偏移。二者均通过对抗训练的方式学习域分类器，域分类器强制网络学习域不变的特征表达，从而实现域自适应。
+最后作者在有雾和红外序列两个不同域的数据集上进行了验证。
+
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2021/07/01/tracking/44-DASiamRPN/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-06-30
             </div>
           </v-col>
@@ -276,7 +325,7 @@
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Data-augmentations/ >Data augmentations</a>
+                    <a rel="tag" href = /tags/Data-augmentation/ >Data augmentation</a>
                   </span>
                 
               </v-card>
@@ -301,7 +350,7 @@ Motivation现有的跟踪方法依赖大量高质量标注数据集训练，但�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/06/30/tracking/43-Crop-Transform-Paste/">Read More</v-btn>
+        <v-btn text href="/2021/06/30/tracking/43-Crop-Transform-Paste/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -355,7 +404,7 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/06/08/tracking/42-rl-tracking/">Read More</v-btn>
+        <v-btn text href="/2021/06/08/tracking/42-rl-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -405,7 +454,7 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/26/tracking/41-siamrcr/">Read More</v-btn>
+        <v-btn text href="/2021/05/26/tracking/41-siamrcr/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -465,7 +514,7 @@ Introduction本文研究的课题为tracking by natural language(NL) 。人类�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/19/tracking/40-snlt/">Read More</v-btn>
+        <v-btn text href="/2021/05/19/tracking/40-snlt/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -491,12 +540,12 @@ Introduction本文研究的课题为tracking by natural language(NL) 。人类�
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%B9%BF/ >数据增广</a>
+                    <a rel="tag" href = /tags/ICME2021/ >ICME2021</a>
                   </span>
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/ICME2021/ >ICME2021</a>
+                    <a rel="tag" href = /tags/Data-augmentation/ >Data augmentation</a>
                   </span>
                 
               </v-card>
@@ -524,7 +573,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/10/tracking/39-deepmix/">Read More</v-btn>
+        <v-btn text href="/2021/05/10/tracking/39-deepmix/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -585,7 +634,7 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/10/tracking/38-siamtol/">Read More</v-btn>
+        <v-btn text href="/2021/05/10/tracking/38-siamtol/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -648,7 +697,7 @@ Refinement Module (RM) 将RD和分类分支获得的信息进行整合，细化�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/05/08/tracking/37-siamrn/">Read More</v-btn>
+        <v-btn text href="/2021/05/08/tracking/37-siamrn/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -698,7 +747,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/28/tracking/36-learning-target-candidate-association/">Read More</v-btn>
+        <v-btn text href="/2021/04/28/tracking/36-learning-target-candidate-association/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -753,67 +802,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/27/tracking/35-FSL-tracking/">Read More</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-04-27
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/CVPR2021/ >CVPR2021</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E6%97%B6%E5%BA%8F/ >时序</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/2021/04/27/tracking/34-stmtrack/">STMTrack: Template-free Visual Tracking with Space-time Memory Networks</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation离线训练的Siamese跟踪器已经充分完全挖掘了第一帧模板信息，但它们抵抗目标外观变化的能力依然有限。现有的模板更新机制大多依赖耗时的数值优化或复杂的手工设计策略，这阻碍了它们的实时跟踪和实际应用。本文提出了一种基于时空记忆网络的跟踪框架，该框架能够充分利用与目标相关的历史信息，从而更好地适应跟踪过程中的外观变化。这样避免了模板更新，所以叫template-free。主要创新点包括：
-
-引入记忆机制存储目标的历史信息，引导跟踪器聚焦在当前帧中信息最丰富的区域；
-memory network的像素级相似度计算能够生成更精确的目标框。
-
-运行速度37 FPS
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/27/tracking/34-stmtrack/">Read More</v-btn>
+        <v-btn text href="/2021/04/27/tracking/35-FSL-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
