@@ -294,7 +294,7 @@
 <p>因此，本文提出在分类和回归之间建立一个互惠关系 (reciprocal relationship)，使它们同步优化，以生成精度一致的输出。整体框架如图2所示，在分类和回归分支之间增加了两个连接 classification / regression assistance link。classification assistance 用分类置信度给回归损失加权，使得回归可以更关注高置信度的位置；regression assistance 用定位精度（预测框和gt的IOU）给分类损失加权，迫使分类分数与回归精度更加一致。</p>
 <p>而在推理阶段，gt是未知的，无法通过计算IOU得到定位精度，因此额外增加一个定位分支专门用于预测定位精度。将分类置信度与定位预测置信度相乘，在推理阶段生成新的跟踪评分/置信度图，保证了与训练过程的一致性（类似FCOS / SiamFC++）。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/41-siamrcr/20210526221151.png"></p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>图2整体是一个anchor-free的孪生框架，预测头部分采用的是CenterNet的中心、中心偏移量、宽高的形式。这里将中心偏移量和宽高放在同一个分支输出，所以回归分支输出维度是4 ($t^{<em>}_{x,y} = (w^</em>, h^*, \Delta x^*, \Delta y^*)$)。</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>图2整体是一个anchor-free的孪生框架，预测头部分采用的是CenterNet的中心、中心偏移量、宽高的形式。这里将中心偏移量和宽高放在同一个分支输出，所以回归分支输出维度是4  $t^*_{x,y} = (w^*, h^*, \Delta x^*, \Delta y^*)$ 。</p>
 <h2 id="Reciprocal-Classification-and-Regression"><a href="#Reciprocal-Classification-and-Regression" class="headerlink" title="Reciprocal Classification and Regression"></a>Reciprocal Classification and Regression</h2><p>下面开始介绍两种辅助连接，设计原则就是：</p>
 <ol>
 <li>当回归框的定位精度较低时，相应的分类得分不应该很高，因为如果该位置成为分类置信度的赢家，差的回归结果将导致跟踪性能较差；</li>
