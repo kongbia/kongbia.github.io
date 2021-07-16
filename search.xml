@@ -846,7 +846,7 @@
 <p>因此，本文提出在分类和回归之间建立一个互惠关系 (reciprocal relationship)，使它们同步优化，以生成精度一致的输出。整体框架如图2所示，在分类和回归分支之间增加了两个连接 classification / regression assistance link。classification assistance 用分类置信度给回归损失加权，使得回归可以更关注高置信度的位置；regression assistance 用定位精度（预测框和gt的IOU）给分类损失加权，迫使分类分数与回归精度更加一致。</p>
 <p>而在推理阶段，gt是未知的，无法通过计算IOU得到定位精度，因此额外增加一个定位分支专门用于预测定位精度。将分类置信度与定位预测置信度相乘，在推理阶段生成新的跟踪评分/置信度图，保证了与训练过程的一致性（类似FCOS / SiamFC++）。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/41-siamrcr/20210526221151.png"></p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>图2整体是一个anchor-free的孪生框架，预测头部分采用的是CenterNet的中心、中心偏移量、宽高的形式。这里将中心偏移量和宽高放在同一个分支输出，所以回归分支输出维度是4 ($t^{<em>}_{x,y}=(w^</em>, h^*, \Delta x^*, \Delta y^*)$)。</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>图2整体是一个anchor-free的孪生框架，预测头部分采用的是CenterNet的中心、中心偏移量、宽高的形式。这里将中心偏移量和宽高放在同一个分支输出，所以回归分支输出维度是4 ($t^{<em>}_{x,y} = (w^</em>, h^*, \Delta x^*, \Delta y^*)$)。</p>
 <h2 id="Reciprocal-Classification-and-Regression"><a href="#Reciprocal-Classification-and-Regression" class="headerlink" title="Reciprocal Classification and Regression"></a>Reciprocal Classification and Regression</h2><p>下面开始介绍两种辅助连接，设计原则就是：</p>
 <ol>
 <li>当回归框的定位精度较低时，相应的分类得分不应该很高，因为如果该位置成为分类置信度的赢家，差的回归结果将导致跟踪性能较差；</li>
@@ -1065,7 +1065,7 @@
 <p>其中h表示域分类器，$h(x)\rightarrow 0$表示样本x属于源域，$h(x)\rightarrow 1$表示样本x属于目标域。$min \ error(h(x))$表示理想域分类器的预测误差，显然，误差越小（越容易区分）表示域差异越大。现在要最小化域差异$d_A(S,T)$以实现特征对齐，等价于要最大化理想域分类器误差，即</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702114945.png"></p>
 <p>其中 f 表示样本 x 的特征表达。公式(3)是特征提取器 f 和域分类器 h 之间的minimax优化问题。这个怎么理解呢？其实类似GAN，域分类器 h 需要尽可能区分不同域的样本，而特征提取 f 需要欺骗分类器让其难以区分不同域，即让 f 提取到域不变特征。</p>
-<p>作者在优化这个问题时采用 Gradient Reversed Layer (GRL)，如下图所示，在梯度从域分类器传到特征提取之前将其取负号反转，希望粉色部分的参数向$L_d$减小的方向优化，绿色部分的参数向$L_d$增大的方向优化，用一个网络一个优化器就实现了两部分有不一样的优化目标，形成<strong>对抗</strong>的关系。（参考<a href="https://www.zhihu.com/question/266710153/answer/1338864403">Gradient Reversal Layer指什么？ - Just4Fan的回答 - 知乎</a></p>
+<p>作者在优化这个问题时采用 Gradient Reversed Layer (GRL)，如下图所示，在梯度从域分类器传到特征提取之前将其取负号反转，希望粉色部分的参数向$L_d$减小的方向优化，绿色部分的参数向$L_d$增大的方向优化，用一个网络一个优化器就实现了两部分有不一样的优化目标，形成<strong>对抗</strong>的关系。（参考<a href="https://www.zhihu.com/question/266710153/answer/1338864403">Gradient Reversal Layer指什么？ - Just4Fan的回答 - 知乎</a> )</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702115615.png"></p>
 <h2 id="Probabilistic-Analysis-for-Object-Tracker"><a href="#Probabilistic-Analysis-for-Object-Tracker" class="headerlink" title="Probabilistic Analysis for Object Tracker"></a>Probabilistic Analysis for Object Tracker</h2><p>作者将跟踪问题看成一个后验概率 $P(S,B|Z,X)$，即给定模板Z和搜索区域X，预测分类得分S和目标框B。由于域偏移的存在，源域的联合概率分布$P_S(S,B,Z,X)$与目标域的联合概率分布$P_T(S,B,Z,X)$是不同的。</p>
 <p><strong>Pixel Domain Adaptation</strong> 根据贝叶斯公式，可以将联合概率分布分解成：</p>

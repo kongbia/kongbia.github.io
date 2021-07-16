@@ -299,7 +299,7 @@
 <p>其中h表示域分类器，$h(x)\rightarrow 0$表示样本x属于源域，$h(x)\rightarrow 1$表示样本x属于目标域。$min \ error(h(x))$表示理想域分类器的预测误差，显然，误差越小（越容易区分）表示域差异越大。现在要最小化域差异$d_A(S,T)$以实现特征对齐，等价于要最大化理想域分类器误差，即</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702114945.png"></p>
 <p>其中 f 表示样本 x 的特征表达。公式(3)是特征提取器 f 和域分类器 h 之间的minimax优化问题。这个怎么理解呢？其实类似GAN，域分类器 h 需要尽可能区分不同域的样本，而特征提取 f 需要欺骗分类器让其难以区分不同域，即让 f 提取到域不变特征。</p>
-<p>作者在优化这个问题时采用 Gradient Reversed Layer (GRL)，如下图所示，在梯度从域分类器传到特征提取之前将其取负号反转，希望粉色部分的参数向$L_d$减小的方向优化，绿色部分的参数向$L_d$增大的方向优化，用一个网络一个优化器就实现了两部分有不一样的优化目标，形成<strong>对抗</strong>的关系。（参考<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/266710153/answer/1338864403">Gradient Reversal Layer指什么？ - Just4Fan的回答 - 知乎</a></p>
+<p>作者在优化这个问题时采用 Gradient Reversed Layer (GRL)，如下图所示，在梯度从域分类器传到特征提取之前将其取负号反转，希望粉色部分的参数向$L_d$减小的方向优化，绿色部分的参数向$L_d$增大的方向优化，用一个网络一个优化器就实现了两部分有不一样的优化目标，形成<strong>对抗</strong>的关系。（参考<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/266710153/answer/1338864403">Gradient Reversal Layer指什么？ - Just4Fan的回答 - 知乎</a> )</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702115615.png"></p>
 <h2 id="Probabilistic-Analysis-for-Object-Tracker"><a href="#Probabilistic-Analysis-for-Object-Tracker" class="headerlink" title="Probabilistic Analysis for Object Tracker"></a>Probabilistic Analysis for Object Tracker</h2><p>作者将跟踪问题看成一个后验概率 $P(S,B|Z,X)$，即给定模板Z和搜索区域X，预测分类得分S和目标框B。由于域偏移的存在，源域的联合概率分布$P_S(S,B,Z,X)$与目标域的联合概率分布$P_T(S,B,Z,X)$是不同的。</p>
 <p><strong>Pixel Domain Adaptation</strong> 根据贝叶斯公式，可以将联合概率分布分解成：</p>
