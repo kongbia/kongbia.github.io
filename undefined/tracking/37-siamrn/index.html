@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
+    <meta name="baidu-site-verification" content="code-Toh8kQYN7N" />
+    <meta name="google-site-verification" content="r3Cw4aIKBFXcYVnB8J-bxaQozYY6BHsoE3q5soJN3Po" />
+    <meta name="msvalidate.01" content="C5E4D0D01152A883DDA407CDCE62E1DA" />
+    <meta name='description' content='A personal blog that shares computer vision papers'>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/avatar.jpg">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+    
+        <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        
+            load: ['[tex]/mhchem'],
+        
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        
+            packages: {'[+]': ['mhchem']},
+        
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+          
+
+    
+    
+    
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+            <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+            <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+        
+    
+
+    
+    
+    <title>
+        
+            Learning to Filter: Siamese Relation Network for Robust Tracking | CV home
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.jpg">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://space.bilibili.com/5567932/article" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                b站专栏
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/undefined/tracking/37-siamrn/" class="toc-header">文章目录</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Relation-Detector"><span class="toc-number">2.1.</span> <span class="toc-text">Relation Detector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Contrastive-Training-Strategy"><span class="toc-number">2.2.</span> <span class="toc-text">Contrastive Training Strategy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Refinement-Module"><span class="toc-number">2.3.</span> <span class="toc-text">Refinement Module</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ground-truth-and-Loss-function"><span class="toc-number">2.4.</span> <span class="toc-text">Ground-truth and Loss function</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Training-and-Inference"><span class="toc-number">2.5.</span> <span class="toc-text">Training and Inference</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">3.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-with-the-state-of-the-art"><span class="toc-number">3.1.</span> <span class="toc-text">Comparison with the state-of-the-art</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ablation-Study"><span class="toc-number">3.2.</span> <span class="toc-text">Ablation Study</span></a></li></ol></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:zjphust@gmail.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://github.com/kongbia" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+            
+                <span id="busuanzi_container_site_uv" style="display: none;"> 
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                </span>
+                <br>
+            
+            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>
+            <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+            <span>
+                &copy; 2020 - 2021 
+                zjp
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">CV home</a>
+      </div>
+      <div id="site-description">A personal blog that shares computer vision papers</div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://space.bilibili.com/5567932/article">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/undefined/tracking/37-siamrn/">Learning to Filter: Siamese Relation Network for Robust Tracking</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      发布于:&nbsp;2021-05-08
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      更新于:&nbsp;2021-05-11
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210508213527.png"></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2104.00829">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
+<li>Siamese跟踪器的训练设置只是在大量的图像对中匹配同一个目标，而忽略了它们之间的区别，因此对相似干扰物的判别能力不够好；</li>
+<li>分类和回归是独立优化的，造成二者之间的不匹配。具体来说，分类置信度最高的位置对应的目标框可能并不是最准确的（类似检测中general focal loss等文章的观点）。</li>
+</ul>
+<p>针对上述问题，作者提出了两个模块：</p>
+<ul>
+<li><strong>Relation Detector (RD)</strong> 构造了一个2-way-1-shot的少样本学习方法来过滤干扰物。并且使用对比训练策略 (contrastive training strategy)，不仅学习匹配相同的目标，而且学习如何区分不同的目标 ；</li>
+<li><strong>Refinement Module (RM)</strong> 将RD和分类分支获得的信息进行整合，细化跟踪结果。RM可以联合优化分类分支和回归分支，缓解两个分支的不匹配。</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509122001.png"></p>
+<p>整体框架如图2，baseline是SiamBAN，经过特征提取后，将目标和<strong>回归分支</strong>生成的proposal送入RD计算它们之间的相似性(metric-based)，RD输出的结果与分类分支的结果融合后得到最终的目标输出。</p>
+<h2 id="Relation-Detector"><a href="#Relation-Detector" class="headerlink" title="Relation Detector"></a>Relation Detector</h2><p>比较目标和proposal相似性的最简单的方法就是各种线性距离（欧式距离、余弦距离等），然而面对难以分辨的干扰物时很容易失效。因此，本文提出了一种自适应的非线性比较器。该方法受启发自CVPR2020的 Few-Shot Object Detection with Attention-RPN and Multi-Relation Detector，是一个metric-based的少样本学习方法，具体包括Global Detector, Local Detector, and Patch Detector三个模块，如图3所示。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509165405.png"></p>
+<p>回归分支响应图的每个位置都会预测一个框，提取其ROI特征(query)，与目标模板的ROI特征(support)共同送入3个Detector中：</p>
+<ul>
+<li>Global Detector 将目标和proposal的ROI特征拼接后做全局池化，经过几层FC得到global分数；</li>
+<li>Local Detector 将两个ROI特征做DW-Corr得到local分数；</li>
+<li>Patch Detector 将两个ROI特征拼接后经过若干卷积得到patch分数。</li>
+</ul>
+<p>最后将三个得分加起来就得到最终的匹配相似性分数，该分数能够同时考虑全局、局部以及patch之间的关系。</p>
+<h2 id="Contrastive-Training-Strategy"><a href="#Contrastive-Training-Strategy" class="headerlink" title="Contrastive Training Strategy"></a>Contrastive Training Strategy</h2><p>RD的训练是一个2-way-1-shot的少样本学习过程，2-way表示目标和非目标两类。在训练RD时，作者不仅对属于目标类别的物体进行匹配，还对非目标类别的干扰物进行区分。因此构建一个三元组训练集 $(s_c, q_c, s_n)$，其中$s_c$和$s_n$分别表示positive support图像和negative support图像，$q_c$是query图像。$s_c, q_c$取自同一个视频，而$s_n$取自其他视频（表示干扰物）。通过输入的三元组图像可以生成不同的样本组合，定义$s_p$为positive support的gt，$p_p$表示positive proposal，$n_n$表示negative support的gt，$p_n$表示negative proposal，将它们结合可以得到不同的样本对 $(s_p, p_p), (s_p, p_n), (n_n, p_p / p_n)$（这些样本对就是图3中输入的support和query），其比例为1: 2: 1。</p>
+<p>在训练初期，应用简单样本可以使模型稳定收敛。为了进一步增强模型的判别能力，在训练中后期引入难样本挖掘，包括离线和在线两种方式。在线就是从IOU小于0.2的proposal中选择得分最高的作为难负样本；离线就是像SiamRCNN一样构建索引表，从中选取在嵌入空间中的最接近的难样本。</p>
+<h2 id="Refinement-Module"><a href="#Refinement-Module" class="headerlink" title="Refinement Module"></a>Refinement Module</h2><p>分类和回归的独立优化导致分类得分最高的位置对应的框不一定是最准确的，甚至可能都不是目标，因此作者通过将RD嵌入孪生框架使得分类和回归的学习能够统一。具体来说，首先将RD的输出转换成$25 \times 25 \times 1$的匹配分数图，这个输出就反映了每个位置预测框内的物体与目标之间的相似性；将其作为权重与分类分支的分数图进行元素点乘，可以过滤掉背景中的干扰；最后将refine后的分数图经过一层卷积得到最后的分类得分，并获取最大响应位置对应的预测框。图4展示了一些响应图可视化结果，可以看到，RM将回归分支和分类分支的信息结合起来预测目标位置，从而缓解了不匹配的问题。</p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509213558.png" style="zoom:80%;" />
+
+<h2 id="Ground-truth-and-Loss-function"><a href="#Ground-truth-and-Loss-function" class="headerlink" title="Ground-truth and Loss function"></a>Ground-truth and Loss function</h2><p>大部分都和SiamBAN一样，增加的RD模块采用MSE loss</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509215957.png"></p>
+<p>其中$r_{i,j}$表示位置$(i,j)$处的relation score；$y_{i,j}$是对应标签，上文提及的三种样本对中，$(s_p, p_p)$标签为1，$(s_p, p_n), (n_n, p_p / p_n)$标签为0。</p>
+<h2 id="Training-and-Inference"><a href="#Training-and-Inference" class="headerlink" title="Training and Inference"></a>Training and Inference</h2><p>训练首先从来自同一个序列的模板和搜索区域中选择16个正样本和48个负样本来训练分类和回归分支，然后再加入另一个序列中的搜索图像（负例）用于生成RD的训练样本。第5个epoch开始在线难样本挖掘，第15个epoch开始离线难样本挖掘。整个网络端到端训练不需要fine-tune。</p>
+<p>推理阶段第一帧先提取模板特征并通过precise ROI pooling提取ROI特征。后续帧对回归分支每个位置的输出生成proposal，提取proposal的ROI特征与模板ROI特征共同送入RD计算它们之间的关系，最后将RD的输出与分类分支的输出送入RM得到最终结果。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Comparison-with-the-state-of-the-art"><a href="#Comparison-with-the-state-of-the-art" class="headerlink" title="Comparison with the state-of-the-art"></a>Comparison with the state-of-the-art</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509223013.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509223028.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509223105.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509223114.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509223124.png"></p>
+<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p>比较了多尺度预测和使用不同组合的Relation Head的结果。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509223228.png"></p>
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+        
+            <div class="post-nav-button float-left">
+                <v-icon>chevron_left</v-icon>
+                <a class="font-weight-bold text-left" href="/undefined/tracking/38-siamtol/">
+                    Updatable Siamese Tracker with Two-stage One-shot Learning
+                </a>
+            </div>
+              
+          
+            <div class="post-nav-button float-right">
+                <a class="font-weight-bold text-right" href="/undefined/tracking/36-learning-target-candidate-association/">      
+                    Learning Target Candidate Association to Keep Track of What Not to Track
+                </a>
+                <v-icon>chevron_right</v-icon>
+            </div>
+        
+    </div>
+</v-card>
+
+
+
+    <v-card class="comment-card elevation-2">
+        <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
+            
+                <v-tab><span id="comment-tab-0">gitalk</span></v-tab>
+            
+        </v-tabs>
+        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOlsiZ2l0YWxrIl0sImdpdGFsa19jbGllbnRfaWQiOiI2OTQ1MTJjNTYxZTdkNjQyMTM5ZiIsImdpdGFsa19jbGllbnRfc2VjcmV0IjoiMjE2OTI5MTRkYWI2YWJhOGI5ZTZjZDUyZTY2ZWFkY2ExMDIyNjZlYiIsImdpdGFsa19yZXBvIjoia29uZ2JpYS5naXRodWIuaW8iLCJnaXRhbGtfb3duZXIiOiJrb25nYmlhIiwiZ2l0YWxrX3NpZF90eXBlIjpudWxsLCJnaXRhbGtfZGlzdHJhY3Rpb25GcmVlTW9kZSI6dHJ1ZSwiZGlzcXVzX3Nob3J0bmFtZSI6bnVsbCwibGl2ZXJlX2RhdGFfdWlkIjpudWxsLCJ2YWxpbmVfbGVhbmNsb3VkX2FwcF9pZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfa2V5IjpudWxsLCJ2YWxpbmVfb3B0aW9uIjpudWxsLCJjaGFuZ3lhbl9hcHBfaWQiOm51bGwsImNoYW5neWFuX2FwcF9rZXkiOm51bGwsImNoYW5neWFuX3NpZF90eXBlIjpudWxsfQ== >
+            
+                <v-tab-item eager=true>
+                    
+                        <div id="gitalk-container"></div>
+                    
+                </v-tab-item>
+            
+        </v-tabs-items>
+    </v-card>
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2020 - 2021 zjp</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+    
+        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+
+
+</body>
+</html>
