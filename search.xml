@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>Siam R-CNN: Visual Tracking by Re-Detection</title>
-    <url>/undefined/tracking/1-siamrcnn/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p>Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。</p>
 <span id="more"></span>
 
@@ -84,7 +84,7 @@
   </entry>
   <entry>
     <title>目标检测框架在目标跟踪中的应用</title>
-    <url>/undefined/tracking/2-detection-in-tracking/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p>从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。</p>
 <p>本篇笔记关注如何将目标检测框架应用在跟踪中，主要介绍其思想，细节部分不做过多描述，记录论文包含：</p>
 <span id="more"></span>
@@ -155,7 +155,7 @@
   </entry>
   <entry>
     <title>Transform与目标跟踪</title>
-    <url>/undefined/tracking/33-transform-tracking/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p>Transform在视觉领域遍地开花，终于目标跟踪也没能逃过。并行的长距离依赖（空间和时间皆可）对于目标跟踪似乎有着天然的优势，本篇笔记简要概述今年CVPR2021关于Transform在目标跟踪中的应用，主要介绍动机和结构，细节和实验部分以后有空再补充。</p>
 <span id="more"></span>
 
@@ -307,7 +307,7 @@
   </entry>
   <entry>
     <title>Anchor Free的孪生目标跟踪</title>
-    <url>/undefined/tracking/3-anchorfree-siamese/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p>Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。</p>
 <p>[<a href="https://www.bilibili.com/read/cv4987634/?from=readlist">Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)</a></p>
 <p>[<a href="https://www.bilibili.com/read/cv6518222/?from=readlist">Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)</a></p>
@@ -401,7 +401,7 @@
   </entry>
   <entry>
     <title>STMTrack: Template-free Visual Tracking with Space-time Memory Networks</title>
-    <url>/undefined/tracking/34-stmtrack/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427102245.png"></p>
 <p><a href="https://arxiv.org/abs/2104.00324">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>离线训练的Siamese跟踪器已经充分完全挖掘了第一帧模板信息，但它们抵抗目标外观变化的能力依然有限。现有的模板更新机制大多依赖耗时的数值优化或复杂的手工设计策略，这阻碍了它们的实时跟踪和实际应用。本文提出了一种基于时空记忆网络的跟踪框架，该框架能够充分利用与目标相关的历史信息，从而更好地适应跟踪过程中的外观变化。这样避免了模板更新，所以叫template-free。主要创新点包括：</p>
@@ -463,7 +463,7 @@
   </entry>
   <entry>
     <title>Real-Time Visual Object Tracking via Few-Shot Learning</title>
-    <url>/undefined/tracking/35-FSL-tracking/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427173306.png"></p>
 <p><a href="https://arxiv.org/abs/2103.10130">论文</a></p>
 <p>跟踪可以看成是一个特殊的 few-shot learning (FSL) 问题，本文提出了一个通用的两阶段框架，它能够使用大量的FSL算法并且保持较快的速度。第一阶段通过SiamRPN生成若干潜在候选框，第二阶段通过少样本分类的思想对候选框进行分类。按照这种coarse-to-fine结构，第一阶段为第二阶段提供稀疏的样本，在第二阶段可以更方便、高效地进行多种FSL算法。作者选取了几种基于优化的少样本学习方法进行证明。此外，该框架可将大多数FSL算法直接应用到视觉跟踪中，使研究人员能够在这两个领域相互交流。</p>
@@ -544,7 +544,7 @@
   </entry>
   <entry>
     <title>Learning Target Candidate Association to Keep Track of What Not to Track</title>
-    <url>/undefined/tracking/36-learning-target-candidate-association/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428110851.png"></p>
 <p><a href="https://arxiv.org/abs/2103.16556">论文</a> <a href="https://github.com/visionml/pytracking">代码</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>Martin参与的新作，出发点和之前的<a href="https://arxiv.org/abs/2003.11014">KYS</a>类似，均指出仅外观模型不足以区分目标和干扰物，因此需要对所有潜在目标保持跟踪。不同的是KYS是通过一个传播模块隐式地跟踪所有对象，最后作用于外观模型的输出来抑制干扰响应；而本文则是借助SuperGlue显式地匹配帧间所有的候选对象，构建跟踪链，有点多目标跟踪的意思，可解释性也更强。</p>
@@ -628,7 +628,7 @@
   </entry>
   <entry>
     <title>Learning to Filter: Siamese Relation Network for Robust Tracking</title>
-    <url>/undefined/tracking/37-siamrn/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210508213527.png"></p>
 <p><a href="https://arxiv.org/abs/2104.00829">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
@@ -682,7 +682,7 @@
   </entry>
   <entry>
     <title>Updatable Siamese Tracker with Two-stage One-shot Learning</title>
-    <url>/undefined/tracking/38-siamtol/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/38-siamtol/20210510102825.png"></p>
 <p><a href="https://arxiv.org/abs/2104.15049">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文主要解决孪生跟踪器缺乏在线更新能力的问题。传统的线性模板更新难以处理目标的不规则变化和采样噪声，造成跟踪漂移；而一些像updatenet采用网络进行自适应更新的方法，其更新网络和跟踪器在结构上是分离的，不能从联合训练中受益，也不能以最佳方式合作。</p>
@@ -731,7 +731,7 @@
   </entry>
   <entry>
     <title>DeepMix: Online Auto Data Augmentation for Robust Visual Object Tracking</title>
-    <url>/undefined/tracking/39-deepmix/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/39-deepmixl/20210510171656.png"></p>
 <p><a href="https://arxiv.org/abs/2104.11585">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
@@ -779,7 +779,7 @@
   </entry>
   <entry>
     <title>Siamese Natural Language Tracker: Tracking by Natural Language Descriptions with Siamese Trackers</title>
-    <url>/undefined/tracking/40-snlt/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519110756.png"></p>
 <p><a href="https://arxiv.org/abs/1912.02048">论文</a></p>
 <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>本文研究的课题为tracking by natural language(NL) 。人类的学习过程是视觉和语言共同作用的，而在基于外观的跟踪过程中引入语言描述同样可以使得跟踪器更加精确、灵活和鲁棒（如图1的例子）。因此，本文将孪生跟踪器与语言描述结合，将语言描述编码成一个卷积核嵌入到孪生框架中（SNL-RPN），并将视觉和语言的预测进行动态聚合（Dynamic Aggregation），为tracking by NL任务提供了一个新的baseline。具体贡献总结如下：</p>
@@ -835,7 +835,7 @@
   </entry>
   <entry>
     <title>SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</title>
-    <url>/undefined/tracking/41-siamrcr/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/41-siamrcr/20210526210529.png"></p>
 <p><a href="https://arxiv.org/abs/2105.11237">论文</a></p>
 <p>本文解决的是老生常谈的分类和回归不匹配的问题。作者提出在分类和回归之间建立<strong>双向</strong>的连接，可以动态地重新加权每个正样本的损失。此外，增加了一个定位分支用于预测定位精度，可以在推理过程中替代回归辅助连接(regression assistance link)，使得训练和测试更加一致。最终运行速度为65FPS。</p>
@@ -883,7 +883,7 @@
   </entry>
   <entry>
     <title>强化学习在目标跟踪中的应用</title>
-    <url>/undefined/tracking/42-rl-tracking/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p>强化学习讨论的问题是智能体(agent) 如何在一个复杂不确定的环境(environment) 里去最大化它能获得的奖励。 今天介绍三篇关于强化学习在目标跟踪中的工作，分别利用强化学习来决策使用的特征，多个跟踪器的切换以及是否更新模板。</p>
 <p>论文列表：</p>
 <ul>
@@ -998,7 +998,7 @@
   </entry>
   <entry>
     <title>Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking</title>
-    <url>/undefined/tracking/43-Crop-Transform-Paste/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210630203150.png"></p>
 <p><a href="https://arxiv.org/abs/2106.10900">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>现有的跟踪方法依赖大量高质量标注数据集训练，但很多复杂挑战场景并未出现在训练数据中。为了避免昂贵的人工标注，本文提出一种<strong>自监督</strong>学习方式。作者设计了Crop-Transform-Paste，通过模拟跟踪过程中各种场景变化，合成足够的训练数据。在合成数据中目标状态是已知的，因此无需人工标注。</p>
@@ -1049,7 +1049,7 @@
   </entry>
   <entry>
     <title>Domain Adaptive SiamRPN++ for Object Tracking in the Wild</title>
-    <url>/undefined/tracking/44-DASiamRPN/</url>
+    <url>/posts/undefined.html</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210701165637.png"></p>
 <p><a href="https://arxiv.org/abs/2106.07862">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>基于孪生网络的跟踪算法均假定训练和测试数据遵循相同的分布，然而在正常图像上训练的跟踪器并不能保证在其他领域的数据上（如雨雾天气的序列）也表现良好，即存在域偏移（domain shift）问题，如图1和图2。作者称本文是首次将域分布差异问题引入视觉跟踪领域。</p>
