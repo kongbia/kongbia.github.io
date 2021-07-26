@@ -322,149 +322,6 @@ memory network的像素级相似度计算能够生成更精确的目标框。
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
-              2021-04-26
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Anchor-free/ >Anchor-free</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/2021/04/26/tracking/3-anchorfree-siamese/">Anchor Free的孪生目标跟踪</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。
-[Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)
-[Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)
-跟踪任务可以看成是分类任务与状态估计任务的结合。分类任务的目的是精确定位目标的位置，而状态估计获得目标的姿态（即目标框）。SiamFC++一文将当前的跟踪器按照不同状态估计的方法分为三类：
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/26/tracking/3-anchorfree-siamese/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-04-24
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/2021/04/24/tracking/2-detection-in-tracking/">目标检测框架在目标跟踪中的应用</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。
-本篇笔记关注如何将目标检测框架应用在跟踪中，主要介绍其思想，细节部分不做过多描述，记录论文包含：
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/24/tracking/2-detection-in-tracking/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-04-24
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/CVPR2020/ >CVPR2020</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/2021/04/24/tracking/1-siamrcnn/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
               2021-04-23
             </div>
           </v-col>
@@ -508,6 +365,149 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       
       <div class="index-article-readmore ">
         <v-btn text href="/2021/04/23/tracking/33-transform-tracking/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2020-03-06
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Anchor-free/ >Anchor-free</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2020/03/06/tracking/3-anchorfree-siamese/">Anchor Free的孪生目标跟踪</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。
+[Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)
+[Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)
+跟踪任务可以看成是分类任务与状态估计任务的结合。分类任务的目的是精确定位目标的位置，而状态估计获得目标的姿态（即目标框）。SiamFC++一文将当前的跟踪器按照不同状态估计的方法分为三类：
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2020/03/06/tracking/3-anchorfree-siamese/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2020-02-16
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2020/02/16/tracking/2-detection-in-tracking/">目标检测框架在目标跟踪中的应用</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。
+本篇笔记关注如何将目标检测框架应用在跟踪中，主要介绍其思想，细节部分不做过多描述，记录论文包含：
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2020/02/16/tracking/2-detection-in-tracking/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2020-02-15
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/CVPR2020/ >CVPR2020</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/2020/02/15/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/2020/02/15/tracking/1-siamrcnn/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 

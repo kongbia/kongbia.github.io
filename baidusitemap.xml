@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://www.zjp97.top/2020/03/06/tracking/3-anchorfree-siamese/</loc>
+    <lastmod>2021-07-26</lastmod>
+  </url>
+  <url>
+    <loc>https://www.zjp97.top/2020/02/16/tracking/2-detection-in-tracking/</loc>
+    <lastmod>2021-07-26</lastmod>
+  </url>
+  <url>
+    <loc>https://www.zjp97.top/2020/02/15/tracking/1-siamrcnn/</loc>
+    <lastmod>2021-07-26</lastmod>
+  </url>
+  <url>
     <loc>https://www.zjp97.top/2021/05/26/tracking/41-siamrcr/</loc>
     <lastmod>2021-07-16</lastmod>
   </url>
@@ -22,14 +34,6 @@
   </url>
   <url>
     <loc>https://www.zjp97.top/2021/04/23/tracking/33-transform-tracking/</loc>
-    <lastmod>2021-06-30</lastmod>
-  </url>
-  <url>
-    <loc>https://www.zjp97.top/2021/04/26/tracking/3-anchorfree-siamese/</loc>
-    <lastmod>2021-06-30</lastmod>
-  </url>
-  <url>
-    <loc>https://www.zjp97.top/2021/04/24/tracking/2-detection-in-tracking/</loc>
     <lastmod>2021-06-30</lastmod>
   </url>
   <url>
@@ -55,9 +59,5 @@
   <url>
     <loc>https://www.zjp97.top/2021/04/27/tracking/35-FSL-tracking/</loc>
     <lastmod>2021-04-28</lastmod>
-  </url>
-  <url>
-    <loc>https://www.zjp97.top/2021/04/24/tracking/1-siamrcnn/</loc>
-    <lastmod>2021-04-27</lastmod>
   </url>
 </urlset> 
