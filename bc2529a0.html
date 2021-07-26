@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
+    <meta name="baidu-site-verification" content="code-Toh8kQYN7N" />
+    <meta name="google-site-verification" content="r3Cw4aIKBFXcYVnB8J-bxaQozYY6BHsoE3q5soJN3Po" />
+    <meta name="msvalidate.01" content="C5E4D0D01152A883DDA407CDCE62E1DA" />
+    <meta name='description' content='A personal blog that shares computer vision papers'>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/avatar.jpg">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+          
+
+    
+    
+    
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+            <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+            <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+        
+    
+
+    
+    
+    <title>
+        
+            Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking | CV home
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.jpg">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://space.bilibili.com/5567932/article" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                b站专栏
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/bc2529a0.html" class="toc-header">文章目录</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">3.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Analysis-of-Crop-Transform-Paste"><span class="toc-number">3.1.</span> <span class="toc-text">Analysis of Crop-Transform-Paste</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ablation-of-Each-Transformation"><span class="toc-number">3.2.</span> <span class="toc-text">Ablation of Each Transformation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Advantages-of-the-Proposed-Method"><span class="toc-number">3.3.</span> <span class="toc-text">Advantages of the Proposed Method</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Evaluation-against-Unsupervised-Methods"><span class="toc-number">3.4.</span> <span class="toc-text">Evaluation against Unsupervised Methods</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">小结</span></a></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:zjphust@gmail.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://github.com/kongbia" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+            
+                <span id="busuanzi_container_site_uv" style="display: none;"> 
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                </span>
+                <br>
+            
+            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>
+            <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+            <span>
+                &copy; 2020 - 2021 
+                zjp
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">CV home</a>
+      </div>
+      <div id="site-description">A personal blog that shares computer vision papers</div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://space.bilibili.com/5567932/article">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/bc2529a0.html">Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      发布于:&nbsp;2021-06-30
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      更新于:&nbsp;2021-07-02
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210630203150.png"></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2106.10900">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>现有的跟踪方法依赖大量高质量标注数据集训练，但很多复杂挑战场景并未出现在训练数据中。为了避免昂贵的人工标注，本文提出一种<strong>自监督</strong>学习方式。作者设计了Crop-Transform-Paste，通过模拟跟踪过程中各种场景变化，合成足够的训练数据。在合成数据中目标状态是已知的，因此无需人工标注。</p>
+<p>本文提出的自监督方法可以无缝集成到任何现有的跟踪框架中进行训练，实验证明提出的方法：1）在<strong>少样本</strong>跟踪场景中取得比监督学习更好的性能；2）能够处理目标形变、遮挡、背景干扰等各种挑战；3）可以与监督学习相结合，进一步提高性能。</p>
+<span id="more"></span>
+
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701002056.png"></p>
+<p>整体框架如图2所示，作者利用Crop-Transform-Paste来合成训练样本。给定一个只有第一帧有标注的跟踪序列，首先裁剪目标区域（crop）；然后对目标进行跟踪相关的变换，模拟跟踪过程中的目标变化（transform）；最后将变换后的目标粘贴到不同帧的不同位置上，模拟目标周围的背景(上下文)变化（paste）。</p>
+<p><strong>Crop</strong></p>
+<p>根据给定的bbox裁剪目标patch。其实也可裁剪任意的patch，但这样缺乏有效的语义特征和边界。</p>
+<p><strong>Transform</strong></p>
+<p>如图2中间部分所示，采用shear, blur, cutout, color jittering, rescale 来模拟跟踪过程中的形变、运动模糊、遮挡、光照和尺度变换。其中跟踪场景中出现的模糊通常是由相机抖动或快速运动引起的，因此采用shaking blur（滤波器核仅在水平和垂直中心线非零）。shaking blur不和cutout同时使用，因为cutout填充的黑块会影响blur，而且现实中又模糊又遮挡的场景也比较少见。</p>
+<p><strong>Paste</strong></p>
+<p>如图2右边部分所示，把变换后的目标块随机粘贴到其他帧的不同位置上。为了减轻直接粘贴在边界处产生的尖锐突变，作者在目标patch外增加了pad，并在pad区域使用混合相加以平滑过渡。此外，还可以从其他视频中选择相似目标块粘贴到背景上，模拟背景（相似物）干扰，作者将其称为Similar-Patch Paste (SPatchP)。</p>
+<p><strong>Discussions</strong></p>
+<p>利用上述Crop-Transform-Paste可以生成各种训练样本而无需人工标注，因此属于自监督学习。作者讨论了它与典型的关注表征学习的自监督学习（SSL-RL）之间的差异。</p>
+<ol>
+<li>不同的框架。SSL-RL按照contrastive learning框架训练一个独立的特征学习模块，而本文的方法聚焦在生成无需人工标注的训练数据，因此可以嵌入到任何现有跟踪框架中；</li>
+<li>不同的data transformation技术。SSL-RL通过data transformation构造训练对来训练其特征学习模块，而本文设计了特定的跟踪相关的transformations来模拟跟踪过程中的场景变化。由于目标不同，采用了不同的transformation技术。比如后续实验中发现翻转(flip)会产生不利的影响。</li>
+</ol>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p>本文的实验非常充分，对比了不同的跟踪器，不同的数据变换方式，训练的数据量，以及和有监督方式的结合等。</p>
+<h2 id="Analysis-of-Crop-Transform-Paste"><a href="#Analysis-of-Crop-Transform-Paste" class="headerlink" title="Analysis of Crop-Transform-Paste"></a>Analysis of Crop-Transform-Paste</h2><p><strong>Selection of base target patch</strong> 表1对比了不同的目标块生成方式，SS-random表示随机裁剪，SS-annotated表示根据标注裁剪。显然后者优于前者，因为标注目标包含更有效的语义特征和更多的边界信息。并且自监督学习的性能和监督学习（Su）也比较接近。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701114700.png"></p>
+<p><strong>Selection of images to paste onto</strong> 表2对比了不同的粘贴方式。裁剪的目标粘贴到相同的视频序列中优于粘贴到其他视频序列中。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701115051.png"></p>
+<h2 id="Ablation-of-Each-Transformation"><a href="#Ablation-of-Each-Transformation" class="headerlink" title="Ablation of Each Transformation"></a>Ablation of Each Transformation</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701151326.png"></p>
+<p>作者做了两组实验分析每种变换的作用，第一组在只有shift变换的baseline1上添加一个变换来显示性能增益，第二组从使用所有变换的baseline2中删除一个变换来呈现性能下降。表3显示rescale和shift的作用最大，说明尺度和平移变换是最常见的。blur和color jitter单独使用不够好，可能过拟合，而与其他变换结合使用时有益的。flip不管单独使用还是结合其他变换一起均带来负面影响，作者认为它破坏了目标的边界信息（为什么？）。</p>
+<h2 id="Advantages-of-the-Proposed-Method"><a href="#Advantages-of-the-Proposed-Method" class="headerlink" title="Advantages of the Proposed Method"></a>Advantages of the Proposed Method</h2><p><strong>Challenge-oriented transformations</strong> Crop-Transform-Paste的一个明显优势在于可以针对跟踪挑战定制变换方法，比如1) rescale for Scale Variation (SV); 2) Cutout for Occlusion (OCC); 3) Blur for Motion Blur (MB) and 4) Similar-Patch Paste (SPatchP) for Background Clutter (BC)。如图3所示，针对OTB100中的各种挑战，使用对应的变换方法能够有效提升性能。在遮挡、运动模糊和背景杂波的测试序列上，cutout, blur, 和 similar-patch paste 在SS+Su模式下的提升甚至超过单独SS模式下的提升，说明这些场景的标注数据很少。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701153651.png"></p>
+<p><strong>Data efficiency</strong> 图1和图4对比了自监督学习（SS）、监督学习（Su）和二者结合（SS+Su）在使用不同数量的标注样本训练时的性能。可以看到，SS仅需要很少的标注样本0.6K就能收敛到一个不错的结果。并且二者结合可以进一步提升监督学习的性能。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155122.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155137.png"></p>
+<p><strong>Integration with supervised methods</strong> </p>
+<p>表4用SiamRPN++和DiMP证明提出的自监督方法可以嵌入到现有的有监督框架中进一步提升性能。DiMP提升较小是因为它本身有个在线训练模块能够一定程度 处理跟踪目标或场景的变化。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155221.png"></p>
+<h2 id="Evaluation-against-Unsupervised-Methods"><a href="#Evaluation-against-Unsupervised-Methods" class="headerlink" title="Evaluation against Unsupervised Methods"></a>Evaluation against Unsupervised Methods</h2><p>最后是和无监督方法的对比，同样是更优的。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155442.png"></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文提出了一种基于Crop-Transform-Paste的自监督学习方法，用于在没有人工标注的场景下训练跟踪模型。方法简洁，实验充分。个人认为这篇文章的重点在于自监督而不是数据增广，毕竟增广那部分只是单纯做了些常见的变换，核心还是利用这些变换有针对地合成各类样本。</p>
+<p>但就带来一个新的思考：如果我不用合成样本的自监督学习，直接把所有的变换全部作为数据增广加到有监督学习的训练中效果如何？以一个视频序列举例，本文的合成样本只利用视频的某一帧进行变换再粘贴到其他帧上生成N个样本；而传统的监督方法是获取视频中任意N帧得到N个样本。那假如对这N个不同的真实样本直接做数据增广，理论上能够覆盖的样本变换范围应该更大，效果是不是会更好？</p>
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+        
+            <div class="post-nav-button float-left">
+                <v-icon>chevron_left</v-icon>
+                <a class="font-weight-bold text-left" href="/853b6893.html">
+                    Domain Adaptive SiamRPN++ for Object Tracking in the Wild
+                </a>
+            </div>
+              
+          
+            <div class="post-nav-button float-right">
+                <a class="font-weight-bold text-right" href="/cc6a0cad.html">      
+                    强化学习在目标跟踪中的应用
+                </a>
+                <v-icon>chevron_right</v-icon>
+            </div>
+        
+    </div>
+</v-card>
+
+
+
+    <v-card class="comment-card elevation-2">
+        <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
+            
+                <v-tab><span id="comment-tab-0">gitalk</span></v-tab>
+            
+        </v-tabs>
+        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOlsiZ2l0YWxrIl0sImdpdGFsa19jbGllbnRfaWQiOiI2OTQ1MTJjNTYxZTdkNjQyMTM5ZiIsImdpdGFsa19jbGllbnRfc2VjcmV0IjoiMjE2OTI5MTRkYWI2YWJhOGI5ZTZjZDUyZTY2ZWFkY2ExMDIyNjZlYiIsImdpdGFsa19yZXBvIjoia29uZ2JpYS5naXRodWIuaW8iLCJnaXRhbGtfb3duZXIiOiJrb25nYmlhIiwiZ2l0YWxrX3NpZF90eXBlIjpudWxsLCJnaXRhbGtfZGlzdHJhY3Rpb25GcmVlTW9kZSI6dHJ1ZSwiZGlzcXVzX3Nob3J0bmFtZSI6bnVsbCwibGl2ZXJlX2RhdGFfdWlkIjpudWxsLCJ2YWxpbmVfbGVhbmNsb3VkX2FwcF9pZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfa2V5IjpudWxsLCJ2YWxpbmVfb3B0aW9uIjpudWxsLCJjaGFuZ3lhbl9hcHBfaWQiOm51bGwsImNoYW5neWFuX2FwcF9rZXkiOm51bGwsImNoYW5neWFuX3NpZF90eXBlIjpudWxsfQ== >
+            
+                <v-tab-item eager=true>
+                    
+                        <div id="gitalk-container"></div>
+                    
+                </v-tab-item>
+            
+        </v-tabs-items>
+    </v-card>
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2020 - 2021 zjp</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+    
+        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+
+
+</body>
+</html>

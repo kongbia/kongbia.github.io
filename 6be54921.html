@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
+    <meta name="baidu-site-verification" content="code-Toh8kQYN7N" />
+    <meta name="google-site-verification" content="r3Cw4aIKBFXcYVnB8J-bxaQozYY6BHsoE3q5soJN3Po" />
+    <meta name="msvalidate.01" content="C5E4D0D01152A883DDA407CDCE62E1DA" />
+    <meta name='description' content='A personal blog that shares computer vision papers'>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/avatar.jpg">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+    
+        <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        
+            load: ['[tex]/mhchem'],
+        
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        
+            packages: {'[+]': ['mhchem']},
+        
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+          
+
+    
+    
+    
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+            <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+            <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+        
+    
+
+    
+    
+    <title>
+        
+            目标检测框架在目标跟踪中的应用 | CV home
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.jpg">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://space.bilibili.com/5567932/article" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                b站专栏
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/6be54921.html" class="toc-header">文章目录</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><span class="toc-number">1.</span> <span class="toc-text">Bridging the Gap Between Detection and Tracking: A Unified Approach</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><span class="toc-number">2.</span> <span class="toc-text">GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Learning-to-Track-Any-Object"><span class="toc-number">3.</span> <span class="toc-text">Learning to Track Any Object</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection"><span class="toc-number">4.</span> <span class="toc-text">Siam R-CNN: Visual Tracking by Re-Detection</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><span class="toc-number">5.</span> <span class="toc-text">Tracking by Instance Detection: A Meta-Learning Approach</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:zjphust@gmail.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://github.com/kongbia" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+            
+                <span id="busuanzi_container_site_uv" style="display: none;"> 
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                </span>
+                <br>
+            
+            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>
+            <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+            <span>
+                &copy; 2020 - 2021 
+                zjp
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">CV home</a>
+      </div>
+      <div id="site-description">A personal blog that shares computer vision papers</div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://space.bilibili.com/5567932/article">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/6be54921.html">目标检测框架在目标跟踪中的应用</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      发布于:&nbsp;2020-02-16
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      更新于:&nbsp;2021-07-26
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <p>从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。</p>
+<p>本篇笔记关注如何将目标检测框架应用在跟踪中，主要介绍其思想，细节部分不做过多描述，记录论文包含：</p>
+<span id="more"></span>
+
+<ul>
+<li><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Huang_Bridging_the_Gap_Between_Detection_and_Tracking_A_Unified_Approach_ICCV_2019_paper.pdf">Bridging the Gap Between Detection and Tracking: A Unified Approach</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1912.08531">GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1910.11844">Learning to Track Any Object</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.12836">Siam R-CNN: Visual Tracking by Re-Detection</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2004.00830">Tracking by Instance Detection: A Meta-Learning Approach</a></li>
+</ul>
+<h1 id="Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><a href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach" class="headerlink" title="Bridging the Gap Between Detection and Tracking: A Unified Approach"></a>Bridging the Gap Between Detection and Tracking: A Unified Approach</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234243.png"></p>
+<p>从结构图可以很直观的看出这就是Faster RCNN的框架，作者将目标跟踪任务看成是one-shot object detection 和 few-shot instance classification 的组合。前者是一个class-level的子任务用来寻找和目标相似的候选框，后者是instance-level的任务用来区分目标和干扰物。主要有两个模块：Target-guidence module(TGM) 和 few-shot instance classifier。</p>
+<p>TGM对目标和搜索区域的特征以及它们在主干中的相互作用进行编码，相当于让网络更关注于与目标相关的instance，后面几篇文章也用了不同的方法来实现这个目的。</p>
+<p>TGM虽然使检测器聚焦于与目标相关的物体，但忽略了周围的背景干扰。为了弥补这一点，提出了few-shot instance classifier。 然而，直接从头开始训练耗时且容易导过拟合。因此作者通过Model-Agnostic Meta Learning (MAML)进行few-shot finetune，增强判别性进一步消除distractors。</p>
+<p>MAML的目的是训练一组初始化参数，<strong>通过在初始参数的基础上进行一或多步的梯度调整，来达到仅用少量数据就能快速适应新task的目的，</strong>示意图如下：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234331.png"></p>
+<p>域自适应的检测器整体训练流程如下图：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234353.png"></p>
+<p>输入是三元组，包括examplar, support, query，训练分为inner and outer optimization loops。对于Inner optimization loop中，在support image上计算的loss用来微调meta-layers即detector heads的参数，然后用微调后的参数计算meta-loss其梯度用于更新outer optimization loop。具体公式可以参考原文。</p>
+<p>在线跟踪中将之前帧的检测结果作为训练样本在线更新detector head的参数。</p>
+<p>作者称这是第一篇将目标检测框架应用到跟踪上的通用框架，检测模型可以用Faster RCNN，SSD等，速度上SSD模型为10FPS   Faster RCNN模型为3FPS。</p>
+<hr>
+<h1 id="GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><a href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking" class="headerlink" title="GlobalTrack: A Simple and Strong Baseline for Long-term Tracking"></a>GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234652.png"></p>
+<p>这篇文章构建了一个global instance search tracker，主要思想是利用target来引导网络搜索特定instance，与上一篇的TGM模块思想类似，不过这里对在RPN阶段和分类回归阶段都加入了target信息进行引导。对应的就是Query-guided RPN 和 Query-guided RCNN。</p>
+<p><strong>Query-guided RPN</strong></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234747.png"></p>
+<p>$z \in [k,k,c]$ 是query的ROI特征，$x \in [h,w,c]$ 是搜索图像的特征。$f_z$ 用 $k \times k$ 0-padding的卷积将 $z$ 转换为 $1 \times 1$ 的核作用于搜索区域，$f_x$ 使用 $3 \times 3$ 1-padding的卷积。$f_{out}$ 是 $1 \times 1 \times c$  的卷积将通道数变回为c，这个过程不使用正则化和激活函数。</p>
+<p><strong>Query-guided RCNN</strong></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424235530.png"></p>
+<p> $z$ 定义同上，$x_i \in [k,k,c]$ 是提取的proposal的特征。$h_z$ 和 $h_x$ 均为 $3 \times 3$ 1-padding的卷积，$h_{out}$ 为$1 \times 1 \times c$  卷积。</p>
+<p>GlobalTrack 对视频每一帧的跟踪完全不依赖相邻帧，没有累计误差使得它在长期跟踪问题中准确率保持稳定。速度为6FPS。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426092832.png"></p>
+<center>车牌在长期跟踪过程中消失了一段时间，当车牌再次出现的时候，其他跟踪算法就再也无法恢复跟踪了，而没有累计误差的 GlobalTrack不受前面的影响立刻跟踪到了目标。</center>
+
+<hr>
+<h1 id="Learning-to-Track-Any-Object"><a href="#Learning-to-Track-Any-Object" class="headerlink" title="Learning to Track Any Object"></a>Learning to Track Any Object</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426093105.png"></p>
+<center>图1 (a)从基于图像的数据集学习一个通用对象先验，(b)通过计算一个封闭形式的目标和背景之间的线性判别器使其适应于一个感兴趣的特定对象(例如左上角的总线)。这允许跟踪物体通过显著的变形，而不捕获干扰物</center>
+
+<p>本文重点在于将category-specific object detector 变成 category-agnostic, object-specific detector来做跟踪。想达到这个目的，需要处理如下两个关键的问题，如图1所示：</p>
+<ol>
+<li>如何将 category specific prior 改为 generic objectness prior？</li>
+<li>如何进一步的将这种 generic prior 改为 particular instance of interst？</li>
+</ol>
+<p>针对问题1，作者构建了 a joint model for category-specific object detection and category-agnostic tracking。和之前类似，也是添加了目标特征的检测框架（基于 Mask R-CNN）如下图2所示 。其将目标模板作为输入，计算 feature embedding。然后该模板特征与测试图像计算相似性得到attention mask。attention mask又被用于重新加权空间特征，以检测感兴趣的物体。另外这个框架可以同时用于检测、跟踪和分割。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100348.png"></p>
+<p>针对问题 2，本文计算一个线性分类器来区分第一帧的感兴趣目标和其他目标，通过最小二乘方法得到闭式解从而可以学习到一个更关注感兴趣instance的鲁棒特征。下图3通过一个例子说明，左下是直接用feature embedding计算的attention map，右下是用线性分类器计算的attention map，显然右下效果更好。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100433.png"></p>
+<p>最后运行速度为7FPS。</p>
+<hr>
+<h1 id="Siam-R-CNN-Visual-Tracking-by-Re-Detection"><a href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection" class="headerlink" title="Siam R-CNN: Visual Tracking by Re-Detection"></a>Siam R-CNN: Visual Tracking by Re-Detection</h1><p>这个就是用重检测的思想做跟踪，也是基于RCNN框架的，同时使用Tracklet Dynamic Programming Algorithm去跟踪所有潜在的目标。</p>
+<p>具体解读见前一篇笔记</p>
+<p><a target="_blank" rel="noopener" href="https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection | CV home (kongbia.github.io)</a></p>
+<hr>
+<h1 id="Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><a href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach" class="headerlink" title="Tracking by Instance Detection: A Meta-Learning Approach"></a>Tracking by Instance Detection: A Meta-Learning Approach</h1><p>同样是域自适应方法将检测器转化成跟踪器，此篇更像是第一篇Bridging the Gap Between Detection and Tracking: A Unified Approach的进阶，不同的是本文没有额外添加模板引导分支，而是直接用标准的检测器通过元学习的方式做域自适应。避免了冗余结构使得速度大幅提升，达到40FPS。另外就是训练的时候加入了很多来自MAML++喝MetaSGD的技巧，效果更好。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100802.png"></p>
+<p>具体的解读可以参考我b站的笔记，后续会搬运到博客。</p>
+<p>[<a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv5521209/">Note7] Tracking by Instance Detection: A Meta-Learning Approach - 哔哩哔哩专栏 (bilibili.com)</a></p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这几篇文章的一个共同思路都是融合了Siamese架构和目标检测框架，将目标实例信息以各种形式加入待检测图像中，从而将class-level的通用检测转变成instance-level的实例检测（跟踪）。借助目标检测对尺度，形变等复杂条件的优越性来解决跟踪中的问题，同时将跟踪转变成one-shot的检测任务也避免了更新带来的漂移（第一篇里面使用了MAML进行更新，主要原因猜测是单纯往RPN中融合目标信息还不够work，像globaltracker在head上也添加了instance，而第三篇则是构建一个分类器增强鲁棒性）。当然引入检测框架带来的计算开销也是很大的，最后一种方法避免了额外的模板分支相当于跳出了Siamese框架，给实时带来了可能。</p>
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+        
+            <div class="post-nav-button float-left">
+                <v-icon>chevron_left</v-icon>
+                <a class="font-weight-bold text-left" href="/88099a26.html">
+                    Anchor Free的孪生目标跟踪
+                </a>
+            </div>
+              
+          
+            <div class="post-nav-button float-right">
+                <a class="font-weight-bold text-right" href="/4733d3f0.html">      
+                    Siam R-CNN: Visual Tracking by Re-Detection
+                </a>
+                <v-icon>chevron_right</v-icon>
+            </div>
+        
+    </div>
+</v-card>
+
+
+
+    <v-card class="comment-card elevation-2">
+        <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
+            
+                <v-tab><span id="comment-tab-0">gitalk</span></v-tab>
+            
+        </v-tabs>
+        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOlsiZ2l0YWxrIl0sImdpdGFsa19jbGllbnRfaWQiOiI2OTQ1MTJjNTYxZTdkNjQyMTM5ZiIsImdpdGFsa19jbGllbnRfc2VjcmV0IjoiMjE2OTI5MTRkYWI2YWJhOGI5ZTZjZDUyZTY2ZWFkY2ExMDIyNjZlYiIsImdpdGFsa19yZXBvIjoia29uZ2JpYS5naXRodWIuaW8iLCJnaXRhbGtfb3duZXIiOiJrb25nYmlhIiwiZ2l0YWxrX3NpZF90eXBlIjpudWxsLCJnaXRhbGtfZGlzdHJhY3Rpb25GcmVlTW9kZSI6dHJ1ZSwiZGlzcXVzX3Nob3J0bmFtZSI6bnVsbCwibGl2ZXJlX2RhdGFfdWlkIjpudWxsLCJ2YWxpbmVfbGVhbmNsb3VkX2FwcF9pZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfa2V5IjpudWxsLCJ2YWxpbmVfb3B0aW9uIjpudWxsLCJjaGFuZ3lhbl9hcHBfaWQiOm51bGwsImNoYW5neWFuX2FwcF9rZXkiOm51bGwsImNoYW5neWFuX3NpZF90eXBlIjpudWxsfQ== >
+            
+                <v-tab-item eager=true>
+                    
+                        <div id="gitalk-container"></div>
+                    
+                </v-tab-item>
+            
+        </v-tabs-items>
+    </v-card>
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2020 - 2021 zjp</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+    
+        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+
+
+</body>
+</html>

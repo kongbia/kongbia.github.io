@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
+    <meta name="baidu-site-verification" content="code-Toh8kQYN7N" />
+    <meta name="google-site-verification" content="r3Cw4aIKBFXcYVnB8J-bxaQozYY6BHsoE3q5soJN3Po" />
+    <meta name="msvalidate.01" content="C5E4D0D01152A883DDA407CDCE62E1DA" />
+    <meta name='description' content='A personal blog that shares computer vision papers'>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/avatar.jpg">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+    
+        <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        
+            load: ['[tex]/mhchem'],
+        
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        
+            packages: {'[+]': ['mhchem']},
+        
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+          
+
+    
+    
+    
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+            <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+            <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+        
+    
+
+    
+    
+    <title>
+        
+            Siamese Natural Language Tracker: Tracking by Natural Language Descriptions with Siamese Trackers | CV home
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.jpg">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://space.bilibili.com/5567932/article" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                b站专栏
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/d94c8c97.html" class="toc-header">文章目录</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overview"><span class="toc-number">2.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Architecture-of-the-SNL-RPN"><span class="toc-number">2.2.</span> <span class="toc-text">Architecture of the SNL-RPN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Aggregation-of-the-SNL-RPN-Predictions"><span class="toc-number">2.3.</span> <span class="toc-text">Aggregation of the SNL-RPN Predictions</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Training-the-SNL-RPN-and-Loss-Functions"><span class="toc-number">2.4.</span> <span class="toc-text">Training the SNL-RPN and Loss Functions</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">3.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-with-Visual-and-NL-Trackers"><span class="toc-number">3.1.</span> <span class="toc-text">Comparison with Visual and NL Trackers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ablation-Studies"><span class="toc-number">3.2.</span> <span class="toc-text">Ablation Studies</span></a></li></ol></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:zjphust@gmail.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://github.com/kongbia" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+            
+                <span id="busuanzi_container_site_uv" style="display: none;"> 
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                </span>
+                <br>
+            
+            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>
+            <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+            <span>
+                &copy; 2020 - 2021 
+                zjp
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">CV home</a>
+      </div>
+      <div id="site-description">A personal blog that shares computer vision papers</div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://space.bilibili.com/5567932/article">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/d94c8c97.html">Siamese Natural Language Tracker: Tracking by Natural Language Descriptions with Siamese Trackers</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      发布于:&nbsp;2021-05-19
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      更新于:&nbsp;2021-05-19
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519110756.png"></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1912.02048">论文</a></p>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>本文研究的课题为tracking by natural language(NL) 。人类的学习过程是视觉和语言共同作用的，而在基于外观的跟踪过程中引入语言描述同样可以使得跟踪器更加精确、灵活和鲁棒（如图1的例子）。因此，本文将孪生跟踪器与语言描述结合，将语言描述编码成一个卷积核嵌入到孪生框架中（SNL-RPN），并将视觉和语言的预测进行动态聚合（Dynamic Aggregation），为tracking by NL任务提供了一个新的baseline。具体贡献总结如下：</p>
+<ol>
+<li>提出一种新的tracking by NL的baseline，Siamese Natural Language Region Proposal Network (SNL-RPN)；</li>
+<li>提出了一种基于视觉和语言预测的动态聚合（Dynamic Aggregation），将SNL-RPN转换为Siamese Natural Language Tracker (SNLT)；</li>
+<li>在NL标注的数据集上将孪生跟踪器的性能提升了3-7个百分点，并且性能超过其他NL tracker，速度为50FPS。</li>
+</ol>
+<span id="more"></span>
+
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519113920.png"></p>
+<center>图1 （摘自CVPR2021 TNL2K） (a) 只利用box时跟踪器可能会混淆跟踪目标是自行车还是人的腿，加入语言描述使得跟踪对象更加清晰；(b) 当目标发生剧烈形变时加入语言描述可以减少漂移；(c) 语言描述可以更灵活地指定目标，如这里需要跟踪持球的运动员，使用传统跟踪器达到这一效果需要反复重新初始化跟踪器。  </center>
+
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519115620.png"></p>
+<p>上图展示了SNLT整体框架，将语言描述嵌入到SiamRPN++中。输入包含三部分：模板、搜索区域和查询语言Q。模板和搜索区域经过卷积提取特征$Z$和$X$，查询语言经过语言模型（BERT, GloVe, HGLMM）提取句子嵌入编码$Z_Q$。三元组$(Z,Z_Q,X)$送入SNL-RPN，分别预测视觉和语言的分类和回归响应。最后二者通过Dynamic Aggregation Module进行融合。</p>
+<h2 id="Architecture-of-the-SNL-RPN"><a href="#Architecture-of-the-SNL-RPN" class="headerlink" title="Architecture of the SNL-RPN"></a>Architecture of the SNL-RPN</h2><p>SNL-RPN如上图b所示，包括蓝色部分的visual head和红色部分的NL head，都是通过DW-XCorr生成相应的的分类和回归响应。类似SiamRPN++，同样在ResNet的三个stage上进行预测，并将结果融合，融合权重通过离线训练得到。visual head和NL head各包含两个分支，总共有四组融合参数：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519154224.png"></p>
+<p>$S_{VIS}, S_{NL}$表示分类分支的视觉和语言预测，$B_{VIS},B_{NL}$表示回归分支的两种预测。</p>
+<h2 id="Aggregation-of-the-SNL-RPN-Predictions"><a href="#Aggregation-of-the-SNL-RPN-Predictions" class="headerlink" title="Aggregation of the SNL-RPN Predictions"></a>Aggregation of the SNL-RPN Predictions</h2><p>上一节对不同stage的预测融合，本节作者对视觉和语言的结果再次进行融合：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519160117.png"></p>
+<p>$\omega_{VIS},\omega_{NL}$ 可以简单像上面一样离线训练得到，但是融合对象来自两个不同的输入，用固定的权重融合并不是最优的。因此，作者提出一个基于预测响应图熵的动态融合方式：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519160727.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519160737.png"></p>
+<p>其中$\sigma$表示softmax函数，$\alpha$表示缩放因子。公式4的含义是<strong>熵越大的项赋予更小的权重</strong>。熵越大表示预测图分布越混乱，越不准确，所以权重更小。</p>
+<h2 id="Training-the-SNL-RPN-and-Loss-Functions"><a href="#Training-the-SNL-RPN-and-Loss-Functions" class="headerlink" title="Training the SNL-RPN and Loss Functions"></a>Training the SNL-RPN and Loss Functions</h2><p>训练设置和siamese框架一样，额外增加了一个语言模型。损失函数分别计算视觉和语言对应的分类回归损失。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519161412.png"></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p>训练数据集使用的是 MSCOCO, YouTube-BB, VisualGenome, LaSOT, OTB-99-LANG，其中后三个都是有语言标注的，前两个只有类别标注。</p>
+<p>测试数据集使用有语言标注的OTB-99-LANG和LaSOT。</p>
+<h2 id="Comparison-with-Visual-and-NL-Trackers"><a href="#Comparison-with-Visual-and-NL-Trackers" class="headerlink" title="Comparison with Visual and NL Trackers"></a>Comparison with Visual and NL Trackers</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519161835.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519161846.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519161952.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519162121.png"></p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519162142.png" style="zoom:80%;" />
+
+<p>表2最后一行表示只使用语义类别作为语言输入测试LaSOT（原始的LaSOT里语言描述是一句话），这样效果会下降，证明SNLT可以学到比语义类别更多的东西。</p>
+<h2 id="Ablation-Studies"><a href="#Ablation-Studies" class="headerlink" title="Ablation Studies"></a>Ablation Studies</h2><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519162612.png" style="zoom:80%;" />
+
+<p>表1对比了不同语言模型的效果</p>
+<p><img src="C:/Users/zjp/AppData/Roaming/Typora/typora-user-images/image-20210519162738919.png" alt="image-20210519162738919"></p>
+<p>图6的两个例子，第一个展示了语言描述可以辅助跟踪器避免模型漂移，而第二个例子语言描述不能唯一地描述目标，导致跟踪器漂移。</p>
+<img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519163102.png" style="zoom:80%;" />
+
+<p>图8展示了视觉和语言的分类响应图，NL head的响应更加准确，可能是由于遮挡阻碍了视觉模型。通过计算响应图的熵，赋予熵更小的NL响应图更大的权重。</p>
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+        
+            <div class="post-nav-button float-left">
+                <v-icon>chevron_left</v-icon>
+                <a class="font-weight-bold text-left" href="/3f09e4f9.html">
+                    SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking
+                </a>
+            </div>
+              
+          
+            <div class="post-nav-button float-right">
+                <a class="font-weight-bold text-right" href="/ffb50b33.html">      
+                    DeepMix: Online Auto Data Augmentation for Robust Visual Object Tracking
+                </a>
+                <v-icon>chevron_right</v-icon>
+            </div>
+        
+    </div>
+</v-card>
+
+
+
+    <v-card class="comment-card elevation-2">
+        <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
+            
+                <v-tab><span id="comment-tab-0">gitalk</span></v-tab>
+            
+        </v-tabs>
+        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOlsiZ2l0YWxrIl0sImdpdGFsa19jbGllbnRfaWQiOiI2OTQ1MTJjNTYxZTdkNjQyMTM5ZiIsImdpdGFsa19jbGllbnRfc2VjcmV0IjoiMjE2OTI5MTRkYWI2YWJhOGI5ZTZjZDUyZTY2ZWFkY2ExMDIyNjZlYiIsImdpdGFsa19yZXBvIjoia29uZ2JpYS5naXRodWIuaW8iLCJnaXRhbGtfb3duZXIiOiJrb25nYmlhIiwiZ2l0YWxrX3NpZF90eXBlIjpudWxsLCJnaXRhbGtfZGlzdHJhY3Rpb25GcmVlTW9kZSI6dHJ1ZSwiZGlzcXVzX3Nob3J0bmFtZSI6bnVsbCwibGl2ZXJlX2RhdGFfdWlkIjpudWxsLCJ2YWxpbmVfbGVhbmNsb3VkX2FwcF9pZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfa2V5IjpudWxsLCJ2YWxpbmVfb3B0aW9uIjpudWxsLCJjaGFuZ3lhbl9hcHBfaWQiOm51bGwsImNoYW5neWFuX2FwcF9rZXkiOm51bGwsImNoYW5neWFuX3NpZF90eXBlIjpudWxsfQ== >
+            
+                <v-tab-item eager=true>
+                    
+                        <div id="gitalk-container"></div>
+                    
+                </v-tab-item>
+            
+        </v-tabs-items>
+    </v-card>
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2020 - 2021 zjp</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+    
+        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+
+
+</body>
+</html>

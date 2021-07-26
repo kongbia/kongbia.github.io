@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
+    <meta name="baidu-site-verification" content="code-Toh8kQYN7N" />
+    <meta name="google-site-verification" content="r3Cw4aIKBFXcYVnB8J-bxaQozYY6BHsoE3q5soJN3Po" />
+    <meta name="msvalidate.01" content="C5E4D0D01152A883DDA407CDCE62E1DA" />
+    <meta name='description' content='A personal blog that shares computer vision papers'>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/avatar.jpg">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+    
+        <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        
+            load: ['[tex]/mhchem'],
+        
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        
+            packages: {'[+]': ['mhchem']},
+        
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+          
+
+    
+    
+    
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+            <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+            <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+        
+    
+
+    
+    
+    <title>
+        
+            Domain Adaptive SiamRPN++ for Object Tracking in the Wild | CV home
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.jpg">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://space.bilibili.com/5567932/article" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                b站专栏
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/853b6893.html" class="toc-header">文章目录</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Theoretical-Preliminaries"><span class="toc-number">2.</span> <span class="toc-text">Theoretical Preliminaries</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#A-distance"><span class="toc-number">2.1.</span> <span class="toc-text">A-distance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Probabilistic-Analysis-for-Object-Tracker"><span class="toc-number">2.2.</span> <span class="toc-text">Probabilistic Analysis for Object Tracker</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">3.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pixel-Domain-Adaptation"><span class="toc-number">3.1.</span> <span class="toc-text">Pixel Domain Adaptation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Semantic-Domain-Adaptation"><span class="toc-number">3.2.</span> <span class="toc-text">Semantic Domain Adaptation</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">4.</span> <span class="toc-text">Experiments</span></a></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:zjphust@gmail.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://github.com/kongbia" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+            
+                <span id="busuanzi_container_site_uv" style="display: none;"> 
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                </span>
+                <br>
+            
+            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>
+            <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+            <span>
+                &copy; 2020 - 2021 
+                zjp
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">CV home</a>
+      </div>
+      <div id="site-description">A personal blog that shares computer vision papers</div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://space.bilibili.com/5567932/article">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/853b6893.html">Domain Adaptive SiamRPN++ for Object Tracking in the Wild</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      发布于:&nbsp;2021-07-01
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      更新于:&nbsp;2021-07-02
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210701165637.png"></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2106.07862">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>基于孪生网络的跟踪算法均假定训练和测试数据遵循相同的分布，然而在正常图像上训练的跟踪器并不能保证在其他领域的数据上（如雨雾天气的序列）也表现良好，即存在域偏移（domain shift）问题，如图1和图2。作者称本文是首次将域分布差异问题引入视觉跟踪领域。</p>
+<p>针对这一问题，本文提出一种域自适应方法，包括Pixel Domain Adaptation (PDA) 和 Semantic Domain Adaptation (SDA)。PDA分别对（不同域的）模板和搜索图像的特征对齐，消除天气、光照等引起的像素级域偏移；SDA将（不同域的）跟踪目标的特征表达对齐，以消除语义级的域偏移。二者均通过对抗训练的方式学习域分类器，域分类器强制网络学习域不变的特征表达，从而实现域自适应。</p>
+<p>最后作者在有雾和红外序列两个不同域的数据集上进行了验证。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702104303.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702104337.png"></p>
+<span id="more"></span>
+
+<h1 id="Theoretical-Preliminaries"><a href="#Theoretical-Preliminaries" class="headerlink" title="Theoretical Preliminaries"></a>Theoretical Preliminaries</h1><p>最简单粗暴的方法就是搜集许多具有不同域的标注训练数据，但这显然不现实。因此我们的目标是针对<strong>无监督域自适应场景</strong>（即源域有标记而目标域未标记），使跟踪器在源域和目标域上都表现良好，而不需要额外的标注成本。一种通用的方案就是学习域不变（domain-invariant）的特征表达来缩小不同域之间的差异。作者利用 <em>A</em>-distance理论和概率分析来实现这一目的，下面先简单介绍这些概念。</p>
+<h2 id="A-distance"><a href="#A-distance" class="headerlink" title="A-distance"></a><em>A</em>-distance</h2><p>给定源域 $S$ 和目标域 $T$， <em>A</em>-distance可以用于衡量两个域样本分布的差异，定义如下：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702113837.png"></p>
+<p>其中h表示域分类器，$h(x)\rightarrow 0$表示样本x属于源域，$h(x)\rightarrow 1$表示样本x属于目标域。$min \ error(h(x))$表示理想域分类器的预测误差，显然，误差越小（越容易区分）表示域差异越大。现在要最小化域差异$d_A(S,T)$以实现特征对齐，等价于要最大化理想域分类器误差，即</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702114945.png"></p>
+<p>其中 f 表示样本 x 的特征表达。公式(3)是特征提取器 f 和域分类器 h 之间的minimax优化问题。这个怎么理解呢？其实类似GAN，域分类器 h 需要尽可能区分不同域的样本，而特征提取 f 需要欺骗分类器让其难以区分不同域，即让 f 提取到域不变特征。</p>
+<p>作者在优化这个问题时采用 Gradient Reversed Layer (GRL)，如下图所示，在梯度从域分类器传到特征提取之前将其取负号反转，希望粉色部分的参数向$L_d$减小的方向优化，绿色部分的参数向$L_d$增大的方向优化，用一个网络一个优化器就实现了两部分有不一样的优化目标，形成<strong>对抗</strong>的关系。（参考<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/266710153/answer/1338864403">Gradient Reversal Layer指什么？ - Just4Fan的回答 - 知乎</a> )</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702115615.png"></p>
+<h2 id="Probabilistic-Analysis-for-Object-Tracker"><a href="#Probabilistic-Analysis-for-Object-Tracker" class="headerlink" title="Probabilistic Analysis for Object Tracker"></a>Probabilistic Analysis for Object Tracker</h2><p>作者将跟踪问题看成一个后验概率 $P(S,B|Z,X)$，即给定模板Z和搜索区域X，预测分类得分S和目标框B。由于域偏移的存在，源域的联合概率分布$P_S(S,B,Z,X)$与目标域的联合概率分布$P_T(S,B,Z,X)$是不同的。</p>
+<p><strong>Pixel Domain Adaptation</strong> 根据贝叶斯公式，可以将联合概率分布分解成：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702150940.png"></p>
+<p>其中$i \in {S,T}$。条件概率$P(S,B|Z,X)$相当于跟踪器的分类回归分支，我们假设这部分对于不同域是一样，那么域偏移主要来自模板和搜索图像的特征提取$P(Z,X)$。为了消除域偏移，需要另Siamese网络提取域不变的特征映射，即$P_S(Z,X) = P_T(Z,X)$</p>
+<p><strong>Semantic Domain Adaptation</strong> 上面PDA解决天气或光照引起的全局域偏移，但不同域的目标还存在外观和类别的变化，因此还需要考虑目标语义的域偏移。类似的，可以将联合概率分解成：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702151847.png"></p>
+<p>同样假设条件概率$P(S | B,Z,X)$对于不同域是一样的，那么域偏移主要来自$P(B,Z,X)$。为了消除偏移，需要$P_S(B,Z,X) = P_T(B,Z,X)$，表示给定了模板、搜索区域以及对应的目标框，跟踪目标的特征表达要是一样的。考虑到目标域是没有真实框标注的，因此这里统一采用RPN的预测框表示B。</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702152654.png"></p>
+<p>图3是整体方法框架，根据上一节的<em>A</em>-distance理论以及概率分析，作者提出了PDA和SDA两个模块。其中PDA针对的是孪生网络的整体特征，SDA针对的是预测框内的目标特征。</p>
+<h2 id="Pixel-Domain-Adaptation"><a href="#Pixel-Domain-Adaptation" class="headerlink" title="Pixel Domain Adaptation"></a>Pixel Domain Adaptation</h2><p>PDA包括模板对齐和搜索区域对齐，目的是通过域分类器和Siamese网络之间的minimax优化来混淆跨域的特征映射。域分类器由Conv+MaxPool+FC组成，FC层对每个像素进行二值分类，损失函数为：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702154430.png"></p>
+<p>m,n为像素位置，D是标签，p是预测结果。然后按照公式3的minimax优化，需要对域分类器参数最小化该损失，对siamese特征提取参数最大化该损失，即</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702154740.png"></p>
+<p>$\omega_{pda}$表示PDA域分类器参数，$\varphi$表示孪生网络参数。域分类器的参数更新方向与减少域分类损失的方向相同，这与普通的训练方法相同；而Siamese网络的参数更新方向被反转（GRL），这正是增加域分类损失的方向，二者形成对抗。</p>
+<h2 id="Semantic-Domain-Adaptation"><a href="#Semantic-Domain-Adaptation" class="headerlink" title="Semantic Domain Adaptation"></a>Semantic Domain Adaptation</h2><p>由于不同域的类别、视角和姿态的变化，跟踪目标会发生明显的变化，SDA强制跟踪目标的特征表示在语义上是域不变的。具体过程为，通过ROI Align提取预测框内的multi-layer的ROI特征，域分类器（两层FC）对其进行分类，GRL放在域分类器和ROI Align之间。域分类损失为：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702155824.png"></p>
+<p>同样以对抗的方式训练SDA</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702155913.png"></p>
+<p>$\omega_{sda}$表示SDA域分类器参数，$\varphi$表示孪生网络参数。无论跟踪目标来自源域还是目标域，目标的域不变特征都能在分数图中获得较高的响应。</p>
+<p>最后总的训练损失包括孪生跟踪器的损失和域自适应损失</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702160122.png"></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p>训练时使用LaSOT作为源域数据，Foggy GOT-10k和LSOTB-TIR作为目标域数据。Foggy GOT-10k是作者生成的有雾数据集，LSOTB-TIR是红外数据集，注意二者作为目标域数据训练时是没有标注的。模板和搜索图像的裁剪通过运行现有的SiamRPN++对目标域数据集获取伪标签得到的。</p>
+<p>表1-4展示了正常天气到有雾的跨域和RGB到红外的跨域的跟踪结果。这里的比较方式有点迷，作者列出每个epoch的结果证明性能的提升，但如果只关注最好的结果发现的性能提升其实不明显。比如Foggy VOT2018 0.211 v.s. 0.218，LSOTB-TIR 0.543 v.s. 0.547。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702162344.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702162404.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702162413.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702162420.png"></p>
+<p>消融实验也呈现一样的结果，如果只比较最好的性能，单独的PDA和SDA甚至不如baseline。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702161634.png"></p>
+<p>其他的一些可视化结果。图6将特征压缩到平面证明了源域和目标域的特征混淆在一起，证明了域不变特征。图7证明了提出的方法在跨域性能表现良好的同时，不会损失在源域上的性能。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702161754.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702161803.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702161810.png"></p>
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+              
+          
+            <div class="post-nav-button float-right">
+                <a class="font-weight-bold text-right" href="/bc2529a0.html">      
+                    Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking
+                </a>
+                <v-icon>chevron_right</v-icon>
+            </div>
+        
+    </div>
+</v-card>
+
+
+
+    <v-card class="comment-card elevation-2">
+        <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
+            
+                <v-tab><span id="comment-tab-0">gitalk</span></v-tab>
+            
+        </v-tabs>
+        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOlsiZ2l0YWxrIl0sImdpdGFsa19jbGllbnRfaWQiOiI2OTQ1MTJjNTYxZTdkNjQyMTM5ZiIsImdpdGFsa19jbGllbnRfc2VjcmV0IjoiMjE2OTI5MTRkYWI2YWJhOGI5ZTZjZDUyZTY2ZWFkY2ExMDIyNjZlYiIsImdpdGFsa19yZXBvIjoia29uZ2JpYS5naXRodWIuaW8iLCJnaXRhbGtfb3duZXIiOiJrb25nYmlhIiwiZ2l0YWxrX3NpZF90eXBlIjpudWxsLCJnaXRhbGtfZGlzdHJhY3Rpb25GcmVlTW9kZSI6dHJ1ZSwiZGlzcXVzX3Nob3J0bmFtZSI6bnVsbCwibGl2ZXJlX2RhdGFfdWlkIjpudWxsLCJ2YWxpbmVfbGVhbmNsb3VkX2FwcF9pZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfa2V5IjpudWxsLCJ2YWxpbmVfb3B0aW9uIjpudWxsLCJjaGFuZ3lhbl9hcHBfaWQiOm51bGwsImNoYW5neWFuX2FwcF9rZXkiOm51bGwsImNoYW5neWFuX3NpZF90eXBlIjpudWxsfQ== >
+            
+                <v-tab-item eager=true>
+                    
+                        <div id="gitalk-container"></div>
+                    
+                </v-tab-item>
+            
+        </v-tabs-items>
+    </v-card>
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2020 - 2021 zjp</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+    
+        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+
+
+</body>
+</html>
