@@ -244,7 +244,6 @@
       <tags>
         <tag>综述</tag>
         <tag>Anchor-free</tag>
-        <tag>Siamese</tag>
       </tags>
   </entry>
   <entry>
@@ -475,7 +474,6 @@
         <category>目标跟踪</category>
       </categories>
       <tags>
-        <tag>Siamese</tag>
         <tag>FSL</tag>
         <tag>arxiv</tag>
       </tags>
@@ -661,7 +659,6 @@
         <category>目标跟踪</category>
       </categories>
       <tags>
-        <tag>Siamese</tag>
         <tag>FSL</tag>
         <tag>arxiv</tag>
         <tag>模型更新</tag>
@@ -828,7 +825,6 @@
         <category>目标跟踪</category>
       </categories>
       <tags>
-        <tag>Siamese</tag>
         <tag>CVPR2021</tag>
         <tag>Natural Language</tag>
       </tags>
@@ -1051,6 +1047,13 @@
     <title>46-AutoMatch</title>
     <url>/tracking/46-AutoMatch/</url>
     <content><![CDATA[]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>matching</tag>
+        <tag>ICCV2021</tag>
+      </tags>
   </entry>
   <entry>
     <title>45-HiFT</title>

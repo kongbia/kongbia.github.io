@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="15" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="16" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -268,11 +268,25 @@
           <v-spacer></v-spacer>
           <v-col cols="auto">
             
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/matching/ >matching</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/ICCV2021/ >ICCV2021</a>
+                  </span>
+                
+              </v-card>
+            
           </v-col>
         </v-row>
         <span>
           
-            <a class="index-article-header-category font-weight-bold" href="/tracking/46-AutoMatch/">Uncategorized></a>
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
            
         </span> 
         <a class="index-article-header-title font-weight-medium" href="/tracking/46-AutoMatch/">46-AutoMatch</a>
@@ -544,11 +558,6 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
                     <a rel="tag" href = /tags/CVPR2021/ >CVPR2021</a>
                   </span>
                 
@@ -660,11 +669,6 @@ Motivation
           <v-col cols="auto">
             
               <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
-                  </span>
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
