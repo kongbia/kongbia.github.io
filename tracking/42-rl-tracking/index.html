@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/42-rl-tracking/" class="toc-header">Table of Contents</a>
+            <a href="/tracking/42-rl-tracking/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E6%96%B9%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">强化学习方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Learning-Policies-for-Adaptive-Tracking-with-Deep-Feature-Cascades"><span class="toc-number">2.</span> <span class="toc-text">Learning Policies for Adaptive Tracking with Deep Feature Cascades</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Motivation"><span class="toc-number">2.1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method"><span class="toc-number">2.2.</span> <span class="toc-text">Method</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Online-Decision-Based-Visual-Tracking-via-Reinforcement-Learning"><span class="toc-number">3.</span> <span class="toc-text">Online Decision Based Visual Tracking via Reinforcement Learning</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Motivation-1"><span class="toc-number">3.1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-1"><span class="toc-number">3.2.</span> <span class="toc-text">Method</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Fast-Template-Matching-and-Update-for-Video-Object-Tracking-and-Segmentation"><span class="toc-number">4.</span> <span class="toc-text">Fast Template Matching and Update for Video Object Tracking and Segmentation</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Motivation-2"><span class="toc-number">4.1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Method-2"><span class="toc-number">4.2.</span> <span class="toc-text">Method</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">小结</span></a></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2021-06-08
+      发布于:&nbsp;2021-06-08
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-07-26
+      更新于:&nbsp;2021-07-26
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -293,65 +293,60 @@
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2004.07538">Fast Template Matching and Update for Video Object Tracking and Segmentation</a></li>
 </ul>
 <span id="more"></span>
-
 <h1 id="强化学习方法"><a href="#强化学习方法" class="headerlink" title="强化学习方法"></a>强化学习方法</h1><p>强化学习包含环境, 动作和奖励三部分, 其本质是agent 通过与环境的交互, 使得其作出的action所得到的总奖励达到最大, 或者说是期望最大。</p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608202931.png" style="zoom: 50%;" />
-
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608202931.png" style="zoom: 50%;" /></p>
 <p>强化学习方法主要可以分为Value-Based，Policy-Based以及二者结合的Actor-Critic方法。Value-Based方法通过Temporal Difference (TD) Learning学习动作价值函数；Policy-Based方法通过Policy Gradient学习策略函数；而Actor-Critic方法将二者结合，actor学习一个策略来得到尽量高的回报，critic对当前策略的值函数进行估计，即评估actor的好坏。</p>
 <p>关于强化学习的更多细节可以参考王树森老师的视频课程<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV12o4y197US">【王树森】深度强化学习(DRL)</a></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608203415.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608204616.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608204711.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608204741.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608203415.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608204616.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608204711.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210608204741.png" alt=""></p>
 <hr>
 <h1 id="Learning-Policies-for-Adaptive-Tracking-with-Deep-Feature-Cascades"><a href="#Learning-Policies-for-Adaptive-Tracking-with-Deep-Feature-Cascades" class="headerlink" title="Learning Policies for Adaptive Tracking with Deep Feature Cascades"></a>Learning Policies for Adaptive Tracking with Deep Feature Cascades</h1><h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>第一篇来自ICCV2017，出发点是不同复杂程度的跟踪场景对特征的需求是不同的，对于简单场景使用浅层特征（甚至像素特征）就能处理，而对于一些复杂场景才需要具有更强语义信息的深度特征。这个<strong>自适应决策</strong>的问题可以通过基于Q-learning的强化学习完成，如图1所示，学习一个agent来判断当前特征是否已经可以以较高的置信度定位目标，还是需要继续计算更深层的特征来寻找目标。</p>
 <p>这样对简单目标提前终止的策略可以大幅提升推理速度，相比baseline平均速度提升了大约10倍，GPU速度158.9FPS，并且在cpu上也能以23.2FPS的速度接近实时运行。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629104958.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629104958.png" alt=""></p>
 <h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><p>首先定义一些公式符号，孪生网络每一层的互相关层定义：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629121458.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629121458.png" alt=""></p>
 <p>其中$\varphi_l$ 表示第 $l$ 层的特征，$F_l$ 表示第 $l$ 层的互相关结果。</p>
 <p>整体框架如图2所示，在每一层互相关结果$F_l$后面接一个Q-Net，用于判断是否在该层停止，或者调整预测框的形状并继续使用下一层特征。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629121328.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629121328.png" alt=""></p>
 <p>agent采用强化学习的方式训练，基本元素包括状态(state S) ，动作(action A)和奖励(reward R)。在每一个step即第l层中，agent根据当前状态$S_l$ 采取动作$A_l$来决定是否调整预测框或者在该层停止并输出结果，动作$A_l$的目的是减少预测的框的不确定性。训练时根据预测框与GT的IOU给出相应的奖励$R_l$（有正有负），通过最大化期望奖励，agent能学到最好的决策来采取行动，在精度和效率上取得平衡。</p>
 <p><strong>Actions:</strong> 包括7个各向异性的的尺度变换和一个stop动作。7个尺度变换里包括2个全局的缩放和4个局部缩放，缩放比例为0.2。还有一个不缩放(no scaling)的动作，这一操作用于在当前响应图不明确或无法做出决策时推迟决策。</p>
 <p><strong>States:</strong> 状态是一个包含响应图$F’_l$和历史动作$h_l$的二元组 $(F’_l,h_l)$。$F’_l$使用的是当前层和之前所有层响应图的平均，相当于结合了浅层的细节和深层的语义。$h_l$包含历史4个动作的向量，每个动作是8维的one-hot的向量，所以$h_l$总共是32维。</p>
-<p><strong>Rewards:</strong> 奖励函数$R(S_{l-1},S_l)$反应了采取动作$A_l$后，从状态$S_{l-1}$到状态$S_l$的定位精度提升（或下降），精度采用IOU衡量，奖励函数计算如下：</p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629174619.png" style="zoom:80%;" />
-
+<p><strong>Rewards:</strong> 奖励函数$R(S<em>{l-1},S_l)$反应了采取动作$A_l$后，从状态$S</em>{l-1}$到状态$S_l$的定位精度提升（或下降），精度采用IOU衡量，奖励函数计算如下：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629174619.png" style="zoom:80%;" /></p>
 <p>当动作不为stop时，若该动作能使IOU增大，则奖励+1，否则惩罚-1。若采取任何尺度变换都不能进一步提升IOU或者已经到达最后一层了，则采取stop动作，此时以IOU阈值0.6来决定奖惩。</p>
 <p><strong>Deep Q-learning</strong>：本文使用value-based的DQN来选择动作，该方法需要学习一个动作-价值函数$Q(S_l,A_l)$, 选择能够使得Q最大的动作A。Q函数用网络模拟，如图2虚线框所示，包含两个128维的FC层，输出对应8维动作的回报。训练时采用TD learning进行迭代。</p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629181015.png" style="zoom:80%;" />
-
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629181015.png" style="zoom:80%;" /></p>
 <p>其中R表示当前奖励，$Q(S‘,A’)$表示未来总的回报，$\gamma$是折扣因子。</p>
 <p>测试阶段无需奖励，只根据Q函数调整预测框直到输出stop动作。作者在OTB50上验证平均只需要2.1步输出结果，即只需要两层网络，因此可以大幅提速。</p>
 <p>此外，这套策略还可以集成一些简单的特征，比如像素特征和hog特征，计算更快。</p>
 <p>图3展示了一些early stop的例子，如跟踪清晰的人脸时只需C1-C2的特征，但跟踪一个模糊的人脸则需要更深层的C5特征。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629194612.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629194612.png" alt=""></p>
 <hr>
 <h1 id="Online-Decision-Based-Visual-Tracking-via-Reinforcement-Learning"><a href="#Online-Decision-Based-Visual-Tracking-via-Reinforcement-Learning" class="headerlink" title="Online Decision Based Visual Tracking via Reinforcement Learning"></a>Online Decision Based Visual Tracking via Reinforcement Learning</h1><h2 id="Motivation-1"><a href="#Motivation-1" class="headerlink" title="Motivation"></a>Motivation</h2><p>第二篇来自NIPS2020。目前主流的跟踪方法有基于检测的和基于模板匹配的，二者各有优劣。基于检测的方法容易受遮挡等影响错误更新网络，但是能适应形变；而基于模板匹配的方法只利用第一帧模板，与上述情况刚好相反。很自然会想到将二者结合，但这是两套完全不同的跟踪原理，直接融合并不能同时收敛到各自的最优解。因此本文提出了一个基于分层强化学习(HRL)的在线决策机制。决策机制实现了一种智能切换策略，其中检测器和模板跟踪器必须相互竞争，以便在它们擅长的不同场景中进行跟踪。</p>
-<h2 id="Method-1"><a href="#Method-1" class="headerlink" title="Method"></a>Method</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629205511.png"></p>
+<h2 id="Method-1"><a href="#Method-1" class="headerlink" title="Method"></a>Method</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629205511.png" alt=""></p>
 <p>整体框架如图2所示，包括决策模块和跟踪模块。决策模块是一个Actor-Critic（or Option-Critic？）结构，包括switch network和termination network。首先将初始帧模板和上一帧跟踪结果送入switch network，输出一个二元信号选择跟踪器。跟踪器结果送入termination network，输出终止当前跟踪器的概率。注意这里终止之后并不一定切换到另一个跟踪器，因为并不能保证另一个就更好，而是要经过switch network重新选择。</p>
 <p><strong>Decision Module</strong></p>
-<p>给定一组状态$S$和动作$A$，马尔可夫选项$\omega \in \Omega$ 包括三部分：intra-option policy $\pi: S \times A \rightarrow [0,1]$, termination condition $\beta: S^{+}  \rightarrow [0,1]$, initiation set $I \subseteq  S$。当option $\omega$选定后，根据$\pi_{\omega}$选择相应的动作，直到终止函数 $\beta_{\omega}$ 判断终止。</p>
+<p>给定一组状态$S$和动作$A$，马尔可夫选项$\omega \in \Omega$ 包括三部分：intra-option policy $\pi: S \times A \rightarrow [0,1]$, termination condition $\beta: S^{+}  \rightarrow [0,1]$, initiation set $I \subseteq  S$。当option $\omega$选定后，根据$\pi<em>{\omega}$选择相应的动作，直到终止函数 $\beta</em>{\omega}$ 判断终止。</p>
 <p>这是一个标准的Option-Critic结构，一大堆公式就省略了。但是最后作者却用Actor-Critic去解释图2，即switch network是option-value函数，作为Critic来评价option，并且为termination network提供更新梯度（参考上面Actor-Critic的ppt）。termination network作为Actor评估正在使用的跟踪器性能，以决定它是否应该在当前帧终止。</p>
 <p>switch network的奖励函数定义如下：</p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629214943.png" style="zoom:80%;" />
-
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629214943.png" style="zoom:80%;" /></p>
 <p>其中$P$表示被选中的跟踪器的跟踪框与GT的IOU，$P^*$表示未被选中的跟踪器的跟踪框与GT的IOU，$D_{IoU}$表示两者的差。按照公式7总共有3种情况：一个成功一个失败，两个均成功，两个均失败。</p>
 <p>训练按照Actor-Critic训练，Critic使用贝尔曼方程（TD learning）更新，Actor使用策略梯度更新。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629215908.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629215908.png" alt=""></p>
 <p>图5是一个可视化结果，其中终止概率1表示终止，0表示保持不变。可以看到初始是SiamFC（黄框）表现较好；当发生形变后，FCT的价值函数更大，终止概率趋近1，跟踪器切换；之后一直都是FCT表现更好，因此终止概率始终在0附近。</p>
 <hr>
 <h1 id="Fast-Template-Matching-and-Update-for-Video-Object-Tracking-and-Segmentation"><a href="#Fast-Template-Matching-and-Update-for-Video-Object-Tracking-and-Segmentation" class="headerlink" title="Fast Template Matching and Update for Video Object Tracking and Segmentation"></a>Fast Template Matching and Update for Video Object Tracking and Segmentation</h1><h2 id="Motivation-2"><a href="#Motivation-2" class="headerlink" title="Motivation"></a>Motivation</h2><p>第三篇来自CVPR2020。本文针对的任务是<strong>多实例半监督视频目标分割</strong>(VOS)。基于检测的算法被广泛应用于这一任务，难点在于选择匹配方法来预测结果，以及是否更新目标模板。 本文利用强化学习来同时做出这两个决策。具体来说，<strong>agent根据预测结果的质量来决定是否更新目标模板</strong>。 匹配方法的选择则基于agent的动作历史来确定。</p>
 <p>目前大部分VOT或VOS方法主要分为三步：</p>
 <ol>
-<li> 对当前帧进行实例分割，生成一系列候选proposal；</li>
+<li>对当前帧进行实例分割，生成一系列候选proposal；</li>
 <li>将目标模板和所有proposal进行匹配，找到正确的proposal作为最终结果；</li>
 <li>使用当前帧的预测结果替换目标模板。</li>
 </ol>
 <p>针对步骤2，基于外观的匹配方法（siamese）准确但非常耗时，而直接利用候选框与前一帧预测框的IOU进行快速匹配只适用于目标缓慢移动或变化。针对步骤3，现有方法简单地直接用当前结果替换模板，不考虑结果的正确性，会导致误差逐渐累积。因此需要利用强化学习智能切换。</p>
-<h2 id="Method-2"><a href="#Method-2" class="headerlink" title="Method"></a>Method</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630113658.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630171122.png"></p>
+<h2 id="Method-2"><a href="#Method-2" class="headerlink" title="Method"></a>Method</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630113658.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630171122.png" alt=""></p>
 <center>将上一帧中所有目标框的最小外接矩形bm扩大一定倍率得到搜素区域bs。</center>
 
 <p>整体方法如图2所示，分为三个步骤：</p>
@@ -362,30 +357,29 @@
 </ol>
 <p>下面介绍将Actor-Critic的框架嵌入上述模型</p>
 <p><strong>Action</strong></p>
-<p>首先定义相关的符号，如图4所示，目标模板包括边界框 $T_{box}$，mask $T_{mask}$，$T_{box}$中的图像内容$T’<em>{box}$，$T</em>{mask}$中的图像内容$T’<em>{mask}$。而预测结果则是类似的$P</em>{box}, P_{mask}, P’<em>{box}, P’</em>{mask}$。</p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630173712.png" style="zoom:80%;" />
-
+<p>首先定义相关的符号，如图4所示，目标模板包括边界框 $T<em>{box}$，mask $T</em>{mask}$，$T<em>{box}$中的图像内容$T’</em>{box}$，$T<em>{mask}$中的图像内容$T’</em>{mask}$。而预测结果则是类似的$P<em>{box}, P</em>{mask}, P’<em>{box}, P’</em>{mask}$。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630173712.png" style="zoom:80%;" /></p>
 <p>第一个决策是是否更新模板，agent的动作 $a_i \in A$ 有两种情况，$a_0$表示用当前结果更新模板，$a_1$表示不更新。</p>
 <p>第二个决策是匹配方法选择快速的基于IOU匹配还是精确的基于外观匹配，在精度和速度间取得平衡。前者分别计算模板和候选预测的box IOU和mask IOU，选择IOU最大的作为匹配结果；后者则是计算模板图像块$T’<em>{box}$和候选预测图像块$P’</em>{box}$的相似性，选择最像的作为匹配结果。<strong>注意这里没有另外增加一个agent</strong>，而是根据第一个agent的历史决策来决定。若agent连续N帧预测$a_1$，表示目标很可能丢失，此时需要切换到基于外观的匹配方法。</p>
 <p><strong>State</strong> </p>
-<p>输入agent的状态$s_t$包括两部分，如下式。第一部分$S_T$是模板图像，其中边框$T’_{box}$之内的内容保持不变，之外的内容填充黑色；第二部分$S_P$是搜索图像，同样将mask之内的内容保持不变，之外的内容填充黑色。提取这两种图像的特征并相加得到输入状态。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175114.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175123.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175138.png"></p>
+<p>输入agent的状态$s<em>t$包括两部分，如下式。第一部分$S_T$是模板图像，其中边框$T’</em>{box}$之内的内容保持不变，之外的内容填充黑色；第二部分$S_P$是搜索图像，同样将mask之内的内容保持不变，之外的内容填充黑色。提取这两种图像的特征并相加得到输入状态。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175114.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175123.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175138.png" alt=""></p>
 <p><strong>Reward</strong></p>
 <p>奖励函数定义：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175755.png"></p>
-<p>$J_t$表示$P_{mask}$和GT mask之间的IOU。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175755.png" alt=""></p>
+<p>$J<em>t$表示$P</em>{mask}$和GT mask之间的IOU。</p>
 <p><strong>Actor-Critic Training</strong></p>
 <p>基本元素确定后，按照Actor-Critic框架训练。</p>
 <p>critic网络用value-based的方式训练：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630180416.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630180416.png" alt=""></p>
 <p>$\delta_t$ 表示TD error，公式8中梯度下降用加号是因为公式9减法顺序和常规的是反过来的。</p>
 <p>actor用policy-based方法训练：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630192837.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630192837.png" alt=""></p>
 <p>公式11减$V(s_t)$表示是带baseline的策略梯度。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630193309.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630193324.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630193309.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630193324.png" alt=""></p>
 <p>图1和图6表面本文的方法在VOT和VOS任务上均能在速度和精度上取得一个较好的平衡。</p>
 <h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>以上三种方法分别介绍了利用强化学习来决策使用的跟踪特征，多个跟踪器的切换以及是否更新模板。可以发现，应用的方向基本都是把跟踪方法中某些需要启发式设计的模块换成了强化学习进行智能决策。此外，第一篇和第三篇均提到了引入强化学习可以在一定程度上提速，对于某些简单的情况，agent可以决策使用简单的方法进行跟踪。</p>
 
@@ -402,15 +396,15 @@
         
             <div class="post-nav-button float-left">
                 <v-icon>chevron_left</v-icon>
-                <a class="font-weight-bold text-left" href="/tracking/43-Crop-Transform-Paste/">
-                    Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking
+                <a class="font-weight-bold text-left" href="/tracking/44-DASiamRPN/">
+                    Domain Adaptive SiamRPN++ for Object Tracking in the Wild
                 </a>
             </div>
               
           
             <div class="post-nav-button float-right">
-                <a class="font-weight-bold text-right" href="/tracking/41-siamrcr/">      
-                    SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking
+                <a class="font-weight-bold text-right" href="/tracking/40-snlt/">      
+                    Siamese Natural Language Tracker: Tracking by Natural Language Descriptions with Siamese Trackers
                 </a>
                 <v-icon>chevron_right</v-icon>
             </div>

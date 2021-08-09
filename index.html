@@ -144,7 +144,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="17" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="11" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -194,7 +194,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -272,12 +272,12 @@
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/matching/ >matching</a>
+                    <a rel="tag" href = /tags/ICCV2021/ >ICCV2021</a>
                   </span>
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/ICCV2021/ >ICCV2021</a>
+                    <a rel="tag" href = /tags/matching/ >matching</a>
                   </span>
                 
               </v-card>
@@ -302,7 +302,7 @@ Analysis of Matching Operators首先介绍本文采用的6种匹配算子，Conc
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/46-AutoMatch/">Read More</v-btn>
+        <v-btn text href="/tracking/46-AutoMatch/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -355,7 +355,7 @@ Motivation现有的孪生跟踪算法大多是基于相似得分图对目标对�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/45-HiFT/">Read More</v-btn>
+        <v-btn text href="/tracking/45-HiFT/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -404,58 +404,7 @@ Motivation基于孪生网络的跟踪算法均假定训练和测试数据遵循�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/44-DASiamRPN/">Read More</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-06-30
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Data-augmentation/ >Data augmentation</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Self-supervised/ >Self-supervised</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/43-Crop-Transform-Paste/">Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation现有的跟踪方法依赖大量高质量标注数据集训练，但很多复杂挑战场景并未出现在训练数据中。为了避免昂贵的人工标注，本文提出一种自监督学习方式。作者设计了Crop-Transform-Paste，通过模拟跟踪过程中各种场景变化，合成足够的训练数据。在合成数据中目标状态是已知的，因此无需人工标注。
-本文提出的自监督方法可以无缝集成到任何现有的跟踪框架中进行训练，实验证明提出的方法：1）在少样本跟踪场景中取得比监督学习更好的性能；2）能够处理目标形变、遮挡、背景干扰等各种挑战；3）可以与监督学习相结合，进一步提高性能。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/43-Crop-Transform-Paste/">Read More</v-btn>
+        <v-btn text href="/tracking/44-DASiamRPN/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -509,57 +458,7 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/42-rl-tracking/">Read More</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-05-26
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/IJCAI2021/ >IJCAI2021</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/41-siamrcr/">SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-本文解决的是老生常谈的分类和回归不匹配的问题。作者提出在分类和回归之间建立双向的连接，可以动态地重新加权每个正样本的损失。此外，增加了一个定位分支用于预测定位精度，可以在推理过程中替代回归辅助连接(regression assistance link)，使得训练和测试更加一致。最终运行速度为65FPS。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/41-siamrcr/">Read More</v-btn>
+        <v-btn text href="/tracking/42-rl-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -614,66 +513,7 @@ Introduction本文研究的课题为tracking by natural language(NL) 。人类�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/40-snlt/">Read More</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-05-10
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/ >模型更新</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Data-augmentation/ >Data augmentation</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/ICME2021/ >ICME2021</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/39-deepmix/">DeepMix: Online Auto Data Augmentation for Robust Visual Object Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation
-通过历史帧样本在线更新目标模型对跟踪具有重要意义。最近的研究主要集中在构建有效的更新方法，而忽略了用于学习判别模型的训练样本；
-本文提出DeepMix，对历史帧样本的特征进行在线增广，从而强化模型的在线更新能力。具体包括通过object-aware filtering在线增强历史样本，以及通过离线训练的MixNet混合多个样本进行数据增强；
-最后通过三个典型的跟踪器DiMP, DSiam和SiamRPN++验证提出的方法。
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/39-deepmix/">Read More</v-btn>
+        <v-btn text href="/tracking/40-snlt/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -729,7 +569,7 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/38-siamtol/">Read More</v-btn>
+        <v-btn text href="/tracking/38-siamtol/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -740,7 +580,7 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
-              2021-05-08
+              2021-04-28
             </div>
           </v-col>
           <v-spacer></v-spacer>
@@ -750,8 +590,53 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Siamese/ >Siamese</a>
+                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
                   </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/36-learning-target-candidate-association/">Learning Target Candidate Association to Keep Track of What Not to Track</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文 代码
+MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅外观模型不足以区分目标和干扰物，因此需要对所有潜在目标保持跟踪。不同的是KYS是通过一个传播模块隐式地跟踪所有对象，最后作用于外观模型的输出来抑制干扰响应；而本文则是借助SuperGlue显式地匹配帧间所有的候选对象，构建跟踪链，有点多目标跟踪的意思，可解释性也更强。
+
+主流跟踪方法大多聚焦于建立强大的外观模型，然而仅依靠外观模型对于干扰物的鲁棒性较差；
+作者提出另一种思路，即对干扰物也保持跟踪。为此构建一个可学习的关联网络（受启发自SuperGlue），允许在帧与帧之间传播所有候选目标；
+针对跟踪数据集没有对干扰物标注的问题，提出了一种结合部分标注和自监督的训练策略。
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/36-learning-target-candidate-association/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-04-27
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
                 
                   <span class="index-article-header-tag-content">
                     <v-icon>fas fa-tag</v-icon>
@@ -772,27 +657,123 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
             <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
            
         </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/37-siamrn/">Learning to Filter: Siamese Relation Network for Robust Tracking</a>
+        <a class="index-article-header-title font-weight-medium" href="/tracking/35-FSL-tracking/">Real-Time Visual Object Tracking via Few-Shot Learning</a>
       </div>
       
       <div class="index-article-content">
         
           
 论文
-Motivation
-Siamese跟踪器的训练设置只是在大量的图像对中匹配同一个目标，而忽略了它们之间的区别，因此对相似干扰物的判别能力不够好；
-分类和回归是独立优化的，造成二者之间的不匹配。具体来说，分类置信度最高的位置对应的目标框可能并不是最准确的（类似检测中general focal loss等文章的观点）。
-
-针对上述问题，作者提出了两个模块：
-
-Relation Detector (RD) 构造了一个2-way-1-shot的少样本学习方法来过滤干扰物。并且使用对比训练策略 (contrastive training strategy)，不仅学习匹配相同的目标，而且学习如何区分不同的目标 ；
-Refinement Module (RM) 将RD和分类分支获得的信息进行整合，细化跟踪结果。RM可以联合优化分类分支和回归分支，缓解两个分支的不匹配。
-
+跟踪可以看成是一个特殊的 few-shot learning (FSL) 问题，本文提出了一个通用的两阶段框架，它能够使用大量的FSL算法并且保持较快的速度。第一阶段通过SiamRPN生成若干潜在候选框，第二阶段通过少样本分类的思想对候选框进行分类。按照这种coarse-to-fine结构，第一阶段为第二阶段提供稀疏的样本，在第二阶段可以更方便、高效地进行多种FSL算法。作者选取了几种基于优化的少样本学习方法进行证明。此外，该框架可将大多数FSL算法直接应用到视觉跟踪中，使研究人员能够在这两个领域相互交流。
         
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/37-siamrn/">Read More</v-btn>
+        <v-btn text href="/tracking/35-FSL-tracking/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-04-23
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/transform/ >transform</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/CVPR2021/ >CVPR2021</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/33-transform-tracking/">Transform与目标跟踪</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          Transform在视觉领域遍地开花，终于目标跟踪也没能逃过。并行的长距离依赖（空间和时间皆可）对于目标跟踪似乎有着天然的优势，本篇笔记简要概述今年CVPR2021关于Transform在目标跟踪中的应用，主要介绍动机和结构，细节和实验部分以后有空再补充。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/33-transform-tracking/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2020-03-06
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Anchor-free/ >Anchor-free</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/3-anchorfree-siamese/">Anchor Free的孪生目标跟踪</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。
+[Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)
+[Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)
+跟踪任务可以看成是分类任务与状态估计任务的结合。分类任务的目的是精确定位目标的位置，而状态估计获得目标的姿态（即目标框）。SiamFC++一文将当前的跟踪器按照不同状态估计的方法分为三类：
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/3-anchorfree-siamese/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 

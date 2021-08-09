@@ -96,7 +96,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -112,7 +112,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/3-anchorfree-siamese/" class="toc-header">Table of Contents</a>
+            <a href="/tracking/3-anchorfree-siamese/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#FCOS%E7%B1%BB"><span class="toc-number">1.</span> <span class="toc-text">FCOS类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#SiamFC-Towards-Robust-and-Accurate-Visual-Tracking-with-Target-Estimation-Guidelines"><span class="toc-number">1.1.</span> <span class="toc-text">SiamFC++: Towards Robust and Accurate Visual Tracking with Target Estimation Guidelines</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SiamCAR-Siamese-Fully-Convolutional-Classification-and-Regression-for-Visual-Tracking"><span class="toc-number">1.2.</span> <span class="toc-text">SiamCAR: Siamese Fully Convolutional Classification and Regression for Visual Tracking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Siamese-Box-Adaptive-Network-for-Visual-Tracking"><span class="toc-number">1.3.</span> <span class="toc-text">Siamese Box Adaptive Network for Visual Tracking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fully-Conventional-Anchor-Free-Siamese-Networks-for-Object-Tracking"><span class="toc-number">1.4.</span> <span class="toc-text">Fully Conventional Anchor-Free Siamese Networks for Object Tracking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ocean-Object-aware-Anchor-free-Tracking"><span class="toc-number">1.5.</span> <span class="toc-text">Ocean: Object-aware Anchor-free Tracking</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CenterNet%E7%B1%BB"><span class="toc-number">2.</span> <span class="toc-text">CenterNet类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Siamese-Attentional-Keypoint-Network-for-High-Performance-Visual-Tracking"><span class="toc-number">2.1.</span> <span class="toc-text">Siamese Attentional Keypoint Network for High Performance Visual Tracking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Accurate-Anchor-Free-Tracking"><span class="toc-number">2.2.</span> <span class="toc-text">Accurate Anchor Free Tracking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Siamese-Keypoint-Prediction-Network-for-Visual-Object-Tracking"><span class="toc-number">2.3.</span> <span class="toc-text">Siamese Keypoint Prediction Network for Visual Object Tracking</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B6%E4%BB%96"><span class="toc-number">3.</span> <span class="toc-text">其他</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Correlation-Guided-Attention-for-Corner-Detection-Based-Visual-Tracking"><span class="toc-number">3.1.</span> <span class="toc-text">Correlation-Guided Attention for Corner Detection Based Visual Tracking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RPT-Learning-Point-Set-Representation-for-Siamese-Visual-Tracking"><span class="toc-number">3.2.</span> <span class="toc-text">RPT: Learning Point Set Representation for Siamese Visual Tracking</span></a></li></ol></li></ol>
             </div>
@@ -137,7 +137,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -205,20 +205,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2020-03-06
+      发布于:&nbsp;2020-03-06
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-08-07
+      更新于:&nbsp;2021-08-07
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -230,11 +230,10 @@
     
     <div class="post-content typo">
         <p>Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。</p>
-<p>[<a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv4987634/?from=readlist">Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)</a></p>
-<p>[<a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6518222/?from=readlist">Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv4987634/?from=readlist">[Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6518222/?from=readlist">[Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)</a></p>
 <p>跟踪任务可以看成是分类任务与状态估计任务的结合。分类任务的目的是精确定位目标的位置，而状态估计获得目标的姿态（即目标框）。SiamFC++一文将当前的跟踪器按照不同<strong>状态估计</strong>的方法分为三类：</p>
 <span id="more"></span>
-
 <ol>
 <li>以DCF和SiamFC为主的跟踪器，构建多尺度金字塔，将搜索区域缩放到多个比例，选择最高得分对应的尺度，这种方式是最不精确的同时先验的固定长宽比不适合现实任务；</li>
 <li>以ATOM为主的跟踪器，借鉴IOUNet，通过IOU的梯度迭代来细化box，提升精度的同时带来了较多的超参数以及时间上的消耗；</li>
@@ -248,10 +247,10 @@
 <p>G3：prior knowledge-free：跟踪器不应该依赖过多的先验知识（如尺度/长宽比）。现有的方法普遍存在对数据分布先验知识的依赖，阻碍了其泛化能力；</p>
 <p>G4：estimation quality assessment：不能直接使用分类置信度来评价状态估计，需要使用独立于分类的质量评估方式。（如RPN系列直接就是选择分类置信度最高的位置进行边框预测，而ATOM，DIMP则另外加入了IOU信息来指导边框调整）</p>
 <p>作者依据这4条guidelines设计了SiamFC++，将目标检测中的Anchor Free的FCOS应用到Siamese框架中，整体结构如下，细节部分可以去开头我在b站的专栏。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426104215.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426104215.png" alt=""></p>
 <hr>
 <h2 id="SiamCAR-Siamese-Fully-Convolutional-Classification-and-Regression-for-Visual-Tracking"><a href="#SiamCAR-Siamese-Fully-Convolutional-Classification-and-Regression-for-Visual-Tracking" class="headerlink" title="SiamCAR: Siamese Fully Convolutional Classification and Regression for Visual Tracking"></a>SiamCAR: Siamese Fully Convolutional Classification and Regression for Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.07241v2">论文</a> <a target="_blank" rel="noopener" href="https://github.com/ohhhyeahhh/SiamCAR">代码</a></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426111123.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426111123.png" alt=""></p>
 <p>这一篇和SiamFC++很类似，这里仅标注一些实践细节的差异。</p>
 <ul>
 <li>backbone采用了改造的resnet50；</li>
@@ -262,20 +261,18 @@
 <p>细节同样参照开头b站专栏。</p>
 <hr>
 <h2 id="Siamese-Box-Adaptive-Network-for-Visual-Tracking"><a href="#Siamese-Box-Adaptive-Network-for-Visual-Tracking" class="headerlink" title="Siamese Box Adaptive Network for Visual Tracking"></a>Siamese Box Adaptive Network for Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2003.06761">论文</a> <a target="_blank" rel="noopener" href="https://github.com/hqucv/siamban">代码</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv5400217">解读</a></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426112506.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426112506.png" alt=""></p>
 <p>同样是FCOS的应用，比较insight的地方是打标签的时候使用椭圆标签，两个椭圆，小椭圆E2内的点是positive，大椭圆E1外的点是negative，两个椭圆中间的部分为ignore。椭圆标签能够更紧凑地标注正负样本，并且设置了缓冲(ignore)以忽略模棱两可的样本。</p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426112854.png" style="zoom:67%;" />
-
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426112854.png" style="zoom:67%;" /></p>
 <hr>
 <h2 id="Fully-Conventional-Anchor-Free-Siamese-Networks-for-Object-Tracking"><a href="#Fully-Conventional-Anchor-Free-Siamese-Networks-for-Object-Tracking" class="headerlink" title="Fully Conventional Anchor-Free Siamese Networks for Object Tracking"></a>Fully Conventional Anchor-Free Siamese Networks for Object Tracking</h2><p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/335467780_Fully_Conventional_Anchor-Free_Siamese_Networks_for_Object_Tracking">论文</a></p>
 <p>将FCOS与级联结构结合，另一个就是分配GT到AFPN层时采用了FCOS一样的思路（划分[0,64], [64,128], [128,∞]）</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426114147.png"></p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426114239.png" style="zoom: 50%;" />
-
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426114147.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426114239.png" style="zoom: 50%;" /></p>
 <hr>
 <h2 id="Ocean-Object-aware-Anchor-free-Tracking"><a href="#Ocean-Object-aware-Anchor-free-Tracking" class="headerlink" title="Ocean: Object-aware Anchor-free Tracking"></a>Ocean: Object-aware Anchor-free Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.10721">论文</a> <a target="_blank" rel="noopener" href="https://github.com/researchmm/TracKit">代码</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6615313">解读</a></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426115451.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426115537.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426115451.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426115537.png" alt=""></p>
 <ul>
 <li>anchor-base方法对于弱预测的修正能力较差，因为训练时只考虑了IOU大于阈值的anchor的回归，对于跟踪过程中如果出现overlap很小的anchor很难去refine。而anchor-free可以针对每个点进行预测；</li>
 <li>作者设计了一个feature alignment module来从预测框中学习object-aware feature（图2c），从而对物体尺度敏感；</li>
@@ -284,33 +281,33 @@
 <hr>
 <h1 id="CenterNet类"><a href="#CenterNet类" class="headerlink" title="CenterNet类"></a>CenterNet类</h1><h2 id="Siamese-Attentional-Keypoint-Network-for-High-Performance-Visual-Tracking"><a href="#Siamese-Attentional-Keypoint-Network-for-High-Performance-Visual-Tracking" class="headerlink" title="Siamese Attentional Keypoint Network for High Performance Visual Tracking"></a>Siamese Attentional Keypoint Network for High Performance Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1904.10128v2">论文</a></p>
 <p>这篇将CenterNet和CornerNet结合到跟踪中，分别预测中心点和两个角点，以及运用了CBAM注意力机制强化上下文信息，应该是第一个将CenterNet/CornerNet用进来的，遗憾的是性能没有刷的很高。细节同样参照开头b站专栏。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426164747.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426164810.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426164747.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426164810.png" alt=""></p>
 <hr>
 <h2 id="Accurate-Anchor-Free-Tracking"><a href="#Accurate-Anchor-Free-Tracking" class="headerlink" title="Accurate Anchor Free Tracking"></a>Accurate Anchor Free Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.07560">论文</a></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426165201.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426165201.png" alt=""></p>
 <p>这篇就是比较典型的CenterNet模式了，预测中心点，中心偏移以及宽高。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426165235.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426165235.png" alt=""></p>
 <p>作者另外设计了backbone，最后在VOT2018性能虽然比siamrpn++略低但是速度是它的3.9倍（136FPS v.s. 35FPS）。</p>
 <hr>
 <h2 id="Siamese-Keypoint-Prediction-Network-for-Visual-Object-Tracking"><a href="#Siamese-Keypoint-Prediction-Network-for-Visual-Object-Tracking" class="headerlink" title="Siamese Keypoint Prediction Network for Visual Object Tracking"></a>Siamese Keypoint Prediction Network for Visual Object Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.04078">论文</a> <a target="_blank" rel="noopener" href="https://github.com/ZekuiQin/SiamKPN">代码</a></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171705.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171705.png" alt=""></p>
 <p>这一篇将casscade的思想结合在centernet类的siamese跟踪器中，看上面图2结构已经很清晰了，KPN结构如下：</p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171748.png" style="zoom:80%;" />
-
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171748.png" style="zoom:80%;" /></p>
 <p>还有一个需要关注的就是每个stage训练的时候分类标签的高斯方差不一样，遵循的原则就是越高的stage峰值越收束。目的即随着级联的进行，监管信号越来越严格。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171845.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426171845.png" alt=""></p>
 <hr>
 <h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Correlation-Guided-Attention-for-Corner-Detection-Based-Visual-Tracking"><a href="#Correlation-Guided-Attention-for-Corner-Detection-Based-Visual-Tracking" class="headerlink" title="Correlation-Guided Attention for Corner Detection Based Visual Tracking"></a>Correlation-Guided Attention for Corner Detection Based Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_CVPR_2020/papers/Du_Correlation-Guided_Attention_for_Corner_Detection_Based_Visual_Tracking_CVPR_2020_paper.pdf">论文</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6647311">解读</a></p>
 <p>作者为了解决跟踪中回归框估计不准确的问题，引入角点检测来得到更紧致的回归框。分析了之前一些角点检测方法在目标跟踪中无法取得好性能的原因，并提出了两阶段的correlation-guided attentional corner detection (CGACD)方法。第一阶段使用siamese网络得到目标区域的粗略ROI，第二阶段通过空间和通道两个correlation-guided attention来探索模板和ROI之间的关系，突出角点区域进行检测。速度可以达到70FPS。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173132.png"></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173132.png" alt=""></p>
 <hr>
 <h2 id="RPT-Learning-Point-Set-Representation-for-Siamese-Visual-Tracking"><a href="#RPT-Learning-Point-Set-Representation-for-Siamese-Visual-Tracking" class="headerlink" title="RPT: Learning Point Set Representation for Siamese Visual Tracking"></a>RPT: Learning Point Set Representation for Siamese Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2008.03467">论文</a> <a target="_blank" rel="noopener" href="https://github.com/zhanght021/RPT">代码</a> <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/257854666">原作者解读</a></p>
 <p>现有的跟踪方法往往采用矩形框或四边形来表示目标的状态（位置和大小），这种方式忽略了目标自身会变化的特点（形变、姿态变化），因此作者受启发自Reppoints检测方法，采用表示点（Representative Points）方法来描述目标的外观特征，学习表示点的特征，根据表示点的分布确定目标的状态，实现更精确的目标状态估计。</p>
 <p>具体可以参考原作者在知乎的解读，该方法取得了VOT2020-ST的冠军。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173720.png"></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173734.png"></p>
-<img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173759.png" style="zoom:80%;" />
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173720.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173734.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/3-anchorfree-siamese/20210426173759.png" style="zoom:80%;" /></p>
+
     </div>
     <!--文末结束语-->
     
