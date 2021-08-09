@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="16" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="17" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -289,12 +289,15 @@
             <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
            
         </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/46-AutoMatch/">46-AutoMatch</a>
+        <a class="index-article-header-title font-weight-medium" href="/tracking/46-AutoMatch/">Learn to Match: Automatic Matching Network Design for Visual Tracking</a>
       </div>
       
       <div class="index-article-content">
         
           
+论文 代码
+Motivation本文聚焦于孪生跟踪算法的匹配过程，目前主流的互相关操作是启发式设计的，严重依赖人工经验，并且单一的匹配方法无法适应各种复杂的跟踪场景。因此，本文引入了6种新的匹配算子来替代互相关。通过分析这些算子在不同跟踪挑战场景下的适应性，作者发现可以将它们结合起来进行互补，并借鉴NAS思想提出一种搜索方法 binary channel manipulation (BCM) 探索这些匹配算子的最优组合。
+Analysis of Matching Operators首先介绍本文采用的6种匹配算子，Concatenation, Pointwise-Addition , P...
         
       </div>
       
@@ -316,19 +319,38 @@
           <v-spacer></v-spacer>
           <v-col cols="auto">
             
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/transform/ >transform</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/ICCV2021/ >ICCV2021</a>
+                  </span>
+                
+              </v-card>
+            
           </v-col>
         </v-row>
         <span>
           
-            <a class="index-article-header-category font-weight-bold" href="/tracking/45-HiFT/">Uncategorized></a>
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
            
         </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/45-HiFT/">45-HiFT</a>
+        <a class="index-article-header-title font-weight-medium" href="/tracking/45-HiFT/">HiFT: Hierarchical Feature Transformer for Aerial Tracking</a>
       </div>
       
       <div class="index-article-content">
         
           
+论文 代码
+Motivation现有的孪生跟踪算法大多是基于相似得分图对目标对象进行分类和回归，使用单一的相似图会降低复杂场景下的定位精度，而像SiamRPN++那样单独使用多个相似图分别进行预测又会引入较大计算负担，不适用于移动设备。因此，本文提出一种 hierarchical feature transformer (HiFT) 对多个层级的相似图进行融合，既可以捕获全局的依赖关系，又可以高效地学习多层级特征之间的依赖关系。
+在介绍本文方法前，我们先分析经典的transformer架构应用于目标跟踪任务中的难点。
+
+预定义的(或学习的)解码query在面对任意跟踪对象时很难保持有效...
         
       </div>
       
