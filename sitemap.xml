@@ -9,30 +9,86 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tracking/45-HiFT/</loc>
+    <loc>https://www.zjp97.top/tracking/44-DASiamRPN/</loc>
     
-    <lastmod>2021-08-09</lastmod>
+    <lastmod>2021-08-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tracking/43-Crop-Transform-Paste/</loc>
+    
+    <lastmod>2021-08-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tracking/41-siamrcr/</loc>
+    
+    <lastmod>2021-08-10</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.zjp97.top/tracking/40-snlt/</loc>
     
-    <lastmod>2021-08-07</lastmod>
+    <lastmod>2021-08-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tracking/39-deepmix/</loc>
+    
+    <lastmod>2021-08-10</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.zjp97.top/tracking/38-siamtol/</loc>
     
-    <lastmod>2021-08-07</lastmod>
+    <lastmod>2021-08-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tracking/37-siamrn/</loc>
+    
+    <lastmod>2021-08-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tracking/36-learning-target-candidate-association/</loc>
+    
+    <lastmod>2021-08-10</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.zjp97.top/tracking/35-FSL-tracking/</loc>
     
-    <lastmod>2021-08-07</lastmod>
+    <lastmod>2021-08-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tracking/34-stmtrack/</loc>
+    
+    <lastmod>2021-08-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tracking/1-siamrcnn/</loc>
+    
+    <lastmod>2021-08-10</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tracking/45-HiFT/</loc>
+    
+    <lastmod>2021-08-09</lastmod>
     
   </url>
   
@@ -44,21 +100,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tracking/44-DASiamRPN/</loc>
-    
-    <lastmod>2021-07-26</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.zjp97.top/tracking/42-rl-tracking/</loc>
-    
-    <lastmod>2021-07-26</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tracking/36-learning-target-candidate-association/</loc>
     
     <lastmod>2021-07-26</lastmod>
     
@@ -194,6 +236,48 @@
   
   <url>
     <loc>https://www.zjp97.top/tags/matching/</loc>
+    <lastmod>2021-08-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/CVPR2020/</loc>
+    <lastmod>2021-08-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/%E6%97%B6%E5%BA%8F/</loc>
+    <lastmod>2021-08-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/Data-augmentation/</loc>
+    <lastmod>2021-08-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/ICME2021/</loc>
+    <lastmod>2021-08-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/IJCAI2021/</loc>
+    <lastmod>2021-08-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/Self-supervised/</loc>
     <lastmod>2021-08-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

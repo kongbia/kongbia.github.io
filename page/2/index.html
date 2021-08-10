@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="11" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="17" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -262,6 +262,265 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-04-28
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/36-learning-target-candidate-association/">Learning Target Candidate Association to Keep Track of What Not to Track</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文 代码
+MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅外观模型不足以区分目标和干扰物，因此需要对所有潜在目标保持跟踪。不同的是KYS是通过一个传播模块隐式地跟踪所有对象，最后作用于外观模型的输出来抑制干扰响应；而本文则是借助SuperGlue显式地匹配帧间所有的候选对象，构建跟踪链，有点多目标跟踪的意思，可解释性也更强。
+
+主流跟踪方法大多聚焦于建立强大的外观模型，然而仅依靠外观模型对于干扰物的鲁棒性较差；
+作者提出另一种思路，即对干扰物也保持跟踪。为此构建一个可学习的关联网络（受启发自SuperGlue），允许在帧与帧之间传播所有候选目标；
+针对跟踪数据集没有对干扰物标注的问题，提出了一种结合部分标注和自监督的训练策略。
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/36-learning-target-candidate-association/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-04-27
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/FSL/ >FSL</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/35-FSL-tracking/">Real-Time Visual Object Tracking via Few-Shot Learning</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文
+跟踪可以看成是一个特殊的 few-shot learning (FSL) 问题，本文提出了一个通用的两阶段框架，它能够使用大量的FSL算法并且保持较快的速度。第一阶段通过SiamRPN生成若干潜在候选框，第二阶段通过少样本分类的思想对候选框进行分类。按照这种coarse-to-fine结构，第一阶段为第二阶段提供稀疏的样本，在第二阶段可以更方便、高效地进行多种FSL算法。作者选取了几种基于优化的少样本学习方法进行证明。此外，该框架可将大多数FSL算法直接应用到视觉跟踪中，使研究人员能够在这两个领域相互交流。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/35-FSL-tracking/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-04-27
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/CVPR2021/ >CVPR2021</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E6%97%B6%E5%BA%8F/ >时序</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/34-stmtrack/">STMTrack: Template-free Visual Tracking with Space-time Memory Networks</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文
+Motivation离线训练的Siamese跟踪器已经充分完全挖掘了第一帧模板信息，但它们抵抗目标外观变化的能力依然有限。现有的模板更新机制大多依赖耗时的数值优化或复杂的手工设计策略，这阻碍了它们的实时跟踪和实际应用。本文提出了一种基于时空记忆网络的跟踪框架，该框架能够充分利用与目标相关的历史信息，从而更好地适应跟踪过程中的外观变化。这样避免了模板更新，所以叫template-free。主要创新点包括：
+
+引入记忆机制存储目标的历史信息，引导跟踪器聚焦在当前帧中信息最丰富的区域；
+memory network的像素级相似度计算能够生成更精确的目标框。
+
+运行速度37 FPS
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/34-stmtrack/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-04-23
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/transform/ >transform</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/CVPR2021/ >CVPR2021</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/33-transform-tracking/">Transform与目标跟踪</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          Transform在视觉领域遍地开花，终于目标跟踪也没能逃过。并行的长距离依赖（空间和时间皆可）对于目标跟踪似乎有着天然的优势，本篇笔记简要概述今年CVPR2021关于Transform在目标跟踪中的应用，主要介绍动机和结构，细节和实验部分以后有空再补充。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/33-transform-tracking/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2020-03-06
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/Anchor-free/ >Anchor-free</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/3-anchorfree-siamese/">Anchor Free的孪生目标跟踪</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。
+[Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)
+[Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)
+跟踪任务可以看成是分类任务与状态估计任务的结合。分类任务的目的是精确定位目标的位置，而状态估计获得目标的姿态（即目标框）。SiamFC++一文将当前的跟踪器按照不同状态估计的方法分为三类：
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/3-anchorfree-siamese/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2020-02-16
             </div>
           </v-col>
@@ -296,6 +555,49 @@
       
       <div class="index-article-readmore ">
         <v-btn text href="/tracking/2-detection-in-tracking/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2020-02-15
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/CVPR2020/ >CVPR2020</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/1-siamrcnn/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
