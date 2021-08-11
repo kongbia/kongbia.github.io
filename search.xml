@@ -1108,13 +1108,13 @@
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210808225804.png" style="zoom:80%;" /></p>
 <p>上述结果表明不同的匹配算子在不同跟踪场景下具有不同的可靠性，由此想到是否可以将它们结合起来，利用这些特征进行互补。因此，作者接下来提出一种自适应学习的自动选择和组合匹配算子的方法。</p>
 <h1 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210809101847.png" alt=""></p>
-<p>图5为整体框架，首先将模板和搜索特征送入多个匹配算子构成的搜索空间，生成m个响应特征 ${r_1, r_2, … , r_m}$，给每个响应特征的每个通道都赋予一个可学习的调制器(manipulator) $\omega_i^j$​​，表示该通道的贡献。然后引入二元Gumbel-Softmax来离散化这些调制器进行二元决策，训练过程参考DARTS的两层优化。最后根据学好的调制器保留两个匹配算子构建新的跟踪器再次训练。</p>
+<p>图5为整体框架，首先将模板和搜索特征送入多个匹配算子构成的搜索空间，生成m个响应特征 $\{ r_1, r_2, … , r_m \}$​，给每个响应特征的每个通道都赋予一个可学习的调制器(manipulator) $\omega_i^j$​​​，表示该通道的贡献。然后引入二元Gumbel-Softmax来离散化这些调制器进行二元决策，训练过程参考DARTS的两层优化。最后根据学好的调制器保留两个匹配算子构建新的跟踪器再次训练。</p>
 <p>下面分别介绍二元的通道调制器(Binary Channel Manipulation)和两层优化(Bilevel Optimization)</p>
 <h2 id="Binary-Channel-Manipulation"><a href="#Binary-Channel-Manipulation" class="headerlink" title="Binary Channel Manipulation"></a>Binary Channel Manipulation</h2><p>Binary Channel Manipulation (BCM) 用于决定匹配算子对目标状态预测的贡献，它给每个匹配响应特征的每个通道都赋予一个可学习的调制器(manipulator) $\omega_i^j$​​，将所有调制后的特征拼接聚合成一个大的特征（有点类似NAS里的supernet）。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210809111736.png" style="zoom:80%;" /></p>
 <p>其中$r_i^j$​ 表示第 i 个响应特征的第 j 个通道。对于每个匹配算子，我们将其对应的所有通道调制器相加得到该算子的potential $p_i$​，这个在后面选择匹配算子时会用到。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210809112703.png" style="zoom:80%;" /></p>
-<p>接下来，将连续的$\omega_i^j$​​转换为离散的，离散后的类别是二值分类，概率向量为$\pi = { \pi_1 = \sigma(\omega_i^j), \pi_2 = 1 - \sigma(\omega_i^j) }$​​。为了能够可微的反向传播，这里利用<a href="https://www.cnblogs.com/initial-h/p/9468974.html">Gumbel-Softmax</a>进行训练。对概率向量$\pi$​​对应的随机变量添加Gumbel噪声$g_k$​​后随机采样</p>
+<p>接下来，将连续的$\omega_i^j$​​转换为离散的，离散后的类别是二值分类，概率向量为$\pi = \{ \pi_1 = \sigma(\omega_i^j), \pi_2 = 1 - \sigma(\omega_i^j) \}$​​。为了能够可微的反向传播，这里利用<a href="https://www.cnblogs.com/initial-h/p/9468974.html">Gumbel-Softmax</a>进行训练。对概率向量$\pi$​​对应的随机变量添加Gumbel噪声$g_k$​​后随机采样</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210809114815.png" style="zoom:80%;" /></p>
 <p>然后将argmax替换为Softmax定义一个连续可微的近似</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210809114947.png" style="zoom:80%;" /></p>
