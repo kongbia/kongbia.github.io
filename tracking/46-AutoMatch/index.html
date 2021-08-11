@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/46-AutoMatch/" class="toc-header">Table of Contents</a>
+            <a href="/tracking/46-AutoMatch/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Analysis-of-Matching-Operators"><span class="toc-number">2.</span> <span class="toc-text">Analysis of Matching Operators</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Methodology"><span class="toc-number">3.</span> <span class="toc-text">Methodology</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Binary-Channel-Manipulation"><span class="toc-number">3.1.</span> <span class="toc-text">Binary Channel Manipulation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Bilevel-Optimization"><span class="toc-number">3.2.</span> <span class="toc-text">Bilevel Optimization</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">4.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Implementation-Details"><span class="toc-number">4.1.</span> <span class="toc-text">Implementation Details</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#State-of-the-art-Comparison"><span class="toc-number">4.2.</span> <span class="toc-text">State-of-the-art Comparison</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ablation-and-Analysis"><span class="toc-number">4.3.</span> <span class="toc-text">Ablation and Analysis</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-number">5.</span> <span class="toc-text">Conclusion</span></a></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2021-08-07
+      发布于:&nbsp;2021-08-07
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-08-10
+      更新于:&nbsp;2021-08-11
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -288,6 +288,7 @@
         <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210808103150.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2108.00803">论文</a> <a target="_blank" rel="noopener" href="https://github.com/JudasDie/SOTS">代码</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文聚焦于孪生跟踪算法的匹配过程，目前主流的互相关操作是启发式设计的，严重依赖人工经验，并且单一的匹配方法无法适应各种复杂的跟踪场景。因此，本文引入了6种新的匹配算子来替代互相关。通过分析这些算子在不同跟踪挑战场景下的适应性，作者发现可以将它们结合起来进行互补，并借鉴NAS思想提出一种搜索方法 binary channel manipulation (BCM) 探索这些匹配算子的最优组合。</p>
+<span id="more"></span>
 <h1 id="Analysis-of-Matching-Operators"><a href="#Analysis-of-Matching-Operators" class="headerlink" title="Analysis of Matching Operators"></a>Analysis of Matching Operators</h1><p>首先介绍本文采用的6种匹配算子，Concatenation, Pointwise-Addition , Pairwise-Relation , FiLM , Simple-Transformer 和Transductive-Guidance。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210808161330.png" alt=""></p>
 <p><strong>Concatenation</strong> 图2(a)，将模板特征$F_z$ pool成 $f_z \in 1 \times 1 \times C$，再与搜索特征$F_x$拼接。</p>

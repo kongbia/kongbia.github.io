@@ -977,10 +977,10 @@
 <p><a href="https://arxiv.org/abs/2106.07862">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>基于孪生网络的跟踪算法均假定训练和测试数据遵循相同的分布，然而在正常图像上训练的跟踪器并不能保证在其他领域的数据上（如雨雾天气的序列）也表现良好，即存在域偏移（domain shift）问题，如图1和图2。作者称本文是首次将域分布差异问题引入视觉跟踪领域。</p>
 <p>针对这一问题，本文提出一种域自适应方法，包括Pixel Domain Adaptation (PDA) 和 Semantic Domain Adaptation (SDA)。PDA分别对（不同域的）模板和搜索图像的特征对齐，消除天气、光照等引起的像素级域偏移；SDA将（不同域的）跟踪目标的特征表达对齐，以消除语义级的域偏移。二者均通过对抗训练的方式学习域分类器，域分类器强制网络学习域不变的特征表达，从而实现域自适应。</p>
+<span id="more"></span>
 <p>最后作者在有雾和红外序列两个不同域的数据集上进行了验证。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702104303.png" alt=""></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702104337.png" alt=""></p>
-<span id="more"></span>
 <h1 id="Theoretical-Preliminaries"><a href="#Theoretical-Preliminaries" class="headerlink" title="Theoretical Preliminaries"></a>Theoretical Preliminaries</h1><p>最简单粗暴的方法就是搜集许多具有不同域的标注训练数据，但这显然不现实。因此我们的目标是针对<strong>无监督域自适应场景</strong>（即源域有标记而目标域未标记），使跟踪器在源域和目标域上都表现良好，而不需要额外的标注成本。一种通用的方案就是学习域不变（domain-invariant）的特征表达来缩小不同域之间的差异。作者利用 <em>A</em>-distance理论和概率分析来实现这一目的，下面先简单介绍这些概念。</p>
 <h2 id="A-distance"><a href="#A-distance" class="headerlink" title="A-distance"></a><em>A</em>-distance</h2><p>给定源域 $S$ 和目标域 $T$， <em>A</em>-distance可以用于衡量两个域样本分布的差异，定义如下：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702113837.png" alt=""></p>
@@ -1041,6 +1041,7 @@
 <li>预定义的(或学习的)解码query在面对任意跟踪对象时很难保持有效性；</li>
 <li>transformer难以处理小目标（参考deform DETR）。</li>
 </ol>
+<span id="more"></span>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/45-HiFT/20210807215745.png" alt=""></p>
 <p>图2为整体框架，分成特征提取，transformer和预测头三部分。特征提取采用高效的alexnet，最后三层特征输入到transformer中，预测头采用类似FCOS的三分支预测（分类、回归、定位质量）。下面详细介绍本文提出的Hierarchical Transformer。</p>
 <h2 id="Hierarchical-Feature-Transformer"><a href="#Hierarchical-Feature-Transformer" class="headerlink" title="Hierarchical Feature Transformer"></a>Hierarchical Feature Transformer</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/45-HiFT/20210807221543.png" style="zoom:80%;" /></p>
@@ -1082,6 +1083,7 @@
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210808103150.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2108.00803">论文</a> <a href="https://github.com/JudasDie/SOTS">代码</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文聚焦于孪生跟踪算法的匹配过程，目前主流的互相关操作是启发式设计的，严重依赖人工经验，并且单一的匹配方法无法适应各种复杂的跟踪场景。因此，本文引入了6种新的匹配算子来替代互相关。通过分析这些算子在不同跟踪挑战场景下的适应性，作者发现可以将它们结合起来进行互补，并借鉴NAS思想提出一种搜索方法 binary channel manipulation (BCM) 探索这些匹配算子的最优组合。</p>
+<span id="more"></span>
 <h1 id="Analysis-of-Matching-Operators"><a href="#Analysis-of-Matching-Operators" class="headerlink" title="Analysis of Matching Operators"></a>Analysis of Matching Operators</h1><p>首先介绍本文采用的6种匹配算子，Concatenation, Pointwise-Addition , Pairwise-Relation , FiLM , Simple-Transformer 和Transductive-Guidance。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/46-AutoMatch/20210808161330.png" alt=""></p>
 <p><strong>Concatenation</strong> 图2(a)，将模板特征$F_z$ pool成 $f_z \in 1 \times 1 \times C$，再与搜索特征$F_x$拼接。</p>
@@ -1154,12 +1156,13 @@
 <p><a href="https://arxiv.org/abs/1712.09153">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
 <p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
+<span id="more"></span>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
 <p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
 <p><strong>Components</strong></p>
 <p>匹配网络是标准的孪生网络</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
-<p>其中，$x$是模板，$z$是搜索区域，$w = { w_1, w_2, …, w_N }$​表示每一层卷积层的权重参数。</p>
+<p>其中，$x$​是模板，$z$​是搜索区域，$w = { w_1, w_2, …, w_N }$​​表示每一层卷积层的权重参数。</p>
 <p>元学习网络根据历史得到的M个context patch $z = {z_1, z_2, …, z_M}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
 <p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>

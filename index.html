@@ -144,7 +144,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -194,7 +194,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -297,12 +297,11 @@
           
 论文 代码
 Motivation本文聚焦于孪生跟踪算法的匹配过程，目前主流的互相关操作是启发式设计的，严重依赖人工经验，并且单一的匹配方法无法适应各种复杂的跟踪场景。因此，本文引入了6种新的匹配算子来替代互相关。通过分析这些算子在不同跟踪挑战场景下的适应性，作者发现可以将它们结合起来进行互补，并借鉴NAS思想提出一种搜索方法 binary channel manipulation (BCM) 探索这些匹配算子的最优组合。
-Analysis of Matching Operators首先介绍本文采用的6种匹配算子，Concatenation, Pointwise-Addition , P...
         
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/46-AutoMatch/">Read More</v-btn>
+        <v-btn text href="/tracking/46-AutoMatch/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -350,12 +349,14 @@ Analysis of Matching Operators首先介绍本文采用的6种匹配算子，Conc
 Motivation现有的孪生跟踪算法大多是基于相似得分图对目标对象进行分类和回归，使用单一的相似图会降低复杂场景下的定位精度，而像SiamRPN++那样单独使用多个相似图分别进行预测又会引入较大计算负担，不适用于移动设备。因此，本文提出一种 hierarchical feature transformer (HiFT) 对多个层级的相似图进行融合，既可以捕获全局的依赖关系，又可以高效地学习多层级特征之间的依赖关系。
 在介绍本文方法前，我们先分析经典的transformer架构应用于目标跟踪任务中的难点。
 
-预定义的(或学习的)解码query在面对任意跟踪对象时很难保持有效...
+预定义的(或学习的)解码query在面对任意跟踪对象时很难保持有效性；
+transformer难以处理小目标（参考deform DETR）。
+
         
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/45-HiFT/">Read More</v-btn>
+        <v-btn text href="/tracking/45-HiFT/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -397,14 +398,11 @@ Motivation现有的孪生跟踪算法大多是基于相似得分图对目标对�
 论文
 Motivation基于孪生网络的跟踪算法均假定训练和测试数据遵循相同的分布，然而在正常图像上训练的跟踪器并不能保证在其他领域的数据上（如雨雾天气的序列）也表现良好，即存在域偏移（domain shift）问题，如图1和图2。作者称本文是首次将域分布差异问题引入视觉跟踪领域。
 针对这一问题，本文提出一种域自适应方法，包括Pixel Domain Adaptation (PDA) 和 Semantic Domain Adaptation (SDA)。PDA分别对（不同域的）模板和搜索图像的特征对齐，消除天气、光照等引起的像素级域偏移；SDA将（不同域的）跟踪目标的特征表达对齐，以消除语义级的域偏移。二者均通过对抗训练的方式学习域分类器，域分类器强制网络学习域不变的特征表达，从而实现域自适应。
-最后作者在有雾和红外序列两个不同域的数据集上进行了验证。
-
-
         
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/44-DASiamRPN/">Read More</v-btn>
+        <v-btn text href="/tracking/44-DASiamRPN/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -455,7 +453,7 @@ Motivation现有的跟踪方法依赖大量高质量标注数据集训练，但�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/43-Crop-Transform-Paste/">Read More</v-btn>
+        <v-btn text href="/tracking/43-Crop-Transform-Paste/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -509,7 +507,7 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/42-rl-tracking/">Read More</v-btn>
+        <v-btn text href="/tracking/42-rl-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -554,7 +552,7 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/41-siamrcr/">Read More</v-btn>
+        <v-btn text href="/tracking/41-siamrcr/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -609,7 +607,7 @@ Introduction本文研究的课题为tracking by natural language(NL) 。人类�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/40-snlt/">Read More</v-btn>
+        <v-btn text href="/tracking/40-snlt/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -668,7 +666,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/39-deepmix/">Read More</v-btn>
+        <v-btn text href="/tracking/39-deepmix/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -724,7 +722,7 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/38-siamtol/">Read More</v-btn>
+        <v-btn text href="/tracking/38-siamtol/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -782,7 +780,7 @@ Refinement Module (RM) 将RD和分类分支获得的信息进行整合，细化�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/37-siamrn/">Read More</v-btn>
+        <v-btn text href="/tracking/37-siamrn/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 

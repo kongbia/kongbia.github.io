@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/4-mlt/" class="toc-header">Table of Contents</a>
+            <a href="/tracking/4-mlt/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">3.</span> <span class="toc-text">Experiments</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-number">4.</span> <span class="toc-text">Conclusion</span></a></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2020-03-10
+      发布于:&nbsp;2020-03-10
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-08-11
+      更新于:&nbsp;2021-08-11
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -289,12 +289,13 @@
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1712.09153">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
 <p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
+<span id="more"></span>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
 <p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
 <p><strong>Components</strong></p>
 <p>匹配网络是标准的孪生网络</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
-<p>其中，$x$是模板，$z$是搜索区域，$w = { w_1, w_2, …, w_N }$​表示每一层卷积层的权重参数。</p>
+<p>其中，$x$​是模板，$z$​是搜索区域，$w = { w_1, w_2, …, w_N }$​​表示每一层卷积层的权重参数。</p>
 <p>元学习网络根据历史得到的M个context patch $z = {z_1, z_2, …, z_M}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
 <p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>

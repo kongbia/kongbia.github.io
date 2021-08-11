@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/44-DASiamRPN/" class="toc-header">Table of Contents</a>
+            <a href="/tracking/44-DASiamRPN/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Theoretical-Preliminaries"><span class="toc-number">2.</span> <span class="toc-text">Theoretical Preliminaries</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#A-distance"><span class="toc-number">2.1.</span> <span class="toc-text">A-distance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Probabilistic-Analysis-for-Object-Tracker"><span class="toc-number">2.2.</span> <span class="toc-text">Probabilistic Analysis for Object Tracker</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">3.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Pixel-Domain-Adaptation"><span class="toc-number">3.1.</span> <span class="toc-text">Pixel Domain Adaptation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Semantic-Domain-Adaptation"><span class="toc-number">3.2.</span> <span class="toc-text">Semantic Domain Adaptation</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">4.</span> <span class="toc-text">Experiments</span></a></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2021-07-01
+      发布于:&nbsp;2021-07-01
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-08-10
+      更新于:&nbsp;2021-08-11
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -289,10 +289,10 @@
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2106.07862">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>基于孪生网络的跟踪算法均假定训练和测试数据遵循相同的分布，然而在正常图像上训练的跟踪器并不能保证在其他领域的数据上（如雨雾天气的序列）也表现良好，即存在域偏移（domain shift）问题，如图1和图2。作者称本文是首次将域分布差异问题引入视觉跟踪领域。</p>
 <p>针对这一问题，本文提出一种域自适应方法，包括Pixel Domain Adaptation (PDA) 和 Semantic Domain Adaptation (SDA)。PDA分别对（不同域的）模板和搜索图像的特征对齐，消除天气、光照等引起的像素级域偏移；SDA将（不同域的）跟踪目标的特征表达对齐，以消除语义级的域偏移。二者均通过对抗训练的方式学习域分类器，域分类器强制网络学习域不变的特征表达，从而实现域自适应。</p>
+<span id="more"></span>
 <p>最后作者在有雾和红外序列两个不同域的数据集上进行了验证。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702104303.png" alt=""></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702104337.png" alt=""></p>
-<span id="more"></span>
 <h1 id="Theoretical-Preliminaries"><a href="#Theoretical-Preliminaries" class="headerlink" title="Theoretical Preliminaries"></a>Theoretical Preliminaries</h1><p>最简单粗暴的方法就是搜集许多具有不同域的标注训练数据，但这显然不现实。因此我们的目标是针对<strong>无监督域自适应场景</strong>（即源域有标记而目标域未标记），使跟踪器在源域和目标域上都表现良好，而不需要额外的标注成本。一种通用的方案就是学习域不变（domain-invariant）的特征表达来缩小不同域之间的差异。作者利用 <em>A</em>-distance理论和概率分析来实现这一目的，下面先简单介绍这些概念。</p>
 <h2 id="A-distance"><a href="#A-distance" class="headerlink" title="A-distance"></a><em>A</em>-distance</h2><p>给定源域 $S$ 和目标域 $T$， <em>A</em>-distance可以用于衡量两个域样本分布的差异，定义如下：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702113837.png" alt=""></p>

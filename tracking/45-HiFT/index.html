@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/45-HiFT/" class="toc-header">Table of Contents</a>
+            <a href="/tracking/45-HiFT/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Hierarchical-Feature-Transformer"><span class="toc-number">2.1.</span> <span class="toc-text">Hierarchical Feature Transformer</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">3.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Evaluation-on-Aerial-Benchmarks"><span class="toc-number">3.1.</span> <span class="toc-text">Evaluation on Aerial Benchmarks</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ablation-Study"><span class="toc-number">3.2.</span> <span class="toc-text">Ablation Study</span></a></li></ol></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2021-08-07
+      发布于:&nbsp;2021-08-07
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-08-09
+      更新于:&nbsp;2021-08-11
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -293,6 +293,7 @@
 <li>预定义的(或学习的)解码query在面对任意跟踪对象时很难保持有效性；</li>
 <li>transformer难以处理小目标（参考deform DETR）。</li>
 </ol>
+<span id="more"></span>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/45-HiFT/20210807215745.png" alt=""></p>
 <p>图2为整体框架，分成特征提取，transformer和预测头三部分。特征提取采用高效的alexnet，最后三层特征输入到transformer中，预测头采用类似FCOS的三分支预测（分类、回归、定位质量）。下面详细介绍本文提出的Hierarchical Transformer。</p>
 <h2 id="Hierarchical-Feature-Transformer"><a href="#Hierarchical-Feature-Transformer" class="headerlink" title="Hierarchical Feature Transformer"></a>Hierarchical Feature Transformer</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/45-HiFT/20210807221543.png" style="zoom:80%;" /></p>
