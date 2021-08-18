@@ -144,7 +144,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="18" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="19" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -194,7 +194,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -262,6 +262,56 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-08-17
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/ICCV2021/ >ICCV2021</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/matching/ >matching</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/47-SAOT/">Saliency-Associated Object Tracking</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文 代码
+Motivation和上一篇一样是研究跟踪的匹配问题。目前主流的跟踪策略分为全局和局部两种，全局策略（如DW-Corr）学习目标的整体表示，当目标发生较大变化时表现不佳。局部策略（如PG-Corr）将目标分割成多个patch，并行跟踪所有patch，通过聚合这些patch的跟踪结果，推断出目标状态。而局部策略的局限在于并不是所有patch都包含丰富的信息，一些没有判别能力的patch难以跟踪，可能对推断全局目标状态产生不利影响。因此，本文提出只跟踪目标的显著局部区域而不是简单跟踪所有局部块，具体提出了细粒度的显著性挖掘模块(fine-grained saliency mining module)，用于捕获局部显著性；以及显著性关联模块(saliency-association modeling module) 将捕获的显著区域关联在一起，学习目标模板与搜索图像之间的全局相关性，以进行状态估计。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/47-SAOT/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-08-07
             </div>
           </v-col>
@@ -301,7 +351,7 @@ Motivation本文聚焦于孪生跟踪算法的匹配过程，目前主流的互�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/46-AutoMatch/">阅读更多</v-btn>
+        <v-btn text href="/tracking/46-AutoMatch/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -356,7 +406,7 @@ transformer难以处理小目标（参考deform DETR）。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/45-HiFT/">阅读更多</v-btn>
+        <v-btn text href="/tracking/45-HiFT/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -402,7 +452,7 @@ Motivation基于孪生网络的跟踪算法均假定训练和测试数据遵循�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/44-DASiamRPN/">阅读更多</v-btn>
+        <v-btn text href="/tracking/44-DASiamRPN/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -453,7 +503,7 @@ Motivation现有的跟踪方法依赖大量高质量标注数据集训练，但�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/43-Crop-Transform-Paste/">阅读更多</v-btn>
+        <v-btn text href="/tracking/43-Crop-Transform-Paste/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -507,7 +557,7 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/42-rl-tracking/">阅读更多</v-btn>
+        <v-btn text href="/tracking/42-rl-tracking/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -552,7 +602,7 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/41-siamrcr/">阅读更多</v-btn>
+        <v-btn text href="/tracking/41-siamrcr/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -607,7 +657,7 @@ Introduction本文研究的课题为tracking by natural language(NL) 。人类�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/40-snlt/">阅读更多</v-btn>
+        <v-btn text href="/tracking/40-snlt/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -666,7 +716,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/39-deepmix/">阅读更多</v-btn>
+        <v-btn text href="/tracking/39-deepmix/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -722,65 +772,7 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/38-siamtol/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-05-08
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/FSL/ >FSL</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/37-siamrn/">Learning to Filter: Siamese Relation Network for Robust Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation
-Siamese跟踪器的训练设置只是在大量的图像对中匹配同一个目标，而忽略了它们之间的区别，因此对相似干扰物的判别能力不够好；
-分类和回归是独立优化的，造成二者之间的不匹配。具体来说，分类置信度最高的位置对应的目标框可能并不是最准确的（类似检测中general focal loss等文章的观点）。
-
-针对上述问题，作者提出了两个模块：
-
-Relation Detector (RD) 构造了一个2-way-1-shot的少样本学习方法来过滤干扰物。并且使用对比训练策略 (contrastive training strategy)，不仅学习匹配相同的目标，而且学习如何区分不同的目标 ；
-Refinement Module (RM) 将RD和分类分支获得的信息进行整合，细化跟踪结果。RM可以联合优化分类分支和回归分支，缓解两个分支的不匹配。
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/37-siamrn/">阅读更多</v-btn>
+        <v-btn text href="/tracking/38-siamtol/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
