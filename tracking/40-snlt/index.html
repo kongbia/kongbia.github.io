@@ -301,10 +301,10 @@
 <p>上图展示了SNLT整体框架，将语言描述嵌入到SiamRPN++中。输入包含三部分：模板、搜索区域和查询语言Q。模板和搜索区域经过卷积提取特征$Z$和$X$，查询语言经过语言模型（BERT, GloVe, HGLMM）提取句子嵌入编码$Z_Q$。三元组$(Z,Z_Q,X)$送入SNL-RPN，分别预测视觉和语言的分类和回归响应。最后二者通过Dynamic Aggregation Module进行融合。</p>
 <h2 id="Architecture-of-the-SNL-RPN"><a href="#Architecture-of-the-SNL-RPN" class="headerlink" title="Architecture of the SNL-RPN"></a>Architecture of the SNL-RPN</h2><p>SNL-RPN如上图b所示，包括蓝色部分的visual head和红色部分的NL head，都是通过DW-XCorr生成相应的的分类和回归响应。类似SiamRPN++，同样在ResNet的三个stage上进行预测，并将结果融合，融合权重通过离线训练得到。visual head和NL head各包含两个分支，总共有四组融合参数：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519154224.png" alt=""></p>
-<p>$S<em>{VIS}, S</em>{NL}$表示分类分支的视觉和语言预测，$B<em>{VIS},B</em>{NL}$表示回归分支的两种预测。</p>
+<p>$S_{VIS}, S_{NL}$表示分类分支的视觉和语言预测，$B_{VIS},B_{NL}$表示回归分支的两种预测。</p>
 <h2 id="Aggregation-of-the-SNL-RPN-Predictions"><a href="#Aggregation-of-the-SNL-RPN-Predictions" class="headerlink" title="Aggregation of the SNL-RPN Predictions"></a>Aggregation of the SNL-RPN Predictions</h2><p>上一节对不同stage的预测融合，本节作者对视觉和语言的结果再次进行融合：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519160117.png" alt=""></p>
-<p>$\omega<em>{VIS},\omega</em>{NL}$ 可以简单像上面一样离线训练得到，但是融合对象来自两个不同的输入，用固定的权重融合并不是最优的。因此，作者提出一个基于预测响应图熵的动态融合方式：</p>
+<p>$\omega_{VIS},\omega_{NL}$ 可以简单像上面一样离线训练得到，但是融合对象来自两个不同的输入，用固定的权重融合并不是最优的。因此，作者提出一个基于预测响应图熵的动态融合方式：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519160727.png" alt=""></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/40-snlp/20210519160737.png" alt=""></p>
 <p>其中$\sigma$表示softmax函数，$\alpha$表示缩放因子。公式4的含义是<strong>熵越大的项赋予更小的权重</strong>。熵越大表示预测图分布越混乱，越不准确，所以权重更小。</p>

@@ -217,6 +217,14 @@
             </div>
             <div class="tags-contain">
                 
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/CVPR2020/">CVPR2020</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="4" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
@@ -228,7 +236,7 @@
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/CVPR2020/">CVPR2020</a>
+                                <a href="/tags/Anchor-free/">Anchor-free</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
@@ -249,22 +257,6 @@
                         </v-hover>
                     </v-badge>
                 
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/Anchor-free/">Anchor-free</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/%E6%97%B6%E5%BA%8F/">时序</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="3" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
@@ -281,10 +273,34 @@
                         </v-hover>
                     </v-badge>
                 
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/%E6%97%B6%E5%BA%8F/">时序</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="2" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/">模型更新</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/meta-learning/">meta learning</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/ICCV2019/">ICCV2019</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
@@ -357,22 +373,6 @@
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/matching/">matching</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/meta-learning/">meta learning</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/ICCV2019/">ICCV2019</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>

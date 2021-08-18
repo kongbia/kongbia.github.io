@@ -300,10 +300,10 @@
 <li>现有方法都是sample-level的，即会生成新的样本，对这些新样本需要额外花费大量时间提取它们的深度特征；</li>
 <li>现有方法都是基于退化因素(例如，噪声、模糊、雾、雨等)，这些退化因素会破坏原始样本，降低模型判别力。</li>
 </ol>
-<p>为了解决上述问题，作者提出要对训练样本的<strong>特征</strong>(embedding)进行增强。具体来说，首先提取样本$X_t$的特征embedding得到${\varphi(I_i) \in \mathbb{R}^{C \times W \times H} | I_i \in X_t}$，然后将所有embedding拼接起来得到特征张量 $X_t \in \mathbb{R}^{N \times C \times W \times H} $，N是训练样本数量。之后把$X_t$通过数据增强映射到一个新的特征$\hat{X_t} \in \mathbb{R}^{K \times C \times W \times H} $ 送入更新模块以生成目标模型。</p>
+<p>为了解决上述问题，作者提出要对训练样本的<strong>特征</strong>(embedding)进行增强。具体来说，首先提取样本$X_t$的特征embedding得到$\{\varphi(I_i) \in \mathbb{R}^{C \times W \times H} | I_i \in X_t\}$，然后将所有embedding拼接起来得到特征张量 $X_t \in \mathbb{R}^{N \times C \times W \times H} $，N是训练样本数量。之后把$X_t$通过数据增强映射到一个新的特征$\hat{X_t} \in \mathbb{R}^{K \times C \times W \times H} $ 送入更新模块以生成目标模型。</p>
 <p>在特征上进行增强比直接在样本上增强更加高效，此外，作者在混合样本特征时加入了对应跟踪结果的指导。从直观上看，在视频采集过程中，感兴趣的物体可能位于场景中的任何位置，将物体放置在可能的背景区域中来增加训练样本是合理的。因此，作者根据跟踪框将样本分为目标区域和背景区域，并把它们混合以生成新样本。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/39-deepmixl/20210510211559.png" alt=""></p>
-<p>其中 $M<em>o \in \mathbb{R}^{K \times C \times W \times H} $（此处作者笔误，第一个维度为K而不是N，已向作者求证）是二值掩膜，1表示目标区域，0表示背景区域。$W</em>{ {o \ or \ b} } \in \mathbb{R}^{K \times N \times 3 \times 3} $表示卷积，K是输出样本的个数。这个卷积的目的就是混合N个原始样本生成K个新样本，其中$W_o$和$W_b$分别负责混合目标和背景区域。下一步就需要考虑如何计算$W_o$和$W_b$，作者设计了MixNet，如图2所示。</p>
+<p>其中 $M_o \in \mathbb{R}^{K \times C \times W \times H} $（此处作者笔误，第一个维度为K而不是N，已向作者求证）是二值掩膜，1表示目标区域，0表示背景区域。$W_{ \{o \ or \ b\} } \in \mathbb{R}^{K \times N \times 3 \times 3} $表示卷积，K是输出样本的个数。这个卷积的目的就是混合N个原始样本生成K个新样本，其中$W_o$和$W_b$分别负责混合目标和背景区域。下一步就需要考虑如何计算$W_o$和$W_b$，作者设计了MixNet，如图2所示。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/39-deepmixl/20210510212546.png" alt=""></p>
 <p>输入$X_t$，通过两个结构一致参数不同的卷积分支生成kernel $W_o$和$W_b$。这个网络可以预先离线训练好，在线跟踪时只需一次前向传播就可以高效地获得增强样本。</p>
 <p><strong>Implementation for SOTA Trackers</strong></p>

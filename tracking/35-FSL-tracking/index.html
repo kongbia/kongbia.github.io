@@ -296,7 +296,7 @@
 <p>整体跟踪框架如图1所示，第一阶段利用SiamRPN++生成若干个候选框，经过ROI Align后送入第二阶段进行少样本分类。第二阶段是一个N-shot-2-way的分类任务，所有候选使用在线生成的伪标签进行标记。</p>
 <h2 id="Second-Stage-as-Few-Shot-Learning"><a href="#Second-Stage-as-Few-Shot-Learning" class="headerlink" title="Second Stage as Few-Shot Learning"></a>Second Stage as Few-Shot Learning</h2><p>首先用数学形式定义任务，公式比较多直接贴图：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427205448.png" style="zoom:80%;" /></p>
-<p>其中 $\theta$ 是meta-training stage (inner loop)中使用base loss $ L<em>{base} $ 优化得到的sequence-specific参数；然后用$\theta$ 去计算meta loss $ L</em>{meta} $，用于 meta-testing (outer loop) stage 来更新few-shot learner 的参数 $\rho$ 。而$\varphi $ 表示feature embedding的参数，就是前面一大堆特征提取之类的。</p>
+<p>其中 $\theta$ 是meta-training stage (inner loop)中使用base loss $ L_{base} $ 优化得到的sequence-specific参数；然后用$\theta$ 去计算meta loss $ L_{meta} $，用于 meta-testing (outer loop) stage 来更新few-shot learner 的参数 $\rho$ 。而$\varphi $ 表示feature embedding的参数，就是前面一大堆特征提取之类的。</p>
 <p>这里的meta loss是用于分类，所以采用focal loss：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427211809.png" style="zoom:80%;" /></p>
 <p>其中 $\gamma$ 是可学习的缩放因子，$\theta^T$ 是前景和背景的权重。$\alpha, \beta$ 是focal loss的超参数。</p>

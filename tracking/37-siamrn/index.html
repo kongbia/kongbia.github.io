@@ -314,7 +314,7 @@
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509213558.png" style="zoom:80%;" /></p>
 <h2 id="Ground-truth-and-Loss-function"><a href="#Ground-truth-and-Loss-function" class="headerlink" title="Ground-truth and Loss function"></a>Ground-truth and Loss function</h2><p>大部分都和SiamBAN一样，增加的RD模块采用MSE loss</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509215957.png" alt=""></p>
-<p>其中$r<em>{i,j}$表示位置$(i,j)$处的relation score；$y</em>{i,j}$是对应标签，上文提及的三种样本对中，$(s_p, p_p)$标签为1，$(s_p, p_n), (n_n, p_p / p_n)$标签为0。</p>
+<p>其中$r_{i,j}$表示位置$(i,j)$处的relation score；$y_{i,j}$是对应标签，上文提及的三种样本对中，$(s_p, p_p)$标签为1，$(s_p, p_n), (n_n, p_p / p_n)$标签为0。</p>
 <h2 id="Training-and-Inference"><a href="#Training-and-Inference" class="headerlink" title="Training and Inference"></a>Training and Inference</h2><p>训练首先从来自同一个序列的模板和搜索区域中选择16个正样本和48个负样本来训练分类和回归分支，然后再加入另一个序列中的搜索图像（负例）用于生成RD的训练样本。第5个epoch开始在线难样本挖掘，第15个epoch开始离线难样本挖掘。整个网络端到端训练不需要fine-tune。</p>
 <p>推理阶段第一帧先提取模板特征并通过precise ROI pooling提取ROI特征。后续帧对回归分支每个位置的输出生成proposal，提取proposal的ROI特征与模板ROI特征共同送入RD计算它们之间的关系，最后将RD的输出与分类分支的输出送入RM得到最终结果。</p>
 <h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Comparison-with-the-state-of-the-art"><a href="#Comparison-with-the-state-of-the-art" class="headerlink" title="Comparison with the state-of-the-art"></a>Comparison with the state-of-the-art</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/37-siamrn/20210509223013.png" alt=""></p>

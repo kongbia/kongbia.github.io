@@ -313,7 +313,7 @@
 <p>agent采用强化学习的方式训练，基本元素包括状态(state S) ，动作(action A)和奖励(reward R)。在每一个step即第l层中，agent根据当前状态$S_l$ 采取动作$A_l$来决定是否调整预测框或者在该层停止并输出结果，动作$A_l$的目的是减少预测的框的不确定性。训练时根据预测框与GT的IOU给出相应的奖励$R_l$（有正有负），通过最大化期望奖励，agent能学到最好的决策来采取行动，在精度和效率上取得平衡。</p>
 <p><strong>Actions:</strong> 包括7个各向异性的的尺度变换和一个stop动作。7个尺度变换里包括2个全局的缩放和4个局部缩放，缩放比例为0.2。还有一个不缩放(no scaling)的动作，这一操作用于在当前响应图不明确或无法做出决策时推迟决策。</p>
 <p><strong>States:</strong> 状态是一个包含响应图$F’_l$和历史动作$h_l$的二元组 $(F’_l,h_l)$。$F’_l$使用的是当前层和之前所有层响应图的平均，相当于结合了浅层的细节和深层的语义。$h_l$包含历史4个动作的向量，每个动作是8维的one-hot的向量，所以$h_l$总共是32维。</p>
-<p><strong>Rewards:</strong> 奖励函数$R(S<em>{l-1},S_l)$反应了采取动作$A_l$后，从状态$S</em>{l-1}$到状态$S_l$的定位精度提升（或下降），精度采用IOU衡量，奖励函数计算如下：</p>
+<p><strong>Rewards:</strong> 奖励函数$R(S_{l-1},S_l)$反应了采取动作$A_l$后，从状态$S_{l-1}$到状态$S_l$的定位精度提升（或下降），精度采用IOU衡量，奖励函数计算如下：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629174619.png" style="zoom:80%;" /></p>
 <p>当动作不为stop时，若该动作能使IOU增大，则奖励+1，否则惩罚-1。若采取任何尺度变换都不能进一步提升IOU或者已经到达最后一层了，则采取stop动作，此时以IOU阈值0.6来决定奖惩。</p>
 <p><strong>Deep Q-learning</strong>：本文使用value-based的DQN来选择动作，该方法需要学习一个动作-价值函数$Q(S_l,A_l)$, 选择能够使得Q最大的动作A。Q函数用网络模拟，如图2虚线框所示，包含两个128维的FC层，输出对应8维动作的回报。训练时采用TD learning进行迭代。</p>
@@ -328,7 +328,7 @@
 <h2 id="Method-1"><a href="#Method-1" class="headerlink" title="Method"></a>Method</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629205511.png" alt=""></p>
 <p>整体框架如图2所示，包括决策模块和跟踪模块。决策模块是一个Actor-Critic（or Option-Critic？）结构，包括switch network和termination network。首先将初始帧模板和上一帧跟踪结果送入switch network，输出一个二元信号选择跟踪器。跟踪器结果送入termination network，输出终止当前跟踪器的概率。注意这里终止之后并不一定切换到另一个跟踪器，因为并不能保证另一个就更好，而是要经过switch network重新选择。</p>
 <p><strong>Decision Module</strong></p>
-<p>给定一组状态$S$和动作$A$，马尔可夫选项$\omega \in \Omega$ 包括三部分：intra-option policy $\pi: S \times A \rightarrow [0,1]$, termination condition $\beta: S^{+}  \rightarrow [0,1]$, initiation set $I \subseteq  S$。当option $\omega$选定后，根据$\pi<em>{\omega}$选择相应的动作，直到终止函数 $\beta</em>{\omega}$ 判断终止。</p>
+<p>给定一组状态$S$和动作$A$，马尔可夫选项$\omega \in \Omega$ 包括三部分：intra-option policy $\pi: S \times A \rightarrow [0,1]$, termination condition $\beta: S^{+}  \rightarrow [0,1]$, initiation set $I \subseteq  S$。当option $\omega$选定后，根据$\pi_{\omega}$选择相应的动作，直到终止函数 $\beta_{\omega}$ 判断终止。</p>
 <p>这是一个标准的Option-Critic结构，一大堆公式就省略了。但是最后作者却用Actor-Critic去解释图2，即switch network是option-value函数，作为Critic来评价option，并且为termination network提供更新梯度（参考上面Actor-Critic的ppt）。termination network作为Actor评估正在使用的跟踪器性能，以决定它是否应该在当前帧终止。</p>
 <p>switch network的奖励函数定义如下：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210629214943.png" style="zoom:80%;" /></p>
@@ -357,19 +357,19 @@
 </ol>
 <p>下面介绍将Actor-Critic的框架嵌入上述模型</p>
 <p><strong>Action</strong></p>
-<p>首先定义相关的符号，如图4所示，目标模板包括边界框 $T<em>{box}$，mask $T</em>{mask}$，$T<em>{box}$中的图像内容$T’</em>{box}$，$T<em>{mask}$中的图像内容$T’</em>{mask}$。而预测结果则是类似的$P<em>{box}, P</em>{mask}, P’<em>{box}, P’</em>{mask}$。</p>
+<p>首先定义相关的符号，如图4所示，目标模板包括边界框 $T_{box}$，mask $T_{mask}$，$T_{box}$中的图像内容$T’_{box}$，$T_{mask}$中的图像内容$T’_{mask}$。而预测结果则是类似的$P_{box}, P_{mask}, P’_{box}, P’_{mask}$。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630173712.png" style="zoom:80%;" /></p>
 <p>第一个决策是是否更新模板，agent的动作 $a_i \in A$ 有两种情况，$a_0$表示用当前结果更新模板，$a_1$表示不更新。</p>
-<p>第二个决策是匹配方法选择快速的基于IOU匹配还是精确的基于外观匹配，在精度和速度间取得平衡。前者分别计算模板和候选预测的box IOU和mask IOU，选择IOU最大的作为匹配结果；后者则是计算模板图像块$T’<em>{box}$和候选预测图像块$P’</em>{box}$的相似性，选择最像的作为匹配结果。<strong>注意这里没有另外增加一个agent</strong>，而是根据第一个agent的历史决策来决定。若agent连续N帧预测$a_1$，表示目标很可能丢失，此时需要切换到基于外观的匹配方法。</p>
+<p>第二个决策是匹配方法选择快速的基于IOU匹配还是精确的基于外观匹配，在精度和速度间取得平衡。前者分别计算模板和候选预测的box IOU和mask IOU，选择IOU最大的作为匹配结果；后者则是计算模板图像块$T’_{box}$和候选预测图像块$P’_{box}$的相似性，选择最像的作为匹配结果。<strong>注意这里没有另外增加一个agent</strong>，而是根据第一个agent的历史决策来决定。若agent连续N帧预测$a_1$，表示目标很可能丢失，此时需要切换到基于外观的匹配方法。</p>
 <p><strong>State</strong> </p>
-<p>输入agent的状态$s<em>t$包括两部分，如下式。第一部分$S_T$是模板图像，其中边框$T’</em>{box}$之内的内容保持不变，之外的内容填充黑色；第二部分$S_P$是搜索图像，同样将mask之内的内容保持不变，之外的内容填充黑色。提取这两种图像的特征并相加得到输入状态。</p>
+<p>输入agent的状态$s_t$包括两部分，如下式。第一部分$S_T$是模板图像，其中边框$T’_{box}$之内的内容保持不变，之外的内容填充黑色；第二部分$S_P$是搜索图像，同样将mask之内的内容保持不变，之外的内容填充黑色。提取这两种图像的特征并相加得到输入状态。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175114.png" alt=""></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175123.png" alt=""></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175138.png" alt=""></p>
 <p><strong>Reward</strong></p>
 <p>奖励函数定义：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/42-rl-tracking/20210630175755.png" alt=""></p>
-<p>$J<em>t$表示$P</em>{mask}$和GT mask之间的IOU。</p>
+<p>$J_t$表示$P_{mask}$和GT mask之间的IOU。</p>
 <p><strong>Actor-Critic Training</strong></p>
 <p>基本元素确定后，按照Actor-Critic框架训练。</p>
 <p>critic网络用value-based的方式训练：</p>

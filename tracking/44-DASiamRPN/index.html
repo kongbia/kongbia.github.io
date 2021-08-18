@@ -304,7 +304,7 @@
 <h2 id="Probabilistic-Analysis-for-Object-Tracker"><a href="#Probabilistic-Analysis-for-Object-Tracker" class="headerlink" title="Probabilistic Analysis for Object Tracker"></a>Probabilistic Analysis for Object Tracker</h2><p>作者将跟踪问题看成一个后验概率 $P(S,B|Z,X)$，即给定模板Z和搜索区域X，预测分类得分S和目标框B。由于域偏移的存在，源域的联合概率分布$P_S(S,B,Z,X)$与目标域的联合概率分布$P_T(S,B,Z,X)$是不同的。</p>
 <p><strong>Pixel Domain Adaptation</strong> 根据贝叶斯公式，可以将联合概率分布分解成：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702150940.png" alt=""></p>
-<p>其中$i \in {S,T}$。条件概率$P(S,B|Z,X)$相当于跟踪器的分类回归分支，我们假设这部分对于不同域是一样，那么域偏移主要来自模板和搜索图像的特征提取$P(Z,X)$。为了消除域偏移，需要另Siamese网络提取域不变的特征映射，即$P_S(Z,X) = P_T(Z,X)$</p>
+<p>其中$i \in \{S,T\}$。条件概率$P(S,B|Z,X)$相当于跟踪器的分类回归分支，我们假设这部分对于不同域是一样，那么域偏移主要来自模板和搜索图像的特征提取$P(Z,X)$。为了消除域偏移，需要另Siamese网络提取域不变的特征映射，即$P_S(Z,X) = P_T(Z,X)$</p>
 <p><strong>Semantic Domain Adaptation</strong> 上面PDA解决天气或光照引起的全局域偏移，但不同域的目标还存在外观和类别的变化，因此还需要考虑目标语义的域偏移。类似的，可以将联合概率分解成：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/44-DASiamRPN++/20210702151847.png" alt=""></p>
 <p>同样假设条件概率$P(S | B,Z,X)$对于不同域是一样的，那么域偏移主要来自$P(B,Z,X)$。为了消除偏移，需要$P_S(B,Z,X) = P_T(B,Z,X)$，表示给定了模板、搜索区域以及对应的目标框，跟踪目标的特征表达要是一样的。考虑到目标域是没有真实框标注的，因此这里统一采用RPN的预测框表示B。</p>

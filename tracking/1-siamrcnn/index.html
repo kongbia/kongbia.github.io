@@ -316,21 +316,21 @@
 <p>Line 2 提取backbone特征</p>
 <p>Line 3 RPN得到感兴趣区域，为了补偿潜在的假负例影响，加入上一帧的结果；</p>
 <p>Line 4 将Roi和gt送入redetection head得到第一帧的重检测结果 $ det_{S_t} $（包括相似性得分和目标框）；</p>
-<p>Line 5-6 将当前帧结果 $ det<em>{S_t} $ 与上一帧结果 $ det</em>{S_{t-1}} $ 送入redetection head计算每一对检测结果的相似性得分（为了减少计算，仅把当前帧与上一帧框的归一化空间距离小于 r 时才送入head计算，否则相似性得分设为负无穷。如图2，上一帧有3个结果，当前帧有2个结果，理论上两两之间应该计算6个相似得分，但通过框的空间距离约束，实际参与相似得分计算的只有4组）；</p>
-<p>Line 7-20 扩展tracklets。遍历当前帧的检测结果 $d<em>t \in det</em>{S_t}$ 加入tracklet需要满足：</p>
+<p>Line 5-6 将当前帧结果 $ det_{S_t} $ 与上一帧结果 $ det_{S_{t-1}} $ 送入redetection head计算每一对检测结果的相似性得分（为了减少计算，仅把当前帧与上一帧框的归一化空间距离小于 r 时才送入head计算，否则相似性得分设为负无穷。如图2，上一帧有3个结果，当前帧有2个结果，理论上两两之间应该计算6个相似得分，但通过框的空间距离约束，实际参与相似得分计算的只有4组）；</p>
+<p>Line 7-20 扩展tracklets。遍历当前帧的检测结果 $d_t \in det_{S_t}$ 加入tracklet需要满足：</p>
 <ol>
-<li>当前结果 $d<em>t$ 与上一帧结果 $\hat{d} </em> {t-1}$ 的最大相似性得分 $s_{1}$ 大于阈值 $\alpha$</li>
-<li>当前帧没有其他检测结果与 $ \hat{d} <em> {t-1} $ 具有同样高的相似性，即当前帧除 $d_t$ 以外的结果与 $ \hat{d} </em> {t-1} $ 的相似性要满足 $s<em>{2} \leq s</em>{1}-\beta$</li>
-<li>上一帧没有其他检测结果与当前的 $d<em>t$ 具有同样高的相似性，即上一帧除 $ \hat{d} </em> {t-1} $ 以外的结果与 $d<em>t$ 的相似性要满足 $s</em>{3} \leq s_{1}-\beta$</li>
+<li>当前结果 $d_t$ 与上一帧结果 $\hat{d} _ {t-1}$ 的最大相似性得分 $s_{1}$ 大于阈值 $\alpha$</li>
+<li>当前帧没有其他检测结果与 $ \hat{d} _ {t-1} $ 具有同样高的相似性，即当前帧除 $d_t$ 以外的结果与 $ \hat{d} _ {t-1} $ 的相似性要满足 $s_{2} \leq s_{1}-\beta$</li>
+<li>上一帧没有其他检测结果与当前的 $d_t$ 具有同样高的相似性，即上一帧除 $ \hat{d} _ {t-1} $ 以外的结果与 $d_t$ 的相似性要满足 $s_{3} \leq s_{1}-\beta$</li>
 </ol>
 <p><br/></p>
 <ul>
 <li><strong>Scoring</strong>  </li>
 </ul>
-<p>轨迹 $A=(a<em>1,…,a_N)$ 是一个包含N个不重复tracklets的序列，其中 $end(a_i) &lt; start(a</em>{i+1}), \forall i∈{1,…,N-1}$ ，即后一个tracklet的开始帧一定比前一个tracklet的结束帧大。一个轨迹的总分由衡量单个轨迹质量的一元分数 unuary 和惩罚轨迹之间空间距离的位置分数 loc_score 组成。</p>
+<p>轨迹 $A=(a_1,…,a_N)$ 是一个包含N个不重复tracklets的序列，其中 $end(a_i) &lt; start(a_{i+1}), \forall i∈\{1,…,N-1\}$ ，即后一个tracklet的开始帧一定比前一个tracklet的结束帧大。一个轨迹的总分由衡量单个轨迹质量的一元分数 unuary 和惩罚轨迹之间空间距离的位置分数 loc_score 组成。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111306.png" style="zoom:80%;" /></p>
-<p>其中 ff<em>score 表示tracklet $a</em>{i}$ 在 t 时刻以第一帧gt为参考的重检测分数；</p>
-<p>而 ff<em>tracklet_score 表示 $a</em>{i}$ 以gt所在tracklet的最后一个检测结果为参考的重检测分数（因为一个tracklet的所有检测结果都有很高概率与这个tracklet的第一个检测结果相同，否则这个tracklet就会终止，所以gt所在的tracklet的最后一个检测结果也有很大概率是正确的）；</p>
+<p>其中 ff_score 表示tracklet $a_{i}$ 在 t 时刻以第一帧gt为参考的重检测分数；</p>
+<p>而 ff_tracklet_score 表示 $a_{i}$ 以gt所在tracklet的最后一个检测结果为参考的重检测分数（因为一个tracklet的所有检测结果都有很高概率与这个tracklet的第一个检测结果相同，否则这个tracklet就会终止，所以gt所在的tracklet的最后一个检测结果也有很大概率是正确的）；</p>
 <p>Location score是计算前一个tracklet最后一个检测结果和后一个tracklet的第一个检测结果的bbox之间的L1距离，是负的，作为惩罚项，越小越好。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111534.png" style="zoom:80%;" /></p>
 <ul>
@@ -338,7 +338,7 @@
 </ul>
 <p>这一节介绍如何高效找到具有最大总得分的tracklets序列。</p>
 <p>定义 $\theta[a]$ 表示从第一个tracklet开始到第a个tracklet的总得分。由于一旦tracklet不被扩展，就会终止。因此当新的一帧到来时，只有被扩展或者新建的tracklet需要重新计算score。</p>
-<p>首先设置 $\theta[a<em>{ff}]=0$，$a</em>{ff}$ 是first-frame tracklet（即包含gt的tracklet），当每一个tracklet a被创建或需要更新时</p>
+<p>首先设置 $\theta[a_{ff}]=0$，$a_{ff}$ 是first-frame tracklet（即包含gt的tracklet），当每一个tracklet a被创建或需要更新时</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424111717.png" style="zoom:80%;" /></p>
 <p>在更新了当前帧的 $\theta$ 后，选择最大动态规划得分的tracklet $\hat{a}=arg max_{a} \theta[a]$；如果被选中的tracklet在当前帧中没有检测结果，则算法会指出目标不存在。由于benchmarks要求每帧都输出结果，所以我们用选定的tracklet最近一次的检测的box，并且将其得分置0。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>实验做的很充分，在目前主流数据集中都有结果。在short-term的测试中，大部分达到SOTA水平或者比SOTA稍低一些，在long-term的测试效果则非常好，基本吊打第二名。其中VOT的测试因为其自带一个重启，会与算法本身的重启冲突，所以作者专门做了一个short-term版本的用于VOT测试。</p>

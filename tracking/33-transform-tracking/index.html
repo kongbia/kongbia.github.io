@@ -397,7 +397,7 @@
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/17.png" style="zoom:80%;" /></p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/transform-tracking/18.png" style="zoom:80%;" /></p>
 <p>$x_i$是搜索特征，$t_j$是目标特征，$Ω_k$表示目标模板的所有位置，$k$表示模板池的序号；</p>
-<p>$\theta<em>{x_i}, \phi</em>{t<em>j}, \omega</em>{t_j}$ 分别表示 query, key, value；</p>
+<p>$\theta_{x_i}, \phi_{t_j}, \omega_{t_j}$ 分别表示 query, key, value；</p>
 <p>注意这里归一化使用1/N而不是softmax。</p>
 <blockquote>
 <p>The reason lies in that some positions in background and distractors of the search region are expected to have low dependency with target, while Softmax function will amplify this noise influence as the sum of attention weights between the query and all the keys is always 1.</p>
