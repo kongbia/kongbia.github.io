@@ -1236,7 +1236,7 @@
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/47-SAOT/20210818164636.png" alt=""></p>
 <p>本文用两层全连接层来学习边的权重，定义权重的邻接矩阵为 $A \in \mathbb{R}^{N \times N}, N=h_s w_s $</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/47-SAOT/20210818170326.png" alt=""></p>
-<p>其中 $v1, v2$是图的两个节点，$\phi_1, \phi_2$是两层全连接层，用sigmoid函数约束权值范围在0到1之间。只有当边<i, j>符合图5中的两种情况才有权值。</p>
+<p>其中 $v1, v2$是图的两个节点，$\phi_1, \phi_2$是两层全连接层，用sigmoid函数约束权值范围在0到1之间。只有当边$\langle i, j \rangle$符合图5中的两种情况才有权值。</p>
 <p><strong>Aggregation of the captured saliencies</strong>  使用两层的GCN进行显著性聚合</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/47-SAOT/20210818172505.png" alt=""></p>
 <p>其中m和M表示多项式的阶数和总阶数，$\omega_m$是可学习权重。$\hat{A} = \tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{\frac{1}{2}}$是normalized邻接矩阵，$\tilde{A}=A+I$，$ \tilde{D}$是$\tilde{A}$的对角阵，这些均为图卷积知识。$X^{l} \in \mathbb{R}^{N \times d_l}$和$X^{l+1} \in \mathbb{R}^{N \times d_{l+1} }$是第 l 层上所有节点的输入和输出特征，其中 $d_l, d_{l+1}$是对应的特征维度，$d_0 = h_x w_x + c$，$ \Theta_m^l \in \mathbb{R}^{d_l \times d_{l+1}} $是第l层第m阶的参数矩阵。</p>
