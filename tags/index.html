@@ -96,7 +96,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -146,7 +146,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -208,7 +208,7 @@
 
                             <v-card class="elevation-2 post-card">
     <div class="post-header">
-        <a class="post-header-title font-weight-medium" href="/tags/index.html">Tags</a>
+        <a class="post-header-title font-weight-medium" href="/tags/index.html">标签</a>
     </div>
     <div class="post-content typo">
         
@@ -216,14 +216,6 @@
                 counter.tags
             </div>
             <div class="tags-contain">
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/CVPR2020/">CVPR2020</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
                 
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="4" >
                         <v-hover v-model="tagHover">
@@ -237,6 +229,14 @@
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/Anchor-free/">Anchor-free</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/CVPR2020/">CVPR2020</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
@@ -308,22 +308,6 @@
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/meta-learning/">meta learning</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/ICCV2019/">ICCV2019</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/Natural-Language/">Natural Language</a>
                             </v-chip>
                         </v-hover>
@@ -333,6 +317,22 @@
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/IJCAI2021/">IJCAI2021</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/meta-learning/">meta learning</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/ICCV2019/">ICCV2019</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
