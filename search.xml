@@ -1199,7 +1199,8 @@
   <entry>
     <title>Saliency-Associated Object Tracking</title>
     <url>/tracking/47-SAOT/</url>
-    <content><![CDATA[<p><a href="https://arxiv.org/abs/2108.03637">论文</a> <a href="https://github.com/ZikunZhou/SAOT.git">代码</a></p>
+    <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/47-SAOT/20210817170638.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2108.03637">论文</a> <a href="https://github.com/ZikunZhou/SAOT.git">代码</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>和上一篇一样是研究跟踪的匹配问题。目前主流的跟踪策略分为全局和局部两种，全局策略（如DW-Corr）学习目标的整体表示，当目标发生较大变化时表现不佳。局部策略（如PG-Corr）将目标分割成多个patch，并行跟踪所有patch，通过聚合这些patch的跟踪结果，推断出目标状态。而局部策略的局限在于并不是所有patch都包含丰富的信息，一些没有判别能力的patch难以跟踪，可能对推断目标状态产生不利影响。因此，本文提出只跟踪目标的显著局部区域而不是简单跟踪所有局部块，具体提出了细粒度的显著性挖掘模块(fine-grained saliency mining module)，用于捕获局部显著性；以及显著性关联模块(saliency-association modeling module) 将捕获的显著区域关联在一起，学习目标模板与搜索图像之间的全局相关性，以进行状态估计。</p>
 <span id="more"></span>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/47-SAOT/20210817211327.png" alt=""></p>
@@ -1236,8 +1237,7 @@
 <p>本文用两层全连接层来学习边的权重，定义权重的邻接矩阵为 $A \in \mathbb{R}^{N \times N}, N=h_s w_s $</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/47-SAOT/20210818170326.png" alt=""></p>
 <p>其中 $v1, v2$是图的两个节点，$\phi_1, \phi_2$是两层全连接层，用sigmoid函数约束权值范围在0到1之间。只有当边<i, j>符合图5中的两种情况才有权值。</p>
-<p><strong>Aggregation of the captured saliencies</strong>  </p>
-<p>使用两层的GCN进行显著性聚合</p>
+<p><strong>Aggregation of the captured saliencies</strong>  使用两层的GCN进行显著性聚合</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/47-SAOT/20210818172505.png" alt=""></p>
 <p>其中m和M表示多项式的阶数和总阶数，$\omega_m$是可学习权重。$\hat{A} = \tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{\frac{1}{2}}$是normalized邻接矩阵，$\tilde{A}=A+I$，$ \tilde{D}$是$\tilde{A}$的对角阵，这些均为图卷积知识。$X^{l} \in \mathbb{R}^{N \times d_l}$和$X^{l+1} \in \mathbb{R}^{N \times d_{l+1} }$是第 l 层上所有节点的输入和输出特征，其中 $d_l, d_{l+1}$是对应的特征维度，$d_0 = h_x w_x + c$，$ \Theta_m^l \in \mathbb{R}^{d_l \times d_{l+1}} $是第l层第m阶的参数矩阵。</p>
 <p>通过构造显著性图并进一步进行显著性聚合，Saliency-Association Modeling module能够学习目标模板与搜索图像之间的全局相关表示，进而用于预测搜索图像中的目标状态。</p>
