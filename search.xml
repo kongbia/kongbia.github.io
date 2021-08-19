@@ -374,6 +374,57 @@
       </tags>
   </entry>
   <entry>
+    <title>STMTrack: Template-free Visual Tracking with Space-time Memory Networks</title>
+    <url>/tracking/34-stmtrack/</url>
+    <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427102245.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2104.00324">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>离线训练的Siamese跟踪器已经充分完全挖掘了第一帧模板信息，但它们抵抗目标外观变化的能力依然有限。现有的模板更新机制大多依赖耗时的数值优化或复杂的手工设计策略，这阻碍了它们的实时跟踪和实际应用。本文提出了一种基于时空记忆网络的跟踪框架，该框架能够充分利用与目标相关的历史信息，从而更好地适应跟踪过程中的外观变化。这样避免了模板更新，所以叫template-free。主要创新点包括：</p>
+<ul>
+<li>引入记忆机制存储目标的历史信息，引导跟踪器聚焦在当前帧中信息最丰富的区域；</li>
+<li>memory network的像素级相似度计算能够生成更精确的目标框。</li>
+</ul>
+<p>运行速度37 FPS</p>
+<span id="more"></span>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427102842.png" alt=""></p>
+<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p>整体框架如图2所示，主要包括三部分：特征提取网络、时空记忆网络和头部预测。特征提取网络包括<font color=LightGreen>绿色</font>的记忆分支和<font color=LightBlue>蓝色</font>的查询分支。记忆分支输入多个历史帧以及对应的前背景标签，查询分支输入当前帧。特征提取后，时空记忆网络从所有记忆帧中检索与目标相关的信息，生成综合特征图进行最后的分类回归。</p>
+<h2 id="Feature-Extraction-Network"><a href="#Feature-Extraction-Network" class="headerlink" title="Feature Extraction Network"></a>Feature Extraction Network</h2><p>对memory的每个分支，特征提取为：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427104555.png" style="zoom:80%;" /></p>
+<p>$m_i$ 表示第i帧图像，$c_i$ 表示第i个前背景标签（根据gt构建的0/1 mask），$ \varphi_0^m $ 和 $g$ 将图像和标签统一到同一维度从而相加，$ h_m $ 对特征降维到512。</p>
+<p>对于query分支：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427105233.png" style="zoom:80%;" /></p>
+<p>$ \varphi^m $ 和 $ \varphi^q $ 结构一样但<strong>参数不共享</strong>。</p>
+<h2 id="Space-time-Memory-Network"><a href="#Space-time-Memory-Network" class="headerlink" title="Space-time Memory Network"></a>Space-time Memory Network</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427111921.png" alt=""></p>
+<p>首先计算memory的 $f_m $ 和 query的 $f_q $  每个像素之间的相似性 $\omega \in THW \times HW $</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427111950.png" style="zoom:80%;" /></p>
+<p>这个操作类似non-local或self-attention，相当于用query去检索历史帧中与目标相关的信息作为<strong>软权重</strong>来加权 $f_m $。最后将加权后的结果与$f_q $ 拼接起来</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427112745.png" style="zoom:80%;" /></p>
+<p>与non-local区别在于该方法采用相似性矩阵作为软权值从多个记忆帧中检索目标信息，而不是计算特征图中每个像素对的非局部自注意。</p>
+<h2 id="Head-Network"><a href="#Head-Network" class="headerlink" title="Head Network"></a>Head Network</h2><p>常规的FCOS类预测头。</p>
+<h2 id="Inference-Phase"><a href="#Inference-Phase" class="headerlink" title="Inference Phase"></a>Inference Phase</h2><p>训练和推理时记忆帧的数量是可以不一致的，因为不影响优化参数的数量。</p>
+<p>推理时的记忆帧采样策略为：首先保留最可靠的第一帧和最相似的上一帧，剩下的帧数均匀采样</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427113629.png" style="zoom:80%;" /></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p>主要分析了是否共享backbone参数，前背景标签的作用，记忆帧的数量的影响。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427114407.png" style="zoom:80%;" /></p>
+<p>加了 fb_label 之后，不共享backbone参数效果更好。可能是因为此时两个分支的特征空间已经不一样了，期望学到的东西也是不一样的。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115130.png" style="zoom:80%;" /></p>
+<p>随着记忆帧的数量增加，性能都是先增后减。</p>
+<p>训练时帧数越多，可以训练的目标模式越多，但与当前帧相似的帧也会越多。在这种情况下，网络倾向于比较最相似的图像对，而不是学习当前帧与有杂波背景或部分遮挡的帧之间的相似性。</p>
+<h2 id="Comparison-with-the-stateoftheart"><a href="#Comparison-with-the-stateoftheart" class="headerlink" title="Comparison with the stateoftheart"></a>Comparison with the stateoftheart</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115649.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115737.png" style="zoom:80%;" /></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115757.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115804.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115816.png" style="zoom:80%;" /></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>提出了一种新的基于时空记忆网络的跟踪框架。该框架摒弃了传统的基于模板的跟踪机制，使用多个记忆帧和前背景标签映射来定位查询帧中的目标。在时空记忆网络中，通过查询帧自适应地检索存储在多个记忆帧中的目标信息，使跟踪器对目标变化具有较强的自适应能力。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>CVPR2021</tag>
+        <tag>时序</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Real-Time Visual Object Tracking via Few-Shot Learning</title>
     <url>/tracking/35-FSL-tracking/</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427173306.png" alt=""></p>
@@ -438,57 +489,6 @@
       <tags>
         <tag>FSL</tag>
         <tag>arxiv</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>STMTrack: Template-free Visual Tracking with Space-time Memory Networks</title>
-    <url>/tracking/34-stmtrack/</url>
-    <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427102245.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2104.00324">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>离线训练的Siamese跟踪器已经充分完全挖掘了第一帧模板信息，但它们抵抗目标外观变化的能力依然有限。现有的模板更新机制大多依赖耗时的数值优化或复杂的手工设计策略，这阻碍了它们的实时跟踪和实际应用。本文提出了一种基于时空记忆网络的跟踪框架，该框架能够充分利用与目标相关的历史信息，从而更好地适应跟踪过程中的外观变化。这样避免了模板更新，所以叫template-free。主要创新点包括：</p>
-<ul>
-<li>引入记忆机制存储目标的历史信息，引导跟踪器聚焦在当前帧中信息最丰富的区域；</li>
-<li>memory network的像素级相似度计算能够生成更精确的目标框。</li>
-</ul>
-<p>运行速度37 FPS</p>
-<span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427102842.png" alt=""></p>
-<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p>整体框架如图2所示，主要包括三部分：特征提取网络、时空记忆网络和头部预测。特征提取网络包括<font color=LightGreen>绿色</font>的记忆分支和<font color=LightBlue>蓝色</font>的查询分支。记忆分支输入多个历史帧以及对应的前背景标签，查询分支输入当前帧。特征提取后，时空记忆网络从所有记忆帧中检索与目标相关的信息，生成综合特征图进行最后的分类回归。</p>
-<h2 id="Feature-Extraction-Network"><a href="#Feature-Extraction-Network" class="headerlink" title="Feature Extraction Network"></a>Feature Extraction Network</h2><p>对memory的每个分支，特征提取为：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427104555.png" style="zoom:80%;" /></p>
-<p>$m_i$ 表示第i帧图像，$c_i$ 表示第i个前背景标签（根据gt构建的0/1 mask），$ \varphi_0^m $ 和 $g$ 将图像和标签统一到同一维度从而相加，$ h_m $ 对特征降维到512。</p>
-<p>对于query分支：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427105233.png" style="zoom:80%;" /></p>
-<p>$ \varphi^m $ 和 $ \varphi^q $ 结构一样但<strong>参数不共享</strong>。</p>
-<h2 id="Space-time-Memory-Network"><a href="#Space-time-Memory-Network" class="headerlink" title="Space-time Memory Network"></a>Space-time Memory Network</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427111921.png" alt=""></p>
-<p>首先计算memory的 $f_m $ 和 query的 $f_q $  每个像素之间的相似性 $\omega \in THW \times HW $</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427111950.png" style="zoom:80%;" /></p>
-<p>这个操作类似non-local或self-attention，相当于用query去检索历史帧中与目标相关的信息作为<strong>软权重</strong>来加权 $f_m $。最后将加权后的结果与$f_q $ 拼接起来</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427112745.png" style="zoom:80%;" /></p>
-<p>与non-local区别在于该方法采用相似性矩阵作为软权值从多个记忆帧中检索目标信息，而不是计算特征图中每个像素对的非局部自注意。</p>
-<h2 id="Head-Network"><a href="#Head-Network" class="headerlink" title="Head Network"></a>Head Network</h2><p>常规的FCOS类预测头。</p>
-<h2 id="Inference-Phase"><a href="#Inference-Phase" class="headerlink" title="Inference Phase"></a>Inference Phase</h2><p>训练和推理时记忆帧的数量是可以不一致的，因为不影响优化参数的数量。</p>
-<p>推理时的记忆帧采样策略为：首先保留最可靠的第一帧和最相似的上一帧，剩下的帧数均匀采样</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427113629.png" style="zoom:80%;" /></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p>主要分析了是否共享backbone参数，前背景标签的作用，记忆帧的数量的影响。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427114407.png" style="zoom:80%;" /></p>
-<p>加了 fb_label 之后，不共享backbone参数效果更好。可能是因为此时两个分支的特征空间已经不一样了，期望学到的东西也是不一样的。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115130.png" style="zoom:80%;" /></p>
-<p>随着记忆帧的数量增加，性能都是先增后减。</p>
-<p>训练时帧数越多，可以训练的目标模式越多，但与当前帧相似的帧也会越多。在这种情况下，网络倾向于比较最相似的图像对，而不是学习当前帧与有杂波背景或部分遮挡的帧之间的相似性。</p>
-<h2 id="Comparison-with-the-stateoftheart"><a href="#Comparison-with-the-stateoftheart" class="headerlink" title="Comparison with the stateoftheart"></a>Comparison with the stateoftheart</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115649.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115737.png" style="zoom:80%;" /></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115757.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115804.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/34-stmtrack/20210427115816.png" style="zoom:80%;" /></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>提出了一种新的基于时空记忆网络的跟踪框架。该框架摒弃了传统的基于模板的跟踪机制，使用多个记忆帧和前背景标签映射来定位查询帧中的目标。在时空记忆网络中，通过查询帧自适应地检索存储在多个记忆帧中的目标信息，使跟踪器对目标变化具有较强的自适应能力。</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>CVPR2021</tag>
-        <tag>时序</tag>
       </tags>
   </entry>
   <entry>
@@ -668,53 +668,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Deep Meta Learning for Real-Time Target-Aware Visual Tracking</title>
-    <url>/tracking/4-mlt/</url>
-    <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810211247.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/1712.09153">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
-<p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
-<span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
-<p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
-<p><strong>Components</strong></p>
-<p>匹配网络是标准的孪生网络</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
-<p>其中，$x$是模板，$z$是搜索区域，$w = \{ w_1, w_2, …, w_N \}$​表示每一层卷积层的权重参数。</p>
-<p>元学习网络根据历史得到的M个context patch $z = \{z_1, z_2, …, z_M\}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
-<p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811094325.png" style="zoom:80%;" /></p>
-<p>将生成的$\omega^{target}$与原始的权重拼接起来得到新的自适应权重$w^{adapt} = \{ w_1, w_2, …, [w_N, \omega^{target}] \}$​，将其用于目标定位</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811094727.png" style="zoom:80%;" /></p>
-<p>此外，元学习网络还生成了通道注意力权重进一步调整特征表示空间。</p>
-<p><strong>Tracking algorithm</strong></p>
-<p>在跟踪过程中，会保存一个context image的集合 $z_{mem} = \{ z_1, z_2, …, z_K \}$​​​​​​ 以及对应生成的响应图$\hat{y}_{mem} = \{ \hat{y}_1, \hat{y}_2, …, \hat{y}_K \}$​​​​​​。只有当 $\hat{y}$​​​​​​ 的最大响应值大于阈值时，$z$​​​​​​才会被加入memory集合中。在更新权重时，从K个context image中选择M个来进行计算，筛选标准是$\hat{y}_{mem}$​​​​​​​的最小熵，熵越大响应图分布越杂乱，这样可以避免模糊的响应图引入false positive。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811101915.png" style="zoom:80%;" /></p>
-<p>整体跟踪流程如下：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811094851.png" style="zoom:80%;" /></p>
-<p><strong>Training</strong></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811102117.png" style="zoom: 67%;" /></p>
-<p>首先单独训练匹配网络，然后在此基础上按照图3的方式训练元学习网络。类似在线跟踪过程，从同一个视频序列中随机采样 M’ 个context patch，然后从中选取M个送入元学习网络训练（M’ ＞M），这样是为了避免过拟合。优化损失为：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811102811.png" style="zoom:80%;" /></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103012.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103215.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103248.png" alt=""></p>
-<p>消融实验，MLT-mt表示只有匹配网络，MLT-mt+ft表示对匹配网络最后一层进行在线微调更新。可以发现在线微调甚至比不进行更新效果更差，因为过拟合。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103028.png" style="zoom: 67%;" /></p>
-<p>最后可视化了target-specific特征空间的效果，可以更聚焦目标并且抑制周围的干扰。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103525.png" style="zoom:80%;" /></p>
-<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>这篇文章发表在ICCV2019，整体实验结果并没有刷得太高，但是meta learning运用在siamese跟踪中的思想无疑是优秀的。目标跟踪同样可以看做是一个few-shot learning的任务，如何运用历史跟踪的少量结果来微调模型参数，meta learning是一个不错的方案。</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>meta learning</tag>
-        <tag>ICCV2019</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DeepMix: Online Auto Data Augmentation for Robust Visual Object Tracking</title>
     <url>/tracking/39-deepmix/</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/39-deepmixl/20210510171656.png" alt=""></p>
@@ -759,6 +712,53 @@
         <tag>模型更新</tag>
         <tag>Data augmentation</tag>
         <tag>ICME2021</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Deep Meta Learning for Real-Time Target-Aware Visual Tracking</title>
+    <url>/tracking/4-mlt/</url>
+    <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810211247.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/1712.09153">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
+<p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
+<span id="more"></span>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
+<p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
+<p><strong>Components</strong></p>
+<p>匹配网络是标准的孪生网络</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
+<p>其中，$x$是模板，$z$是搜索区域，$w = \{ w_1, w_2, …, w_N \}$​表示每一层卷积层的权重参数。</p>
+<p>元学习网络根据历史得到的M个context patch $z = \{z_1, z_2, …, z_M\}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
+<p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811094325.png" style="zoom:80%;" /></p>
+<p>将生成的$\omega^{target}$与原始的权重拼接起来得到新的自适应权重$w^{adapt} = \{ w_1, w_2, …, [w_N, \omega^{target}] \}$​，将其用于目标定位</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811094727.png" style="zoom:80%;" /></p>
+<p>此外，元学习网络还生成了通道注意力权重进一步调整特征表示空间。</p>
+<p><strong>Tracking algorithm</strong></p>
+<p>在跟踪过程中，会保存一个context image的集合 $z_{mem} = \{ z_1, z_2, …, z_K \}$​​​​​​ 以及对应生成的响应图$\hat{y}_{mem} = \{ \hat{y}_1, \hat{y}_2, …, \hat{y}_K \}$​​​​​​。只有当 $\hat{y}$​​​​​​ 的最大响应值大于阈值时，$z$​​​​​​才会被加入memory集合中。在更新权重时，从K个context image中选择M个来进行计算，筛选标准是$\hat{y}_{mem}$​​​​​​​的最小熵，熵越大响应图分布越杂乱，这样可以避免模糊的响应图引入false positive。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811101915.png" style="zoom:80%;" /></p>
+<p>整体跟踪流程如下：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811094851.png" style="zoom:80%;" /></p>
+<p><strong>Training</strong></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811102117.png" style="zoom: 67%;" /></p>
+<p>首先单独训练匹配网络，然后在此基础上按照图3的方式训练元学习网络。类似在线跟踪过程，从同一个视频序列中随机采样 M’ 个context patch，然后从中选取M个送入元学习网络训练（M’ ＞M），这样是为了避免过拟合。优化损失为：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811102811.png" style="zoom:80%;" /></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103012.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103215.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103248.png" alt=""></p>
+<p>消融实验，MLT-mt表示只有匹配网络，MLT-mt+ft表示对匹配网络最后一层进行在线微调更新。可以发现在线微调甚至比不进行更新效果更差，因为过拟合。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103028.png" style="zoom: 67%;" /></p>
+<p>最后可视化了target-specific特征空间的效果，可以更聚焦目标并且抑制周围的干扰。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103525.png" style="zoom:80%;" /></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>这篇文章发表在ICCV2019，整体实验结果并没有刷得太高，但是meta learning运用在siamese跟踪中的思想无疑是优秀的。目标跟踪同样可以看做是一个few-shot learning的任务，如何运用历史跟踪的少量结果来微调模型参数，meta learning是一个不错的方案。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>meta learning</tag>
+        <tag>ICCV2019</tag>
       </tags>
   </entry>
   <entry>
@@ -1198,7 +1198,7 @@
   </entry>
   <entry>
     <title>Saliency-Associated Object Tracking</title>
-    <url>/tracking/47-SAOT/</url>
+    <url>/tracking/48-SAOT/</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/47-SAOT/20210817170638.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2108.03637">论文</a> <a href="https://github.com/ZikunZhou/SAOT.git">代码</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>和上一篇一样是研究跟踪的匹配问题。目前主流的跟踪策略分为全局和局部两种，全局策略（如DW-Corr）学习目标的整体表示，当目标发生较大变化时表现不佳。局部策略（如PG-Corr）将目标分割成多个patch，并行跟踪所有patch，通过聚合这些patch的跟踪结果，推断出目标状态。而局部策略的局限在于并不是所有patch都包含丰富的信息，一些没有判别能力的patch难以跟踪，可能对推断目标状态产生不利影响。因此，本文提出只跟踪目标的显著局部区域而不是简单跟踪所有局部块，具体提出了细粒度的显著性挖掘模块(fine-grained saliency mining module)，用于捕获局部显著性；以及显著性关联模块(saliency-association modeling module) 将捕获的显著区域关联在一起，学习目标模板与搜索图像之间的全局相关性，以进行状态估计。</p>
