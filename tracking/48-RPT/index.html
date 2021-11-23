@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/48-RPT/" class="toc-header">文章目录</a>
+            <a href="/tracking/48-RPT/" class="toc-header">Table of Contents</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">2.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">3.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Baseline"><span class="toc-number">3.1.</span> <span class="toc-text">Baseline</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Framework-of-RPT"><span class="toc-number">3.2.</span> <span class="toc-text">Framework of RPT++</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Customized-Feature-Extraction"><span class="toc-number">3.3.</span> <span class="toc-text">Customized Feature Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Loss-Function"><span class="toc-number">3.4.</span> <span class="toc-text">Loss Function</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">4.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-with-SOTA"><span class="toc-number">4.1.</span> <span class="toc-text">Comparison with SOTA</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Ablation-Study"><span class="toc-number">4.2.</span> <span class="toc-text">Ablation Study</span></a></li></ol></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      发布于:&nbsp;2021-11-22
+      Posted on:&nbsp;2021-11-22
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      更新于:&nbsp;2021-11-23
+      Edited on:&nbsp;2021-11-23
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -299,12 +299,12 @@
 <p>公式2可以通过下图直观理解，对于一个初始中心点$(x_k, y_k)$，先通过回归偏移$\{(x_k^c, y_k^c)\}^n_{k=1}$得到一个粗略的点集，然后对每个点再进行一次微调$\{(x_k^r, y_k^r)\}^n_{k=1}$得到最终的目标状态。RPT通过可变形卷积得到更强大的特征表示，能够对物体的几何变换进行建模，生成的特征同时用于分类和回归。而下面介绍的改进就是通过两个不同的模块生成不同的特征进行分类和回归。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/48-RPT++/20211122212826.png" alt=""></p>
 <h2 id="Framework-of-RPT"><a href="#Framework-of-RPT" class="headerlink" title="Framework of RPT++"></a>Framework of RPT++</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/48-RPT++/20211122214512.png" alt=""></p>
-<p>RPT++整体框架如图2所示，首先预测相关特征图上每个位置的粗略关键点集，包括四个边界极值关键点（左上右下）和五个语义关键点。将四个边界点转换为伪box如下：</p>
+<p>RPT++整体框架如图2所示，首先预测相关特征图上每个位置的粗略关键点集，包括四个边界极值关键点（左上右下）和五个语义关键点。将四个边界点转换为伪框如下：</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/48-RPT++/20211122223816.png" alt=""></p>
-<p>其中$(x_{init}, y_{init})$表示相关特征图上每个点，$\Delta x^c_{leftmost}, \Delta x^c_{topmost}, \Delta x^c_{rightmost}, \Delta x^c_{bottommost}$对应左、上、右、下的边界关键点的伪框偏移量。与RPT不同的是，本文还额外估计了每个偏移量的不确定性，用一个高斯分布表示。</p>
+<p>其中$(x_{init}, y_{init})$表示相关特征图上每个点，$\Delta x^c_{leftmost}, \Delta x^c_{topmost}, \Delta x^c_{rightmost}, \Delta x^c_{bottommost}$对应左、上、右、下的极值关键点的伪框偏移量。与RPT不同的是，本文还额外估计了每个偏移量的不确定性，用一个高斯分布表示。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/48-RPT++/20211123103507.png" alt=""></p>
 <p>其中均值$o_e \in \{ \Delta x^c_{leftmost}, \Delta x^c_{topmost}, \Delta x^c_{rightmost}, \Delta x^c_{bottommost}\}$表示预测偏移量，方差$\sigma$表示不确定性。这种方法常用于目标检测中，用一个概率分布来表示回归预测而不是仅仅估计一个硬值，从而预测回归的不确定性。</p>
-<p>总结一下，粗略关键点集的预测对于相关特征图上的每个位置，回归分支输出n个2D偏移量，以逐点的方式细化样本点的分布；而不确定性分支输出4个伪box偏移量的不确定性。接下来，我们将语义关键点送入polar pooling得到更利于分类的视觉表示，将边界极值关键点和不确定性预测送入extreme pooling得到更精确的边界框。</p>
+<p>总结一下，粗略关键点集的预测对相关特征图上的每个位置，在回归分支输出n个2D偏移量，以逐点的方式细化样本点的分布；在不确定性分支输出4个伪框偏移量的不确定性。接下来，我们将语义关键点送入polar pooling得到更利于分类的视觉表示，将边界极值关键点和不确定性预测送入extreme pooling得到更精确的边界框。</p>
 <h2 id="Customized-Feature-Extraction"><a href="#Customized-Feature-Extraction" class="headerlink" title="Customized Feature Extraction"></a>Customized Feature Extraction</h2><p><strong>Extreme Pooling</strong> 在某些情况下，目标的极值点是不明确的(例如，沿着车辆边界顶部的任何一点都可能被视为极值点)。这些模糊性使得有效的极值特征难以提取，直接限制了定位精度。Extreme pooling就是为了解决这一问题，具体来说，既然我们已经得到了每个边界极值点的不确定性，那么提取边界特征时就不用局限仅提取该点的特征，而是可以提取该点附近的一个不确定性区域的特征，这样可以更好地描述目标边界。整个过程如图3所示。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/48-RPT++/20211123110412.png" alt=""></p>
 <p>Extreme pooling首先在每个边界极值点$(x_e,y_e)$上根据其对应的不确定性$\sigma$裁剪一个区域</p>
