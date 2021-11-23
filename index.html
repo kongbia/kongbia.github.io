@@ -144,7 +144,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="19" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="20" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -194,7 +194,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -262,6 +262,42 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-11-22
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/48-RPT/">RPT++: Customized Feature Representation for Siamese Visual Tracking</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          论文
+Motivation本文是去年RPT方法的改进，作者来自同一团队。出发点是现有的跟踪方法对于分类和回归使用的是同一套特征，而作者指出这两个任务是有差异的，因此对特征的需求也是不同的。如图1所示，分类需要的是显著区域中更具有判别力的特征，而回归需要边界附近的特征来精确定位。针对这一问题，作者提出了两种定制化的特征提取，用于捕获特定任务的视觉模式。其中Polar Pooling从语义关键点收集丰富的信息，以进行更强的分类；而Extreme Pooling捕获目标边界的清晰视觉模式，实现目标状态的精确估计。
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/48-RPT/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-08-17
             </div>
           </v-col>
@@ -301,7 +337,7 @@ Motivation和上一篇一样是研究跟踪的匹配问题。目前主流的跟�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/47-SAOT/">Read More</v-btn>
+        <v-btn text href="/tracking/47-SAOT/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -351,7 +387,7 @@ Motivation本文聚焦于孪生跟踪算法的匹配过程，目前主流的互�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/46-AutoMatch/">Read More</v-btn>
+        <v-btn text href="/tracking/46-AutoMatch/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -406,7 +442,7 @@ transformer难以处理小目标（参考deform DETR）。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/45-HiFT/">Read More</v-btn>
+        <v-btn text href="/tracking/45-HiFT/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -452,7 +488,7 @@ Motivation基于孪生网络的跟踪算法均假定训练和测试数据遵循�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/44-DASiamRPN/">Read More</v-btn>
+        <v-btn text href="/tracking/44-DASiamRPN/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -503,7 +539,7 @@ Motivation现有的跟踪方法依赖大量高质量标注数据集训练，但�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/43-Crop-Transform-Paste/">Read More</v-btn>
+        <v-btn text href="/tracking/43-Crop-Transform-Paste/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -557,7 +593,7 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/42-rl-tracking/">Read More</v-btn>
+        <v-btn text href="/tracking/42-rl-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -602,7 +638,7 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/41-siamrcr/">Read More</v-btn>
+        <v-btn text href="/tracking/41-siamrcr/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -657,7 +693,7 @@ Introduction本文研究的课题为tracking by natural language(NL) 。人类�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/40-snlt/">Read More</v-btn>
+        <v-btn text href="/tracking/40-snlt/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -716,63 +752,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/39-deepmix/">Read More</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-05-10
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/FSL/ >FSL</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/ >模型更新</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/38-siamtol/">Updatable Siamese Tracker with Two-stage One-shot Learning</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。传统的线性模板更新难以处理目标的不规则变化和采样噪声，造成跟踪漂移；而一些像updatenet采用网络进行自适应更新的方法，其更新网络和跟踪器在结构上是分离的，不能从联合训练中受益，也不能以最佳方式合作。
-为了实现高质量的自适应更新，作者从 one-shot learning的角度提出一个two-stage one-shot learner，利用不同阶段的目标样本预测分类器的参数。具体来说，除了使用模板分支来学习初始目标特征，作者额外增加了一个输入分支用于捕获后续帧中的目标特征，并设计了一个残差模块来使用这些特征更新初始模板。通过残差学习融合多帧目标特征，跟踪器可以用更合适的模板跟踪当前目标。此外，还设计了一种多方面(multi-aspect)的训练损失来避免过拟合。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/38-siamtol/">Read More</v-btn>
+        <v-btn text href="/tracking/39-deepmix/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 

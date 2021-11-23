@@ -144,7 +144,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="19" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="20" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -194,7 +194,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -262,6 +262,62 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-05-10
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/FSL/ >FSL</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/ >模型更新</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/38-siamtol/">Updatable Siamese Tracker with Two-stage One-shot Learning</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文
+Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。传统的线性模板更新难以处理目标的不规则变化和采样噪声，造成跟踪漂移；而一些像updatenet采用网络进行自适应更新的方法，其更新网络和跟踪器在结构上是分离的，不能从联合训练中受益，也不能以最佳方式合作。
+为了实现高质量的自适应更新，作者从 one-shot learning的角度提出一个two-stage one-shot learner，利用不同阶段的目标样本预测分类器的参数。具体来说，除了使用模板分支来学习初始目标特征，作者额外增加了一个输入分支用于捕获后续帧中的目标特征，并设计了一个残差模块来使用这些特征更新初始模板。通过残差学习融合多帧目标特征，跟踪器可以用更合适的模板跟踪当前目标。此外，还设计了一种多方面(multi-aspect)的训练损失来避免过拟合。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/38-siamtol/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-05-08
             </div>
           </v-col>
@@ -309,7 +365,7 @@ Refinement Module (RM) 将RD和分类分支获得的信息进行整合，细化�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/37-siamrn/">Read More</v-btn>
+        <v-btn text href="/tracking/37-siamrn/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -359,7 +415,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/36-learning-target-candidate-association/">Read More</v-btn>
+        <v-btn text href="/tracking/36-learning-target-candidate-association/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -409,7 +465,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/35-FSL-tracking/">Read More</v-btn>
+        <v-btn text href="/tracking/35-FSL-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -464,7 +520,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/34-stmtrack/">Read More</v-btn>
+        <v-btn text href="/tracking/34-stmtrack/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -517,7 +573,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/33-transform-tracking/">Read More</v-btn>
+        <v-btn text href="/tracking/33-transform-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -568,7 +624,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/4-mlt/">Read More</v-btn>
+        <v-btn text href="/tracking/4-mlt/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -619,7 +675,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/3-anchorfree-siamese/">Read More</v-btn>
+        <v-btn text href="/tracking/3-anchorfree-siamese/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -663,7 +719,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/2-detection-in-tracking/">Read More</v-btn>
+        <v-btn text href="/tracking/2-detection-in-tracking/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -706,7 +762,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/1-siamrcnn/">Read More</v-btn>
+        <v-btn text href="/tracking/1-siamrcnn/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
