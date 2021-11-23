@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="20" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="21" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -262,11 +262,71 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-11-23
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/transform/ >transform</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/WACV2022/ >WACV2022</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/49-SiamTPN/">Siamese Transformer Pyramid Networks for Real-Time UAV Tracking</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文 代码
+Motivation本文着眼于移动平台的无人机目标跟踪，融合了CNN和Transformer的优点。具体来说，通过轻量的shufflenet v2来构建特征金字塔，并使用Transformer进行强化（特征融合），以构建一个鲁棒的目标外观模型。此外，作者设计了pooling attention module通过减少key和value的数量进一步降低了Transformer的内存消耗和时间复杂度。提出的方法在CPU端运行速度可超过30 FPS。
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/49-SiamTPN/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-11-22
             </div>
           </v-col>
           <v-spacer></v-spacer>
           <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
+                  </span>
+                
+              </v-card>
             
           </v-col>
         </v-row>
@@ -697,65 +757,6 @@ Introduction本文研究的课题为tracking by natural language(NL) 。人类�
       </div>
       <v-divider></v-divider>
     </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-05-10
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/ >模型更新</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Data-augmentation/ >Data augmentation</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/ICME2021/ >ICME2021</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/39-deepmix/">DeepMix: Online Auto Data Augmentation for Robust Visual Object Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation
-通过历史帧样本在线更新目标模型对跟踪具有重要意义。最近的研究主要集中在构建有效的更新方法，而忽略了用于学习判别模型的训练样本；
-本文提出DeepMix，对历史帧样本的特征进行在线增广，从而强化模型的在线更新能力。具体包括通过object-aware filtering在线增强历史样本，以及通过离线训练的MixNet混合多个样本进行数据增强；
-最后通过三个典型的跟踪器DiMP, DSiam和SiamRPN++验证提出的方法。
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/39-deepmix/">Read More</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
    
 </v-card>  
 
@@ -763,7 +764,7 @@ Motivation
   <div id="pagination" class="text-center">
     <v-pagination 
       v-model="currentPage" 
-      :length=2 
+      :length=3 
       @input="PageChange" 
       prev-icon="chevron_left"
       next-icon="chevron_right"

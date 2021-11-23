@@ -115,7 +115,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="20" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="21" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -233,7 +233,7 @@
                         </v-hover>
                     </v-badge>
                 
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="2" >
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="3" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/transform/">transform</a>
@@ -265,7 +265,7 @@
                         </v-hover>
                     </v-badge>
                 
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="2" >
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="3" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/arxiv/">arxiv</a>
@@ -373,6 +373,14 @@
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/matching/">matching</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/WACV2022/">WACV2022</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
