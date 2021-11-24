@@ -1322,7 +1322,7 @@
     <url>/tracking/49-SiamTPN/</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/49-SiamTPN/20211123155750.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2110.08822">论文</a> <a href="https://github.com/RISC-NYUAD/SiamTPNTracker">代码</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文着眼于移动平台的无人机目标跟踪，融合了CNN和Transformer的优点。具体来说，通过轻量的shufflenet v2来构建特征金字塔，并使用Transformer进行强化（特征融合），以构建一个鲁棒的目标外观模型。此外，作者设计了pooling attention module通过减少key和value的数量进一步降低了Transformer的内存消耗和时间复杂度。提出的方法在CPU端运行速度可超过30 FPS。</p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文着眼于移动平台的无人机目标跟踪，融合了CNN和Transformer的优点。具体来说，通过轻量的shufflenet v2来构建特征金字塔，并使用Transformer对其进行强化（特征融合），以构建一个鲁棒的目标外观模型。开发了一种具有横向交叉注意力的集中式架构，用于构建增强的高级特征图。此外，作者设计了pooling attention module减少key和value的数量进一步降低了Transformer的内存消耗和时间复杂度。提出的方法在CPU端运行速度可超过30 FPS。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/49-SiamTPN/20211123164050.png" alt=""></p>
 <span id="more"></span>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/49-SiamTPN/20211123171117.png" alt=""></p>
