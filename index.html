@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="21" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="22" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -255,6 +255,56 @@
 </v-row>
 
                             <v-card class="elevation-2 index-card">
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-11-24
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/contrastive-learning/ >contrastive learning</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/50-IAT/">Explicitly Modeling the Discriminability for Instance-Aware Visual Object Tracking</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文
+Motivation作者认为当前方法的局限在于，跟踪目标的特征仅被表达学习，而没有做判别性的建模（即网络只学会了如何从表观上描述一个目标的特征，但并未学到不同目标特征之间的差异）。为了解决这一问题，本文引入对比学习（contrastive learning）构建实例级的跟踪器 Instance-Aware Tracker (IAT)，确保每个训练样本都能被唯一建模，并与其他大量样本高度区分。提出的IAT包括video-level和object-level两种形式，前者提高了从背景中识别目标的能力，后者提高了区分目标和干扰物的判别能力。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/50-IAT/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
   
     <article class="index-article">
       
@@ -699,61 +749,6 @@ Fast Template Matching and Update for Video Object Tracking and Segmentation
       
       <div class="index-article-readmore ">
         <v-btn text href="/tracking/41-siamrcr/">Read More</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-05-19
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/CVPR2021/ >CVPR2021</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Natural-Language/ >Natural Language</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/40-snlt/">Siamese Natural Language Tracker: Tracking by Natural Language Descriptions with Siamese Trackers</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Introduction本文研究的课题为tracking by natural language(NL) 。人类的学习过程是视觉和语言共同作用的，而在基于外观的跟踪过程中引入语言描述同样可以使得跟踪器更加精确、灵活和鲁棒（如图1的例子）。因此，本文将孪生跟踪器与语言描述结合，将语言描述编码成一个卷积核嵌入到孪生框架中（SNL-RPN），并将视觉和语言的预测进行动态聚合（Dynamic Aggregation），为tracking by NL任务提供了一个新的baseline。具体贡献总结如下：
-
-提出一种新的tracking by NL的baseline，Siamese Natural Language Region Proposal Network (SNL-RPN)；
-提出了一种基于视觉和语言预测的动态聚合（Dynamic Aggregation），将SNL-RPN转换为Siamese Natural Language Tracker (SNLT)；
-在NL标注的数据集上将孪生跟踪器的性能提升了3-7个百分点，并且性能超过其他NL tracker，速度为50FPS。
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/40-snlt/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
