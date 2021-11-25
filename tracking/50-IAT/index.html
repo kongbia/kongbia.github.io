@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/50-IAT/" class="toc-header">Table of Contents</a>
+            <a href="/tracking/50-IAT/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">2.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">3.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Instance-Classification-Branch"><span class="toc-number">3.1.</span> <span class="toc-text">Instance Classification Branch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Two-Variants-of-IAT"><span class="toc-number">3.2.</span> <span class="toc-text">Two Variants of IAT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Training-Loss"><span class="toc-number">3.3.</span> <span class="toc-text">Training Loss</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">4.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ablation-Study"><span class="toc-number">4.1.</span> <span class="toc-text">Ablation Study</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SOTA-Comparison"><span class="toc-number">4.2.</span> <span class="toc-text">SOTA Comparison</span></a></li></ol></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2021-11-24
+      发布于:&nbsp;2021-11-24
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-11-25
+      更新于:&nbsp;2021-11-25
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -294,7 +294,7 @@
 <p>因此，本文提出实例感知跟踪器 (Instance-Aware Tracker, IAT) 显式地建模视觉跟踪的判别性，首次将基于对比学习的实例级分类任务集成到跟踪中。作者借鉴了经典的MoCo算法（算法结构如下图），可以参考<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1av411874e?spm_id_from=333.999.0.0">MoCo论文简析</a>。将每个目标看成一个特定的类别，在memory bank中存储大量的类内和类间负样本。然后，对网络进行训练，使其从大量的负样本中对比区分目标对象，从而提升判别能力。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/50-IAT/20211124162015.png" alt=""></p>
 <p>作者提出了两种不同级别的实例感知，视频级和对象级。前者将整个视频看成一个样本，从全局的视角提高了从背景中识别目标的能力；后者将每个目标看成一个实例，强化了目标和干扰物的区分能力。提出的方法仅在训练过程中使用，因此不会增加推理时间，作者在PrDiMP上进行实验，速度可以达到30 FPS。</p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/50-IAT/20211124173201.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/50-IAT/20211125165645.png" alt=""></p>
 <p>整体框架如图2所示，包括特征提取、分类分支、回归分支和实例分类分支。整个上半部分就是PrDiMP的结构，增加的实例分类分支将每个目标与大量其他样本进行分类，以提高跟踪器的判别力。下面对实例分类分支进行详细介绍。</p>
 <h2 id="Instance-Classification-Branch"><a href="#Instance-Classification-Branch" class="headerlink" title="Instance Classification Branch"></a>Instance Classification Branch</h2><p>为了引入大量负样本，作者借鉴了自监督学习方法MoCo，将该分支定义为字典查找任务，将来自同一视频的帧作为正样本，将来自其他视频的帧作为负样本。如图2所示，该分支包括memory encoder $\omega$ 和instance boosting module $\psi$，其中$\omega$的网络<strong>结构</strong>和f1/f2相同用于提取字典中的特征，$\psi$调整来自$\omega$和f1的特征用于后续对比学习。</p>
 <p>给定query q和字典$\{k_+, \{k_i\}^K_{i=1} \}$，字典中包含一个正样本$k_+$和K个负样本，对比学习的任务是从字典中查找到对应q的正样本$k_+$。在本文的跟踪任务中，q为模板特征，$k_+$为搜索特征，而$\{k_i\}^K_{i=1}$是来自其他视频的历史搜索特征。训练时，给定模板帧$I_t$和搜索帧$I_s$，实例分类分支的前向传播如下：</p>
