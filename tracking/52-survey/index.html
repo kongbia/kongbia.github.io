@@ -111,7 +111,7 @@
     
     <title>
         
-            相关滤波和孪生网络目标跟踪综述解读（Martin团队） | CV home
+            相关滤波和孪生网络目标跟踪综述（Martin团队） | CV home
         
     </title>
     
@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/52-survey/" class="toc-header">文章目录</a>
+            <a href="/tracking/52-survey/" class="toc-header">Table of Contents</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#INTRODUCTION"><span class="toc-number">1.</span> <span class="toc-text">INTRODUCTION</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DCF"><span class="toc-number">2.</span> <span class="toc-text">DCF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DCF%E5%9F%BA%E6%9C%AC%E5%85%AC%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">DCF基本公式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DCF%E8%B7%9F%E8%B8%AA%E6%B5%81%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">DCF跟踪流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DCF%E5%AD%98%E5%9C%A8%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-number">2.3.</span> <span class="toc-text">DCF存在的挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E8%A1%A8%E8%BE%BE"><span class="toc-number">2.3.1.</span> <span class="toc-text">特征表达</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%95%8C%E6%95%88%E5%BA%94"><span class="toc-number">2.3.2.</span> <span class="toc-text">边界效应</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="toc-number">2.3.3.</span> <span class="toc-text">优化问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%E7%8A%B6%E6%80%81%E4%BC%B0%E8%AE%A1"><span class="toc-number">2.3.4.</span> <span class="toc-text">目标状态估计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%88%86%E5%89%B2%E7%9A%84DCF"><span class="toc-number">2.4.</span> <span class="toc-text">基于分割的DCF</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SIAMESE-TRACKERS"><span class="toc-number">3.</span> <span class="toc-text">SIAMESE  TRACKERS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Siamese%E8%B7%9F%E8%B8%AA%E5%AD%98%E5%9C%A8%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-number">3.1.</span> <span class="toc-text">Siamese跟踪存在的挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Backbone%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.1.</span> <span class="toc-text">Backbone结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E8%AE%AD%E7%BB%83"><span class="toc-number">3.1.2.</span> <span class="toc-text">离线训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0"><span class="toc-number">3.1.3.</span> <span class="toc-text">在线模型更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-number">3.1.4.</span> <span class="toc-text">损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%E7%8A%B6%E6%80%81%E4%BC%B0%E8%AE%A1-1"><span class="toc-number">3.1.5.</span> <span class="toc-text">目标状态估计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%88%86%E5%89%B2%E7%9A%84Siamese%E8%B7%9F%E8%B8%AA"><span class="toc-number">3.2.</span> <span class="toc-text">基于分割的Siamese跟踪</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EXPERIMENTAL-COMPARISON"><span class="toc-number">4.</span> <span class="toc-text">EXPERIMENTAL COMPARISON</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%9F%E8%B8%AA%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87"><span class="toc-number">4.2.</span> <span class="toc-text">评价指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E9%87%8F%E5%88%86%E6%9E%90"><span class="toc-number">4.3.</span> <span class="toc-text">定量分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9F%E5%BA%A6%E6%AF%94%E8%BE%83"><span class="toc-number">4.4.</span> <span class="toc-text">速度比较</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DISCUSSION-AND-CONCLUSIONS"><span class="toc-number">5.</span> <span class="toc-text">DISCUSSION  AND CONCLUSIONS</span></a></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -257,24 +257,24 @@
     
     
         <div class="post-header">
-  <a class="post-header-title font-weight-medium" href="/tracking/52-survey/">相关滤波和孪生网络目标跟踪综述解读（Martin团队）</a>
+  <a class="post-header-title font-weight-medium" href="/tracking/52-survey/">相关滤波和孪生网络目标跟踪综述（Martin团队）</a>
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      发布于:&nbsp;2021-12-22
+      Posted on:&nbsp;2021-12-22
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      更新于:&nbsp;2021-12-27
+      Edited on:&nbsp;2021-12-27
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
