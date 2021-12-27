@@ -1500,7 +1500,7 @@
       </tags>
   </entry>
   <entry>
-    <title>Martin团队最新目标跟踪综述解读</title>
+    <title>相关滤波和孪生网络目标跟踪综述解读（Martin团队）</title>
     <url>/tracking/52-survey/</url>
     <content><![CDATA[<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211222231118.png" alt=""></p>
 <p>Visual Object Tracking with Discriminative Filters and Siamese Networks: A Survey and Outlook 马丁团队的新作，强烈推荐。</p>
