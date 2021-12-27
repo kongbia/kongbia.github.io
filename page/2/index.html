@@ -144,7 +144,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="22" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="24" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -194,7 +194,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -262,6 +262,105 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2021-06-08
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/ >强化学习</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/42-rl-tracking/">强化学习在目标跟踪中的应用</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          强化学习讨论的问题是智能体(agent) 如何在一个复杂不确定的环境(environment) 里去最大化它能获得的奖励。 今天介绍三篇关于强化学习在目标跟踪中的工作，分别利用强化学习来决策使用的特征，多个跟踪器的切换以及是否更新模板。
+论文列表：
+
+Learning Policies for Adaptive Tracking with Deep Feature Cascades
+Online Decision Based Visual Tracking via Reinforcement Learning
+Fast Template Matching and Update for Video Object Tracking and Segmentation
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/42-rl-tracking/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2021-05-26
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/IJCAI2021/ >IJCAI2021</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/41-siamrcr/">SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+论文
+本文解决的是老生常谈的分类和回归不匹配的问题。作者提出在分类和回归之间建立双向的连接，可以动态地重新加权每个正样本的损失。此外，增加了一个定位分支用于预测定位精度，可以在推理过程中替代回归辅助连接(regression assistance link)，使得训练和测试更加一致。最终运行速度为65FPS。
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/41-siamrcr/">Read More</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-05-19
             </div>
           </v-col>
@@ -306,7 +405,7 @@ Introduction本文研究的课题为tracking by natural language(NL) 。人类�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/40-snlt/">阅读更多</v-btn>
+        <v-btn text href="/tracking/40-snlt/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -365,7 +464,7 @@ Motivation
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/39-deepmix/">阅读更多</v-btn>
+        <v-btn text href="/tracking/39-deepmix/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -421,7 +520,7 @@ Motivation本文主要解决孪生跟踪器缺乏在线更新能力的问题。�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/38-siamtol/">阅读更多</v-btn>
+        <v-btn text href="/tracking/38-siamtol/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -479,7 +578,7 @@ Refinement Module (RM) 将RD和分类分支获得的信息进行整合，细化�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/37-siamrn/">阅读更多</v-btn>
+        <v-btn text href="/tracking/37-siamrn/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -529,7 +628,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/36-learning-target-candidate-association/">阅读更多</v-btn>
+        <v-btn text href="/tracking/36-learning-target-candidate-association/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -579,7 +678,7 @@ MotivationMartin参与的新作，出发点和之前的KYS类似，均指出仅�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/35-FSL-tracking/">阅读更多</v-btn>
+        <v-btn text href="/tracking/35-FSL-tracking/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -634,7 +733,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/34-stmtrack/">阅读更多</v-btn>
+        <v-btn text href="/tracking/34-stmtrack/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -687,109 +786,7 @@ memory network的像素级相似度计算能够生成更精确的目标框。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/33-transform-tracking/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2020-03-10
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/meta-learning/ >meta learning</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/ICCV2019/ >ICCV2019</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/4-mlt/">Deep Meta Learning for Real-Time Target-Aware Visual Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation
-当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/4-mlt/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2020-03-06
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Anchor-free/ >Anchor-free</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/3-anchorfree-siamese/">Anchor Free的孪生目标跟踪</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。
-[Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)
-[Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)
-跟踪任务可以看成是分类任务与状态估计任务的结合。分类任务的目的是精确定位目标的位置，而状态估计获得目标的姿态（即目标框）。SiamFC++一文将当前的跟踪器按照不同状态估计的方法分为三类：
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/3-anchorfree-siamese/">阅读更多</v-btn>
+        <v-btn text href="/tracking/33-transform-tracking/">Read More</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 

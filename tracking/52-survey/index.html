@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
+    <meta name="baidu-site-verification" content="code-Toh8kQYN7N" />
+    <meta name="google-site-verification" content="r3Cw4aIKBFXcYVnB8J-bxaQozYY6BHsoE3q5soJN3Po" />
+    <meta name="msvalidate.01" content="C5E4D0D01152A883DDA407CDCE62E1DA" />
+    <meta name='description' content='A personal blog that shares computer vision papers'>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/avatar.jpg">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+    
+        <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        
+            load: ['[tex]/mhchem'],
+        
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        
+            packages: {'[+]': ['mhchem']},
+        
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+          
+
+    
+    
+    
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+            <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+            <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+        
+    
+
+    
+    
+    <title>
+        
+            Martin团队最新目标跟踪综述解读 | CV home
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.jpg">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                Archives
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://space.bilibili.com/5567932/article" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                b站专栏
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/tracking/52-survey/" class="toc-header">Table of Contents</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#INTRODUCTION"><span class="toc-number">1.</span> <span class="toc-text">INTRODUCTION</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DCF"><span class="toc-number">2.</span> <span class="toc-text">DCF</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#DCF%E5%9F%BA%E6%9C%AC%E5%85%AC%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">DCF基本公式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DCF%E8%B7%9F%E8%B8%AA%E6%B5%81%E7%A8%8B"><span class="toc-number">2.2.</span> <span class="toc-text">DCF跟踪流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DCF%E5%AD%98%E5%9C%A8%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-number">2.3.</span> <span class="toc-text">DCF存在的挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E8%A1%A8%E8%BE%BE"><span class="toc-number">2.3.1.</span> <span class="toc-text">特征表达</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BE%B9%E7%95%8C%E6%95%88%E5%BA%94"><span class="toc-number">2.3.2.</span> <span class="toc-text">边界效应</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98"><span class="toc-number">2.3.3.</span> <span class="toc-text">优化问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%E7%8A%B6%E6%80%81%E4%BC%B0%E8%AE%A1"><span class="toc-number">2.3.4.</span> <span class="toc-text">目标状态估计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%88%86%E5%89%B2%E7%9A%84DCF"><span class="toc-number">2.4.</span> <span class="toc-text">基于分割的DCF</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SIAMESE-TRACKERS"><span class="toc-number">3.</span> <span class="toc-text">SIAMESE  TRACKERS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Siamese%E8%B7%9F%E8%B8%AA%E5%AD%98%E5%9C%A8%E7%9A%84%E6%8C%91%E6%88%98"><span class="toc-number">3.1.</span> <span class="toc-text">Siamese跟踪存在的挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Backbone%E7%BB%93%E6%9E%84"><span class="toc-number">3.1.1.</span> <span class="toc-text">Backbone结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A6%BB%E7%BA%BF%E8%AE%AD%E7%BB%83"><span class="toc-number">3.1.2.</span> <span class="toc-text">离线训练</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9C%A8%E7%BA%BF%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0"><span class="toc-number">3.1.3.</span> <span class="toc-text">在线模型更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="toc-number">3.1.4.</span> <span class="toc-text">损失函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%AE%E6%A0%87%E7%8A%B6%E6%80%81%E4%BC%B0%E8%AE%A1-1"><span class="toc-number">3.1.5.</span> <span class="toc-text">目标状态估计</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%88%86%E5%89%B2%E7%9A%84Siamese%E8%B7%9F%E8%B8%AA"><span class="toc-number">3.2.</span> <span class="toc-text">基于分割的Siamese跟踪</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#EXPERIMENTAL-COMPARISON"><span class="toc-number">4.</span> <span class="toc-text">EXPERIMENTAL COMPARISON</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B7%9F%E8%B8%AA%E6%95%B0%E6%8D%AE%E9%9B%86"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87"><span class="toc-number">4.2.</span> <span class="toc-text">评价指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9A%E9%87%8F%E5%88%86%E6%9E%90"><span class="toc-number">4.3.</span> <span class="toc-text">定量分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%9F%E5%BA%A6%E6%AF%94%E8%BE%83"><span class="toc-number">4.4.</span> <span class="toc-text">速度比较</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#DISCUSSION-AND-CONCLUSIONS"><span class="toc-number">5.</span> <span class="toc-text">DISCUSSION  AND CONCLUSIONS</span></a></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:zjphust@gmail.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://github.com/kongbia" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+            
+                <span id="busuanzi_container_site_uv" style="display: none;"> 
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                </span>
+                <br>
+            
+            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>
+            <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+            <span>
+                &copy; 2020 - 2021 
+                zjp
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">CV home</a>
+      </div>
+      <div id="site-description">A personal blog that shares computer vision papers</div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://space.bilibili.com/5567932/article">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/tracking/52-survey/">Martin团队最新目标跟踪综述解读</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      Posted on:&nbsp;2021-12-22
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      Edited on:&nbsp;2021-12-27
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211222231118.png" alt=""></p>
+<p>Visual Object Tracking with Discriminative Filters and Siamese Networks: A Survey and Outlook 马丁团队的新作，强烈推荐。</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2112.02838">论文</a></p>
+<p>精确和鲁棒的视觉目标跟踪是计算机视觉中最具挑战性和最基本的问题之一。它需要在只给定目标初始状态的条件下，准确估计图像序列中目标的轨迹及状态。相关滤波和孪生网络已经成为当下的主流跟踪算法，本文选取了90多个DCF和Siamese跟踪器进行系统和全面的回顾。首先，介绍了DCF和Siamese跟踪核心公式的背景理论。然后，区分和全面回顾了这两种跟踪范式中共享的和各自特定的挑战。此外，深入分析了DCF和Siamese跟踪器在9个benchmark上的性能，涵盖了视觉跟踪的不同方面的实验：数据集、评估指标、性能和速度比较。在此分析的基础上，提出了对视觉跟踪开放挑战的建议。</p>
+<h1 id="INTRODUCTION"><a href="#INTRODUCTION" class="headerlink" title="INTRODUCTION"></a>INTRODUCTION</h1><p>这项工作系统的回顾流行的DCF和Siamese的跟踪范式。两种模型都有一个共同的目标，即学习一个准确的目标外观模型，能够有效地从背景中区分出目标物体。尽管在解决上述目的方面出现了不同的潜在范式，但深度学习的出现给这两种范式带来了一些重要的相似之处和共同的挑战。</p>
+<p>相同的挑战包括：</p>
+<ol>
+<li><strong>特征表达</strong> 从预训练网络中提取深度特征表示是两种范式共同的趋势。然而，深度网络架构和特征层次结构的选择仍然是一个开放的问题；</li>
+<li><strong>目标状态估计</strong> 两种范式的核心公式只解决了如何估计目标对象的平移，但都没有提供一个显式的方法来估计完整的目标状态（边界框参数）；</li>
+<li><strong>离线训练</strong> 最初只有Siamese跟踪器可以端到端离线训练，但最近的DCF也可以利用大规模离线学习，将其与高效、可微的在线学习模块集成，以实现鲁棒和准确的跟踪。</li>
+</ol>
+<p>这两个流行的范例虽然有共同的挑战，但也有特定的问题，例如：</p>
+<ol>
+<li><strong>边界效应</strong> DCF通常利用训练样本的周期性循环位移来学习在线分类器，这引入了不良的边界效应，严重降低了目标模型的质量；</li>
+<li><strong>优化问题</strong> DCF的损失函数优化是一个挑战，特别是在岭回归中加入了空间或时间正则化等目标约束条件时变得更加困难；</li>
+<li><strong>模型在线自适应</strong> 当目标外观发生变化时，模型需要能够应对这些变化。DCF可以通过损失函数更新外观模型，但Siamese跟踪器并没有固有的在线模型更新机制。因此，在线适应性是Siamese跟踪器的一个重要问题。</li>
+</ol>
+<p>下面将分别介绍这两种跟踪范式的背景理论以及回顾它们针对上述挑战做出的相关工作。图4整体展现了两种跟踪范式的发展过程。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211225112755.png" alt=""></p>
+<h1 id="DCF"><a href="#DCF" class="headerlink" title="DCF"></a>DCF</h1><p>DCF是一种有监督的线性回归技术。DCF成功的关键是通过循环移动训练样本实现稠密采样，这允许在学习和应用相关滤波器时使用快速傅里叶变换(FFT)，大幅提升计算效率。通过利用傅里叶变换的特性，DCF在线学习相关滤波器，有效地最小化岭回归误差来定位连续帧中的目标对象。为了估计下一帧的目标位置，将学习的滤波器应用到感兴趣的区域，其中最大响应的位置估计目标位置，然后以迭代的方式更新滤波器。</p>
+<h2 id="DCF基本公式"><a href="#DCF基本公式" class="headerlink" title="DCF基本公式"></a>DCF基本公式</h2><p>早期的DCF如MOOSE和CSK均采用单通道的灰度特征，从KCF之后基本都是应用多通道特征，所以这里直接列出多通道的形式，关于单通道的详细推导可以查看原论文。多通道DCF优化目标如下：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211223103910.png" alt=""></p>
+<p>其中$d \in \{1,…,D\}$表示特征维度，$m$是样本个数，$x, y$分别对应训练样本和标签，$\omega$表示是滤波器参数。通过利用FFT转到频域求解：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211223104338.png" alt=""></p>
+<p>详细推导可以参考<a target="_blank" rel="noopener" href="https://blog.csdn.net/u011285477/article/details/53861850">KCF论文阅读笔记_图像研究猿的专栏</a></p>
+<h2 id="DCF跟踪流程"><a href="#DCF跟踪流程" class="headerlink" title="DCF跟踪流程"></a>DCF跟踪流程</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211223104623.png" alt=""></p>
+<p>DCF跟踪流程如图2所示，首先在第一帧学习滤波器$\omega$，然后在后续帧进行检测，并更新滤波器参数。第m帧的检测公式计算如下：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211223105745.png" alt=""></p>
+<p>其中$z$为根据上一帧的检测结果裁剪的patch，$\omega_{m-1}$为从初始帧一直递归更新到上一帧的滤波器，二者通过卷积运算得到每个位置的目标分数$s$。其中$s$中响应最大的位置为当前检测的目标位置，并在此位置裁剪新的patch用于更新滤波器参数。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211223114556.png" alt=""></p>
+<p>其中$\omega_m^{num}, \omega_m^{den}$分别为分子和分母，即滤波器$\hat{\omega}=\frac{\omega_m^{num}}{\omega_m^{den}}$。</p>
+<h2 id="DCF存在的挑战"><a href="#DCF存在的挑战" class="headerlink" title="DCF存在的挑战"></a>DCF存在的挑战</h2><p>DCF框架中存在的问题包括特征表达、边界效应、损失优化和目标状态估计，下面分别进行讨论。</p>
+<h3 id="特征表达"><a href="#特征表达" class="headerlink" title="特征表达"></a>特征表达</h3><p><strong>Handcrafted  Features</strong> 手工特征包括：灰度/RGB/LAB等颜色强度特征，Color  Names  (CN)  特征以及HOG特征。</p>
+<p><em>由于其速度和有效性，这些特性已经成为手工方法中的首选。此外，HOG特征也被有效地与CN特征结合起来，以利用形状和颜色信息。</em></p>
+<p><strong>Deep Features</strong> 随着CNN的发展，许多DCF方法将高维非线性的卷积特征用于跟踪，如HCF、HDT、CCOT、ECO、ASRCF和RPCF等。它们均使用在ImageNet上离线预训练的特征，虽然是用于分类任务的特征，但这种深度表示方法适用于广泛的视觉任务。</p>
+<p>一些流行的预训练深度网络，如VGG-19、imagenet-vgg-m-2048、VGG-16、ResNet50和googlenet被用来提取深度特征表示。其中浅层特征包含高分辨率的低层信息，这对精确定位目标非常重要。更深层的特征对复杂的形变具有较高的不变性，可以提高跟踪鲁棒性，同时在很大程度上不受小的平移和尺度变化的影响。因此，在DCF框架中融合浅卷积层和深卷积层的精确策略一直是人们感兴趣的话题。CCOT中提出了DCF框架的连续域公式，实现了多分辨率特征的融合。ECO研究降低CCOT计算成本的策略，并降低过拟合的风险。其他跟踪器如HDT、HCFTs、MCCT、MCPF、MCPF、LMCF、STRCF、TRACA、DRT、UPDT和GFS-DCF使用后期融合策略集成深度特征。该策略是在每个单独的特征表示上训练一个分类器，然后聚合特征响应图。</p>
+<p><strong>End-to-End Features Learning</strong> 上述方法依赖离线预训练，而后续研究关注如何在跟踪数据集上端到端优化DCF框架，这样可以学到任务特定的深度特征表示来改善跟踪性能。CFNet以离线方式对相关滤波器进行端到端学习，CREST和ACFN也采用了相同的在线策略。最近，ATOM额外加入了端到端的尺度估计分支，DiMP和PrDiMP则改进了经典的DCF模型，提升了判别能力。</p>
+<p><em>最近DCF跟踪器（ATOM, DiMP, PrDiMP）中端到端特征学习的趋势导致了在多个基准上的优秀跟踪性能，为探索DCF范式中更复杂的端到端特征学习铺平了道路。</em></p>
+<h3 id="边界效应"><a href="#边界效应" class="headerlink" title="边界效应"></a>边界效应</h3><p>DCF的循环位移操作引入了对跟踪不利的边界效应。具体来说，由于循环位移，训练样本中的负样本并不是真实的背景内容，而是一个较小图像块的不断位移合成的重复。因此，模型在训练过程中看到的背景样本较少，严重限制了其判别能力。此外，由于周期性重复所造成的失真，预测的目标分数只在图像块的中心附近是准确的，搜索区域的大小因此受到限制。尽管可以通过窗口函数相乘来对其进行预处理。然而，这种技术并不试图解决上述问题，而只是为了消除边界区域的不连续性。针对这一问题，许多方法在DCF的目标公式中加入了各种目标特定的空间、时空和平滑约束。</p>
+<p><strong>空间正则化</strong> SRDCF提出了一种空间正则化来控制滤波器的空间扩展，以缓解边界问题，公式如下：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211224163041.png" alt=""></p>
+<p>其中空间权重函数$f(n) \textgreater 0$，在背景像素处取大值，在目标区域内取小值，对背景滤波系数进行惩罚。这样可以在一个更大的搜索图像上学到一个聚焦于目标区域的紧凑型滤波器。空间正则化策略已被应用于各种跟踪器中，包括ARCF、ASRCF和AutoTrack。为了提高SRDCF的效率，Li等人提出了STRCF，它只使用单一的训练样本，而引入了时间正则化项来整合历史信息。</p>
+<p><strong>约束优化</strong> SRDCF的目的是惩罚目标区域外的滤波系数，而Kiani等人提出引入硬约束（BACF）。该策略强制滤波系数$\omega$在目标区域外为零。优化公式可以通过引入二进制掩码P来表示：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211224165451.png" alt=""></p>
+<p>其中$P \cdot \omega$ 掩盖了背景特征对于滤波器参数的影响，目标函数采用ADMM迭代优化。公式(13)和(14)中所研究的特定于目标的约束通常针对不同的对象是固定的，并且在跟踪过程中不会发生变化。最近，Dai等人通过引入自适应正则化项来扩展BACF和SRDCF。</p>
+<p><strong>隐式方法</strong> GFS-DCF提出了一种联合特征选择模型，该模型同时学习三个正则化项:空间正则化用于特征选择，通道正则化用于特征通道选择，低秩时间正则化项用于增强滤波权值的平滑性。Mueller等人提出CACF对每个目标patch的上下文信息进行正则化。在每一帧中，CACF对几个上下文补丁进行采样，作为负样本。</p>
+<p><strong>空域形式</strong> 最近，ATOM和DiMP采用低分辨率（16倍降采样）的深度特征，可以以小尺寸卷积核（$4 \times 4$）的形式在空间域中直接学习滤波器。这种方法完全绕开了边界效应，因为不需要周期性地扩展训练样本。</p>
+<p><em>基于正则化的(SRDCF， STRCF)和基于约束的(CFLB/BACF)方法都取得了巨大成功，并被广泛应用于跟踪器中。最近的深度学习方法(ATOM/DiMP)通过直接在空域中优化滤波器，已经完全避开了边界效应问题。因此，虽然傅里叶域对高分辨率特征的计算具有吸引力，但在使用强大的低分辨率深度特征时，高效的空域优化方法在在线学习中占优。因此，目前基于DCF的SOTA方法研究采用了空域优化的形式，不需要额外的策略来缓解边界效应。</em></p>
+<h3 id="优化问题"><a href="#优化问题" class="headerlink" title="优化问题"></a>优化问题</h3><p>标准的DCF优化利用循环矩阵在傅里叶域可对角化的性质来求解岭回归的闭式解。这套方法无法处理有额外正则项或约束条件的优化问题，下面总结几种有效的模型优化方法。</p>
+<p><strong>Gauss-Seidel Method</strong> 代表方法：DeepSRDCF，采用Gauss-Seidel迭代速度非常慢，大概只有每秒几帧。</p>
+<p><strong>Conjugate Gradient Based Method</strong> 共轭梯度最早用于CCOT，可作用于任意一组满秩的正规方程$A\tilde{\omega}=b$。它通过寻找共轭方向$p^{i}$和最优步长$\beta^i$ 来更新滤波器$\tilde{\omega}^i=\tilde{\omega}^{i-1}+\beta^ip^{i}$。该算法在有限次迭代次数中收敛到解，但在实际应用中，算法在固定次数的迭代后或当误差降低到令人满意的水平时停止。CG在处理D维特征时，复杂度从Gauss-Seidel的二次复杂度$O(D^2)$降为线性的$O(D)$，因此可以用于高维的深度特征优化。</p>
+<p>针对非线性最小二乘问题，Gauss-Newton法也被用于许多跟踪器，包括ECO、ATOM和UPDT。该方法对误差使用泰勒级数展开，找到一个二次逼近的目标。由此产生的二次问题可以用迭代方法处理，例如上面描述的CG方法。在ECO和ATOM中，采用Gauss-Newton结合CG对滤波器$\omega$和降维矩阵进行联合优化。DiMP使用Gauss-Newton和Steepest Descent迭代来学习滤波器。优化步骤本身是可微分的，这进一步支持端到端的学习。PrDiMP进一步使用更一般的牛顿近似来处理凸且非线性KL散度目标函数。</p>
+<p><strong>Alternating Direction Method of Multipliers (ADMM) Method</strong> ADMM方法近年来被广泛应用于DCF中，特别是引入额外正则项的优化上。ADMM将大的全局问题分解为多个较小、较容易求解的局部子问题，并通过协调子问题的解而得到大的全局问题的解。基于ADMM的优化方法为每个子问题提供了闭式解，并且在非常少的迭代内收敛。BACF、DRT、AutoTrack、ARCF和RPCF等跟踪器都采用ADMM来实现高效的求解。</p>
+<h3 id="目标状态估计"><a href="#目标状态估计" class="headerlink" title="目标状态估计"></a>目标状态估计</h3><p><strong>Multiple Resolution Scale Search Method</strong> 多尺度金字塔搜索是最简单粗暴的方法，首先按不同的比例因子调整图像大小，然后在每个尺度进行估计，选择分数最大的位置和尺度作为最终结果。在一定程度上可以提升尺度估计的准确性，但是多尺度采样带来较大的计算负担，且只能等比例缩放边界框。</p>
+<p><strong>Discriminative Scale Space Search Method</strong> 即DSST为代表的方法，将目标状态估计分两步进行。由于两帧之间的尺度变化通常较小或中等，首先通过在当前的尺度估计上应用通常的平移滤波器来找到目标平移。然后，在尺度维度上应用单独的一维滤波器来更新目标尺寸。好处有两方面：1）通过减小搜索空间来提高计算效率；2）对尺度滤波器进行训练，区分不同尺度下目标的外观，从而得到更准确的估计。后续的fDSST跟踪器通过应用PCA和子网格插值[27]降低了DSST的计算开销。</p>
+<p><strong>Deep Bounding Box Regression Method</strong> 上述方法依赖于比例因子参数和在线精确相关滤波器响应，没有以离线方式利用强大的深度特征表示。此外，这些在线方法不执行任何边界框回归。因此，这些方法在尺度突然变化的情况下表现出性能下降。精确估计目标边框是一项复杂的任务，需要高层次的先验知识，不能被建模为一个简单的图像变换(例如统一的图像缩放)。</p>
+<p>边界框回归在目标检测中有广泛的应用，ATOM就借鉴了检测中的IOUNet来进行状态估计。考虑到检测网络具有class-specific的特性，不适合target-specific的跟踪任务，Martin设计了一个调制网络嵌入参考帧中的目标外观信息从而得到target-specific的IOU预测。在跟踪过程中，通过简单地最大化每帧的预测IOU来找到目标框。结果表明，与传统的多尺度搜索方法相比，该方法的性能有了显著提高。后续的DiMP, PrDiMP和KYS都采用了这种策略，其中PrDiMP使用基于能量的模型来预测边界框的非归一化概率密度，而不是预测IOU，通过最小化KL散度和高斯标签来训练的。</p>
+<h2 id="基于分割的DCF"><a href="#基于分割的DCF" class="headerlink" title="基于分割的DCF"></a>基于分割的DCF</h2><p>目标分割为跟踪提供了可靠的目标观测，解决了旋转目标框、遮挡、变形、缩放等跟踪问题。Bertinetto等人使用了一种基于颜色直方图的分割方法来改进在不同光照变化、运动模糊和目标变形下的跟踪。Lukezic等人提出了一种使用基于颜色的分割方法来正则化滤波学习的空间可靠性图。Kart等人将CSR-DCF跟踪器扩展到基于颜色和深度分割的RGB-D跟踪，深度线索提供了更可靠的分割图。Lukezic等人提出了一种single shot分割跟踪器来解决联合框架内的VOT和VOS问题，采用两种判别模型进行编码，用于联合跟踪和分割任务。最近，Robinson等人利用ATOM的快速优化方案，将一种功能强大的判别模型用于视频对象分割任务。Bhat等人也使用了目标模型区分能力来实现更鲁棒的视频对象分割。</p>
+<h1 id="SIAMESE-TRACKERS"><a href="#SIAMESE-TRACKERS" class="headerlink" title="SIAMESE  TRACKERS"></a>SIAMESE  TRACKERS</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211225121835.png" alt=""></p>
+<p>深度学习模型成功的关键是特征在大量数据上的离线学习能力，能够从大量标注的数据中学习复杂而丰富的关系。孪生网络将目标跟踪看成一个相似性学习问题，通过端到端的离线训练来学习目标图像和搜索区域之间的相似性。Siamese跟踪器由模板分支和检测分支组成，模板分支输入初始目标图像块，检测分支输入当前帧图像块。这两个分支共享CNN参数，使得两个图像块编码了适合跟踪的相同变换。Siamese跟踪框架如图3所示，其主要目标是克服预训练CNN的局限性，充分利用端到端学习。离线训练视频用于指导跟踪器处理旋转、视点变化、光照变化和其他复杂的挑战。Siamese跟踪器能够学习物体运动和外观之间的一般关系，并可以用来定位训练中未见过的目标。</p>
+<p><strong>Training Pipeline</strong> 以SiamFC为例，输入一对训练图像(x,  z)，x表示感兴趣的对象（第一帧裁剪的图像块）和z表示后续帧的搜索图像区域。将这些图像对输入CNN中，以获得两个特征图，然后使用互相关进行匹配，</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211226102603.png" alt=""></p>
+<p>其中星号表示互相关，$f_{\rho}(.)$表示CNN，如AlexNet，模型参数为$\rho$。$g_{\rho}(x,z)$表示x和z之间相似性的响应映射，$b$是常数标量。</p>
+<p>训练目标是使得响应图$g_{\rho}(x,z)$的最大值与目标位置相对应，因此采用logistic loss：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211226103514.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211226103550.png" alt=""></p>
+<p>其中$v$是预测值，$c \in \{-1,1\}$是标签。</p>
+<p>同期的其他一些工作，如：SINT使用欧式距离作为相似度量，而不是互相关；GOTURN预测的是边框回归的结果；CFNET将相关滤波器作为匹配函数中的一个独立模块加入到x中，使该网络更浅更高效。</p>
+<p><strong>Testing Pipeline</strong> 测试过程就是利用学到的匹配函数度量x在z上每个匹配区域的相似度，用得分最高的位置预测目标的新位置。最初的SiamFC只是将每一帧与目标的初始外观进行比较，并在GPU上以140FPS的速度实时跟踪。Siamese跟踪器在推理和离线学习中都具有极高的计算效率，并且跟踪性能卓越，因此在跟踪社区中受到了很多关注。</p>
+<h2 id="Siamese跟踪存在的挑战"><a href="#Siamese跟踪存在的挑战" class="headerlink" title="Siamese跟踪存在的挑战"></a>Siamese跟踪存在的挑战</h2><p>经典的SN在准确性和效率上都优于DCF跟踪器。然而，SN在backbone提取网络、离线训练时需要大量的标注图像对、缺乏在线适应性、损失函数、目标状态估计等方面也存在一定的局限性。下面将讨论这些问题并概述近年来发展的解决方案。</p>
+<h3 id="Backbone结构"><a href="#Backbone结构" class="headerlink" title="Backbone结构"></a>Backbone结构</h3><p>早期的Siamese跟踪器均使用AlexNet作为特征提取，包括SiamFC, GOTURN, SINT, FlowTrack, MemTrack, EAST和SiamRPN。然而，这些跟踪器在性能上仍然有限，因为AlexNet是一个相对较浅的网络，并没有产生非常强的特征表示。直接替换更深的网络并不能取得性能上的提升。</p>
+<p>为了解决这一问题，SiamRPN++研究发现，在SNs中，网络中的padding使得学习到的特征表示不满足空间平移不变性约束。因此，提出了一种有效的采样技术来满足这种空间不变性约束。利用强大的深层ResNet架构，许多Siamese跟踪器的性能得到了改善。Zhang等人也研究了同样的问题，并提出了SiamDW，其中浅骨干AlexNet被包括Inception、VGG-19和ResNet在内的深网络所取代。研究发现，除了padding外，感受野和网络步长也是深层网络不能直接替代浅层网络的主要原因。有了这些基础，最近的跟踪器包括SiamCAR、Ocean和SiamBAN等都使用了更深的网络结构。</p>
+<p><em>由于ResNet的简单性和强大的性能，ResNet已经成为Siamese跟踪的首选方案。然而，Transformer的最新进展预计将在未来几年对跟踪社区产生重大影响。</em></p>
+<h3 id="离线训练"><a href="#离线训练" class="headerlink" title="离线训练"></a>离线训练</h3><p>当前流行的跟踪训练数据集包括：ImageNet ILSVRC2014、ILSVRC2015、COCO、YouTube-BB、YouTube-VOS、LaSOT、GOT-10k和TrackingNet。这些数据集充分覆盖了大量的语义，并且不关注特定的对象，否则在Siamese训练中，调优后的网络参数会过拟合到特定的对象类别。</p>
+<p>与DCF范式不同，标准的Siamese范式不能利用跟踪过程中的已知干扰物。因此，当与目标本身相似的物体出现时，Siamese跟踪器通常不能很好地处理。早期的方法只在训练过程中对同一视频中的训练图像进行采样，这种抽样策略不关注具有语义相似干扰物的情况。为了解决这个问题，Zhu等人在DaSiamRPN中引入了难负样本挖掘技术，通过在训练过程中引入更多的语义负样本对来克服数据不平衡。构建的负样本对由相同和不同类别的标记目标组成。该技术通过更多地关注细粒度表示，帮助DaSiamRPN克服漂移。Voigtlaender (SiamRCNN)等人利用嵌入网络和最近邻近似提出了另一种难负样本挖掘技术。对于每个真实目标框，使用预训练网络为相似的目标外观提取嵌入向量。 然后使用索引结构估计近似最近邻，并使用它们估计嵌入空间中目标对象的最近邻。</p>
+<p><em>近年来，利用更多的训练数据和设计数据挖掘技术的趋势在多个基准上显示出了良好的跟踪性能。</em></p>
+<h3 id="在线模型更新"><a href="#在线模型更新" class="headerlink" title="在线模型更新"></a>在线模型更新</h3><p>在SiamFC中，目标模板在第一帧中初始化，然后在视频的剩余部分中保持固定。跟踪器不进行任何模型更新，因此其性能完全依赖于SN的泛化能力。然而当外观变化很大时，不更新模型往往导致跟踪失败。下面将介绍模型更新方向的潜在解决方案。</p>
+<p><strong>Moving Average Update Method</strong> 最简单的线性更新策略，使用固定学习率的对模板滑动平均更新。虽然它提供了一种集成新信息的简单方法，但由于恒定的更新速率和简单的线性模板组合，导致跟踪器无法从漂移中恢复。</p>
+<p><strong>Learning Dynamic SN Method</strong> DSiam设计了两个动态变换矩阵，包括目标外观变化和背景抑制。这两个矩阵都在傅里叶域中用闭式解进行求解。DSiam提供了有效的在线学习，但它忽略了历史目标变化，这对于更平滑地适应模板非常重要。 </p>
+<p><strong>Dynamic Memory Network Method</strong> MemTrack可以动态写入和读取以前的模板，以应对目标外观的变化。使用LSTM作为存储器控制器，输入是搜索特征图，输出存储器读写过程的控制信号。这种方法使跟踪器能够记忆长期目标外观。然而，该算法只关注目标特征，忽略了背景杂波中的鉴别信息，在目标变化剧烈的情况下，会导致精度下降。 </p>
+<p><strong>Gradient-Guided Method</strong> Li等人提出了GradNet，对梯度信息进行编码，通过前向和后向操作更新目标模板。跟踪器利用梯度信息更新当前帧中的模板，然后加入自适应过程，简化基于梯度的优化过程。与上述方法不同的是，该方法充分利用了反向传播梯度中的判别信息，而不是仅仅集成之前的模板。这样可以提高算法性能，但代价是以反向传播的方式计算梯度引入了计算负担。</p>
+<p><strong>UpdateNet Method</strong> UpdateNet利用一个CNN整合了初始模板、历史累计模板、以及当前帧模板，进行自适应更新。基于现有模板与累积模板的差异，可以适应现有框架的具体更新要求。此外，在每帧中还考虑了初始模板，提供了高度可靠的信息，增加了对模型漂移的鲁棒性。结果表明，与SiamFC和DaSiamRPN相比，该方法具有优异的性能。</p>
+<p><em>虽然已经提出了许多模型更新的技术，但简单地不使用更新仍然是一种鲁棒且流行的选择。在这个方向上的进一步研究需要开发简单的、通用的、端到端可训练的技术，从而进一步提高Siamese跟踪的鲁棒性。</em></p>
+<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p>损失函数主要包括分类和回归两种任务。</p>
+<p><strong>Logistic Loss</strong> 如上述公式16-17所示，早期方法均采用逻辑损失，包括SiamFC, DSiam, RASNET, SA-SIAM, CFNET, SiamDW和GradNet。该训练方法利用图像对上的成对关系，在正样本对上相似性分数最大化，在负样本对上相似性分数最小化。</p>
+<p><strong>Contrastive Loss</strong> </p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227102746.png" alt=""></p>
+<p>其中$\epsilon$为距离阈值，$D$代表两个样本特征的欧氏距离，$y_{x z} \in \{0,1\}$表示$x$和$z$是否属于同一个目标。SINT采用了contrastive loss，而GOTURN采用了预测和真实目标框之间的L1 loss。</p>
+<p><strong>Triplet Loss</strong> 上面的损失只利用了图像之间的两两关系，忽略了正样本对和负样本对之间的结构联系。Yan等人提出了SPLT跟踪器，在训练过程中使用Triplet Loss，定义如下：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227103412.png" alt=""></p>
+<p>其中$x^p$是正例，$x^n$是负例。Triplet Loss可以进一步挖掘目标、正实例和负实例之间的潜在关系，而且包含了更鲁棒的相似结构。SiamFC-Tri，SiamRCNN都利用了该损失函数。</p>
+<p><strong>Cross Entropy Loss</strong> SNs中的分类分支借鉴了目标检测中常用的交叉熵损失，定义为：</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227110305.png" alt=""></p>
+<p>其中$p_o$是预测值，$p_o^*$是标签。SiamRPN最早将检测思想引入SNs并使用了交叉熵损失。后续在其基础上，SiamRPN++, SiamAttn, Ocean, CLNET, SPM, C-RPN均使用交叉熵损失用于训练分类分支。</p>
+<p><strong>Regression Loss</strong> 回归损失使用较多的为smooth L1 loss (SiamRPN, SiamRPN++, SiamAttn, CLNET, SPM, C-RPN)和IOU loss (SiamBAN, Ocean, SiamFC++)。</p>
+<p><strong>Multi-Task Loss</strong> 对于分类分支和回归分支的联合训练，需要多任务损失。如交叉熵+smooth L1 loss或交叉熵+IOU loss。</p>
+<p><strong>Regularized Linear Regression</strong> 为了将相关滤波作为一个单独的层加入SNs，需要使用公式9-10的线性回归损失。将岭回归问题通过闭式解的形式解决，并以端到端方式嵌入整个训练框架，代表方法有：CFNET, TADT, RTINET, DSiam, FlowTrack, UDT, UDT++。</p>
+<p><em>目前，关于损失函数的研究还没有普遍的共识。相反，最近的SOTA方法采用了不同的替代方法。在上述方法中，交叉熵损失仍然是最近的跟踪器一个普遍的选择</em></p>
+<h3 id="目标状态估计-1"><a href="#目标状态估计-1" class="headerlink" title="目标状态估计"></a>目标状态估计</h3><p>与DCF类似，SNs也面临尺度变化的挑战。相似函数只能学习图像之间深层结构关系，没有考虑尺度变化问题。下面将讨论这一方面的发展。</p>
+<p><strong>Multiple Resolution Scale Search Method</strong> 最早期的方法仍然是简单粗暴的多尺度搜索，如如RASNET、SA-Siam、StructSiam、UDT、UDT++、TADT、GradeNet、RTINET、FlowTrack。</p>
+<p><strong>Deep Anchor-based Bounding Box Regression Method</strong> 基于锚框的边框回归利用目标检测中的RPN网络来预测具有多种尺度和宽高比的proposal。RPN是一个全卷积网络，它同时预测每个位置的分类分数和边框回归。RPN以端到端方式进行训练，以生成高质量的proposal。最早运用RPN的跟踪器是SiamRPN，包括一个分类分支和回归分支，相比传统方法取得了显著的进步。之后的DaSiamRPN， SiamRPN++， SiamDW ， SPLT， C-RPN， SiamAttn， CSA， SPM等也建立在相同的概念上。</p>
+<p><strong>Deep Anchor-free Bounding Box Regression Method</strong> 上述基于锚框的方法需要启发式知识精心设计锚箱，引入了许多超参数和计算复杂度。因此目标检测中提出了无锚框的方法，避免了设计与锚框相关的超参数，更加灵活通用。无锚框方法分为keypoint-based和center-based两种，前者首先定位预定义的关键点，然后在目标上执行边框回归；后者则预测目标中心正样本区域到边界的四个距离。无锚检测器能够消除与锚框相关的超参数，性能与基于锚框的检测器相似，具有更强的泛化能力。典型的无锚框孪生跟踪算法包括SiamBAN, Ocean, SiamCAR等。</p>
+<p><em>目标检测技术在目标状态估计方面取得了显著的进展。最近使用RPN和无锚框回归结构的趋势表明，可以在端到端范例中进一步探索这些技术</em></p>
+<h2 id="基于分割的Siamese跟踪"><a href="#基于分割的Siamese跟踪" class="headerlink" title="基于分割的Siamese跟踪"></a>基于分割的Siamese跟踪</h2><p>Siamese跟踪也可以和分割结合起来，处理一些形变的问题（比如手掌张开的人、旋转或轴对齐的目标框）。Wang等人提出SiamMask，可以同时估计二值蒙版、边界框和相应的背景-前景得分。该网络能够联合处理视觉跟踪和目标分割，以提高鲁棒性。Lu等人采用无监督视频对象分割任务，该任务基于SN内的联合注意机制提出了一种新颖的体系结构。</p>
+<h1 id="EXPERIMENTAL-COMPARISON"><a href="#EXPERIMENTAL-COMPARISON" class="headerlink" title="EXPERIMENTAL COMPARISON"></a>EXPERIMENTAL COMPARISON</h1><p>实验比较了59个DCF和33个Siamese trackers在9个跟踪数据集上的性能，包括OTB100, TC128, UAV, VOT2014, VOT2016, VOT2018, TrackingNet, LaSOT和GOT-10k。图5显示了来自不同跟踪数据集的示例帧。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227153554.png" alt=""></p>
+<h2 id="跟踪数据集"><a href="#跟踪数据集" class="headerlink" title="跟踪数据集"></a>跟踪数据集</h2><p>为了提供一个标准和公平的目标跟踪器性能评估，许多benchmarks被提出。除了短期跟踪外，一些最近的数据集提供了短期和长期跟踪序列。公开的基准数据集包含各种跟踪挑战，包括尺度变化(SV)，出视野(OV)，形变(DEF)，低分辨率(LR)，光照变化(IV)，平面外旋转(OPR)，遮挡(OCC)，背景杂波(BC)，快速运动(FM)，平面内旋转(IPR)，运动模糊(MB)、部分遮挡(POC)、摄像机突然运动(CM)、长宽比变化(ARC)、全遮挡(FOC)、视点变化(VC)、相似物体(SOB)、物体颜色变化(OCC)、绝对运动(SOB)、目标旋转(ROT)、场景复杂度(SCO)、快速摄像机运动(FCM)、低分辨率物体(LRO)、运动变化(MOC)。表1给出了我们在实验比较中使用的每个数据集的描述。接下来，简要描述每个跟踪数据集。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227154029.png" alt=""></p>
+<p><strong>OTB100</strong> 22个对象类别的100个视频组成，与OTB50相同的11个跟踪属性。OTB100数据集的平均分辨率为356 × 530，视频长度在71 - 3872帧之间。</p>
+<p><strong>TC128</strong> TC128用于评价颜色对视觉跟踪的影响。它包含27个对象类别的128个完整标注的彩色视频序列。在128个序列中，有78个序列不同于OTB100，而剩下的50个序列在两个数据集中是共同的。TC128也包含11个跟踪属性，类似于OTB100(表1)，平均分辨率为461  × 737，最小帧数71帧，最大帧数3872帧。</p>
+<p><strong>UAV123</strong> UAV是低空无人机捕获的真实和合成高清视频序列，分为两个子集，UAV123和UAV20L。UAV123包含9种对象类别的123个短序列，最小帧数109帧，最大帧数3085帧。UAV20L由飞行模拟器生成的5个对象类的20个长视频组成。这些序列包含最小1717帧和最大5527帧。两个数据集子集都包含1231 ×  699的平均分辨率，并带有12个跟踪属性。</p>
+<p><strong>VOT2016</strong> 包含60个序列，每个序列每帧都由不同的属性标注，包括OCC、IV、MOC、ARC、SCO和FCM。序列的平均分辨率为757×480，最小帧数为48，最大帧数为1507。</p>
+<p><strong>VOT2018</strong> 该数据集由短期和长期挑战组成。VOT2018 ShortTerm (VOT2018-st)挑战由24个对象类别的60个序列组成。短期挑战序列的平均分辨率为758 ×  465，最小帧数为41帧，最大帧数为1500帧。长期分割由35个长期序列组成。序列的长期平均分辨率为896 ×  468，最小帧数为1389，最大帧数为29700。</p>
+<p><strong>VOT2020</strong> 由五个子集组成，我们使用VOT2020短期(VOT2020-st)数据集来评估跟踪器的性能。VOT2020-ST与VOT2018-ST在视频数量、类数量和属性数量方面相同。区别在于标注由mask编码，并且重新定义了A,R,EAO。可以参考我之前写的<a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv7654043?from=search&amp;spm_id_from=333.337.0.0">VOT2020 测评指标</a>。</p>
+<p><strong>TrackingNet</strong> 由60643个序列和超过1400万个密集的包围框注释组成。它涵盖了27个不同的对象类。序列也由15个跟踪属性表示。数据集被划分为训练、验证和测试部分。训练集包含30643个序列，而测试集包含511个视频。在测试集中，序列的平均分辨率为591  × 1013，最小帧数为96，最大帧数为2368，帧数为30fps。</p>
+<p><strong>LaSOT</strong> 由1120个训练序列(2.8M帧)和280个测试序列(685K帧)组成。在每一帧中，所有序列都用边界框标注。对象类别是从ImageNet中选择的，包含70个不同的对象类别，每个类别包含20个目标序列。根据ARC、BC、FCM、DEF、POC、ROT和VC等14个属性对序列进行分类。序列的平均分辨率为632  × 1089。此外，该数据集包含非常长的序列，范围在1000到11,397帧之间。</p>
+<p><strong>GOT -10K</strong> 由WordNet语义层次结构中的10,000个视频组成。目的是为开发具有丰富运动轨迹的类无关跟踪器提供统一的训练和测试平台。这些序列被分类为563类运动物体、6种跟踪属性和87类运动，以覆盖现实世界中尽可能多的具有挑战性的模式。GOT-10K分为训练、验证和测试三部分。训练集包含9340个序列，480个物体类别；测试集包含420个视频，83个物体类别，每个序列平均长度为127帧。在测试集中，序列的平均分辨率为929  × 1638，最小帧数为51，最大帧数为920，帧数为10fps。</p>
+<h2 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h2><p><strong>Precision Plot</strong> 精度曲线基于中心位置误差，中心位置误差定义为目标物体的预测中心与真实目标框中心之间的平均欧氏距离。距离精度，定义为目标物体的中心定位误差在T像素范围内的帧数所占的百分比。通过绘制阈值范围内的距离精度来生成精度曲线，使用T=20的精度对跟踪器进行排名。</p>
+<p><strong>Success Plot</strong> 精度只度量跟踪器的定位性能，对于测量目标尺度变化不准确。因此考虑用IOU来衡量这一指标，成功率是预测IOU大于阈值T的百分比。通过将IOU阈值从0改变到1来生成成功率曲线，使用曲线下的面积对跟踪器进行排名。</p>
+<p><strong>Normalized Precision Plot</strong> 由于距离精度对目标尺度敏感，因此引入归一化精度，它计算相对于目标大小的误差，而不是考虑绝对距离。然后在0到0.5的范围内绘制相对误差曲线，这条曲线下的面积称为归一化精度，用于对跟踪器进行排序。</p>
+<p><strong>Average Overlap</strong> 度量预测和真实框的重叠率的平均值。</p>
+<p><strong>$SR_{0.50}$和$SR_{0.75}$</strong> 阈值为0.50和0.75时的成功率。</p>
+<p>在OTB100、TC128、UAV123和LaSOT数据集上，使用One pass评估标准，从精度和成功率方面衡量跟踪性能。这些数据集上的跟踪器是通过在第一帧上初始化并让它运行到序列的末尾来计算的。</p>
+<p>在VOT系列中，跟踪器一旦偏离目标就会被重置。VOT评估协议根据准确性(A)，鲁棒性(R)和期望平均重叠(EAO)对跟踪器进行比较。A是成功跟踪期间预测和真值的平均重叠。R表示跟踪器在跟踪过程中丢失目标(失败)的次数。一旦跟踪器丢失目标对象，复位机制将在某些帧后启动。EAO是一种估计跟踪器期望在与给定数据集具有相同视觉特性的大量短期序列上获得的平均重叠。</p>
+<h2 id="定量分析"><a href="#定量分析" class="headerlink" title="定量分析"></a>定量分析</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227162203.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227162224.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227162351.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227162405.png" alt=""></p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227162415.png" alt=""></p>
+<p>LaSOT和UAV123包含长序列和多个干扰，在这些数据集上性能较高的跟踪器具有较强的鲁棒性和重检测能力。我们观察到，最近的跟踪器DiMP和PrDiMP取得了很强的效果，SiamR-CNN中的干扰感知跟踪提高了此类场景中的鲁棒性。与LaSOT相比，TrackingNet和GOT10k包含短序列，鲁棒性和重检测能力的重要性要小得多。相反，这些数据集更看重高精度的预测框，比如SiamR-CNN和PrDiMP。此外，SiamR-CNN和SiamAttn在几个数据集均实现了良好的结果。除了SiamAttn在LaSOT和SiamRCNN在VOT上效果欠佳。在基于DCF的方法中，PrDiMP在所有评估的数据集中一致地实现SOTA结果。</p>
+<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227162909.png" alt=""></p>
+<p>图6展示了近年来不同benchmark上跟踪性能的提升趋势。可以看到OTB几乎饱和了，而最近推出的LaSOT、GOT10K和TrackingNet都显示了类似的趋势，性能还在持续上涨，且仍有较大空间。这表明，这些新的具有挑战性的benchmark对于SOTA跟踪器来说仍然是非常具有挑战性的，它们的引入显著地推动了视觉跟踪研究的上界。</p>
+<h2 id="速度比较"><a href="#速度比较" class="headerlink" title="速度比较"></a>速度比较</h2><p>KCF和STAPLE追踪器的速度明显最好，而DeepSRDCF和HCF等深度追踪器的竞争性能最差。</p>
+<h1 id="DISCUSSION-AND-CONCLUSIONS"><a href="#DISCUSSION-AND-CONCLUSIONS" class="headerlink" title="DISCUSSION  AND CONCLUSIONS"></a>DISCUSSION  AND CONCLUSIONS</h1><p><strong>Importance of end-to-end tracking framework</strong> 端到端训练不管对DCF还是Siamese跟踪都非常管用。随着大规模训练数据集的引入，这在过去几年才成为可能。</p>
+<p><strong>Importance of robust target modeling</strong> 虽然基于Siamese的方法在许多领域都表现出色，但基于端到端DCF的方法在挑战长期跟踪场景(如LaSOT)方面仍然显示出优势。这说明了通过在网络结构中嵌入判别学习模块来实现鲁棒在线目标外观建模的重要性。这些方法有效地整合了背景外观线索，并且在使用在线学习的跟踪过程中易于更新。</p>
+<p><strong>Target state estimation</strong> 基于Siamese的方法通过利用目标检测技术，推动了更精确的边框回归的进步。最近的基于单阶段(无锚框)的方法，如Ocean，实现了简单、准确和高效的边框回归。此外，这些策略是通用的，可以很容易地集成到任何视觉跟踪架构中。</p>
+<p><strong>Role of segmentation</strong> 分割可以提供更精确的像素级预测，此外，分割还可以改善跟踪本身的潜力，例如辅助目标模型更新。因此，未来的工作应着眼于将准确的分割集成到跟踪框架中。</p>
+<p><strong>Backbone architectures</strong> ResNet在视觉跟踪中仍然是最常用的特征提取方法，但在计算资源受限的平台ResNet的计算成本仍然较高。因此未来研究移动平台的高效backbone仍然是一个有趣的方向。</p>
+<p><strong>Estimating geometry</strong> 将DCF和Siamese方法往3D方向扩展。</p>
+<p><strong>Role of Transformers</strong> Transformer最近在各种视觉任务上都取得了成功，也被应用到了跟踪。未来还需要做更多的工作来进一步分析Transformer的有效性，以及它与DCF和Siamese的联系。</p>
+<p><strong>Future directions</strong> 1）与分割结合；2）与SLAM结合；3）与多目标跟踪结合。</p>
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+              
+          
+            <div class="post-nav-button float-right">
+                <a class="font-weight-bold text-right" href="/tracking/51-lighttrack/">      
+                    轻量化目标跟踪
+                </a>
+                <v-icon>chevron_right</v-icon>
+            </div>
+        
+    </div>
+</v-card>
+
+
+
+    <v-card class="comment-card elevation-2">
+        <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
+            
+                <v-tab><span id="comment-tab-0">gitalk</span></v-tab>
+            
+        </v-tabs>
+        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOlsiZ2l0YWxrIl0sImdpdGFsa19jbGllbnRfaWQiOiI2OTQ1MTJjNTYxZTdkNjQyMTM5ZiIsImdpdGFsa19jbGllbnRfc2VjcmV0IjoiMjE2OTI5MTRkYWI2YWJhOGI5ZTZjZDUyZTY2ZWFkY2ExMDIyNjZlYiIsImdpdGFsa19yZXBvIjoia29uZ2JpYS5naXRodWIuaW8iLCJnaXRhbGtfb3duZXIiOiJrb25nYmlhIiwiZ2l0YWxrX3NpZF90eXBlIjpudWxsLCJnaXRhbGtfZGlzdHJhY3Rpb25GcmVlTW9kZSI6dHJ1ZSwiZGlzcXVzX3Nob3J0bmFtZSI6bnVsbCwibGl2ZXJlX2RhdGFfdWlkIjpudWxsLCJ2YWxpbmVfbGVhbmNsb3VkX2FwcF9pZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfa2V5IjpudWxsLCJ2YWxpbmVfb3B0aW9uIjpudWxsLCJjaGFuZ3lhbl9hcHBfaWQiOm51bGwsImNoYW5neWFuX2FwcF9rZXkiOm51bGwsImNoYW5neWFuX3NpZF90eXBlIjpudWxsfQ== >
+            
+                <v-tab-item eager=true>
+                    
+                        <div id="gitalk-container"></div>
+                    
+                </v-tab-item>
+            
+        </v-tabs-items>
+    </v-card>
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2020 - 2021 zjp</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+    
+        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+
+
+</body>
+</html>

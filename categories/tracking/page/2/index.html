@@ -88,7 +88,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -107,7 +107,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="22" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="24" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -138,7 +138,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -202,8 +202,32 @@
     <v-timeline class="timeline" dense>
         <v-timeline-item class="timeline-header" color="secondary lighten-2">
             <span class="timeline-title">目标跟踪</span>
-            <span class="timeline-subtitle">分类</span>
+            <span class="timeline-subtitle">Categories</span>
         </v-timeline-item>
+        
+            <v-timeline-item fill-dot small color="secondary lighten-2">
+                <div class="timeline-item-post d-none d-md-block">
+                    <span class="timeline-item-time">2021.06.08</span>
+                    <a href="/tracking/42-rl-tracking/" class="timeline-item-title">强化学习在目标跟踪中的应用</a>
+                </div>
+                <div class="timeline-item-post-mobile d-block d-md-none">
+                    <span class="timeline-item-time">2021.06.08</span><br>
+                    <a href="/tracking/42-rl-tracking/" class="timeline-item-title">强化学习在目标跟踪中的应用</a>
+                </div>
+                <v-divider></v-divider>
+            </v-timeline-item>
+        
+            <v-timeline-item fill-dot small color="secondary lighten-2">
+                <div class="timeline-item-post d-none d-md-block">
+                    <span class="timeline-item-time">2021.05.26</span>
+                    <a href="/tracking/41-siamrcr/" class="timeline-item-title">SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</a>
+                </div>
+                <div class="timeline-item-post-mobile d-block d-md-none">
+                    <span class="timeline-item-time">2021.05.26</span><br>
+                    <a href="/tracking/41-siamrcr/" class="timeline-item-title">SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</a>
+                </div>
+                <v-divider></v-divider>
+            </v-timeline-item>
         
             <v-timeline-item fill-dot small color="secondary lighten-2">
                 <div class="timeline-item-post d-none d-md-block">
@@ -297,30 +321,6 @@
                 <div class="timeline-item-post-mobile d-block d-md-none">
                     <span class="timeline-item-time">2021.04.23</span><br>
                     <a href="/tracking/33-transform-tracking/" class="timeline-item-title">Transform与目标跟踪</a>
-                </div>
-                <v-divider></v-divider>
-            </v-timeline-item>
-        
-            <v-timeline-item fill-dot small color="secondary lighten-2">
-                <div class="timeline-item-post d-none d-md-block">
-                    <span class="timeline-item-time">2020.03.10</span>
-                    <a href="/tracking/4-mlt/" class="timeline-item-title">Deep Meta Learning for Real-Time Target-Aware Visual Tracking</a>
-                </div>
-                <div class="timeline-item-post-mobile d-block d-md-none">
-                    <span class="timeline-item-time">2020.03.10</span><br>
-                    <a href="/tracking/4-mlt/" class="timeline-item-title">Deep Meta Learning for Real-Time Target-Aware Visual Tracking</a>
-                </div>
-                <v-divider></v-divider>
-            </v-timeline-item>
-        
-            <v-timeline-item fill-dot small color="secondary lighten-2">
-                <div class="timeline-item-post d-none d-md-block">
-                    <span class="timeline-item-time">2020.03.06</span>
-                    <a href="/tracking/3-anchorfree-siamese/" class="timeline-item-title">Anchor Free的孪生目标跟踪</a>
-                </div>
-                <div class="timeline-item-post-mobile d-block d-md-none">
-                    <span class="timeline-item-time">2020.03.06</span><br>
-                    <a href="/tracking/3-anchorfree-siamese/" class="timeline-item-title">Anchor Free的孪生目标跟踪</a>
                 </div>
                 <v-divider></v-divider>
             </v-timeline-item>
