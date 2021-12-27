@@ -1635,7 +1635,7 @@
 <p>LaSOT和UAV123包含长序列和多个干扰，在这些数据集上性能较高的跟踪器具有较强的鲁棒性和重检测能力。我们观察到，最近的跟踪器DiMP和PrDiMP取得了很强的效果，SiamR-CNN中的干扰感知跟踪提高了此类场景中的鲁棒性。与LaSOT相比，TrackingNet和GOT10k包含短序列，鲁棒性和重检测能力的重要性要小得多。相反，这些数据集更看重高精度的预测框，比如SiamR-CNN和PrDiMP。此外，SiamR-CNN和SiamAttn在几个数据集均实现了良好的结果。除了SiamAttn在LaSOT和SiamRCNN在VOT上效果欠佳。在基于DCF的方法中，PrDiMP在所有评估的数据集中一致地实现SOTA结果。</p>
 <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/52-survey/20211227162909.png" alt=""></p>
 <p>图6展示了近年来不同benchmark上跟踪性能的提升趋势。可以看到OTB几乎饱和了，而最近推出的LaSOT、GOT10K和TrackingNet都显示了类似的趋势，性能还在持续上涨，且仍有较大空间。这表明，这些新的具有挑战性的benchmark对于SOTA跟踪器来说仍然是非常具有挑战性的，它们的引入显著地推动了视觉跟踪研究的上界。</p>
-<h2 id="速度比较"><a href="#速度比较" class="headerlink" title="速度比较"></a>速度比较</h2><p>KCF和STAPLE追踪器的速度明显最好，而DeepSRDCF和HCF等深度追踪器的竞争性能最差。</p>
+<h2 id="速度比较"><a href="#速度比较" class="headerlink" title="速度比较"></a>速度比较</h2><p>KCF和STAPLE追踪器的速度明显最好，而DeepSRDCF和HCF等借助离线深度学习特征的跟踪器速度较慢。</p>
 <h1 id="DISCUSSION-AND-CONCLUSIONS"><a href="#DISCUSSION-AND-CONCLUSIONS" class="headerlink" title="DISCUSSION  AND CONCLUSIONS"></a>DISCUSSION  AND CONCLUSIONS</h1><p><strong>Importance of end-to-end tracking framework</strong> 端到端训练不管对DCF还是Siamese跟踪都非常管用。随着大规模训练数据集的引入，这在过去几年才成为可能。</p>
 <p><strong>Importance of robust target modeling</strong> 虽然基于Siamese的方法在许多领域都表现出色，但基于端到端DCF的方法在挑战长期跟踪场景(如LaSOT)方面仍然显示出优势。这说明了通过在网络结构中嵌入判别学习模块来实现鲁棒在线目标外观建模的重要性。这些方法有效地整合了背景外观线索，并且在使用在线学习的跟踪过程中易于更新。</p>
 <p><strong>Target state estimation</strong> 基于Siamese的方法通过利用目标检测技术，推动了更精确的边框回归的进步。最近的基于单阶段(无锚框)的方法，如Ocean，实现了简单、准确和高效的边框回归。此外，这些策略是通用的，可以很容易地集成到任何视觉跟踪架构中。</p>
