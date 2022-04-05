@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/4-mlt/" class="toc-header">文章目录</a>
+            <a href="/tracking/4-mlt/" class="toc-header">Table of Contents</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">3.</span> <span class="toc-text">Experiments</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Conclusion"><span class="toc-number">4.</span> <span class="toc-text">Conclusion</span></a></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      发布于:&nbsp;2020-03-10
+      Posted on:&nbsp;2020-03-10
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      更新于:&nbsp;2021-08-11
+      Edited on:&nbsp;2022-04-05
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -285,40 +285,40 @@
     
     
     <div class="post-content typo">
-        <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810211247.png" alt=""></p>
+        <p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810211247.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1712.09153">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
 <p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
 <span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
 <p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
 <p><strong>Components</strong></p>
 <p>匹配网络是标准的孪生网络</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
 <p>其中，$x$是模板，$z$是搜索区域，$w = \{ w_1, w_2, …, w_N \}$​表示每一层卷积层的权重参数。</p>
 <p>元学习网络根据历史得到的M个context patch $z = \{z_1, z_2, …, z_M\}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
 <p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811094325.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094325.png" style="zoom:80%;" /></p>
 <p>将生成的$\omega^{target}$与原始的权重拼接起来得到新的自适应权重$w^{adapt} = \{ w_1, w_2, …, [w_N, \omega^{target}] \}$​，将其用于目标定位</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811094727.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094727.png" style="zoom:80%;" /></p>
 <p>此外，元学习网络还生成了通道注意力权重进一步调整特征表示空间。</p>
 <p><strong>Tracking algorithm</strong></p>
 <p>在跟踪过程中，会保存一个context image的集合 $z_{mem} = \{ z_1, z_2, …, z_K \}$​​​​​​ 以及对应生成的响应图$\hat{y}_{mem} = \{ \hat{y}_1, \hat{y}_2, …, \hat{y}_K \}$​​​​​​。只有当 $\hat{y}$​​​​​​ 的最大响应值大于阈值时，$z$​​​​​​才会被加入memory集合中。在更新权重时，从K个context image中选择M个来进行计算，筛选标准是$\hat{y}_{mem}$​​​​​​​的最小熵，熵越大响应图分布越杂乱，这样可以避免模糊的响应图引入false positive。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811101915.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811101915.png" style="zoom:80%;" /></p>
 <p>整体跟踪流程如下：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811094851.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094851.png" style="zoom:80%;" /></p>
 <p><strong>Training</strong></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811102117.png" style="zoom: 67%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102117.png" style="zoom: 67%;" /></p>
 <p>首先单独训练匹配网络，然后在此基础上按照图3的方式训练元学习网络。类似在线跟踪过程，从同一个视频序列中随机采样 M’ 个context patch，然后从中选取M个送入元学习网络训练（M’ ＞M），这样是为了避免过拟合。优化损失为：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811102811.png" style="zoom:80%;" /></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103012.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103215.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103248.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102811.png" style="zoom:80%;" /></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103012.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103215.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103248.png" alt=""></p>
 <p>消融实验，MLT-mt表示只有匹配网络，MLT-mt+ft表示对匹配网络最后一层进行在线微调更新。可以发现在线微调甚至比不进行更新效果更差，因为过拟合。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103028.png" style="zoom: 67%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103028.png" style="zoom: 67%;" /></p>
 <p>最后可视化了target-specific特征空间的效果，可以更聚焦目标并且抑制周围的干扰。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/4-mlt/20210811103525.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103525.png" style="zoom:80%;" /></p>
 <h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>这篇文章发表在ICCV2019，整体实验结果并没有刷得太高，但是meta learning运用在siamese跟踪中的思想无疑是优秀的。目标跟踪同样可以看做是一个few-shot learning的任务，如何运用历史跟踪的少量结果来微调模型参数，meta learning是一个不错的方案。</p>
 
     </div>

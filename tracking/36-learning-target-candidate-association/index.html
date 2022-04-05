@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/36-learning-target-candidate-association/" class="toc-header">文章目录</a>
+            <a href="/tracking/36-learning-target-candidate-association/" class="toc-header">Table of Contents</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Motivation"><span class="toc-number">1.</span> <span class="toc-text">Motivation</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Overview"><span class="toc-number">2.1.</span> <span class="toc-text">Overview</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Problem-Formulation"><span class="toc-number">2.2.</span> <span class="toc-text">Problem Formulation</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Target-Candidate-Extraction"><span class="toc-number">2.3.</span> <span class="toc-text">Target Candidate Extraction</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Candidate-Embedding-Network"><span class="toc-number">2.4.</span> <span class="toc-text">Candidate Embedding Network</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Candidate-Matching"><span class="toc-number">2.5.</span> <span class="toc-text">Candidate Matching</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Learning-Candidate-Association"><span class="toc-number">2.6.</span> <span class="toc-text">Learning Candidate Association</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object-Association"><span class="toc-number">2.7.</span> <span class="toc-text">Object Association</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Memory-Sample-Confidence"><span class="toc-number">2.8.</span> <span class="toc-text">Memory Sample Confidence</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">3.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ablation-Study"><span class="toc-number">3.1.</span> <span class="toc-text">Ablation Study</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#State-of-the-art-Comparison"><span class="toc-number">3.2.</span> <span class="toc-text">State-of-the-art Comparison</span></a></li></ol></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      发布于:&nbsp;2021-04-28
+      Posted on:&nbsp;2021-04-28
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      更新于:&nbsp;2021-10-08
+      Edited on:&nbsp;2022-04-05
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -285,7 +285,7 @@
     
     
     <div class="post-content typo">
-        <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428110851.png" alt=""></p>
+        <p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428110851.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.16556">论文</a> <a target="_blank" rel="noopener" href="https://github.com/visionml/pytracking">代码</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>Martin参与的新作，出发点和之前的<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2003.11014">KYS</a>类似，均指出仅外观模型不足以区分目标和干扰物，因此需要对所有潜在目标保持跟踪。不同的是KYS是通过一个传播模块隐式地跟踪所有对象，最后作用于外观模型的输出来抑制干扰响应；而本文则是借助SuperGlue显式地匹配帧间所有的候选对象，构建跟踪链，有点多目标跟踪的意思，可解释性也更强。</p>
 <ul>
@@ -294,20 +294,20 @@
 <li>针对跟踪数据集没有对干扰物标注的问题，提出了一种结合部分标注和自监督的训练策略。</li>
 </ul>
 <span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428113928.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428113928.png" alt=""></p>
 <p>整体框架如上图，base tracker使用SuperDiMP预测出分数图$s$，选择高得分的几个位置用于生成目标候选 $v_i$。然后对每个候选提取一系列特征，包括分类分数$s_i$，位置$c_i$，和 backbone提取的外观模型$f_i$，将这些特征编码编码成一个单独的特征向量$z_i$。将当前帧和前一帧的所有候选送入candidate embedding network，一起处理得到每个候选对象的丰富嵌入$h_i$。最后利用这些特征来计算相似矩阵S，并使用最优匹配策略估计两个连续帧之间的候选分配矩阵A。</p>
 <p>有了这个分配概率矩阵，就可以建立当前帧的所有候选目标$O$与上一帧所有识别出来的目标$O’$之间的关联，包括消失和新出现的目标。用这种传播策略来推断当前帧中的真实目标对象$\hat{o}$。此外，在在线更新目标分类器时，通过计算目标检测置信度$\beta$来管理存储和控制样本权重。</p>
 <h2 id="Problem-Formulation"><a href="#Problem-Formulation" class="headerlink" title="Problem Formulation"></a>Problem Formulation</h2><p>首先将问题公式化，定义候选目标集合 $V = \{v_i\} _ {i=1}^N$，N为候选个数，$V’$和$V$分别表示前一帧和当前帧的候选集合。两帧的候选关联问题就是寻找$V’$和$V$之间的分配矩阵$A$。若$v’ _ {i}$和$v_{j}$关联，那么$A_{i,j}=1$，否则$A_{i,j}=0$。</p>
 <p>实际操作中，并不是每个候选都能找到相应的匹配，因此引入dustbin来处理未匹配的节点。大致的想法就是额外增加一行一列来存放未匹配的节点。比如候选$v_j$只在集合$V$中出现，则$A_{N’+1,j}=1$；类似的，若$v’ _ i$ 在集合$V$中没有匹配对象，则$A_{i,N+1}=1$。</p>
 <p>作者设计了一种可学习方法来预测这个分配矩阵A，首先需要提取候选对象的特征表示，接下来讨论。</p>
 <h2 id="Target-Candidate-Extraction"><a href="#Target-Candidate-Extraction" class="headerlink" title="Target Candidate Extraction"></a>Target Candidate Extraction</h2><p>目标候选对象需要满足两个条件，响应得分是局部最大，且要超过一定阈值。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428170210.png" style="zoom:;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428170210.png" style="zoom:;" /></p>
 <p>实现时使用$5 \times 5$ max-pooling找到局部极值，阈值$\tau=0.05$。</p>
 <p>接下来为目标候选构建特征编码</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428170144.png"  /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428170144.png"  /></p>
 <p>包括响应得分$s_i$，位置$c_i$，和 backbone在该位置提取的外观模型$f_i$。$\psi$ 表示MLP，将 s 和 c 变换到和 f 一样的维度。</p>
 <h2 id="Candidate-Embedding-Network"><a href="#Candidate-Embedding-Network" class="headerlink" title="Candidate Embedding Network"></a>Candidate Embedding Network</h2><p>为了进一步丰富编码特征，特别是便于提取特征的同时又能识别邻近的候选特征，作者引入了候选嵌入网络。这里借鉴了SuperGlue中的self-attention和cross-attention交换不同节点的信息。最后经过一个线性变换，得到每个候选$v_i$的编码$h_i$。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428171233.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428171233.png" alt=""></p>
 <h2 id="Candidate-Matching"><a href="#Candidate-Matching" class="headerlink" title="Candidate Matching"></a>Candidate Matching</h2><p>用特征点积来度量候选$v’ _ {i} \in V’$和$v_j \in V$之间的相似性，$S_{i,j}=&lt;h’_i,h_j&gt;$，h是对应的特征编码。</p>
 <p>有了相似性得分矩阵S，接下来需要构建分配矩阵A，通过最大化总体得分$\Sigma_{i,j} S_{i,j} A_{i,j} $ 可得到A，这是一个最优传输问题。</p>
 <p>在此之前，还需要考虑dustbin，它是一个虚拟概念，没有对应的特征编码h，因此不能直接预测相似性得分。只有当一个候选对象与所有其他候选对象的相似度分数足够低时，它才属于dustbin。上面得到的相似度矩阵S仅代表了不考虑dustbin的候选对象之间的初始关联预测。本文没有提及如何处理dustbin的相似性得分，参照SuperGlue是给所有dustbin赋予一个相同的可学习参数。</p>
@@ -318,40 +318,40 @@
 </ul>
 <p>最后通过Sinkhorn算法（迭代）解出最优分配矩阵。</p>
 <p>这一套流程也是借鉴了SuperGlue，这里贴出它的示意图。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428181327.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428181327.png" alt=""></p>
 <h2 id="Learning-Candidate-Association"><a href="#Learning-Candidate-Association" class="headerlink" title="Learning Candidate Association"></a>Learning Candidate Association</h2><p>上述流程的训练需要知道所有候选之间的匹配关系作为标签，但跟踪数据集只有唯一目标的标注。所以作者提出了部分监督和自监督结合的方式。</p>
 <p><strong>部分监督损失：</strong>只对有标注的那对目标候选计算loss，另外为了模拟遮挡和重检测，人为地排除一些候选并将其替换为dustbin</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428182311.png"  /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428182311.png"  /></p>
 <p>其中$(l’,l)=(i,j)$，$(l’,l)=(N’+1,j)$, $(l’,l)=(i,N+1)$.</p>
 <p><strong>自监督损失：</strong>自监督的一个候选$V$是由另外的候选$V’$增广变换而来的，因此它们可以构建一一对应关系$C=\{(i,i)\}^N_{i=1}$，增广策略包括随机平移位置$c_i$，增减响应得分$s_i$，以及变换图像对特征$f_i$进行变换。此外，也像上面部分监督一样模拟了遮挡和重检测。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428202146.png"  /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428202146.png"  /></p>
 <p>最后将二者相加得到最终loss。</p>
 <p><strong>Data Mining:</strong> 有价值的训练样本是那些出现干扰物导致跟踪失败或者跟踪置信度很低的子序列，这样才能包含更多候选供网络学习。因此先使用base tracker跑一遍找到这些困难样本。</p>
 <p><strong>Training Details:</strong> 先训练SuperDiMP（这里不训练在线分类的参数，可能是因为想要获取更多失败的样本），跑一遍数据找到难样本。然后冻结base tracker的参数只训练后半部分网络。</p>
-<h2 id="Object-Association"><a href="#Object-Association" class="headerlink" title="Object Association"></a>Object Association</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210428205314.png" alt=""></p>
+<h2 id="Object-Association"><a href="#Object-Association" class="headerlink" title="Object Association"></a>Object Association</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428205314.png" alt=""></p>
 <p>在线跟踪时对所有潜在对象保持跟踪，并构建跟踪链，如图3所示。若当前的候选对象都与该对象没有关联，那么该对象就会从场景中消失。若有新的对象出现则新增链并赋予新的对象id。对于关联上的对象，将得分$s_i$添加到历史分数中。此外，当候选对应关系不确定，即分配概率小于$\tau=0.75$时，我们删除旧的对象并创建一个新的对象。</p>
 <p>这样所有候选对象都与一个已经存在的或新创建的对象相关联，若上一帧检测到的真实目标在当前帧有关联对象，则暂定该关联对象是目标。为了避免该关联对象是干扰，还需将它的历史得分与当前其他候选对象的得分进行比较，如果另一个对象在当前帧中获得的分类分数高于当前选择对象在过去获得的所有分数，我们就选择这个对象作为目标；否则还是保持当前选择对象不变。</p>
 <p>若上一帧检测到的真实目标在当前帧没有关联对象，则进行重检测，需满足：1. 分类得分最高；2. 分类得分大于阈值$\eta =0.25$。</p>
 <p>整个算法流程如下图：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429161216.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210429161216.png" alt=""></p>
 <center>'.' 表示访问对象的属性</center>
 
 <h2 id="Memory-Sample-Confidence"><a href="#Memory-Sample-Confidence" class="headerlink" title="Memory Sample Confidence"></a>Memory Sample Confidence</h2><p>base tracker在线更新的训练样本采用先入先出的策略进行替换，并仅基于存在的寿命时间对样本加权。本文则是将分类得分也考虑进来，计算在线优化损失时综合考虑了寿命时间和分类得分对样本进行加权：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429165636.png"  /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210429165636.png"  /></p>
 <p>$\alpha$ 表示样本存在的时间，越早的样本值越小；$\beta$表示分类得分。此外，训练样本更新时替换的是$\alpha \beta$最小的样本而不是简单替换最早的样本。</p>
 <p><strong>Inference details</strong></p>
 <p>base tracker搜索区域取决于当前估计的边界框大小。当目标物体被遮挡或出视野时，跟踪器通常只检测到目标的一小部分，并估计出比之前帧更小的边界框，相应的搜索区域也会变小，这对于跟踪失败后的重捕是不利的。因此，如果在目标丢失前搜索区域大幅缩小，我们将搜索区域重置为以前的大小，以便于重新检测。</p>
 <p>此外，如果只有一个高分目标出现在前一帧和当前帧中。我们选择这个候选对象作为目标，省略运行目标候选关联网络来加速跟踪。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429165050.png" alt=""></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210429165050.png" alt=""></p>
 <p>memory sample confidence 在LaSOT提升比较大，NFS和UAV123没啥影响，说明它在长时跟踪中的作用更大。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429165254.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210429165254.png" alt=""></p>
 <p>比较了提出的部分监督损失，自监督损失和数据挖掘的作用，每一项都有提升。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429165349.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210429165349.png" alt=""></p>
 <p>表3分析了学习在线分类器过程中加入分类得分的影响。第一列表示增加了分类得分来考虑替换训练样本，第二列表示在计算在线损失时增加分类得分对样本加权，第三列表示在线学习时忽略了得分较低的低质量样本。</p>
-<h2 id="State-of-the-art-Comparison"><a href="#State-of-the-art-Comparison" class="headerlink" title="State-of-the-art Comparison"></a>State-of-the-art Comparison</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429172159.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429172214.png" alt=""></p>
+<h2 id="State-of-the-art-Comparison"><a href="#State-of-the-art-Comparison" class="headerlink" title="State-of-the-art Comparison"></a>State-of-the-art Comparison</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210429172159.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210429172214.png" alt=""></p>
 <p>对LaSOT数据集，$T&lt;0.7$时本文方法指标明显更高，证明其鲁棒性。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/36-learning-target-candidate-association/20210429172329.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210429172329.png" alt=""></p>
 
     </div>
     <!--文末结束语-->

@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/2-detection-in-tracking/" class="toc-header">文章目录</a>
+            <a href="/tracking/2-detection-in-tracking/" class="toc-header">Table of Contents</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><span class="toc-number">1.</span> <span class="toc-text">Bridging the Gap Between Detection and Tracking: A Unified Approach</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><span class="toc-number">2.</span> <span class="toc-text">GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Learning-to-Track-Any-Object"><span class="toc-number">3.</span> <span class="toc-text">Learning to Track Any Object</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection"><span class="toc-number">4.</span> <span class="toc-text">Siam R-CNN: Visual Tracking by Re-Detection</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><span class="toc-number">5.</span> <span class="toc-text">Tracking by Instance Detection: A Meta-Learning Approach</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      发布于:&nbsp;2020-02-16
+      Posted on:&nbsp;2020-02-16
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      更新于:&nbsp;2021-07-26
+      Edited on:&nbsp;2022-04-05
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -295,32 +295,32 @@
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.12836">Siam R-CNN: Visual Tracking by Re-Detection</a></li>
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2004.00830">Tracking by Instance Detection: A Meta-Learning Approach</a></li>
 </ul>
-<h1 id="Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><a href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach" class="headerlink" title="Bridging the Gap Between Detection and Tracking: A Unified Approach"></a>Bridging the Gap Between Detection and Tracking: A Unified Approach</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234243.png" alt=""></p>
+<h1 id="Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><a href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach" class="headerlink" title="Bridging the Gap Between Detection and Tracking: A Unified Approach"></a>Bridging the Gap Between Detection and Tracking: A Unified Approach</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234243.png" alt=""></p>
 <p>从结构图可以很直观的看出这就是Faster RCNN的框架，作者将目标跟踪任务看成是one-shot object detection 和 few-shot instance classification 的组合。前者是一个class-level的子任务用来寻找和目标相似的候选框，后者是instance-level的任务用来区分目标和干扰物。主要有两个模块：Target-guidence module(TGM) 和 few-shot instance classifier。</p>
 <p>TGM对目标和搜索区域的特征以及它们在主干中的相互作用进行编码，相当于让网络更关注于与目标相关的instance，后面几篇文章也用了不同的方法来实现这个目的。</p>
 <p>TGM虽然使检测器聚焦于与目标相关的物体，但忽略了周围的背景干扰。为了弥补这一点，提出了few-shot instance classifier。 然而，直接从头开始训练耗时且容易导过拟合。因此作者通过Model-Agnostic Meta Learning (MAML)进行few-shot finetune，增强判别性进一步消除distractors。</p>
 <p>MAML的目的是训练一组初始化参数，<strong>通过在初始参数的基础上进行一或多步的梯度调整，来达到仅用少量数据就能快速适应新task的目的，</strong>示意图如下：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234331.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234331.png" alt=""></p>
 <p>域自适应的检测器整体训练流程如下图：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234353.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234353.png" alt=""></p>
 <p>输入是三元组，包括examplar, support, query，训练分为inner and outer optimization loops。对于Inner optimization loop中，在support image上计算的loss用来微调meta-layers即detector heads的参数，然后用微调后的参数计算meta-loss其梯度用于更新outer optimization loop。具体公式可以参考原文。</p>
 <p>在线跟踪中将之前帧的检测结果作为训练样本在线更新detector head的参数。</p>
 <p>作者称这是第一篇将目标检测框架应用到跟踪上的通用框架，检测模型可以用Faster RCNN，SSD等，速度上SSD模型为10FPS   Faster RCNN模型为3FPS。</p>
 <hr>
-<h1 id="GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><a href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking" class="headerlink" title="GlobalTrack: A Simple and Strong Baseline for Long-term Tracking"></a>GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234652.png" alt=""></p>
+<h1 id="GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><a href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking" class="headerlink" title="GlobalTrack: A Simple and Strong Baseline for Long-term Tracking"></a>GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234652.png" alt=""></p>
 <p>这篇文章构建了一个global instance search tracker，主要思想是利用target来引导网络搜索特定instance，与上一篇的TGM模块思想类似，不过这里对在RPN阶段和分类回归阶段都加入了target信息进行引导。对应的就是Query-guided RPN 和 Query-guided RCNN。</p>
 <p><strong>Query-guided RPN</strong></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424234747.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234747.png" alt=""></p>
 <p>$z \in [k,k,c]$ 是query的ROI特征，$x \in [h,w,c]$ 是搜索图像的特征。$f_z$ 用 $k \times k$ 0-padding的卷积将 $z$ 转换为 $1 \times 1$ 的核作用于搜索区域，$f_x$ 使用 $3 \times 3$ 1-padding的卷积。$f_{out}$ 是 $1 \times 1 \times c$  的卷积将通道数变回为c，这个过程不使用正则化和激活函数。</p>
 <p><strong>Query-guided RCNN</strong></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210424235530.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424235530.png" alt=""></p>
 <p> $z$ 定义同上，$x_i \in [k,k,c]$ 是提取的proposal的特征。$h_z$ 和 $h_x$ 均为 $3 \times 3$ 1-padding的卷积，$h_{out}$ 为$1 \times 1 \times c$  卷积。</p>
 <p>GlobalTrack 对视频每一帧的跟踪完全不依赖相邻帧，没有累计误差使得它在长期跟踪问题中准确率保持稳定。速度为6FPS。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426092832.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426092832.png" alt=""></p>
 <center>车牌在长期跟踪过程中消失了一段时间，当车牌再次出现的时候，其他跟踪算法就再也无法恢复跟踪了，而没有累计误差的 GlobalTrack不受前面的影响立刻跟踪到了目标。</center>
 
 <hr>
-<h1 id="Learning-to-Track-Any-Object"><a href="#Learning-to-Track-Any-Object" class="headerlink" title="Learning to Track Any Object"></a>Learning to Track Any Object</h1><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426093105.png" alt=""></p>
+<h1 id="Learning-to-Track-Any-Object"><a href="#Learning-to-Track-Any-Object" class="headerlink" title="Learning to Track Any Object"></a>Learning to Track Any Object</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426093105.png" alt=""></p>
 <center>图1 (a)从基于图像的数据集学习一个通用对象先验，(b)通过计算一个封闭形式的目标和背景之间的线性判别器使其适应于一个感兴趣的特定对象(例如左上角的总线)。这允许跟踪物体通过显著的变形，而不捕获干扰物</center>
 
 <p>本文重点在于将category-specific object detector 变成 category-agnostic, object-specific detector来做跟踪。想达到这个目的，需要处理如下两个关键的问题，如图1所示：</p>
@@ -329,9 +329,9 @@
 <li>如何进一步的将这种 generic prior 改为 particular instance of interst？</li>
 </ol>
 <p>针对问题1，作者构建了 a joint model for category-specific object detection and category-agnostic tracking。和之前类似，也是添加了目标特征的检测框架（基于 Mask R-CNN）如下图2所示 。其将目标模板作为输入，计算 feature embedding。然后该模板特征与测试图像计算相似性得到attention mask。attention mask又被用于重新加权空间特征，以检测感兴趣的物体。另外这个框架可以同时用于检测、跟踪和分割。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100348.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426100348.png" alt=""></p>
 <p>针对问题 2，本文计算一个线性分类器来区分第一帧的感兴趣目标和其他目标，通过最小二乘方法得到闭式解从而可以学习到一个更关注感兴趣instance的鲁棒特征。下图3通过一个例子说明，左下是直接用feature embedding计算的attention map，右下是用线性分类器计算的attention map，显然右下效果更好。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100433.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426100433.png" alt=""></p>
 <p>最后运行速度为7FPS。</p>
 <hr>
 <h1 id="Siam-R-CNN-Visual-Tracking-by-Re-Detection"><a href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection" class="headerlink" title="Siam R-CNN: Visual Tracking by Re-Detection"></a>Siam R-CNN: Visual Tracking by Re-Detection</h1><p>这个就是用重检测的思想做跟踪，也是基于RCNN框架的，同时使用Tracklet Dynamic Programming Algorithm去跟踪所有潜在的目标。</p>
@@ -339,7 +339,7 @@
 <p><a target="_blank" rel="noopener" href="https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection | CV home (kongbia.github.io)</a></p>
 <hr>
 <h1 id="Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><a href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach" class="headerlink" title="Tracking by Instance Detection: A Meta-Learning Approach"></a>Tracking by Instance Detection: A Meta-Learning Approach</h1><p>同样是域自适应方法将检测器转化成跟踪器，此篇更像是第一篇Bridging the Gap Between Detection and Tracking: A Unified Approach的进阶，不同的是本文没有额外添加模板引导分支，而是直接用标准的检测器通过元学习的方式做域自适应。避免了冗余结构使得速度大幅提升，达到40FPS。另外就是训练的时候加入了很多来自MAML++喝MetaSGD的技巧，效果更好。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/1-detection-in-tracking/20210426100802.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426100802.png" alt=""></p>
 <p>具体的解读可以参考我b站的笔记，后续会搬运到博客。</p>
 <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv5521209/">[Note7] Tracking by Instance Detection: A Meta-Learning Approach - 哔哩哔哩专栏 (bilibili.com)</a></p>
 <hr>

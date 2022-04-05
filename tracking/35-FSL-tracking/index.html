@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/35-FSL-tracking/" class="toc-header">文章目录</a>
+            <a href="/tracking/35-FSL-tracking/" class="toc-header">Table of Contents</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Introduction"><span class="toc-number">1.</span> <span class="toc-text">Introduction</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Cascaded-Tracking"><span class="toc-number">2.1.</span> <span class="toc-text">Cascaded Tracking</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Second-Stage-as-Few-Shot-Learning"><span class="toc-number">2.2.</span> <span class="toc-text">Second Stage as Few-Shot Learning</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Optimization-Based-Few-Shot-Learners"><span class="toc-number">2.3.</span> <span class="toc-text">Optimization-Based Few-Shot Learners</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Online-Tracking"><span class="toc-number">2.4.</span> <span class="toc-text">Online Tracking</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Implementation-Details"><span class="toc-number">3.</span> <span class="toc-text">Implementation Details</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Experiments"><span class="toc-number">4.</span> <span class="toc-text">Experiments</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Ablation-Study"><span class="toc-number">4.1.</span> <span class="toc-text">Ablation Study</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-with-State-of-the-Arts"><span class="toc-number">4.2.</span> <span class="toc-text">Comparison with State-of-the-Arts</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      发布于:&nbsp;2021-04-27
+      Posted on:&nbsp;2021-04-27
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      更新于:&nbsp;2021-08-10
+      Edited on:&nbsp;2022-04-05
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -285,60 +285,60 @@
     
     
     <div class="post-content typo">
-        <p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427173306.png" alt=""></p>
+        <p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427173306.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2103.10130">论文</a></p>
 <p>跟踪可以看成是一个特殊的 few-shot learning (FSL) 问题，本文提出了一个通用的两阶段框架，它能够使用大量的FSL算法并且保持较快的速度。第一阶段通过SiamRPN生成若干潜在候选框，第二阶段通过少样本分类的思想对候选框进行分类。按照这种coarse-to-fine结构，第一阶段为第二阶段提供稀疏的样本，在第二阶段可以更方便、高效地进行多种FSL算法。作者选取了几种基于优化的少样本学习方法进行证明。此外，该框架可将大多数FSL算法直接应用到视觉跟踪中，使研究人员能够在这两个领域相互交流。</p>
 <span id="more"></span>
 <h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>跟踪任务要求在有限的时间内通过少量数据学习对目标和背景的分类，这与FSL任务非常相似。在少样本学习中，我们假设训练任务和新任务之间存在共享的元知识；在视觉跟踪领域，这可以解释为模型在序列中跟踪任何未见过对象的适应性。</p>
 <p>已经有一些方法将FSL的概念引入跟踪了，比如DiMP和一些MAML的方法，它们将在线更新纳入离线训练阶段作为内环 (inner loop)，使得在线更新可以由手工设计转变成数据驱动。然而，这些方法大多局限于对<strong>整个图像</strong>的<strong>特定卷积核</strong>进行优化设计，而不是像在FSL中，使用<strong>稀疏样本</strong>进行<strong>更定制化的权值学习</strong>(例如矩阵乘法因子)，这限制了直接引入各种新的FSL算法，因为直接应用各种FSL算法，将整个图像的所有位置作为输入样本，必然会牺牲其跟踪速度，而且大量简单负样本会在学习中占主导导致模型判别力下降。</p>
 <p>因此作者提出这个通用的两阶段级联结构，在第一阶段过滤掉大量简单负样本，从而使得第二阶段可以应用各种FSL算法在信息丰富的稀疏样本上实现高效的跟踪。作者选取了几种具有不同目标函数，优化方法，或解空间的少样本学习方法进行验证，速度在40-60 FPS。</p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Cascaded-Tracking"><a href="#Cascaded-Tracking" class="headerlink" title="Cascaded Tracking"></a>Cascaded Tracking</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427203740.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Cascaded-Tracking"><a href="#Cascaded-Tracking" class="headerlink" title="Cascaded Tracking"></a>Cascaded Tracking</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427203740.png" alt=""></p>
 <p>整体跟踪框架如图1所示，第一阶段利用SiamRPN++生成若干个候选框，经过ROI Align后送入第二阶段进行少样本分类。第二阶段是一个N-shot-2-way的分类任务，所有候选使用在线生成的伪标签进行标记。</p>
 <h2 id="Second-Stage-as-Few-Shot-Learning"><a href="#Second-Stage-as-Few-Shot-Learning" class="headerlink" title="Second Stage as Few-Shot Learning"></a>Second Stage as Few-Shot Learning</h2><p>首先用数学形式定义任务，公式比较多直接贴图：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427205448.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427205448.png" style="zoom:80%;" /></p>
 <p>其中 $\theta$ 是meta-training stage (inner loop)中使用base loss $ L_{base} $ 优化得到的sequence-specific参数；然后用$\theta$ 去计算meta loss $ L_{meta} $，用于 meta-testing (outer loop) stage 来更新few-shot learner 的参数 $\rho$ 。而$\varphi $ 表示feature embedding的参数，就是前面一大堆特征提取之类的。</p>
 <p>这里的meta loss是用于分类，所以采用focal loss：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427211809.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427211809.png" style="zoom:80%;" /></p>
 <p>其中 $\gamma$ 是可学习的缩放因子，$\theta^T$ 是前景和背景的权重。$\alpha, \beta$ 是focal loss的超参数。</p>
 <p>few-shot learner $\Lambda$ 的选择对于公式1的影响巨大，它会被用来分类第一阶段得到的稀疏候选样本，下面介绍几种常用的基于优化（optimization-based）的方法。</p>
 <h2 id="Optimization-Based-Few-Shot-Learners"><a href="#Optimization-Based-Few-Shot-Learners" class="headerlink" title="Optimization-Based Few-Shot Learners"></a>Optimization-Based Few-Shot Learners</h2><p>首先默认目标是一个线性凸优化问题。</p>
 <p><strong>RR-prim-itr</strong> 就是在原空间求解岭回归问题，base loss $ L_{base} $ 为L2 loss，可以看成MAML的一种特例。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427215927.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427215927.png" style="zoom:80%;" /></p>
 <p>其中 $\omega_n$ 是每个样本的权重，为了加速优化，借鉴DiMP中的最速梯度下降：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427220212.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427220212.png" style="zoom:80%;" /></p>
 <p><strong>RR-dual-itr</strong> 迭代求解对偶空间中的岭回归，$\theta$ 当成训练集的特征向量的线性组合。对偶变量 $a$ 作为权重因子。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427220526.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427220526.png" style="zoom:80%;" /></p>
 <p>将公式5带入公式3，得到优化目标</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427220643.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427220643.png" style="zoom:80%;" /></p>
 <p>用二次规划的方式求解对偶变量 $a$ ，同样可以利用GPU加速。此外，特征向量在训练集中进行线性组合可以缓解过拟合问题。</p>
 <p><strong>RR-dual-cls</strong> 在对偶空间中开发了岭回归的封闭解用于分类。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427221514.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427221514.png" style="zoom:80%;" /></p>
 <p>优势就是把原始闭式解形式中的 $ \Phi_T\ \Phi$ 变成了 $ \Phi \Phi_T$，使得计算量由 $O(Nd^2)$ 下降到了$O(N^2d)$ ，样本量N远小于特征维数d。</p>
 <p><strong>SVM-dual-itr</strong> 在对偶空间迭代求解稀疏核用于线性分类。主要解决岭回归容易过拟合以及对噪声不鲁棒的问题。用SVM替换了最小二乘，细节不太明白，要去看原文。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427222444.png" style="zoom:80%;" /></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427222555.png" style="zoom:80%;" /></p>
-<h2 id="Online-Tracking"><a href="#Online-Tracking" class="headerlink" title="Online Tracking"></a>Online Tracking</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427230231.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427222444.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427222555.png" style="zoom:80%;" /></p>
+<h2 id="Online-Tracking"><a href="#Online-Tracking" class="headerlink" title="Online Tracking"></a>Online Tracking</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427230231.png" alt=""></p>
 <p><strong>Candidate Selection</strong> 候选框根据第一阶段的检测结果用阈值为0.2的NMS进行筛选，再通过ROI Align作用于第二阶段。初始化时选择24个样本，IOU最高的作为正样本，其余为负样本，并通过数据增广生成额外的8个正样本，共同用于初始化few-shot learner。跟踪过程中，选择NMS后M=8个样本送入few-shot learner进行判断输出最终结果。用融合得分（两个阶段的得分加权相加）top-k个候选框更新support set中最老的样本，其中最高的为正样本，其余为负样本，k=4。</p>
 <p><strong>Support Set Maintenance</strong> 先入先出（FIFO），对于每个样本赋予权重 $\omega$，随着与当前帧的间隔而指数衰减。原空间中的求解存储1000个样本，对偶空间只有60个，一方面是对CPU资源要求高，另外60个的性能已经很好。此外，第一帧的正样本永远会留在support set中。</p>
 <p><strong>Few-Shot Learner Update</strong> 原空间用公式4更新，对偶空间用滑动平均更新</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427231851.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427231851.png" style="zoom:80%;" /></p>
 <p><strong>Stage Fusion</strong> 将两个阶段的分类和回归结果融合，第二阶段除了得到分类得分，还会进行类似RCNN的回归refine。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427232137.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427232137.png" style="zoom:80%;" /></p>
 <h1 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h1><p>训练类似DiMP，每个task从一个视频中选择3个support和2个query。对于第二阶段，NMS后采样16个样本，IOU大于0.8为正，小于0.2为负。每张图片总共8个样本，其中最多两个正样本。meta-training和meta-test均按照上述准则。第一阶段的SiamRPN++用ATSS进行label assign。</p>
 <p>训练loss如下：</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427233344.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427233344.png" style="zoom:80%;" /></p>
 <p>两个阶段都需要分类回归，分类为focal loss，回归为L1 loss。注意这里rcnn的回归是在第一阶段的正样本基础上进行的。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427234324.png" alt=""></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427234324.png" alt=""></p>
 <p>比较了baseline（第一栏），不使用FSL的基于全连接的距离度量方法（第二栏），metric-based少样本学习方法（第三栏），以及本文使用的四种optimization-based少样本学习方法（第四栏）。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427234748.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427234748.png" alt=""></p>
 <p>只用第一阶段方法，SiamRPN++远不如DiMP；加入第二阶段后，这个差距被消除了，且速度将近领先了3倍。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427234945.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427234945.png" alt=""></p>
 <p>support set数量的影响，对于不同数据集最佳的数量是不一样的。但是即使是最低限度的M=40鲁棒性依然不错。</p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210428093340.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210428093340.png" alt=""></p>
 <p>最后可视化了候选框及置信度，可以看到第二阶段对于区分目标和干扰物非常有效。</p>
-<h2 id="Comparison-with-State-of-the-Arts"><a href="#Comparison-with-State-of-the-Arts" class="headerlink" title="Comparison with State-of-the-Arts"></a>Comparison with State-of-the-Arts</h2><p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427235535.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427235554.png" alt=""></p>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/35-FSL-tracking/20210427235609.png" alt=""></p>
+<h2 id="Comparison-with-State-of-the-Arts"><a href="#Comparison-with-State-of-the-Arts" class="headerlink" title="Comparison with State-of-the-Arts"></a>Comparison with State-of-the-Arts</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427235535.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427235554.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427235609.png" alt=""></p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文的创新点主要集中在两阶段和少样本学习。这两个东西单独来看都分别有人做过了，像SPM，SPLT就是先检候选框再分类的两阶段方法；而DiMP还有一些用了MAML的跟踪方法都属于少样本学习。作者将二者结合，最大的好处在于第二阶段得到的稀疏样本更适合FSL的任务设置，可以不用局限于任何特定类型的FSL算法，大幅加强了跟踪和FSL的联系。</p>
 
     </div>
