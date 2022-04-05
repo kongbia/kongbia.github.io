@@ -152,7 +152,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -168,7 +168,7 @@
     <v-divider></v-divider>
     
         <div class="post-toc">
-            <a href="/tracking/1-siamrcnn/" class="toc-header">Table of Contents</a>
+            <a href="/tracking/1-siamrcnn/" class="toc-header">文章目录</a>
             <div class="toc-content">
                 <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Contributions"><span class="toc-number">1.</span> <span class="toc-text">Contributions</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Method"><span class="toc-number">2.</span> <span class="toc-text">Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Siam-RCNN"><span class="toc-number">2.1.</span> <span class="toc-text">Siam RCNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Video-Hard-Example-Mining"><span class="toc-number">2.2.</span> <span class="toc-text">Video Hard Example Mining</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tracklet-Dynamic-Programming-Algorithm"><span class="toc-number">2.3.</span> <span class="toc-text">Tracklet Dynamic Programming Algorithm</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C"><span class="toc-number">3.</span> <span class="toc-text">实验</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
             </div>
@@ -193,7 +193,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -261,20 +261,20 @@
   <div class="post-header-meta">   
     <span>
       <v-icon color="">event</v-icon>
-      Posted on:&nbsp;2020-02-15
+      发布于:&nbsp;2020-02-15
     </span>
     <span>
       <v-icon color="">event_available</v-icon>
-      Edited on:&nbsp;2021-08-10
+      更新于:&nbsp;2022-04-05
     </span>
     <span>
       <v-icon color="">folder</v-icon>
-      In:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
     </span>
     
     <span>
       <v-icon color="">visibility</v-icon>
-      Views:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
     </span>
     
   </div>
@@ -287,7 +287,7 @@
     <div class="post-content typo">
         <p>Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。</p>
 <span id="more"></span>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424105346.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105346.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.12836">论文</a><br><a target="_blank" rel="noopener" href="https://github.com/SJTU-DL-lab/SiamRCNN">代码</a></p>
 <h1 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h1><ol>
 <li>将重检测思想用于跟踪。通过判断建议区域（region proposal）是否与模板区域（template region）相同，重检测图像中任何位置的模板对象，并对该对象的边界框进行回归，这种方法对目标大小和长宽比变化比较鲁棒；</li>

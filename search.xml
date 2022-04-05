@@ -5,7 +5,7 @@
     <url>/tracking/1-siamrcnn/</url>
     <content><![CDATA[<p>Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。</p>
 <span id="more"></span>
-<p><img src="https://gitee.com/zjphust/picgo/raw/master/blog/0-siamrcnn/20210424105346.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105346.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/1911.12836">论文</a><br><a href="https://github.com/SJTU-DL-lab/SiamRCNN">代码</a></p>
 <h1 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h1><ol>
 <li>将重检测思想用于跟踪。通过判断建议区域（region proposal）是否与模板区域（template region）相同，重检测图像中任何位置的模板对象，并对该对象的边界框进行回归，这种方法对目标大小和长宽比变化比较鲁棒；</li>
