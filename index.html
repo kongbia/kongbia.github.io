@@ -144,7 +144,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                Archives
+                归档
             </v-list-item-content>
             </v-list-item>
         
@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="24" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="25" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -194,7 +194,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    Total Visitors <span id="busuanzi_value_site_uv"></span>
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -262,6 +262,67 @@
         <v-row no-gutters>
           <v-col cols="auto">
             <div class="index-article-header-date font-weight-medium">
+              2022-05-24
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/transform/ >transform</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/CVPR2022/ >CVPR2022</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/53-SBT/">(SBT) Correlation-Aware Deep Tracking</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+Correlation-Aware Deep Tracking 论文
+写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。
+摘要切入点：鲁棒性和判别性都很重要
+现有问题：孪生网络无法判别性的建模目标和干扰
+提出新方法：target-dependent feature network 
+做法：通过attention，将跨图像的特征相关性嵌入特征网络的多个层中。
+好处：
+
+在多个层进行匹配，压制非目标特征，得到实例感知的特征提取；
+
+输出的搜索特征可以直接用于预测定位，无需互相关操作；
+
+可以在大量不成对数...
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/53-SBT/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
               2021-12-22
             </div>
           </v-col>
@@ -307,7 +368,7 @@ Visual Object Tracking with Discriminative Filters and Siamese Networks: A Surve
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/52-survey/">Read More</v-btn>
+        <v-btn text href="/tracking/52-survey/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -360,7 +421,7 @@ FEAR: Fast, Efficient, Accurate and Robust Visual Tracker
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/51-lighttrack/">Read More</v-btn>
+        <v-btn text href="/tracking/51-lighttrack/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -410,7 +471,7 @@ Motivation作者认为当前方法的局限在于，跟踪目标的特征仅被�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/50-IAT/">Read More</v-btn>
+        <v-btn text href="/tracking/50-IAT/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -461,7 +522,7 @@ Motivation本文着眼于移动平台的无人机目标跟踪，融合了CNN和T
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/49-SiamTPN/">Read More</v-btn>
+        <v-btn text href="/tracking/49-SiamTPN/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -506,7 +567,7 @@ Motivation本文是去年RPT方法的改进，作者来自同一团队。出发�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/48-RPT/">Read More</v-btn>
+        <v-btn text href="/tracking/48-RPT/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -556,7 +617,7 @@ Motivation和上一篇一样是研究跟踪的匹配问题。目前主流的跟�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/47-SAOT/">Read More</v-btn>
+        <v-btn text href="/tracking/47-SAOT/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -606,7 +667,7 @@ Motivation本文聚焦于孪生跟踪算法的匹配过程，目前主流的互�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/46-AutoMatch/">Read More</v-btn>
+        <v-btn text href="/tracking/46-AutoMatch/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -661,7 +722,7 @@ transformer难以处理小目标（参考deform DETR）。
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/45-HiFT/">Read More</v-btn>
+        <v-btn text href="/tracking/45-HiFT/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
@@ -707,58 +768,7 @@ Motivation基于孪生网络的跟踪算法均假定训练和测试数据遵循�
       </div>
       
       <div class="index-article-readmore ">
-        <v-btn text href="/tracking/44-DASiamRPN/">Read More</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-06-30
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Data-augmentation/ >Data augmentation</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Self-supervised/ >Self-supervised</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/43-Crop-Transform-Paste/">Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation现有的跟踪方法依赖大量高质量标注数据集训练，但很多复杂挑战场景并未出现在训练数据中。为了避免昂贵的人工标注，本文提出一种自监督学习方式。作者设计了Crop-Transform-Paste，通过模拟跟踪过程中各种场景变化，合成足够的训练数据。在合成数据中目标状态是已知的，因此无需人工标注。
-本文提出的自监督方法可以无缝集成到任何现有的跟踪框架中进行训练，实验证明提出的方法：1）在少样本跟踪场景中取得比监督学习更好的性能；2）能够处理目标形变、遮挡、背景干扰等各种挑战；3）可以与监督学习相结合，进一步提高性能。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/43-Crop-Transform-Paste/">Read More</v-btn>
+        <v-btn text href="/tracking/44-DASiamRPN/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
