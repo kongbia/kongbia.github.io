@@ -1,853 +1,1187 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="default">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Cache-Control" content="no-siteapp">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    
-    <meta name="referrer" content="no-referrer-when-downgrade">
-    
-    <meta name="renderer" content="webkit"/>
-    <meta name="force-rendering" content="webkit"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
-    <meta name="baidu-site-verification" content="code-Toh8kQYN7N" />
-    <meta name="google-site-verification" content="r3Cw4aIKBFXcYVnB8J-bxaQozYY6BHsoE3q5soJN3Po" />
-    <meta name="msvalidate.01" content="C5E4D0D01152A883DDA407CDCE62E1DA" />
-    <meta name='description' content='A personal blog that shares computer vision papers'>
-    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
-    
-    
-        <link rel="shortcut icon" href="/images/avatar.jpg">
-    
-     
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
-    
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
 <link rel="stylesheet" href="/css/main.css">
 
-    
-    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"সার্চ করা হচ্ছে...","empty":"আমরা উক্ত অনুসন্ধানের জন্য কোন ফলাফল খুঁজে পাইনি: ${query}","hits_time":"${hits} টি ফলাফল ${time} মিলিসেকেন্ড এ পাওয়া গেছে","hits":"${hits} টি ফলাফল পাওয়া গেছে"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="A personal blog that shares computer vision papers">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CV home">
+<meta property="og:url" content="https://www.zjp97.top/index.html">
+<meta property="og:site_name" content="CV home">
+<meta property="og:description" content="A personal blog that shares computer vision papers">
+<meta property="og:locale">
+<meta property="article:author" content="zjp">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://www.zjp97.top/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":true,"isPost":false,"lang":"default","comments":"","permalink":"","path":"index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CV home</title>
+  
 
 
 
 
 
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
 
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-    
-    
-    
-        <script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        
-            load: ['[tex]/mhchem'],
-        
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        
-            packages: {'[+]': ['mhchem']},
-        
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-          
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="নেভিগেশন বারের দৃশ্যমানতা টগল করুন" role="button">
+    </div>
+  </div>
 
-    
-    
-    
-    
-    <title>
-          
-            CV home
-        
-    </title>
-    
-    
-<meta name="generator" content="Hexo 5.4.0"></head>
+  <div class="site-meta">
 
-<body>
-    <div id="app">
-        <v-app>
-            <v-content id="page">
-                <v-container fluid>
-                    <v-row>
-                        <v-col cols="2" class="d-none d-md-block">
-                            <div id="sidebar" class="float-right">
-    <a href="/" rel="home">
-        <v-avatar size=96>
-            <img id="logo" src="/images/avatar.jpg">     
-        </v-avatar> 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <h1 class="site-title">CV home</h1>
+      <i class="logo-line"></i>
     </a>
-    <v-divider></v-divider>
-    <div class="mini-menu">
-        <v-btn icon href="/">
-            <v-icon>home</v-icon>
-        </v-btn>
-        <v-btn icon href="/categories/">
-            <v-icon>folder</v-icon>
-        </v-btn>
-        <v-btn icon href="/tags/">
-            <v-icon>bookmark</v-icon>
-        </v-btn>
-        <v-btn icon @click="SetNightMode">
-            <v-icon>{{ nightMode }}</v-icon>
-        </v-btn>
-    </div>
-    <v-list id="main-menu" class="font-weight-bold" flat>
-        
-            
-            <v-list-item href="/archives/" link>
-            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
-            <v-list-item-content>
-                归档
-            </v-list-item-content>
-            </v-list-item>
-        
-            
-            <v-list-item href="https://space.bilibili.com/5567932/article" link>
-            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
-            <v-list-item-content>
-                b站专栏
-            </v-list-item-content>
-            </v-list-item>
-        
-    </v-list>
-    <v-divider></v-divider>
-    
-        <v-list id="sub-menu" class="font-weight-medium" dense>
-            
-                
-                    <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="26" >
-                            <v-hover v-model="menuHover">
-                                <v-list-item-content>
-                                    <span>目标跟踪</span>                              
-                                </v-list-item-content>                           
-                            </v-hover>
-                        </v-badge>
-                    </v-list-item>
-                
-            
-        </v-list>    
-    
+      <p class="site-subtitle" itemprop="description">Computer vision paper notes</p>
+  </div>
 
-    <div id="footer">
-        <div class="footer-social">
-            
-                
-                <v-btn icon href="mailto:zjphust@gmail.com" target="_blank">
-                    <v-icon>fas fa-envelope</v-icon>
-                </v-btn>
-            
-                
-                <v-btn icon href="https://github.com/kongbia" target="_blank">
-                    <v-icon>fab fa-github</v-icon>
-                </v-btn>
-            
-        </div>
-        <v-divider></v-divider>
-        <div class="footer-content">
-            
-                <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
-                </span>
-                <br>
-            
-            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>
-            <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
-            <span>
-                &copy; 2020 - 2022 
-                zjp
-            </span>
-        </div>
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
+  </div>
 </div>
 
-                        </v-col>
-                        <v-col cols="12" md="10">
-                            <v-row>
-  <v-col cols="12" md="8" align-self="end">
-    <div id="site-header">
-      <div id="site-title">
-        <a href="/" rel="home">CV home</a>
-      </div>
-      <div id="site-description">A personal blog that shares computer vision papers</div>
-      <div id="mobile-menu" class="d-block d-md-none">
-        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
-        <div class="mobile-mini-menu">
-          <v-btn icon href="/">
-              <v-icon>home</v-icon>
-          </v-btn>
-          <v-btn icon href="/categories/">
-              <v-icon>folder</v-icon>
-          </v-btn>
-          <v-btn icon href="/tags/">
-              <v-icon>bookmark</v-icon>
-          </v-btn>
-          <v-btn icon @click="SetNightMode">
-              <v-icon>{{ nightMode }}</v-icon>
-          </v-btn>
-          
-            
-            <v-btn icon href="/archives/">
-              <v-icon>archive</v-icon>
-            </v-btn>
-          
-            
-            <v-btn icon href="https://space.bilibili.com/5567932/article">
-              <v-icon>rss_feed</v-icon>
-            </v-btn>
-          
-        </div>
-      </div>    
-    </div>
-  </v-col>  
-  <v-col cols="4" align-self="end" class="d-none d-md-block">
-    <v-col align-self="end">
-      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
-    </v-col> 
-  </v-col>
-</v-row>
 
-                            <v-card class="elevation-2 index-card">
+
+
+
+
+
+</div>
+        
   
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2022-05-24
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/transform/ >transform</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/CVPR2022/ >CVPR2022</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/54-mixformer/">MixFormer: End-to-End Tracking with Iterative Mixed Attention</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-MixFormer: End-to-End Tracking with Iterative Mixed Attention 论文 代码
-核心：用transfrom架构整合特征提取和特征融合
-Motivation
-主流的跟踪框架分三步：特征提取、特征融合、预测头分类回归
-其中特征融合是关键，下图展示了不同的融合方法。（摘自 【VALSE论文速览-68期】MixFormer:更加简洁的端到端单目标跟踪器）
-
-最近的研究使用transformer进行融合，但仍然依赖CNN提取特征，这其中存在一些局限：
-
-attention只作用在高层抽象的特征表示空间，忽略了浅层特征；
-CNN对通用对象识别进行预训练，可能会忽略用于跟踪的更精细的结构信息；
-CNN的表征能力是局部的，缺乏长距离建模的能力
-
-解决方案：
-提出一个通用的transformer结构同时进行特征提取和特征融合。
-具有如下好处:
-
-使特征提取更具体到相应的跟踪目标，并捕获更多目标特定的判别特征;
-让目标信息更extensive的融合进搜索区域；
-结构更加紧凑简洁。
-
-主要创新点：
-
-提出了 MAM 模块，应用 attnetion 机制同时进行特征提取与信息交互
-提出SPM模块进行模板更新
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/54-mixformer/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2022-05-24
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/transform/ >transform</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/CVPR2022/ >CVPR2022</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/53-SBT/">SBT: Correlation-Aware Deep Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-Correlation-Aware Deep Tracking 论文
-写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。
-摘要切入点：鲁棒性和判别性都很重要
-现有问题：孪生网络无法判别性的建模目标和干扰
-提出新方法：target-dependent feature network 
-做法：通过attention，将跨图像的特征相关性嵌入特征网络的多个层中。
-好处：
-
-在多个层进行匹配，压制非目标特征，得到实例感知的特征提取；
-输出的搜索特征可以直接用于预测定位，无需互相关操作；
-可以在大量不成对数据上预训练，加速收敛
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/53-SBT/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-12-22
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/DCF/ >DCF</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E5%AD%AA%E7%94%9F%E7%BD%91%E7%BB%9C/ >孪生网络</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/52-survey/">相关滤波和孪生网络目标跟踪综述（Martin团队）</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-Visual Object Tracking with Discriminative Filters and Siamese Networks: A Survey and Outlook 马丁团队的新作，强烈推荐。
-论文
-精确和鲁棒的视觉目标跟踪是计算机视觉中最具挑战性和最基本的问题之一。它需要在只给定目标初始状态的条件下，准确估计图像序列中目标的轨迹及状态。相关滤波和孪生网络已经成为当下的主流跟踪算法，本文选取了90多个DCF和Siamese跟踪器进行系统和全面的回顾。首先，介绍了DCF和Siamese跟踪核心公式的背景理论。然后，区分和全面回顾了这两种跟踪范式中共享的和各自特定的挑战。此外，深入分析了DCF和Siamese跟踪器在9个benchmark上的性能，涵盖了视觉跟踪的不同方面的实验：数据集、评估指标、性能和速度比较。在此分析的基础上，提出了对视觉跟踪开放挑战的建议。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/52-survey/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-12-22
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E7%BB%BC%E8%BF%B0/ >综述</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/%E8%BD%BB%E9%87%8F%E5%8C%96/ >轻量化</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/51-lighttrack/">轻量化目标跟踪</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          引言近些年的目标跟踪算法都在往做大做强的方向发展，比如更深的网络和更复杂的模块。尽管性能越刷越高，但是却很少考虑效率问题，以至于几乎无法在边缘设备上实时运行部署，实用性较低，因此研究轻量化的目标跟踪算法是非常必要的（另外一个原因也可能是做大做强上能水论文的点越来越不好找了 /狗头保命）。本篇博客总结了三篇最近研究跟踪模型轻量化的工作。
-
-LightTrack: Finding Lightweight Neural Networks for Object Tracking via One-Shot Architecture Search
-Efficient Visual Tracking with Exemplar Transformers
-FEAR: Fast, Efficient, Accurate and Robust Visual Tracker
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/51-lighttrack/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-11-24
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/contrastive-learning/ >contrastive learning</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/50-IAT/">Explicitly Modeling the Discriminability for Instance-Aware Visual Object Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation作者认为当前方法的局限在于，跟踪目标的特征仅被表达学习，而没有做判别性的建模（即网络只学会了如何从表观上描述一个目标的特征，但并未学到不同目标特征之间的差异）。为了解决这一问题，本文引入对比学习（contrastive learning）构建实例级的跟踪器 Instance-Aware Tracker (IAT)，确保每个训练样本都能被唯一建模，并与其他大量样本高度区分。提出的IAT包括video-level和object-level两种形式，前者提高了从背景中识别目标的能力，后者提高了区分目标和干扰物的判别能力。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/50-IAT/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-11-23
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/transform/ >transform</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/WACV2022/ >WACV2022</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/49-SiamTPN/">Siamese Transformer Pyramid Networks for Real-Time UAV Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文 代码
-Motivation本文着眼于移动平台的无人机目标跟踪，融合了CNN和Transformer的优点。具体来说，通过轻量的shufflenet v2来构建特征金字塔，并使用Transformer对其进行强化（特征融合），以构建一个鲁棒的目标外观模型。开发了一种具有横向交叉注意力的集中式架构，用于构建增强的高级特征图。此外，作者设计了pooling attention module减少key和value的数量进一步降低了Transformer的内存消耗和时间复杂度。提出的方法在CPU端运行速度可超过30 FPS。
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/49-SiamTPN/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-11-22
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/arxiv/ >arxiv</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/48-RPT/">RPT++: Customized Feature Representation for Siamese Visual Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          论文
-Motivation本文是去年RPT方法的改进，作者来自同一团队。出发点是现有的跟踪方法对于分类和回归使用的是同一套特征，而作者指出这两个任务是有差异的，因此对特征的需求也是不同的。如图1所示，分类需要的是显著区域中更具有判别力的特征，而回归需要边界附近的特征来精确定位。针对这一问题，作者提出了两种定制化的特征提取，用于捕获特定任务的视觉模式。其中Polar Pooling从语义关键点收集丰富的信息，以进行更强的分类；而Extreme Pooling捕获目标边界的清晰视觉模式，实现目标状态的精确估计。
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/48-RPT/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-08-17
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/ICCV2021/ >ICCV2021</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/matching/ >matching</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/47-SAOT/">Saliency-Associated Object Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文 代码
-Motivation和上一篇一样是研究跟踪的匹配问题。目前主流的跟踪策略分为全局和局部两种，全局策略（如DW-Corr）学习目标的整体表示，当目标发生较大变化时表现不佳。局部策略（如PG-Corr）将目标分割成多个patch，并行跟踪所有patch，通过聚合这些patch的跟踪结果，推断出目标状态。而局部策略的局限在于并不是所有patch都包含丰富的信息，一些没有判别能力的patch难以跟踪，可能对推断目标状态产生不利影响。因此，本文提出只跟踪目标的显著局部区域而不是简单跟踪所有局部块，具体提出了细粒度的显著性挖掘模块(fine-grained saliency mining module)，用于捕获局部显著性；以及显著性关联模块(saliency-association modeling module) 将捕获的显著区域关联在一起，学习目标模板与搜索图像之间的全局相关性，以进行状态估计。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/47-SAOT/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-08-07
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/ICCV2021/ >ICCV2021</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/matching/ >matching</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/46-AutoMatch/">Learn to Match: Automatic Matching Network Design for Visual Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文 代码
-Motivation本文聚焦于孪生跟踪算法的匹配过程，目前主流的互相关操作是启发式设计的，严重依赖人工经验，并且单一的匹配方法无法适应各种复杂的跟踪场景。因此，本文引入了6种新的匹配算子来替代互相关。通过分析这些算子在不同跟踪挑战场景下的适应性，作者发现可以将它们结合起来进行互补，并借鉴NAS思想提出一种搜索方法 binary channel manipulation (BCM) 探索这些匹配算子的最优组合。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/46-AutoMatch/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-08-07
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/transform/ >transform</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/ICCV2021/ >ICCV2021</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/45-HiFT/">HiFT: Hierarchical Feature Transformer for Aerial Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文 代码
-Motivation现有的孪生跟踪算法大多是基于相似得分图对目标对象进行分类和回归，使用单一的相似图会降低复杂场景下的定位精度，而像SiamRPN++那样单独使用多个相似图分别进行预测又会引入较大计算负担，不适用于移动设备。因此，本文提出一种 hierarchical feature transformer (HiFT) 对多个层级的相似图进行融合，既可以捕获全局的依赖关系，又可以高效地学习多层级特征之间的依赖关系。
-在介绍本文方法前，我们先分析经典的transformer架构应用于目标跟踪任务中的难点。
-
-预定义的(或学习的)解码query在面对任意跟踪对象时很难保持有效性；
-transformer难以处理小目标（参考deform DETR）。
-
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/45-HiFT/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-   
-</v-card>  
-
-
-  <div id="pagination" class="text-center">
-    <v-pagination 
-      v-model="currentPage" 
-      :length=3 
-      @input="PageChange" 
-      prev-icon="chevron_left"
-      next-icon="chevron_right"
-      color="secondary"
-    ></v-pagination>
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
   </div>
-         
-                            <div id="mobile-footer" class="d-block d-md-none">
-                                <v-divider></v-divider>
-                                <div id="mobile-footer-content">
-                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
-                                    <span> &copy; 2020 - 2022 zjp</span>
-                                </div>
-                            </div>                   
-                        </v-col>                                            
-                    </v-row>
-                </v-container>
-            </v-content>
-        </v-app>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          সূচীপত্র
+        </li>
+        <li class="sidebar-nav-overview">
+          সারাংশ
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zjp</p>
+  <div class="site-description" itemprop="description">A personal blog that shares computer vision papers</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
     </div>
-    
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
-
-<script src="/js/main.js"></script>
+  </aside>
+  <div class="sidebar-dimmer"></div>
 
 
-
-
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-
-
-
+    </header>
 
     
-        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <div class="back-to-top" role="button" aria-label="উপরে ফিরে যান">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner index posts-expand">
+
     
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/54-mixformer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/54-mixformer/" class="post-title-link" itemprop="url">MixFormer: End-to-End Tracking with Iterative Mixed Attention</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2022-05-24 17:20:54" itemprop="dateCreated datePublished" datetime="2022-05-24T17:20:54+08:00">2022-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-05-31 09:15:43" itemprop="dateModified" datetime="2022-05-31T09:15:43+08:00">2022-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172159.png" alt=""></p>
+<p>MixFormer: End-to-End Tracking with Iterative Mixed Attention <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.11082">论文</a> <a target="_blank" rel="noopener" href="https://github.com/MCG-NJU/MixFormer">代码</a></p>
+<p>核心：用transfrom架构整合特征提取和特征融合</p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172748.png" alt=""></p>
+<p>主流的跟踪框架分三步：特征提取、特征融合、预测头分类回归</p>
+<p>其中特征融合是关键，下图展示了不同的融合方法。（摘自 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1L541127MD?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">【VALSE论文速览-68期】MixFormer:更加简洁的端到端单目标跟踪器</a>）</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172920.png" alt=""></p>
+<p>最近的研究使用transformer进行融合，但仍然依赖CNN提取特征，这其中存在一些局限：</p>
+<ol>
+<li>attention只作用在高层抽象的特征表示空间，忽略了浅层特征；</li>
+<li>CNN对通用对象识别进行预训练，可能会忽略用于跟踪的更精细的结构信息；</li>
+<li>CNN的表征能力是局部的，缺乏长距离建模的能力</li>
+</ol>
+<p>解决方案：</p>
+<p>提出一个通用的transformer结构同时进行特征提取和特征融合。</p>
+<p>具有如下好处:</p>
+<ol>
+<li>使特征提取更具体到相应的跟踪目标，并捕获更多目标特定的判别特征;</li>
+<li>让目标信息更extensive的融合进搜索区域；</li>
+<li>结构更加紧凑简洁。</li>
+</ol>
+<p>主要创新点：</p>
+<ul>
+<li>提出了 MAM 模块，应用 attnetion 机制同时进行特征提取与信息交互</li>
+<li>提出SPM模块进行模板更新</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/54-mixformer/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/53-SBT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/53-SBT/" class="post-title-link" itemprop="url">SBT: Correlation-Aware Deep Tracking</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2022-05-24 10:41:22" itemprop="dateCreated datePublished" datetime="2022-05-24T10:41:22+08:00">2022-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-05-31 09:15:51" itemprop="dateModified" datetime="2022-05-31T09:15:51+08:00">2022-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524105019.png" alt=""></p>
+<p>Correlation-Aware Deep Tracking <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.01666">论文</a></p>
+<p>写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。</p>
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>切入点：鲁棒性和判别性都很重要</p>
+<p>现有问题：孪生网络无法判别性的建模目标和干扰</p>
+<p>提出新方法：target-dependent feature network </p>
+<p>做法：通过attention，将跨图像的特征相关性嵌入特征网络的多个层中。</p>
+<p>好处：</p>
+<ol>
+<li>在多个层进行匹配，压制非目标特征，得到实例感知的特征提取；</li>
+<li>输出的搜索特征可以直接用于预测定位，无需互相关操作；</li>
+<li>可以在大量不成对数据上预训练，加速收敛</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/53-SBT/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/52-survey/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/52-survey/" class="post-title-link" itemprop="url">相关滤波和孪生网络目标跟踪综述（Martin团队）</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2021-12-22 11:10:16" itemprop="dateCreated datePublished" datetime="2021-12-22T11:10:16+08:00">2021-12-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-04-05 22:26:27" itemprop="dateModified" datetime="2022-04-05T22:26:27+08:00">2022-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://github.com/kongbia/picgo/raw/master/blog/52-survey/20211222231118.png" alt=""></p>
+<p>Visual Object Tracking with Discriminative Filters and Siamese Networks: A Survey and Outlook 马丁团队的新作，强烈推荐。</p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2112.02838">论文</a></p>
+<p>精确和鲁棒的视觉目标跟踪是计算机视觉中最具挑战性和最基本的问题之一。它需要在只给定目标初始状态的条件下，准确估计图像序列中目标的轨迹及状态。相关滤波和孪生网络已经成为当下的主流跟踪算法，本文选取了90多个DCF和Siamese跟踪器进行系统和全面的回顾。首先，介绍了DCF和Siamese跟踪核心公式的背景理论。然后，区分和全面回顾了这两种跟踪范式中共享的和各自特定的挑战。此外，深入分析了DCF和Siamese跟踪器在9个benchmark上的性能，涵盖了视觉跟踪的不同方面的实验：数据集、评估指标、性能和速度比较。在此分析的基础上，提出了对视觉跟踪开放挑战的建议。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/52-survey/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/51-lighttrack/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/51-lighttrack/" class="post-title-link" itemprop="url">轻量化目标跟踪</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2021-12-22 11:10:04" itemprop="dateCreated datePublished" datetime="2021-12-22T11:10:04+08:00">2021-12-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-04-05 22:26:27" itemprop="dateModified" datetime="2022-04-05T22:26:27+08:00">2022-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>近些年的目标跟踪算法都在往做大做强的方向发展，比如更深的网络和更复杂的模块。尽管性能越刷越高，但是却很少考虑效率问题，以至于几乎无法在边缘设备上实时运行部署，实用性较低，因此研究轻量化的目标跟踪算法是非常必要的（另外一个原因也可能是做大做强上能水论文的点越来越不好找了 /狗头保命）。本篇博客总结了三篇最近研究跟踪模型轻量化的工作。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2104.14545">LightTrack: Finding Lightweight Neural Networks for Object Tracking via One-Shot Architecture Search</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2112.09686">Efficient Visual Tracking with Exemplar Transformers</a></li>
+<li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2112.07957">FEAR: Fast, Efficient, Accurate and Robust Visual Tracker</a></li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/51-lighttrack/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/50-IAT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/50-IAT/" class="post-title-link" itemprop="url">Explicitly Modeling the Discriminability for Instance-Aware Visual Object Tracking</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2021-11-24 10:40:56" itemprop="dateCreated datePublished" datetime="2021-11-24T10:40:56+08:00">2021-11-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-04-05 22:26:26" itemprop="dateModified" datetime="2022-04-05T22:26:26+08:00">2022-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://github.com/kongbia/picgo/raw/master/blog/50-IAT/20211124104316.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2110.15030">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>作者认为当前方法的局限在于，跟踪目标的特征仅被表达学习，而没有做判别性的建模（即网络只学会了如何从表观上描述一个目标的特征，但并未学到不同目标特征之间的差异）。为了解决这一问题，本文引入对比学习（contrastive learning）构建实例级的跟踪器 Instance-Aware Tracker (IAT)，确保每个训练样本都能被唯一建模，并与其他大量样本高度区分。提出的IAT包括video-level和object-level两种形式，前者提高了从背景中识别目标的能力，后者提高了区分目标和干扰物的判别能力。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/50-IAT/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/49-SiamTPN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/49-SiamTPN/" class="post-title-link" itemprop="url">Siamese Transformer Pyramid Networks for Real-Time UAV Tracking</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2021-11-23 15:53:36" itemprop="dateCreated datePublished" datetime="2021-11-23T15:53:36+08:00">2021-11-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-04-05 22:26:25" itemprop="dateModified" datetime="2022-04-05T22:26:25+08:00">2022-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://github.com/kongbia/picgo/raw/master/blog/49-SiamTPN/20211123155750.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2110.08822">论文</a> <a target="_blank" rel="noopener" href="https://github.com/RISC-NYUAD/SiamTPNTracker">代码</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文着眼于移动平台的无人机目标跟踪，融合了CNN和Transformer的优点。具体来说，通过轻量的shufflenet v2来构建特征金字塔，并使用Transformer对其进行强化（特征融合），以构建一个鲁棒的目标外观模型。开发了一种具有横向交叉注意力的集中式架构，用于构建增强的高级特征图。此外，作者设计了pooling attention module减少key和value的数量进一步降低了Transformer的内存消耗和时间复杂度。提出的方法在CPU端运行速度可超过30 FPS。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/49-SiamTPN/20211123164050.png" alt=""></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/49-SiamTPN/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/48-RPT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/48-RPT/" class="post-title-link" itemprop="url">RPT++: Customized Feature Representation for Siamese Visual Tracking</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2021-11-22 11:06:07" itemprop="dateCreated datePublished" datetime="2021-11-22T11:06:07+08:00">2021-11-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-05-31 09:13:24" itemprop="dateModified" datetime="2022-05-31T09:13:24+08:00">2022-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://github.com/kongbia/picgo/raw/master/blog/48-RPT++/20211122111651.png" alt=""><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2110.12194">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文是去年RPT方法的改进，作者来自同一团队。出发点是现有的跟踪方法对于分类和回归使用的是同一套特征，而作者指出这两个任务是有差异的，因此对特征的需求也是不同的。如图1所示，分类需要的是显著区域中更具有判别力的特征，而回归需要边界附近的特征来精确定位。针对这一问题，作者提出了两种定制化的特征提取，用于捕获特定任务的视觉模式。其中Polar Pooling从语义关键点收集丰富的信息，以进行更强的分类；而Extreme Pooling捕获目标边界的清晰视觉模式，实现目标状态的精确估计。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/48-RPT++/20211122115832.png" alt=""></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/48-RPT/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/47-SAOT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/47-SAOT/" class="post-title-link" itemprop="url">Saliency-Associated Object Tracking</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2021-08-17 16:54:55" itemprop="dateCreated datePublished" datetime="2021-08-17T16:54:55+08:00">2021-08-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-04-05 22:26:24" itemprop="dateModified" datetime="2022-04-05T22:26:24+08:00">2022-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210817170638.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2108.03637">论文</a> <a target="_blank" rel="noopener" href="https://github.com/ZikunZhou/SAOT.git">代码</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>和上一篇一样是研究跟踪的匹配问题。目前主流的跟踪策略分为全局和局部两种，全局策略（如DW-Corr）学习目标的整体表示，当目标发生较大变化时表现不佳。局部策略（如PG-Corr）将目标分割成多个patch，并行跟踪所有patch，通过聚合这些patch的跟踪结果，推断出目标状态。而局部策略的局限在于并不是所有patch都包含丰富的信息，一些没有判别能力的patch难以跟踪，可能对推断目标状态产生不利影响。因此，本文提出只跟踪目标的显著局部区域而不是简单跟踪所有局部块，具体提出了细粒度的显著性挖掘模块(fine-grained saliency mining module)，用于捕获局部显著性；以及显著性关联模块(saliency-association modeling module) 将捕获的显著区域关联在一起，学习目标模板与搜索图像之间的全局相关性，以进行状态估计。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/47-SAOT/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/46-AutoMatch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/46-AutoMatch/" class="post-title-link" itemprop="url">Learn to Match: Automatic Matching Network Design for Visual Tracking</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2021-08-07 11:33:08" itemprop="dateCreated datePublished" datetime="2021-08-07T11:33:08+08:00">2021-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-04-05 22:26:23" itemprop="dateModified" datetime="2022-04-05T22:26:23+08:00">2022-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://github.com/kongbia/picgo/raw/master/blog/46-AutoMatch/20210808103150.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2108.00803">论文</a> <a target="_blank" rel="noopener" href="https://github.com/JudasDie/SOTS">代码</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文聚焦于孪生跟踪算法的匹配过程，目前主流的互相关操作是启发式设计的，严重依赖人工经验，并且单一的匹配方法无法适应各种复杂的跟踪场景。因此，本文引入了6种新的匹配算子来替代互相关。通过分析这些算子在不同跟踪挑战场景下的适应性，作者发现可以将它们结合起来进行互补，并借鉴NAS思想提出一种搜索方法 binary channel manipulation (BCM) 探索这些匹配算子的最优组合。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/46-AutoMatch/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/45-HiFT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/tracking/45-HiFT/" class="post-title-link" itemprop="url">HiFT: Hierarchical Feature Transformer for Aerial Tracking</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2021-08-07 11:32:22" itemprop="dateCreated datePublished" datetime="2021-08-07T11:32:22+08:00">2021-08-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-04-05 22:26:22" itemprop="dateModified" datetime="2022-04-05T22:26:22+08:00">2022-04-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807114323.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2108.00202">论文</a> <a target="_blank" rel="noopener" href="https://github.com/vision4robotics/HiFT">代码</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>现有的孪生跟踪算法大多是基于相似得分图对目标对象进行分类和回归，使用单一的相似图会降低复杂场景下的定位精度，而像SiamRPN++那样单独使用多个相似图分别进行预测又会引入较大计算负担，不适用于移动设备。因此，本文提出一种 hierarchical feature transformer (HiFT) 对多个层级的相似图进行融合，既可以捕获全局的依赖关系，又可以高效地学习多层级特征之间的依赖关系。</p>
+<p>在介绍本文方法前，我们先分析经典的transformer架构应用于目标跟踪任务中的难点。</p>
+<ol>
+<li>预定义的(或学习的)解码query在面对任意跟踪对象时很难保持有效性；</li>
+<li>transformer难以处理小目标（参考deform DETR）。</li>
+</ol>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/tracking/45-HiFT/#more" rel="contents">
+                আরো পড়ুন &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="পূর্ববর্তী পৃষ্ঠা"></i></a>
+  </nav>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zjp</span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> এর সাহায্যে চলছে
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
 
 
 </body>

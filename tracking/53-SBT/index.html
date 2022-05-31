@@ -1,290 +1,261 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="default">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="Cache-Control" content="no-siteapp">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    
-    <meta name="referrer" content="no-referrer-when-downgrade">
-    
-    <meta name="renderer" content="webkit"/>
-    <meta name="force-rendering" content="webkit"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
-    <meta name="baidu-site-verification" content="code-Toh8kQYN7N" />
-    <meta name="google-site-verification" content="r3Cw4aIKBFXcYVnB8J-bxaQozYY6BHsoE3q5soJN3Po" />
-    <meta name="msvalidate.01" content="C5E4D0D01152A883DDA407CDCE62E1DA" />
-    <meta name='description' content='A personal blog that shares computer vision papers'>
-    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
-    
-    
-        <link rel="shortcut icon" href="/images/avatar.jpg">
-    
-     
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
-    
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
 <link rel="stylesheet" href="/css/main.css">
 
-    
-    
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"সার্চ করা হচ্ছে...","empty":"আমরা উক্ত অনুসন্ধানের জন্য কোন ফলাফল খুঁজে পাইনি: ${query}","hits_time":"${hits} টি ফলাফল ${time} মিলিসেকেন্ড এ পাওয়া গেছে","hits":"${hits} টি ফলাফল পাওয়া গেছে"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Correlation-Aware Deep Tracking 论文 写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。 摘要切入点：鲁棒性和判别性都很重要 现有问题：孪生网络无法判别性的建模目标和干扰 提出新方法：target-dependent feature network  做法：通过attention">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SBT: Correlation-Aware Deep Tracking">
+<meta property="og:url" content="https://www.zjp97.top/tracking/53-SBT/index.html">
+<meta property="og:site_name" content="CV home">
+<meta property="og:description" content="Correlation-Aware Deep Tracking 论文 写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。 摘要切入点：鲁棒性和判别性都很重要 现有问题：孪生网络无法判别性的建模目标和干扰 提出新方法：target-dependent feature network  做法：通过attention">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524105019.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524111925.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112053.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112939.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114016.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114738.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524115757.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120305.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120323.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524163539.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164926.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164541.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165005.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165305.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165320.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165514.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165758.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170547.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170333.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170608.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171043.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171151.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171328.png">
+<meta property="article:published_time" content="2022-05-24T02:41:22.000Z">
+<meta property="article:modified_time" content="2022-05-31T01:15:51.242Z">
+<meta property="article:author" content="zjp">
+<meta property="article:tag" content="transform">
+<meta property="article:tag" content="CVPR2022">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524105019.png">
+
+
+<link rel="canonical" href="https://www.zjp97.top/tracking/53-SBT/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"default","comments":true,"permalink":"https://www.zjp97.top/tracking/53-SBT/","path":"tracking/53-SBT/","title":"SBT: Correlation-Aware Deep Tracking"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>SBT: Correlation-Aware Deep Tracking | CV home</title>
+  
 
 
 
 
 
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
 
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
 
-    
-    
-    
-        <script>
-  if (typeof MathJax === 'undefined') {
-    window.MathJax = {
-      loader: {
-        
-            load: ['[tex]/mhchem'],
-        
-        source: {
-          '[tex]/amsCd': '[tex]/amscd',
-          '[tex]/AMScd': '[tex]/amscd'
-        }
-      },
-      tex: {
-        inlineMath: {'[+]': [['$', '$']]},
-        
-            packages: {'[+]': ['mhchem']},
-        
-        tags: 'ams'
-      },
-      options: {
-        renderActions: {
-          findScript: [10, doc => {
-            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
-              const display = !!node.type.match(/; *mode=display/);
-              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
-              const text = document.createTextNode('');
-              node.parentNode.replaceChild(text, node);
-              math.start = {node: text, delim: '', n: 0};
-              math.end = {node: text, delim: '', n: 0};
-              doc.math.push(math);
-            });
-          }, '', false],
-          insertedScript: [200, () => {
-            document.querySelectorAll('mjx-container').forEach(node => {
-              let target = node.parentNode;
-              if (target.nodeName.toLowerCase() === 'li') {
-                target.parentNode.classList.add('has-jax');
-              }
-            });
-          }, '', false]
-        }
-      }
-    };
-    (function () {
-      var script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
-      script.defer = true;
-      document.head.appendChild(script);
-    })();
-  } else {
-    MathJax.startup.document.state(0);
-    MathJax.texReset();
-    MathJax.typeset();
-  }
-</script>
-          
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="নেভিগেশন বারের দৃশ্যমানতা টগল করুন" role="button">
+    </div>
+  </div>
 
-    
-    
-    
-          
-            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-            <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-            <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
-        
-    
+  <div class="site-meta">
 
-    
-    
-    <title>
-        
-            SBT: Correlation-Aware Deep Tracking | CV home
-        
-    </title>
-    
-    
-<meta name="generator" content="Hexo 5.4.0"></head>
-
-<body>
-    <div id="app">
-        <v-app>
-            <v-content id="page">
-                <v-container fluid>
-                    <v-row>
-                        <v-col cols="2" class="d-none d-md-block">
-                            <div id="sidebar" class="float-right">
-    <a href="/" rel="home">
-        <v-avatar size=96>
-            <img id="logo" src="/images/avatar.jpg">     
-        </v-avatar> 
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CV home</p>
+      <i class="logo-line"></i>
     </a>
-    <v-divider></v-divider>
-    <div class="mini-menu">
-        <v-btn icon href="/">
-            <v-icon>home</v-icon>
-        </v-btn>
-        <v-btn icon href="/categories/">
-            <v-icon>folder</v-icon>
-        </v-btn>
-        <v-btn icon href="/tags/">
-            <v-icon>bookmark</v-icon>
-        </v-btn>
-        <v-btn icon @click="SetNightMode">
-            <v-icon>{{ nightMode }}</v-icon>
-        </v-btn>
-    </div>
-    <v-list id="main-menu" class="font-weight-bold" flat>
-        
-            
-            <v-list-item href="/archives/" link>
-            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
-            <v-list-item-content>
-                归档
-            </v-list-item-content>
-            </v-list-item>
-        
-            
-            <v-list-item href="https://space.bilibili.com/5567932/article" link>
-            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
-            <v-list-item-content>
-                b站专栏
-            </v-list-item-content>
-            </v-list-item>
-        
-    </v-list>
-    <v-divider></v-divider>
-    
-        <div class="post-toc">
-            <a href="/tracking/53-SBT/" class="toc-header">文章目录</a>
-            <div class="toc-content">
-                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%91%98%E8%A6%81"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Patch-Embedding"><span class="toc-number">3.1.</span> <span class="toc-text">Patch Embedding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Extract-or-Correlation-Block"><span class="toc-number">3.2.</span> <span class="toc-text">Extract-or-Correlation Block</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Position-Encoding"><span class="toc-number">3.3.</span> <span class="toc-text">Position Encoding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Direct-Prediction"><span class="toc-number">3.4.</span> <span class="toc-text">Direct Prediction</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SBT%E8%AE%BE%E8%AE%A1%E5%87%86%E5%88%99"><span class="toc-number">4.</span> <span class="toc-text">SBT设计准则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SBT%E8%B7%9F%E8%B8%AA%E7%9A%84%E7%90%86%E8%AE%BA%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">SBT跟踪的理论分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E7%A7%8DSBT%E7%BD%91%E7%BB%9C"><span class="toc-number">6.</span> <span class="toc-text">4种SBT网络</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C"><span class="toc-number">7.</span> <span class="toc-text">实验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-to-State-of-the-Art-Trackers"><span class="toc-number">7.1.</span> <span class="toc-text">Comparison to State-of-the-Art Trackers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploration-Study"><span class="toc-number">7.2.</span> <span class="toc-text">Exploration Study</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">8.</span> <span class="toc-text">结论</span></a></li></ol>
-            </div>
-        </div>
-    
+      <p class="site-subtitle" itemprop="description">Computer vision paper notes</p>
+  </div>
 
-    <div id="footer">
-        <div class="footer-social">
-            
-                
-                <v-btn icon href="mailto:zjphust@gmail.com" target="_blank">
-                    <v-icon>fas fa-envelope</v-icon>
-                </v-btn>
-            
-                
-                <v-btn icon href="https://github.com/kongbia" target="_blank">
-                    <v-icon>fab fa-github</v-icon>
-                </v-btn>
-            
-        </div>
-        <v-divider></v-divider>
-        <div class="footer-content">
-            
-                <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
-                </span>
-                <br>
-            
-            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>
-            <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
-            <span>
-                &copy; 2020 - 2022 
-                zjp
-            </span>
-        </div>
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
     </div>
-</div>
-
-                        </v-col>
-                        <v-col cols="12" md="10">
-                            <v-row>
-  <v-col cols="12" md="8" align-self="end">
-    <div id="site-header">
-      <div id="site-title">
-        <a href="/" rel="home">CV home</a>
-      </div>
-      <div id="site-description">A personal blog that shares computer vision papers</div>
-      <div id="mobile-menu" class="d-block d-md-none">
-        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
-        <div class="mobile-mini-menu">
-          <v-btn icon href="/">
-              <v-icon>home</v-icon>
-          </v-btn>
-          <v-btn icon href="/categories/">
-              <v-icon>folder</v-icon>
-          </v-btn>
-          <v-btn icon href="/tags/">
-              <v-icon>bookmark</v-icon>
-          </v-btn>
-          <v-btn icon @click="SetNightMode">
-              <v-icon>{{ nightMode }}</v-icon>
-          </v-btn>
-          
-            
-            <v-btn icon href="/archives/">
-              <v-icon>archive</v-icon>
-            </v-btn>
-          
-            
-            <v-btn icon href="https://space.bilibili.com/5567932/article">
-              <v-icon>rss_feed</v-icon>
-            </v-btn>
-          
-        </div>
-      </div>    
-    </div>
-  </v-col>  
-  <v-col cols="4" align-self="end" class="d-none d-md-block">
-    <v-col align-self="end">
-      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
-    </v-col> 
-  </v-col>
-</v-row>
-
-                            <v-card class="elevation-2 post-card">
-    
-    
-        <div class="post-header">
-  <a class="post-header-title font-weight-medium" href="/tracking/53-SBT/">SBT: Correlation-Aware Deep Tracking</a>
-  <div class="post-header-meta">   
-    <span>
-      <v-icon color="">event</v-icon>
-      发布于:&nbsp;2022-05-24
-    </span>
-    <span>
-      <v-icon color="">event_available</v-icon>
-      更新于:&nbsp;2022-05-31
-    </span>
-    <span>
-      <v-icon color="">folder</v-icon>
-      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
-    </span>
-    
-    <span>
-      <v-icon color="">visibility</v-icon>
-      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
-    </span>
-    
   </div>
 </div>
 
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          সূচীপত্র
+        </li>
+        <li class="sidebar-nav-overview">
+          সারাংশ
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%91%98%E8%A6%81"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">2.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Patch-Embedding"><span class="nav-number">3.1.</span> <span class="nav-text">Patch Embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Extract-or-Correlation-Block"><span class="nav-number">3.2.</span> <span class="nav-text">Extract-or-Correlation Block</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Position-Encoding"><span class="nav-number">3.3.</span> <span class="nav-text">Position Encoding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Direct-Prediction"><span class="nav-number">3.4.</span> <span class="nav-text">Direct Prediction</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SBT%E8%AE%BE%E8%AE%A1%E5%87%86%E5%88%99"><span class="nav-number">4.</span> <span class="nav-text">SBT设计准则</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SBT%E8%B7%9F%E8%B8%AA%E7%9A%84%E7%90%86%E8%AE%BA%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">SBT跟踪的理论分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4%E7%A7%8DSBT%E7%BD%91%E7%BB%9C"><span class="nav-number">6.</span> <span class="nav-text">4种SBT网络</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E9%AA%8C"><span class="nav-number">7.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Comparison-to-State-of-the-Art-Trackers"><span class="nav-number">7.1.</span> <span class="nav-text">Comparison to State-of-the-Art Trackers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exploration-Study"><span class="nav-number">7.2.</span> <span class="nav-text">Exploration Study</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">8.</span> <span class="nav-text">结论</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zjp</p>
+  <div class="site-description" itemprop="description">A personal blog that shares computer vision papers</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">26</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="উপরে ফিরে যান">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="default">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/53-SBT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zjp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="A personal blog that shares computer vision papers">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="SBT: Correlation-Aware Deep Tracking | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SBT: Correlation-Aware Deep Tracking
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">প্রকাশিত হয়েছে</span>
+
+      <time title="তৈরি করা হয়েছেঃ 2022-05-24 10:41:22" itemprop="dateCreated datePublished" datetime="2022-05-24T10:41:22+08:00">2022-05-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">সম্পাদিত হয়েছে</span>
+      <time title="পরিমার্জন করা হয়েছেঃ 2022-05-31 09:15:51" itemprop="dateModified" datetime="2022-05-31T09:15:51+08:00">2022-05-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">শ্রেনী</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
     
     
     
-    
-    <div class="post-content typo">
+    <div class="post-body" itemprop="articleBody">
         <p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524105019.png" alt=""></p>
 <p>Correlation-Aware Deep Tracking <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.01666">论文</a></p>
 <p>写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。</p>
@@ -385,95 +356,75 @@
 <h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>本文首次提出了一种target-dependent的跟踪特征网络。SBT大大简化了跟踪管道，比最近基于Transformer的跟踪器收敛更快。从实验和理论两方面对SBT跟踪进行了系统的研究。此外，实现了四个版本的SBT网络，可以改进其他流行的VOT和VOS跟踪器。大量实验表明，该方法取得了良好的效果，可以作为动态特征网络应用于其他跟踪管道。</p>
 
     </div>
-    <!--文末结束语-->
+
     
-        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
     
-    <!--页脚广告-->
     
-    <v-divider></v-divider>
-    
-    <div class="post-nav">             
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/transform/" rel="tag"># transform</a>
+              <a href="/tags/CVPR2022/" rel="tag"># CVPR2022</a>
+          </div>
+
         
-            <div class="post-nav-button float-left">
-                <v-icon>chevron_left</v-icon>
-                <a class="font-weight-bold text-left" href="/tracking/54-mixformer/">
-                    MixFormer: End-to-End Tracking with Iterative Mixed Attention
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/tracking/52-survey/" rel="prev" title="相关滤波和孪生网络目标跟踪综述（Martin团队）">
+                  <i class="fa fa-chevron-left"></i> 相关滤波和孪生网络目标跟踪综述（Martin团队）
                 </a>
             </div>
-              
-          
-            <div class="post-nav-button float-right">
-                <a class="font-weight-bold text-right" href="/tracking/52-survey/">      
-                    相关滤波和孪生网络目标跟踪综述（Martin团队）
+            <div class="post-nav-item">
+                <a href="/tracking/54-mixformer/" rel="next" title="MixFormer: End-to-End Tracking with Iterative Mixed Attention">
+                  MixFormer: End-to-End Tracking with Iterative Mixed Attention <i class="fa fa-chevron-right"></i>
                 </a>
-                <v-icon>chevron_right</v-icon>
             </div>
-        
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zjp</span>
+</div>
+  <div class="powered-by"><a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> এর সাহায্যে চলছে
+  </div>
+
     </div>
-</v-card>
+  </footer>
 
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
 
-
-    <v-card class="comment-card elevation-2">
-        <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
-            
-                <v-tab><span id="comment-tab-0">gitalk</span></v-tab>
-            
-        </v-tabs>
-        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOlsiZ2l0YWxrIl0sImdpdGFsa19jbGllbnRfaWQiOiI2OTQ1MTJjNTYxZTdkNjQyMTM5ZiIsImdpdGFsa19jbGllbnRfc2VjcmV0IjoiMjE2OTI5MTRkYWI2YWJhOGI5ZTZjZDUyZTY2ZWFkY2ExMDIyNjZlYiIsImdpdGFsa19yZXBvIjoia29uZ2JpYS5naXRodWIuaW8iLCJnaXRhbGtfb3duZXIiOiJrb25nYmlhIiwiZ2l0YWxrX3NpZF90eXBlIjpudWxsLCJnaXRhbGtfZGlzdHJhY3Rpb25GcmVlTW9kZSI6dHJ1ZSwiZGlzcXVzX3Nob3J0bmFtZSI6bnVsbCwibGl2ZXJlX2RhdGFfdWlkIjpudWxsLCJ2YWxpbmVfbGVhbmNsb3VkX2FwcF9pZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfa2V5IjpudWxsLCJ2YWxpbmVfb3B0aW9uIjpudWxsLCJjaGFuZ3lhbl9hcHBfaWQiOm51bGwsImNoYW5neWFuX2FwcF9rZXkiOm51bGwsImNoYW5neWFuX3NpZF90eXBlIjpudWxsfQ== >
-            
-                <v-tab-item eager=true>
-                    
-                        <div id="gitalk-container"></div>
-                    
-                </v-tab-item>
-            
-        </v-tabs-items>
-    </v-card>
-
-        
-                            <div id="mobile-footer" class="d-block d-md-none">
-                                <v-divider></v-divider>
-                                <div id="mobile-footer-content">
-                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
-                                    <span> &copy; 2020 - 2022 zjp</span>
-                                </div>
-                            </div>                   
-                        </v-col>                                            
-                    </v-row>
-                </v-container>
-            </v-content>
-        </v-app>
-    </div>
-    
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
-<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
-
-<script src="/js/main.js"></script>
+  
 
 
 
 
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
 
 
 
-
-    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
-    <script>mermaid.initialize({
-        startOnLoad: true,
-        theme: "default"
-    });</script>
-
-
-
-
-    
-        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    
 
 
 </body>
