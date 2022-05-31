@@ -1,76 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>目标检测框架在目标跟踪中的应用</title>
-    <url>/tracking/2-detection-in-tracking/</url>
-    <content><![CDATA[<p>从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。</p>
-<p>本篇笔记关注如何将目标检测框架应用在跟踪中，主要介绍其思想，细节部分不做过多描述，记录论文包含：</p>
-<ul>
-<li><a href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Huang_Bridging_the_Gap_Between_Detection_and_Tracking_A_Unified_Approach_ICCV_2019_paper.pdf">Bridging the Gap Between Detection and Tracking: A Unified Approach</a></li>
-<li><a href="https://arxiv.org/abs/1912.08531">GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</a></li>
-<li><a href="https://arxiv.org/abs/1910.11844">Learning to Track Any Object</a></li>
-<li><a href="https://arxiv.org/abs/1911.12836">Siam R-CNN: Visual Tracking by Re-Detection</a></li>
-<li><a href="https://arxiv.org/abs/2004.00830">Tracking by Instance Detection: A Meta-Learning Approach</a></li>
-</ul>
-<span id="more"></span>
-<h1 id="Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><a href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach" class="headerlink" title="Bridging the Gap Between Detection and Tracking: A Unified Approach"></a>Bridging the Gap Between Detection and Tracking: A Unified Approach</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234243.png" alt=""></p>
-<p>从结构图可以很直观的看出这就是Faster RCNN的框架，作者将目标跟踪任务看成是one-shot object detection 和 few-shot instance classification 的组合。前者是一个class-level的子任务用来寻找和目标相似的候选框，后者是instance-level的任务用来区分目标和干扰物。主要有两个模块：Target-guidence module(TGM) 和 few-shot instance classifier。</p>
-<p>TGM对目标和搜索区域的特征以及它们在主干中的相互作用进行编码，相当于让网络更关注于与目标相关的instance，后面几篇文章也用了不同的方法来实现这个目的。</p>
-<p>TGM虽然使检测器聚焦于与目标相关的物体，但忽略了周围的背景干扰。为了弥补这一点，提出了few-shot instance classifier。 然而，直接从头开始训练耗时且容易导过拟合。因此作者通过Model-Agnostic Meta Learning (MAML)进行few-shot finetune，增强判别性进一步消除distractors。</p>
-<p>MAML的目的是训练一组初始化参数，<strong>通过在初始参数的基础上进行一或多步的梯度调整，来达到仅用少量数据就能快速适应新task的目的，</strong>示意图如下：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234331.png" alt=""></p>
-<p>域自适应的检测器整体训练流程如下图：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234353.png" alt=""></p>
-<p>输入是三元组，包括examplar, support, query，训练分为inner and outer optimization loops。对于Inner optimization loop中，在support image上计算的loss用来微调meta-layers即detector heads的参数，然后用微调后的参数计算meta-loss其梯度用于更新outer optimization loop。具体公式可以参考原文。</p>
-<p>在线跟踪中将之前帧的检测结果作为训练样本在线更新detector head的参数。</p>
-<p>作者称这是第一篇将目标检测框架应用到跟踪上的通用框架，检测模型可以用Faster RCNN，SSD等，速度上SSD模型为10FPS   Faster RCNN模型为3FPS。</p>
-<hr>
-<h1 id="GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><a href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking" class="headerlink" title="GlobalTrack: A Simple and Strong Baseline for Long-term Tracking"></a>GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234652.png" alt=""></p>
-<p>这篇文章构建了一个global instance search tracker，主要思想是利用target来引导网络搜索特定instance，与上一篇的TGM模块思想类似，不过这里对在RPN阶段和分类回归阶段都加入了target信息进行引导。对应的就是Query-guided RPN 和 Query-guided RCNN。</p>
-<p><strong>Query-guided RPN</strong></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234747.png" alt=""></p>
-<p>$z \in [k,k,c]$ 是query的ROI特征，$x \in [h,w,c]$ 是搜索图像的特征。$f_z$ 用 $k \times k$ 0-padding的卷积将 $z$ 转换为 $1 \times 1$ 的核作用于搜索区域，$f_x$ 使用 $3 \times 3$ 1-padding的卷积。$f_{out}$ 是 $1 \times 1 \times c$  的卷积将通道数变回为c，这个过程不使用正则化和激活函数。</p>
-<p><strong>Query-guided RCNN</strong></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424235530.png" alt=""></p>
-<p> $z$ 定义同上，$x_i \in [k,k,c]$ 是提取的proposal的特征。$h_z$ 和 $h_x$ 均为 $3 \times 3$ 1-padding的卷积，$h_{out}$ 为$1 \times 1 \times c$  卷积。</p>
-<p>GlobalTrack 对视频每一帧的跟踪完全不依赖相邻帧，没有累计误差使得它在长期跟踪问题中准确率保持稳定。速度为6FPS。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426092832.png" alt=""></p>
-<center>车牌在长期跟踪过程中消失了一段时间，当车牌再次出现的时候，其他跟踪算法就再也无法恢复跟踪了，而没有累计误差的 GlobalTrack不受前面的影响立刻跟踪到了目标。</center>
-
-<hr>
-<h1 id="Learning-to-Track-Any-Object"><a href="#Learning-to-Track-Any-Object" class="headerlink" title="Learning to Track Any Object"></a>Learning to Track Any Object</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426093105.png" alt=""></p>
-<center>图1 (a)从基于图像的数据集学习一个通用对象先验，(b)通过计算一个封闭形式的目标和背景之间的线性判别器使其适应于一个感兴趣的特定对象(例如左上角的总线)。这允许跟踪物体通过显著的变形，而不捕获干扰物</center>
-
-<p>本文重点在于将category-specific object detector 变成 category-agnostic, object-specific detector来做跟踪。想达到这个目的，需要处理如下两个关键的问题，如图1所示：</p>
-<ol>
-<li>如何将 category specific prior 改为 generic objectness prior？</li>
-<li>如何进一步的将这种 generic prior 改为 particular instance of interst？</li>
-</ol>
-<p>针对问题1，作者构建了 a joint model for category-specific object detection and category-agnostic tracking。和之前类似，也是添加了目标特征的检测框架（基于 Mask R-CNN）如下图2所示 。其将目标模板作为输入，计算 feature embedding。然后该模板特征与测试图像计算相似性得到attention mask。attention mask又被用于重新加权空间特征，以检测感兴趣的物体。另外这个框架可以同时用于检测、跟踪和分割。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426100348.png" alt=""></p>
-<p>针对问题 2，本文计算一个线性分类器来区分第一帧的感兴趣目标和其他目标，通过最小二乘方法得到闭式解从而可以学习到一个更关注感兴趣instance的鲁棒特征。下图3通过一个例子说明，左下是直接用feature embedding计算的attention map，右下是用线性分类器计算的attention map，显然右下效果更好。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426100433.png" alt=""></p>
-<p>最后运行速度为7FPS。</p>
-<hr>
-<h1 id="Siam-R-CNN-Visual-Tracking-by-Re-Detection"><a href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection" class="headerlink" title="Siam R-CNN: Visual Tracking by Re-Detection"></a>Siam R-CNN: Visual Tracking by Re-Detection</h1><p>这个就是用重检测的思想做跟踪，也是基于RCNN框架的，同时使用Tracklet Dynamic Programming Algorithm去跟踪所有潜在的目标。</p>
-<p>具体解读见前一篇笔记</p>
-<p><a href="https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection | CV home (kongbia.github.io)</a></p>
-<hr>
-<h1 id="Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><a href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach" class="headerlink" title="Tracking by Instance Detection: A Meta-Learning Approach"></a>Tracking by Instance Detection: A Meta-Learning Approach</h1><p>同样是域自适应方法将检测器转化成跟踪器，此篇更像是第一篇Bridging the Gap Between Detection and Tracking: A Unified Approach的进阶，不同的是本文没有额外添加模板引导分支，而是直接用标准的检测器通过元学习的方式做域自适应。避免了冗余结构使得速度大幅提升，达到40FPS。另外就是训练的时候加入了很多来自MAML++喝MetaSGD的技巧，效果更好。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426100802.png" alt=""></p>
-<p>具体的解读可以参考我b站的笔记，后续会搬运到博客。</p>
-<p><a href="https://www.bilibili.com/read/cv5521209/">[Note7] Tracking by Instance Detection: A Meta-Learning Approach - 哔哩哔哩专栏 (bilibili.com)</a></p>
-<hr>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这几篇文章的一个共同思路都是融合了Siamese架构和目标检测框架，将目标实例信息以各种形式加入待检测图像中，从而将class-level的通用检测转变成instance-level的实例检测（跟踪）。借助目标检测对尺度，形变等复杂条件的优越性来解决跟踪中的问题，同时将跟踪转变成one-shot的检测任务也避免了更新带来的漂移（第一篇里面使用了MAML进行更新，主要原因猜测是单纯往RPN中融合目标信息还不够work，像globaltracker在head上也添加了instance，而第三篇则是构建一个分类器增强鲁棒性）。当然引入检测框架带来的计算开销也是很大的，最后一种方法避免了额外的模板分支相当于跳出了Siamese框架，给实时带来了可能。</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>综述</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Siam R-CNN: Visual Tracking by Re-Detection</title>
     <url>/tracking/1-siamrcnn/</url>
     <content><![CDATA[<p>Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。</p>
@@ -145,6 +75,76 @@
       </categories>
       <tags>
         <tag>CVPR2020</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>目标检测框架在目标跟踪中的应用</title>
+    <url>/tracking/2-detection-in-tracking/</url>
+    <content><![CDATA[<p>从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。</p>
+<p>本篇笔记关注如何将目标检测框架应用在跟踪中，主要介绍其思想，细节部分不做过多描述，记录论文包含：</p>
+<ul>
+<li><a href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Huang_Bridging_the_Gap_Between_Detection_and_Tracking_A_Unified_Approach_ICCV_2019_paper.pdf">Bridging the Gap Between Detection and Tracking: A Unified Approach</a></li>
+<li><a href="https://arxiv.org/abs/1912.08531">GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</a></li>
+<li><a href="https://arxiv.org/abs/1910.11844">Learning to Track Any Object</a></li>
+<li><a href="https://arxiv.org/abs/1911.12836">Siam R-CNN: Visual Tracking by Re-Detection</a></li>
+<li><a href="https://arxiv.org/abs/2004.00830">Tracking by Instance Detection: A Meta-Learning Approach</a></li>
+</ul>
+<span id="more"></span>
+<h1 id="Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><a href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach" class="headerlink" title="Bridging the Gap Between Detection and Tracking: A Unified Approach"></a>Bridging the Gap Between Detection and Tracking: A Unified Approach</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234243.png" alt=""></p>
+<p>从结构图可以很直观的看出这就是Faster RCNN的框架，作者将目标跟踪任务看成是one-shot object detection 和 few-shot instance classification 的组合。前者是一个class-level的子任务用来寻找和目标相似的候选框，后者是instance-level的任务用来区分目标和干扰物。主要有两个模块：Target-guidence module(TGM) 和 few-shot instance classifier。</p>
+<p>TGM对目标和搜索区域的特征以及它们在主干中的相互作用进行编码，相当于让网络更关注于与目标相关的instance，后面几篇文章也用了不同的方法来实现这个目的。</p>
+<p>TGM虽然使检测器聚焦于与目标相关的物体，但忽略了周围的背景干扰。为了弥补这一点，提出了few-shot instance classifier。 然而，直接从头开始训练耗时且容易导过拟合。因此作者通过Model-Agnostic Meta Learning (MAML)进行few-shot finetune，增强判别性进一步消除distractors。</p>
+<p>MAML的目的是训练一组初始化参数，<strong>通过在初始参数的基础上进行一或多步的梯度调整，来达到仅用少量数据就能快速适应新task的目的，</strong>示意图如下：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234331.png" alt=""></p>
+<p>域自适应的检测器整体训练流程如下图：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234353.png" alt=""></p>
+<p>输入是三元组，包括examplar, support, query，训练分为inner and outer optimization loops。对于Inner optimization loop中，在support image上计算的loss用来微调meta-layers即detector heads的参数，然后用微调后的参数计算meta-loss其梯度用于更新outer optimization loop。具体公式可以参考原文。</p>
+<p>在线跟踪中将之前帧的检测结果作为训练样本在线更新detector head的参数。</p>
+<p>作者称这是第一篇将目标检测框架应用到跟踪上的通用框架，检测模型可以用Faster RCNN，SSD等，速度上SSD模型为10FPS   Faster RCNN模型为3FPS。</p>
+<hr>
+<h1 id="GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><a href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking" class="headerlink" title="GlobalTrack: A Simple and Strong Baseline for Long-term Tracking"></a>GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234652.png" alt=""></p>
+<p>这篇文章构建了一个global instance search tracker，主要思想是利用target来引导网络搜索特定instance，与上一篇的TGM模块思想类似，不过这里对在RPN阶段和分类回归阶段都加入了target信息进行引导。对应的就是Query-guided RPN 和 Query-guided RCNN。</p>
+<p><strong>Query-guided RPN</strong></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424234747.png" alt=""></p>
+<p>$z \in [k,k,c]$ 是query的ROI特征，$x \in [h,w,c]$ 是搜索图像的特征。$f_z$ 用 $k \times k$ 0-padding的卷积将 $z$ 转换为 $1 \times 1$ 的核作用于搜索区域，$f_x$ 使用 $3 \times 3$ 1-padding的卷积。$f_{out}$ 是 $1 \times 1 \times c$  的卷积将通道数变回为c，这个过程不使用正则化和激活函数。</p>
+<p><strong>Query-guided RCNN</strong></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210424235530.png" alt=""></p>
+<p> $z$ 定义同上，$x_i \in [k,k,c]$ 是提取的proposal的特征。$h_z$ 和 $h_x$ 均为 $3 \times 3$ 1-padding的卷积，$h_{out}$ 为$1 \times 1 \times c$  卷积。</p>
+<p>GlobalTrack 对视频每一帧的跟踪完全不依赖相邻帧，没有累计误差使得它在长期跟踪问题中准确率保持稳定。速度为6FPS。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426092832.png" alt=""></p>
+<center>车牌在长期跟踪过程中消失了一段时间，当车牌再次出现的时候，其他跟踪算法就再也无法恢复跟踪了，而没有累计误差的 GlobalTrack不受前面的影响立刻跟踪到了目标。</center>
+
+<hr>
+<h1 id="Learning-to-Track-Any-Object"><a href="#Learning-to-Track-Any-Object" class="headerlink" title="Learning to Track Any Object"></a>Learning to Track Any Object</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426093105.png" alt=""></p>
+<center>图1 (a)从基于图像的数据集学习一个通用对象先验，(b)通过计算一个封闭形式的目标和背景之间的线性判别器使其适应于一个感兴趣的特定对象(例如左上角的总线)。这允许跟踪物体通过显著的变形，而不捕获干扰物</center>
+
+<p>本文重点在于将category-specific object detector 变成 category-agnostic, object-specific detector来做跟踪。想达到这个目的，需要处理如下两个关键的问题，如图1所示：</p>
+<ol>
+<li>如何将 category specific prior 改为 generic objectness prior？</li>
+<li>如何进一步的将这种 generic prior 改为 particular instance of interst？</li>
+</ol>
+<p>针对问题1，作者构建了 a joint model for category-specific object detection and category-agnostic tracking。和之前类似，也是添加了目标特征的检测框架（基于 Mask R-CNN）如下图2所示 。其将目标模板作为输入，计算 feature embedding。然后该模板特征与测试图像计算相似性得到attention mask。attention mask又被用于重新加权空间特征，以检测感兴趣的物体。另外这个框架可以同时用于检测、跟踪和分割。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426100348.png" alt=""></p>
+<p>针对问题 2，本文计算一个线性分类器来区分第一帧的感兴趣目标和其他目标，通过最小二乘方法得到闭式解从而可以学习到一个更关注感兴趣instance的鲁棒特征。下图3通过一个例子说明，左下是直接用feature embedding计算的attention map，右下是用线性分类器计算的attention map，显然右下效果更好。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426100433.png" alt=""></p>
+<p>最后运行速度为7FPS。</p>
+<hr>
+<h1 id="Siam-R-CNN-Visual-Tracking-by-Re-Detection"><a href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection" class="headerlink" title="Siam R-CNN: Visual Tracking by Re-Detection"></a>Siam R-CNN: Visual Tracking by Re-Detection</h1><p>这个就是用重检测的思想做跟踪，也是基于RCNN框架的，同时使用Tracklet Dynamic Programming Algorithm去跟踪所有潜在的目标。</p>
+<p>具体解读见前一篇笔记</p>
+<p><a href="https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection | CV home (kongbia.github.io)</a></p>
+<hr>
+<h1 id="Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><a href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach" class="headerlink" title="Tracking by Instance Detection: A Meta-Learning Approach"></a>Tracking by Instance Detection: A Meta-Learning Approach</h1><p>同样是域自适应方法将检测器转化成跟踪器，此篇更像是第一篇Bridging the Gap Between Detection and Tracking: A Unified Approach的进阶，不同的是本文没有额外添加模板引导分支，而是直接用标准的检测器通过元学习的方式做域自适应。避免了冗余结构使得速度大幅提升，达到40FPS。另外就是训练的时候加入了很多来自MAML++喝MetaSGD的技巧，效果更好。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/1-detection-in-tracking/20210426100802.png" alt=""></p>
+<p>具体的解读可以参考我b站的笔记，后续会搬运到博客。</p>
+<p><a href="https://www.bilibili.com/read/cv5521209/">[Note7] Tracking by Instance Detection: A Meta-Learning Approach - 哔哩哔哩专栏 (bilibili.com)</a></p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这几篇文章的一个共同思路都是融合了Siamese架构和目标检测框架，将目标实例信息以各种形式加入待检测图像中，从而将class-level的通用检测转变成instance-level的实例检测（跟踪）。借助目标检测对尺度，形变等复杂条件的优越性来解决跟踪中的问题，同时将跟踪转变成one-shot的检测任务也避免了更新带来的漂移（第一篇里面使用了MAML进行更新，主要原因猜测是单纯往RPN中融合目标信息还不够work，像globaltracker在head上也添加了instance，而第三篇则是构建一个分类器增强鲁棒性）。当然引入检测框架带来的计算开销也是很大的，最后一种方法避免了额外的模板分支相当于跳出了Siamese框架，给实时带来了可能。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>综述</tag>
       </tags>
   </entry>
   <entry>
@@ -425,6 +425,73 @@
       </tags>
   </entry>
   <entry>
+    <title>Real-Time Visual Object Tracking via Few-Shot Learning</title>
+    <url>/tracking/35-FSL-tracking/</url>
+    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427173306.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2103.10130">论文</a></p>
+<p>跟踪可以看成是一个特殊的 few-shot learning (FSL) 问题，本文提出了一个通用的两阶段框架，它能够使用大量的FSL算法并且保持较快的速度。第一阶段通过SiamRPN生成若干潜在候选框，第二阶段通过少样本分类的思想对候选框进行分类。按照这种coarse-to-fine结构，第一阶段为第二阶段提供稀疏的样本，在第二阶段可以更方便、高效地进行多种FSL算法。作者选取了几种基于优化的少样本学习方法进行证明。此外，该框架可将大多数FSL算法直接应用到视觉跟踪中，使研究人员能够在这两个领域相互交流。</p>
+<span id="more"></span>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>跟踪任务要求在有限的时间内通过少量数据学习对目标和背景的分类，这与FSL任务非常相似。在少样本学习中，我们假设训练任务和新任务之间存在共享的元知识；在视觉跟踪领域，这可以解释为模型在序列中跟踪任何未见过对象的适应性。</p>
+<p>已经有一些方法将FSL的概念引入跟踪了，比如DiMP和一些MAML的方法，它们将在线更新纳入离线训练阶段作为内环 (inner loop)，使得在线更新可以由手工设计转变成数据驱动。然而，这些方法大多局限于对<strong>整个图像</strong>的<strong>特定卷积核</strong>进行优化设计，而不是像在FSL中，使用<strong>稀疏样本</strong>进行<strong>更定制化的权值学习</strong>(例如矩阵乘法因子)，这限制了直接引入各种新的FSL算法，因为直接应用各种FSL算法，将整个图像的所有位置作为输入样本，必然会牺牲其跟踪速度，而且大量简单负样本会在学习中占主导导致模型判别力下降。</p>
+<p>因此作者提出这个通用的两阶段级联结构，在第一阶段过滤掉大量简单负样本，从而使得第二阶段可以应用各种FSL算法在信息丰富的稀疏样本上实现高效的跟踪。作者选取了几种具有不同目标函数，优化方法，或解空间的少样本学习方法进行验证，速度在40-60 FPS。</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Cascaded-Tracking"><a href="#Cascaded-Tracking" class="headerlink" title="Cascaded Tracking"></a>Cascaded Tracking</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427203740.png" alt=""></p>
+<p>整体跟踪框架如图1所示，第一阶段利用SiamRPN++生成若干个候选框，经过ROI Align后送入第二阶段进行少样本分类。第二阶段是一个N-shot-2-way的分类任务，所有候选使用在线生成的伪标签进行标记。</p>
+<h2 id="Second-Stage-as-Few-Shot-Learning"><a href="#Second-Stage-as-Few-Shot-Learning" class="headerlink" title="Second Stage as Few-Shot Learning"></a>Second Stage as Few-Shot Learning</h2><p>首先用数学形式定义任务，公式比较多直接贴图：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427205448.png" style="zoom:80%;" /></p>
+<p>其中 $\theta$ 是meta-training stage (inner loop)中使用base loss $ L_{base} $ 优化得到的sequence-specific参数；然后用$\theta$ 去计算meta loss $ L_{meta} $，用于 meta-testing (outer loop) stage 来更新few-shot learner 的参数 $\rho$ 。而$\varphi $ 表示feature embedding的参数，就是前面一大堆特征提取之类的。</p>
+<p>这里的meta loss是用于分类，所以采用focal loss：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427211809.png" style="zoom:80%;" /></p>
+<p>其中 $\gamma$ 是可学习的缩放因子，$\theta^T$ 是前景和背景的权重。$\alpha, \beta$ 是focal loss的超参数。</p>
+<p>few-shot learner $\Lambda$ 的选择对于公式1的影响巨大，它会被用来分类第一阶段得到的稀疏候选样本，下面介绍几种常用的基于优化（optimization-based）的方法。</p>
+<h2 id="Optimization-Based-Few-Shot-Learners"><a href="#Optimization-Based-Few-Shot-Learners" class="headerlink" title="Optimization-Based Few-Shot Learners"></a>Optimization-Based Few-Shot Learners</h2><p>首先默认目标是一个线性凸优化问题。</p>
+<p><strong>RR-prim-itr</strong> 就是在原空间求解岭回归问题，base loss $ L_{base} $ 为L2 loss，可以看成MAML的一种特例。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427215927.png" style="zoom:80%;" /></p>
+<p>其中 $\omega_n$ 是每个样本的权重，为了加速优化，借鉴DiMP中的最速梯度下降：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427220212.png" style="zoom:80%;" /></p>
+<p><strong>RR-dual-itr</strong> 迭代求解对偶空间中的岭回归，$\theta$ 当成训练集的特征向量的线性组合。对偶变量 $a$ 作为权重因子。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427220526.png" style="zoom:80%;" /></p>
+<p>将公式5带入公式3，得到优化目标</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427220643.png" style="zoom:80%;" /></p>
+<p>用二次规划的方式求解对偶变量 $a$ ，同样可以利用GPU加速。此外，特征向量在训练集中进行线性组合可以缓解过拟合问题。</p>
+<p><strong>RR-dual-cls</strong> 在对偶空间中开发了岭回归的封闭解用于分类。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427221514.png" style="zoom:80%;" /></p>
+<p>优势就是把原始闭式解形式中的 $ \Phi_T\ \Phi$ 变成了 $ \Phi \Phi_T$，使得计算量由 $O(Nd^2)$ 下降到了$O(N^2d)$ ，样本量N远小于特征维数d。</p>
+<p><strong>SVM-dual-itr</strong> 在对偶空间迭代求解稀疏核用于线性分类。主要解决岭回归容易过拟合以及对噪声不鲁棒的问题。用SVM替换了最小二乘，细节不太明白，要去看原文。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427222444.png" style="zoom:80%;" /></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427222555.png" style="zoom:80%;" /></p>
+<h2 id="Online-Tracking"><a href="#Online-Tracking" class="headerlink" title="Online Tracking"></a>Online Tracking</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427230231.png" alt=""></p>
+<p><strong>Candidate Selection</strong> 候选框根据第一阶段的检测结果用阈值为0.2的NMS进行筛选，再通过ROI Align作用于第二阶段。初始化时选择24个样本，IOU最高的作为正样本，其余为负样本，并通过数据增广生成额外的8个正样本，共同用于初始化few-shot learner。跟踪过程中，选择NMS后M=8个样本送入few-shot learner进行判断输出最终结果。用融合得分（两个阶段的得分加权相加）top-k个候选框更新support set中最老的样本，其中最高的为正样本，其余为负样本，k=4。</p>
+<p><strong>Support Set Maintenance</strong> 先入先出（FIFO），对于每个样本赋予权重 $\omega$，随着与当前帧的间隔而指数衰减。原空间中的求解存储1000个样本，对偶空间只有60个，一方面是对CPU资源要求高，另外60个的性能已经很好。此外，第一帧的正样本永远会留在support set中。</p>
+<p><strong>Few-Shot Learner Update</strong> 原空间用公式4更新，对偶空间用滑动平均更新</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427231851.png" style="zoom:80%;" /></p>
+<p><strong>Stage Fusion</strong> 将两个阶段的分类和回归结果融合，第二阶段除了得到分类得分，还会进行类似RCNN的回归refine。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427232137.png" style="zoom:80%;" /></p>
+<h1 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h1><p>训练类似DiMP，每个task从一个视频中选择3个support和2个query。对于第二阶段，NMS后采样16个样本，IOU大于0.8为正，小于0.2为负。每张图片总共8个样本，其中最多两个正样本。meta-training和meta-test均按照上述准则。第一阶段的SiamRPN++用ATSS进行label assign。</p>
+<p>训练loss如下：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427233344.png" style="zoom:80%;" /></p>
+<p>两个阶段都需要分类回归，分类为focal loss，回归为L1 loss。注意这里rcnn的回归是在第一阶段的正样本基础上进行的。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427234324.png" alt=""></p>
+<p>比较了baseline（第一栏），不使用FSL的基于全连接的距离度量方法（第二栏），metric-based少样本学习方法（第三栏），以及本文使用的四种optimization-based少样本学习方法（第四栏）。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427234748.png" alt=""></p>
+<p>只用第一阶段方法，SiamRPN++远不如DiMP；加入第二阶段后，这个差距被消除了，且速度将近领先了3倍。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427234945.png" alt=""></p>
+<p>support set数量的影响，对于不同数据集最佳的数量是不一样的。但是即使是最低限度的M=40鲁棒性依然不错。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210428093340.png" alt=""></p>
+<p>最后可视化了候选框及置信度，可以看到第二阶段对于区分目标和干扰物非常有效。</p>
+<h2 id="Comparison-with-State-of-the-Arts"><a href="#Comparison-with-State-of-the-Arts" class="headerlink" title="Comparison with State-of-the-Arts"></a>Comparison with State-of-the-Arts</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427235535.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427235554.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427235609.png" alt=""></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文的创新点主要集中在两阶段和少样本学习。这两个东西单独来看都分别有人做过了，像SPM，SPLT就是先检候选框再分类的两阶段方法；而DiMP还有一些用了MAML的跟踪方法都属于少样本学习。作者将二者结合，最大的好处在于第二阶段得到的稀疏样本更适合FSL的任务设置，可以不用局限于任何特定类型的FSL算法，大幅加强了跟踪和FSL的联系。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>FSL</tag>
+        <tag>arxiv</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Learning Target Candidate Association to Keep Track of What Not to Track</title>
     <url>/tracking/36-learning-target-candidate-association/</url>
     <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/36-learning-target-candidate-association/20210428110851.png" alt=""></p>
@@ -503,120 +570,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Real-Time Visual Object Tracking via Few-Shot Learning</title>
-    <url>/tracking/35-FSL-tracking/</url>
-    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427173306.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2103.10130">论文</a></p>
-<p>跟踪可以看成是一个特殊的 few-shot learning (FSL) 问题，本文提出了一个通用的两阶段框架，它能够使用大量的FSL算法并且保持较快的速度。第一阶段通过SiamRPN生成若干潜在候选框，第二阶段通过少样本分类的思想对候选框进行分类。按照这种coarse-to-fine结构，第一阶段为第二阶段提供稀疏的样本，在第二阶段可以更方便、高效地进行多种FSL算法。作者选取了几种基于优化的少样本学习方法进行证明。此外，该框架可将大多数FSL算法直接应用到视觉跟踪中，使研究人员能够在这两个领域相互交流。</p>
-<span id="more"></span>
-<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>跟踪任务要求在有限的时间内通过少量数据学习对目标和背景的分类，这与FSL任务非常相似。在少样本学习中，我们假设训练任务和新任务之间存在共享的元知识；在视觉跟踪领域，这可以解释为模型在序列中跟踪任何未见过对象的适应性。</p>
-<p>已经有一些方法将FSL的概念引入跟踪了，比如DiMP和一些MAML的方法，它们将在线更新纳入离线训练阶段作为内环 (inner loop)，使得在线更新可以由手工设计转变成数据驱动。然而，这些方法大多局限于对<strong>整个图像</strong>的<strong>特定卷积核</strong>进行优化设计，而不是像在FSL中，使用<strong>稀疏样本</strong>进行<strong>更定制化的权值学习</strong>(例如矩阵乘法因子)，这限制了直接引入各种新的FSL算法，因为直接应用各种FSL算法，将整个图像的所有位置作为输入样本，必然会牺牲其跟踪速度，而且大量简单负样本会在学习中占主导导致模型判别力下降。</p>
-<p>因此作者提出这个通用的两阶段级联结构，在第一阶段过滤掉大量简单负样本，从而使得第二阶段可以应用各种FSL算法在信息丰富的稀疏样本上实现高效的跟踪。作者选取了几种具有不同目标函数，优化方法，或解空间的少样本学习方法进行验证，速度在40-60 FPS。</p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Cascaded-Tracking"><a href="#Cascaded-Tracking" class="headerlink" title="Cascaded Tracking"></a>Cascaded Tracking</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427203740.png" alt=""></p>
-<p>整体跟踪框架如图1所示，第一阶段利用SiamRPN++生成若干个候选框，经过ROI Align后送入第二阶段进行少样本分类。第二阶段是一个N-shot-2-way的分类任务，所有候选使用在线生成的伪标签进行标记。</p>
-<h2 id="Second-Stage-as-Few-Shot-Learning"><a href="#Second-Stage-as-Few-Shot-Learning" class="headerlink" title="Second Stage as Few-Shot Learning"></a>Second Stage as Few-Shot Learning</h2><p>首先用数学形式定义任务，公式比较多直接贴图：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427205448.png" style="zoom:80%;" /></p>
-<p>其中 $\theta$ 是meta-training stage (inner loop)中使用base loss $ L_{base} $ 优化得到的sequence-specific参数；然后用$\theta$ 去计算meta loss $ L_{meta} $，用于 meta-testing (outer loop) stage 来更新few-shot learner 的参数 $\rho$ 。而$\varphi $ 表示feature embedding的参数，就是前面一大堆特征提取之类的。</p>
-<p>这里的meta loss是用于分类，所以采用focal loss：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427211809.png" style="zoom:80%;" /></p>
-<p>其中 $\gamma$ 是可学习的缩放因子，$\theta^T$ 是前景和背景的权重。$\alpha, \beta$ 是focal loss的超参数。</p>
-<p>few-shot learner $\Lambda$ 的选择对于公式1的影响巨大，它会被用来分类第一阶段得到的稀疏候选样本，下面介绍几种常用的基于优化（optimization-based）的方法。</p>
-<h2 id="Optimization-Based-Few-Shot-Learners"><a href="#Optimization-Based-Few-Shot-Learners" class="headerlink" title="Optimization-Based Few-Shot Learners"></a>Optimization-Based Few-Shot Learners</h2><p>首先默认目标是一个线性凸优化问题。</p>
-<p><strong>RR-prim-itr</strong> 就是在原空间求解岭回归问题，base loss $ L_{base} $ 为L2 loss，可以看成MAML的一种特例。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427215927.png" style="zoom:80%;" /></p>
-<p>其中 $\omega_n$ 是每个样本的权重，为了加速优化，借鉴DiMP中的最速梯度下降：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427220212.png" style="zoom:80%;" /></p>
-<p><strong>RR-dual-itr</strong> 迭代求解对偶空间中的岭回归，$\theta$ 当成训练集的特征向量的线性组合。对偶变量 $a$ 作为权重因子。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427220526.png" style="zoom:80%;" /></p>
-<p>将公式5带入公式3，得到优化目标</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427220643.png" style="zoom:80%;" /></p>
-<p>用二次规划的方式求解对偶变量 $a$ ，同样可以利用GPU加速。此外，特征向量在训练集中进行线性组合可以缓解过拟合问题。</p>
-<p><strong>RR-dual-cls</strong> 在对偶空间中开发了岭回归的封闭解用于分类。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427221514.png" style="zoom:80%;" /></p>
-<p>优势就是把原始闭式解形式中的 $ \Phi_T\ \Phi$ 变成了 $ \Phi \Phi_T$，使得计算量由 $O(Nd^2)$ 下降到了$O(N^2d)$ ，样本量N远小于特征维数d。</p>
-<p><strong>SVM-dual-itr</strong> 在对偶空间迭代求解稀疏核用于线性分类。主要解决岭回归容易过拟合以及对噪声不鲁棒的问题。用SVM替换了最小二乘，细节不太明白，要去看原文。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427222444.png" style="zoom:80%;" /></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427222555.png" style="zoom:80%;" /></p>
-<h2 id="Online-Tracking"><a href="#Online-Tracking" class="headerlink" title="Online Tracking"></a>Online Tracking</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427230231.png" alt=""></p>
-<p><strong>Candidate Selection</strong> 候选框根据第一阶段的检测结果用阈值为0.2的NMS进行筛选，再通过ROI Align作用于第二阶段。初始化时选择24个样本，IOU最高的作为正样本，其余为负样本，并通过数据增广生成额外的8个正样本，共同用于初始化few-shot learner。跟踪过程中，选择NMS后M=8个样本送入few-shot learner进行判断输出最终结果。用融合得分（两个阶段的得分加权相加）top-k个候选框更新support set中最老的样本，其中最高的为正样本，其余为负样本，k=4。</p>
-<p><strong>Support Set Maintenance</strong> 先入先出（FIFO），对于每个样本赋予权重 $\omega$，随着与当前帧的间隔而指数衰减。原空间中的求解存储1000个样本，对偶空间只有60个，一方面是对CPU资源要求高，另外60个的性能已经很好。此外，第一帧的正样本永远会留在support set中。</p>
-<p><strong>Few-Shot Learner Update</strong> 原空间用公式4更新，对偶空间用滑动平均更新</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427231851.png" style="zoom:80%;" /></p>
-<p><strong>Stage Fusion</strong> 将两个阶段的分类和回归结果融合，第二阶段除了得到分类得分，还会进行类似RCNN的回归refine。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427232137.png" style="zoom:80%;" /></p>
-<h1 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h1><p>训练类似DiMP，每个task从一个视频中选择3个support和2个query。对于第二阶段，NMS后采样16个样本，IOU大于0.8为正，小于0.2为负。每张图片总共8个样本，其中最多两个正样本。meta-training和meta-test均按照上述准则。第一阶段的SiamRPN++用ATSS进行label assign。</p>
-<p>训练loss如下：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427233344.png" style="zoom:80%;" /></p>
-<p>两个阶段都需要分类回归，分类为focal loss，回归为L1 loss。注意这里rcnn的回归是在第一阶段的正样本基础上进行的。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427234324.png" alt=""></p>
-<p>比较了baseline（第一栏），不使用FSL的基于全连接的距离度量方法（第二栏），metric-based少样本学习方法（第三栏），以及本文使用的四种optimization-based少样本学习方法（第四栏）。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427234748.png" alt=""></p>
-<p>只用第一阶段方法，SiamRPN++远不如DiMP；加入第二阶段后，这个差距被消除了，且速度将近领先了3倍。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427234945.png" alt=""></p>
-<p>support set数量的影响，对于不同数据集最佳的数量是不一样的。但是即使是最低限度的M=40鲁棒性依然不错。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210428093340.png" alt=""></p>
-<p>最后可视化了候选框及置信度，可以看到第二阶段对于区分目标和干扰物非常有效。</p>
-<h2 id="Comparison-with-State-of-the-Arts"><a href="#Comparison-with-State-of-the-Arts" class="headerlink" title="Comparison with State-of-the-Arts"></a>Comparison with State-of-the-Arts</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427235535.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427235554.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/35-FSL-tracking/20210427235609.png" alt=""></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文的创新点主要集中在两阶段和少样本学习。这两个东西单独来看都分别有人做过了，像SPM，SPLT就是先检候选框再分类的两阶段方法；而DiMP还有一些用了MAML的跟踪方法都属于少样本学习。作者将二者结合，最大的好处在于第二阶段得到的稀疏样本更适合FSL的任务设置，可以不用局限于任何特定类型的FSL算法，大幅加强了跟踪和FSL的联系。</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>FSL</tag>
-        <tag>arxiv</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Updatable Siamese Tracker with Two-stage One-shot Learning</title>
-    <url>/tracking/38-siamtol/</url>
-    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510102825.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2104.15049">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文主要解决孪生跟踪器缺乏在线更新能力的问题。传统的线性模板更新难以处理目标的不规则变化和采样噪声，造成跟踪漂移；而一些像updatenet采用网络进行自适应更新的方法，其更新网络和跟踪器在结构上是分离的，不能从联合训练中受益，也不能以最佳方式合作。</p>
-<p>为了实现高质量的自适应更新，作者从 one-shot learning的角度提出一个two-stage one-shot learner，利用不同阶段的目标样本预测分类器的参数。具体来说，除了使用模板分支来学习初始目标特征，作者额外增加了一个输入分支用于捕获后续帧中的目标特征，并设计了一个残差模块来使用这些特征更新初始模板。通过残差学习融合多帧目标特征，跟踪器可以用更合适的模板跟踪当前目标。此外，还设计了一种多方面(multi-aspect)的训练损失来避免过拟合。</p>
-<span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="One-shot-learning-formulation"><a href="#One-shot-learning-formulation" class="headerlink" title="One-shot learning formulation"></a>One-shot learning formulation</h2><p>SiamRPN指出孪生跟踪框架是一个one-shot learner，即通过初始帧的一次学习使得模型能够跟踪到后续帧中的目标，本节首先对其进行公式化定义。</p>
-<p>目标跟踪的典型框架是判别分类器$\varphi (x,W)$，目标是在训练数据集上找到能使总损失L最小化的参数W：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510115919.png" alt=""></p>
-<p>$n$表示训练样本数，$l_i$是样本$x_i$的标签。尽管分类器在目标跟踪上具有很强的竞争力，但需要大量计算量和样本在线训练学习。</p>
-<p>另外一种跟踪框架是孪生网络，目标是学习模板和搜索区域之间的相似性度量：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510152537.png" alt=""></p>
-<p>$z_i$和$x_i$分别表示模板和搜索区域，$\varphi ‘$和 $\zeta$ 分别表示特征提取网络和匹配网络。</p>
-<p>进一步分析，我们发现公式2的孪生网络模型可以被重新解释为类似公式1的one-shot分类器模型。对于分类器$\varphi (x,W)$，若仅通过一个感兴趣样本$z_i$就能学到分类器参数$W$，那么这就是一个one-shot learner。因此，孪生网络的模板分支可以看成是一个元学习函数$\omega$，它将模板特征映射成分类器参数$W$；而搜索分支和互相关就是一个检测器，整个目标函数定义如下：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510154435.png" alt=""></p>
-<p>至此，我们就把孪生框架解释为了one-shot learning，图1直观展示了这种表达方式</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510155519.png" alt=""></p>
-<h2 id="Two-stage-One-shot-learner"><a href="#Two-stage-One-shot-learner" class="headerlink" title="Two-stage One-shot learner"></a>Two-stage One-shot learner</h2><p>孪生网络框架只能在初始帧这个stage通过one-shot learning学到目标信息，因此无法在线更新。那自然会想能不能让这个learner在不同的stage（跟踪阶段）去学习目标信息呢？因此作者提出了 two-stage one-shot learner (TOL)，可以结合具有不同属性的样本来预测分类器的参数$W$。目标函数定义如下：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510160306.png" alt=""></p>
-<p>相比公式3，就是增加了一个来自后续帧中的样本$u_i$来学习$\omega$ 。</p>
-<h2 id="Updatable-Siamese-Network"><a href="#Updatable-Siamese-Network" class="headerlink" title="Updatable Siamese Network"></a>Updatable Siamese Network</h2><p>基于上述的 two-stage one-shot learner，本文提出一个可更新的孪生网络，如下图</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510162506.png" alt=""></p>
-<p>相比原始的孪生框架，增加了一个update分支，然后把两个分支的目标特征进行融合。其实抛开上面讲的那些one-shot learning也不妨碍理解这个结构，无非就是把初始帧和跟踪过程中的历史帧通过网络融合生成一个更好的模板以适应跟踪中的变化。</p>
-<p>融合模板的过程（或者说元学习函数）定义如下：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510163640.png" alt=""></p>
-<p>其中$zf$和$uf$分别表示模板和更新样本的特征，M表示特征融合网络（三层卷积）。</p>
-<p><strong>Multi-aspect loss training</strong> 训练网络时在模板和搜索图像之间的间隔图像中额外扣一个更新样本，并且计算损失分别考虑了模板样本-搜索样本，更新样本-搜索样本，融合模板样本-搜索样本三方面损失，如图3所示。这样做是因为网络包括一个基本的孪生跟踪器和一个在线调整的更新器两部分，如果直接用一个整体损失训练，网络可能难以平衡这两部分。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510164536.png" alt=""></p>
-<p><strong>Online update</strong> 在线跟踪过程中，更新样本每N=10帧更新一次，且满足置信度大于阈值0.9。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Comparison-with-the-state-of-the-arts"><a href="#Comparison-with-the-state-of-the-arts" class="headerlink" title="Comparison with the state-of-the-arts"></a>Comparison with the state-of-the-arts</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165043.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165257.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165536.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165551.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165627.png" alt=""></p>
-<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165730.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>FSL</tag>
-        <tag>arxiv</tag>
-        <tag>模型更新</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Learning to Filter: Siamese Relation Network for Robust Tracking</title>
     <url>/tracking/37-siamrn/</url>
     <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/37-siamrn/20210508213527.png" alt=""></p>
@@ -665,6 +618,53 @@
       <tags>
         <tag>CVPR2021</tag>
         <tag>FSL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Updatable Siamese Tracker with Two-stage One-shot Learning</title>
+    <url>/tracking/38-siamtol/</url>
+    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510102825.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2104.15049">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文主要解决孪生跟踪器缺乏在线更新能力的问题。传统的线性模板更新难以处理目标的不规则变化和采样噪声，造成跟踪漂移；而一些像updatenet采用网络进行自适应更新的方法，其更新网络和跟踪器在结构上是分离的，不能从联合训练中受益，也不能以最佳方式合作。</p>
+<p>为了实现高质量的自适应更新，作者从 one-shot learning的角度提出一个two-stage one-shot learner，利用不同阶段的目标样本预测分类器的参数。具体来说，除了使用模板分支来学习初始目标特征，作者额外增加了一个输入分支用于捕获后续帧中的目标特征，并设计了一个残差模块来使用这些特征更新初始模板。通过残差学习融合多帧目标特征，跟踪器可以用更合适的模板跟踪当前目标。此外，还设计了一种多方面(multi-aspect)的训练损失来避免过拟合。</p>
+<span id="more"></span>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="One-shot-learning-formulation"><a href="#One-shot-learning-formulation" class="headerlink" title="One-shot learning formulation"></a>One-shot learning formulation</h2><p>SiamRPN指出孪生跟踪框架是一个one-shot learner，即通过初始帧的一次学习使得模型能够跟踪到后续帧中的目标，本节首先对其进行公式化定义。</p>
+<p>目标跟踪的典型框架是判别分类器$\varphi (x,W)$，目标是在训练数据集上找到能使总损失L最小化的参数W：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510115919.png" alt=""></p>
+<p>$n$表示训练样本数，$l_i$是样本$x_i$的标签。尽管分类器在目标跟踪上具有很强的竞争力，但需要大量计算量和样本在线训练学习。</p>
+<p>另外一种跟踪框架是孪生网络，目标是学习模板和搜索区域之间的相似性度量：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510152537.png" alt=""></p>
+<p>$z_i$和$x_i$分别表示模板和搜索区域，$\varphi ‘$和 $\zeta$ 分别表示特征提取网络和匹配网络。</p>
+<p>进一步分析，我们发现公式2的孪生网络模型可以被重新解释为类似公式1的one-shot分类器模型。对于分类器$\varphi (x,W)$，若仅通过一个感兴趣样本$z_i$就能学到分类器参数$W$，那么这就是一个one-shot learner。因此，孪生网络的模板分支可以看成是一个元学习函数$\omega$，它将模板特征映射成分类器参数$W$；而搜索分支和互相关就是一个检测器，整个目标函数定义如下：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510154435.png" alt=""></p>
+<p>至此，我们就把孪生框架解释为了one-shot learning，图1直观展示了这种表达方式</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510155519.png" alt=""></p>
+<h2 id="Two-stage-One-shot-learner"><a href="#Two-stage-One-shot-learner" class="headerlink" title="Two-stage One-shot learner"></a>Two-stage One-shot learner</h2><p>孪生网络框架只能在初始帧这个stage通过one-shot learning学到目标信息，因此无法在线更新。那自然会想能不能让这个learner在不同的stage（跟踪阶段）去学习目标信息呢？因此作者提出了 two-stage one-shot learner (TOL)，可以结合具有不同属性的样本来预测分类器的参数$W$。目标函数定义如下：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510160306.png" alt=""></p>
+<p>相比公式3，就是增加了一个来自后续帧中的样本$u_i$来学习$\omega$ 。</p>
+<h2 id="Updatable-Siamese-Network"><a href="#Updatable-Siamese-Network" class="headerlink" title="Updatable Siamese Network"></a>Updatable Siamese Network</h2><p>基于上述的 two-stage one-shot learner，本文提出一个可更新的孪生网络，如下图</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510162506.png" alt=""></p>
+<p>相比原始的孪生框架，增加了一个update分支，然后把两个分支的目标特征进行融合。其实抛开上面讲的那些one-shot learning也不妨碍理解这个结构，无非就是把初始帧和跟踪过程中的历史帧通过网络融合生成一个更好的模板以适应跟踪中的变化。</p>
+<p>融合模板的过程（或者说元学习函数）定义如下：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510163640.png" alt=""></p>
+<p>其中$zf$和$uf$分别表示模板和更新样本的特征，M表示特征融合网络（三层卷积）。</p>
+<p><strong>Multi-aspect loss training</strong> 训练网络时在模板和搜索图像之间的间隔图像中额外扣一个更新样本，并且计算损失分别考虑了模板样本-搜索样本，更新样本-搜索样本，融合模板样本-搜索样本三方面损失，如图3所示。这样做是因为网络包括一个基本的孪生跟踪器和一个在线调整的更新器两部分，如果直接用一个整体损失训练，网络可能难以平衡这两部分。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510164536.png" alt=""></p>
+<p><strong>Online update</strong> 在线跟踪过程中，更新样本每N=10帧更新一次，且满足置信度大于阈值0.9。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Comparison-with-the-state-of-the-arts"><a href="#Comparison-with-the-state-of-the-arts" class="headerlink" title="Comparison with the state-of-the-arts"></a>Comparison with the state-of-the-arts</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165043.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165257.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165536.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165551.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165627.png" alt=""></p>
+<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165730.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>FSL</tag>
+        <tag>arxiv</tag>
+        <tag>模型更新</tag>
       </tags>
   </entry>
   <entry>
@@ -859,6 +859,56 @@
       </tags>
   </entry>
   <entry>
+    <title>Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking</title>
+    <url>/tracking/43-Crop-Transform-Paste/</url>
+    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210630203150.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2106.10900">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>现有的跟踪方法依赖大量高质量标注数据集训练，但很多复杂挑战场景并未出现在训练数据中。为了避免昂贵的人工标注，本文提出一种<strong>自监督</strong>学习方式。作者设计了Crop-Transform-Paste，通过模拟跟踪过程中各种场景变化，合成足够的训练数据。在合成数据中目标状态是已知的，因此无需人工标注。</p>
+<p>本文提出的自监督方法可以无缝集成到任何现有的跟踪框架中进行训练，实验证明提出的方法：1）在<strong>少样本</strong>跟踪场景中取得比监督学习更好的性能；2）能够处理目标形变、遮挡、背景干扰等各种挑战；3）可以与监督学习相结合，进一步提高性能。</p>
+<span id="more"></span>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701002056.png" alt=""></p>
+<p>整体框架如图2所示，作者利用Crop-Transform-Paste来合成训练样本。给定一个只有第一帧有标注的跟踪序列，首先裁剪目标区域（crop）；然后对目标进行跟踪相关的变换，模拟跟踪过程中的目标变化（transform）；最后将变换后的目标粘贴到不同帧的不同位置上，模拟目标周围的背景(上下文)变化（paste）。</p>
+<p><strong>Crop</strong></p>
+<p>根据给定的bbox裁剪目标patch。其实也可裁剪任意的patch，但这样缺乏有效的语义特征和边界。</p>
+<p><strong>Transform</strong></p>
+<p>如图2中间部分所示，采用shear, blur, cutout, color jittering, rescale 来模拟跟踪过程中的形变、运动模糊、遮挡、光照和尺度变换。其中跟踪场景中出现的模糊通常是由相机抖动或快速运动引起的，因此采用shaking blur（滤波器核仅在水平和垂直中心线非零）。shaking blur不和cutout同时使用，因为cutout填充的黑块会影响blur，而且现实中又模糊又遮挡的场景也比较少见。</p>
+<p><strong>Paste</strong></p>
+<p>如图2右边部分所示，把变换后的目标块随机粘贴到其他帧的不同位置上。为了减轻直接粘贴在边界处产生的尖锐突变，作者在目标patch外增加了pad，并在pad区域使用混合相加以平滑过渡。此外，还可以从其他视频中选择相似目标块粘贴到背景上，模拟背景（相似物）干扰，作者将其称为Similar-Patch Paste (SPatchP)。</p>
+<p><strong>Discussions</strong></p>
+<p>利用上述Crop-Transform-Paste可以生成各种训练样本而无需人工标注，因此属于自监督学习。作者讨论了它与典型的关注表征学习的自监督学习（SSL-RL）之间的差异。</p>
+<ol>
+<li>不同的框架。SSL-RL按照contrastive learning框架训练一个独立的特征学习模块，而本文的方法聚焦在生成无需人工标注的训练数据，因此可以嵌入到任何现有跟踪框架中；</li>
+<li>不同的data transformation技术。SSL-RL通过data transformation构造训练对来训练其特征学习模块，而本文设计了特定的跟踪相关的transformations来模拟跟踪过程中的场景变化。由于目标不同，采用了不同的transformation技术。比如后续实验中发现翻转(flip)会产生不利的影响。</li>
+</ol>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p>本文的实验非常充分，对比了不同的跟踪器，不同的数据变换方式，训练的数据量，以及和有监督方式的结合等。</p>
+<h2 id="Analysis-of-Crop-Transform-Paste"><a href="#Analysis-of-Crop-Transform-Paste" class="headerlink" title="Analysis of Crop-Transform-Paste"></a>Analysis of Crop-Transform-Paste</h2><p><strong>Selection of base target patch</strong> 表1对比了不同的目标块生成方式，SS-random表示随机裁剪，SS-annotated表示根据标注裁剪。显然后者优于前者，因为标注目标包含更有效的语义特征和更多的边界信息。并且自监督学习的性能和监督学习（Su）也比较接近。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701114700.png" alt=""></p>
+<p><strong>Selection of images to paste onto</strong> 表2对比了不同的粘贴方式。裁剪的目标粘贴到相同的视频序列中优于粘贴到其他视频序列中。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701115051.png" alt=""></p>
+<h2 id="Ablation-of-Each-Transformation"><a href="#Ablation-of-Each-Transformation" class="headerlink" title="Ablation of Each Transformation"></a>Ablation of Each Transformation</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701151326.png" alt=""></p>
+<p>作者做了两组实验分析每种变换的作用，第一组在只有shift变换的baseline1上添加一个变换来显示性能增益，第二组从使用所有变换的baseline2中删除一个变换来呈现性能下降。表3显示rescale和shift的作用最大，说明尺度和平移变换是最常见的。blur和color jitter单独使用不够好，可能过拟合，而与其他变换结合使用时有益的。flip不管单独使用还是结合其他变换一起均带来负面影响，作者认为它破坏了目标的边界信息（为什么？）。</p>
+<h2 id="Advantages-of-the-Proposed-Method"><a href="#Advantages-of-the-Proposed-Method" class="headerlink" title="Advantages of the Proposed Method"></a>Advantages of the Proposed Method</h2><p><strong>Challenge-oriented transformations</strong> Crop-Transform-Paste的一个明显优势在于可以针对跟踪挑战定制变换方法，比如1) rescale for Scale Variation (SV); 2) Cutout for Occlusion (OCC); 3) Blur for Motion Blur (MB) and 4) Similar-Patch Paste (SPatchP) for Background Clutter (BC)。如图3所示，针对OTB100中的各种挑战，使用对应的变换方法能够有效提升性能。在遮挡、运动模糊和背景杂波的测试序列上，cutout, blur, 和 similar-patch paste 在SS+Su模式下的提升甚至超过单独SS模式下的提升，说明这些场景的标注数据很少。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701153651.png" alt=""></p>
+<p><strong>Data efficiency</strong> 图1和图4对比了自监督学习（SS）、监督学习（Su）和二者结合（SS+Su）在使用不同数量的标注样本训练时的性能。可以看到，SS仅需要很少的标注样本0.6K就能收敛到一个不错的结果。并且二者结合可以进一步提升监督学习的性能。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155122.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155137.png" alt=""></p>
+<p><strong>Integration with supervised methods</strong> </p>
+<p>表4用SiamRPN++和DiMP证明提出的自监督方法可以嵌入到现有的有监督框架中进一步提升性能。DiMP提升较小是因为它本身有个在线训练模块能够一定程度 处理跟踪目标或场景的变化。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155221.png" alt=""></p>
+<h2 id="Evaluation-against-Unsupervised-Methods"><a href="#Evaluation-against-Unsupervised-Methods" class="headerlink" title="Evaluation against Unsupervised Methods"></a>Evaluation against Unsupervised Methods</h2><p>最后是和无监督方法的对比，同样是更优的。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155442.png" alt=""></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文提出了一种基于Crop-Transform-Paste的自监督学习方法，用于在没有人工标注的场景下训练跟踪模型。方法简洁，实验充分。个人认为这篇文章的重点在于自监督而不是数据增广，毕竟增广那部分只是单纯做了些常见的变换，核心还是利用这些变换有针对地合成各类样本。</p>
+<p>但就带来一个新的思考：如果我不用合成样本的自监督学习，直接把所有的变换全部作为数据增广加到有监督学习的训练中效果如何？以一个视频序列举例，本文的合成样本只利用视频的某一帧进行变换再粘贴到其他帧上生成N个样本；而传统的监督方法是获取视频中任意N帧得到N个样本。那假如对这N个不同的真实样本直接做数据增广，理论上能够覆盖的样本变换范围应该更大，效果是不是会更好？</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>Data augmentation</tag>
+        <tag>Self-supervised</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>强化学习在目标跟踪中的应用</title>
     <url>/tracking/42-rl-tracking/</url>
     <content><![CDATA[<p>强化学习讨论的问题是智能体(agent) 如何在一个复杂不确定的环境(environment) 里去最大化它能获得的奖励。 今天介绍三篇关于强化学习在目标跟踪中的工作，分别利用强化学习来决策使用的特征，多个跟踪器的切换以及是否更新模板。</p>
@@ -965,56 +1015,6 @@
       <tags>
         <tag>综述</tag>
         <tag>强化学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking</title>
-    <url>/tracking/43-Crop-Transform-Paste/</url>
-    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210630203150.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2106.10900">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>现有的跟踪方法依赖大量高质量标注数据集训练，但很多复杂挑战场景并未出现在训练数据中。为了避免昂贵的人工标注，本文提出一种<strong>自监督</strong>学习方式。作者设计了Crop-Transform-Paste，通过模拟跟踪过程中各种场景变化，合成足够的训练数据。在合成数据中目标状态是已知的，因此无需人工标注。</p>
-<p>本文提出的自监督方法可以无缝集成到任何现有的跟踪框架中进行训练，实验证明提出的方法：1）在<strong>少样本</strong>跟踪场景中取得比监督学习更好的性能；2）能够处理目标形变、遮挡、背景干扰等各种挑战；3）可以与监督学习相结合，进一步提高性能。</p>
-<span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701002056.png" alt=""></p>
-<p>整体框架如图2所示，作者利用Crop-Transform-Paste来合成训练样本。给定一个只有第一帧有标注的跟踪序列，首先裁剪目标区域（crop）；然后对目标进行跟踪相关的变换，模拟跟踪过程中的目标变化（transform）；最后将变换后的目标粘贴到不同帧的不同位置上，模拟目标周围的背景(上下文)变化（paste）。</p>
-<p><strong>Crop</strong></p>
-<p>根据给定的bbox裁剪目标patch。其实也可裁剪任意的patch，但这样缺乏有效的语义特征和边界。</p>
-<p><strong>Transform</strong></p>
-<p>如图2中间部分所示，采用shear, blur, cutout, color jittering, rescale 来模拟跟踪过程中的形变、运动模糊、遮挡、光照和尺度变换。其中跟踪场景中出现的模糊通常是由相机抖动或快速运动引起的，因此采用shaking blur（滤波器核仅在水平和垂直中心线非零）。shaking blur不和cutout同时使用，因为cutout填充的黑块会影响blur，而且现实中又模糊又遮挡的场景也比较少见。</p>
-<p><strong>Paste</strong></p>
-<p>如图2右边部分所示，把变换后的目标块随机粘贴到其他帧的不同位置上。为了减轻直接粘贴在边界处产生的尖锐突变，作者在目标patch外增加了pad，并在pad区域使用混合相加以平滑过渡。此外，还可以从其他视频中选择相似目标块粘贴到背景上，模拟背景（相似物）干扰，作者将其称为Similar-Patch Paste (SPatchP)。</p>
-<p><strong>Discussions</strong></p>
-<p>利用上述Crop-Transform-Paste可以生成各种训练样本而无需人工标注，因此属于自监督学习。作者讨论了它与典型的关注表征学习的自监督学习（SSL-RL）之间的差异。</p>
-<ol>
-<li>不同的框架。SSL-RL按照contrastive learning框架训练一个独立的特征学习模块，而本文的方法聚焦在生成无需人工标注的训练数据，因此可以嵌入到任何现有跟踪框架中；</li>
-<li>不同的data transformation技术。SSL-RL通过data transformation构造训练对来训练其特征学习模块，而本文设计了特定的跟踪相关的transformations来模拟跟踪过程中的场景变化。由于目标不同，采用了不同的transformation技术。比如后续实验中发现翻转(flip)会产生不利的影响。</li>
-</ol>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p>本文的实验非常充分，对比了不同的跟踪器，不同的数据变换方式，训练的数据量，以及和有监督方式的结合等。</p>
-<h2 id="Analysis-of-Crop-Transform-Paste"><a href="#Analysis-of-Crop-Transform-Paste" class="headerlink" title="Analysis of Crop-Transform-Paste"></a>Analysis of Crop-Transform-Paste</h2><p><strong>Selection of base target patch</strong> 表1对比了不同的目标块生成方式，SS-random表示随机裁剪，SS-annotated表示根据标注裁剪。显然后者优于前者，因为标注目标包含更有效的语义特征和更多的边界信息。并且自监督学习的性能和监督学习（Su）也比较接近。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701114700.png" alt=""></p>
-<p><strong>Selection of images to paste onto</strong> 表2对比了不同的粘贴方式。裁剪的目标粘贴到相同的视频序列中优于粘贴到其他视频序列中。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701115051.png" alt=""></p>
-<h2 id="Ablation-of-Each-Transformation"><a href="#Ablation-of-Each-Transformation" class="headerlink" title="Ablation of Each Transformation"></a>Ablation of Each Transformation</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701151326.png" alt=""></p>
-<p>作者做了两组实验分析每种变换的作用，第一组在只有shift变换的baseline1上添加一个变换来显示性能增益，第二组从使用所有变换的baseline2中删除一个变换来呈现性能下降。表3显示rescale和shift的作用最大，说明尺度和平移变换是最常见的。blur和color jitter单独使用不够好，可能过拟合，而与其他变换结合使用时有益的。flip不管单独使用还是结合其他变换一起均带来负面影响，作者认为它破坏了目标的边界信息（为什么？）。</p>
-<h2 id="Advantages-of-the-Proposed-Method"><a href="#Advantages-of-the-Proposed-Method" class="headerlink" title="Advantages of the Proposed Method"></a>Advantages of the Proposed Method</h2><p><strong>Challenge-oriented transformations</strong> Crop-Transform-Paste的一个明显优势在于可以针对跟踪挑战定制变换方法，比如1) rescale for Scale Variation (SV); 2) Cutout for Occlusion (OCC); 3) Blur for Motion Blur (MB) and 4) Similar-Patch Paste (SPatchP) for Background Clutter (BC)。如图3所示，针对OTB100中的各种挑战，使用对应的变换方法能够有效提升性能。在遮挡、运动模糊和背景杂波的测试序列上，cutout, blur, 和 similar-patch paste 在SS+Su模式下的提升甚至超过单独SS模式下的提升，说明这些场景的标注数据很少。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701153651.png" alt=""></p>
-<p><strong>Data efficiency</strong> 图1和图4对比了自监督学习（SS）、监督学习（Su）和二者结合（SS+Su）在使用不同数量的标注样本训练时的性能。可以看到，SS仅需要很少的标注样本0.6K就能收敛到一个不错的结果。并且二者结合可以进一步提升监督学习的性能。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155122.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155137.png" alt=""></p>
-<p><strong>Integration with supervised methods</strong> </p>
-<p>表4用SiamRPN++和DiMP证明提出的自监督方法可以嵌入到现有的有监督框架中进一步提升性能。DiMP提升较小是因为它本身有个在线训练模块能够一定程度 处理跟踪目标或场景的变化。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155221.png" alt=""></p>
-<h2 id="Evaluation-against-Unsupervised-Methods"><a href="#Evaluation-against-Unsupervised-Methods" class="headerlink" title="Evaluation against Unsupervised Methods"></a>Evaluation against Unsupervised Methods</h2><p>最后是和无监督方法的对比，同样是更优的。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/43-Crop-Transform-Paste/20210701155442.png" alt=""></p>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文提出了一种基于Crop-Transform-Paste的自监督学习方法，用于在没有人工标注的场景下训练跟踪模型。方法简洁，实验充分。个人认为这篇文章的重点在于自监督而不是数据增广，毕竟增广那部分只是单纯做了些常见的变换，核心还是利用这些变换有针对地合成各类样本。</p>
-<p>但就带来一个新的思考：如果我不用合成样本的自监督学习，直接把所有的变换全部作为数据增广加到有监督学习的训练中效果如何？以一个视频序列举例，本文的合成样本只利用视频的某一帧进行变换再粘贴到其他帧上生成N个样本；而传统的监督方法是获取视频中任意N帧得到N个样本。那假如对这N个不同的真实样本直接做数据增广，理论上能够覆盖的样本变换范围应该更大，效果是不是会更好？</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>Data augmentation</tag>
-        <tag>Self-supervised</tag>
       </tags>
   </entry>
   <entry>
