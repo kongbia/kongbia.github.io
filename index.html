@@ -145,7 +145,7 @@
         <a href="mailto:zjphust@gmail.com" title="E-Mail → mailto:zjphust@gmail.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i>E-Mail</a>
       </span>
       <span class="links-of-author-item">
-        <a href="https://space.bilibili.com/5567932/article" title="BiliBili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5567932&#x2F;article" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>BiliBili</a>
+        <a href="https://space.bilibili.com/5567932/article" title="BiliBili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5567932&#x2F;article" rel="noopener" target="_blank"><i class="fab fa-bilibili fa-fw"></i>BiliBili</a>
       </span>
   </div>
 
@@ -217,7 +217,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">Bearbeitet am</span>
-      <time title="Geändert am: 2022-05-31 09:15:43" itemprop="dateModified" datetime="2022-05-31T09:15:43+08:00">2022-05-31</time>
+      <time title="Geändert am: 2022-05-31 09:50:21" itemprop="dateModified" datetime="2022-05-31T09:50:21+08:00">2022-05-31</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -242,29 +242,6 @@
           <p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172159.png" alt=""></p>
 <p>MixFormer: End-to-End Tracking with Iterative Mixed Attention <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.11082">论文</a> <a target="_blank" rel="noopener" href="https://github.com/MCG-NJU/MixFormer">代码</a></p>
 <p>核心：用transfrom架构整合特征提取和特征融合</p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172748.png" alt=""></p>
-<p>主流的跟踪框架分三步：特征提取、特征融合、预测头分类回归</p>
-<p>其中特征融合是关键，下图展示了不同的融合方法。（摘自 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1L541127MD?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">【VALSE论文速览-68期】MixFormer:更加简洁的端到端单目标跟踪器</a>）</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172920.png" alt=""></p>
-<p>最近的研究使用transformer进行融合，但仍然依赖CNN提取特征，这其中存在一些局限：</p>
-<ol>
-<li>attention只作用在高层抽象的特征表示空间，忽略了浅层特征；</li>
-<li>CNN对通用对象识别进行预训练，可能会忽略用于跟踪的更精细的结构信息；</li>
-<li>CNN的表征能力是局部的，缺乏长距离建模的能力</li>
-</ol>
-<p>解决方案：</p>
-<p>提出一个通用的transformer结构同时进行特征提取和特征融合。</p>
-<p>具有如下好处:</p>
-<ol>
-<li>使特征提取更具体到相应的跟踪目标，并捕获更多目标特定的判别特征;</li>
-<li>让目标信息更extensive的融合进搜索区域；</li>
-<li>结构更加紧凑简洁。</li>
-</ol>
-<p>主要创新点：</p>
-<ul>
-<li>提出了 MAM 模块，应用 attnetion 机制同时进行特征提取与信息交互</li>
-<li>提出SPM模块进行模板更新</li>
-</ul>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/tracking/54-mixformer/#more" rel="contents">
@@ -1213,6 +1190,12 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 
