@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta name="renderer" content="webkit"/>
+    <meta name="force-rendering" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="baidu-site-verification" content="code-8gGOibEXMj" />
+    <meta name="baidu-site-verification" content="code-Toh8kQYN7N" />
+    <meta name="google-site-verification" content="r3Cw4aIKBFXcYVnB8J-bxaQozYY6BHsoE3q5soJN3Po" />
+    <meta name="msvalidate.01" content="C5E4D0D01152A883DDA407CDCE62E1DA" />
+    <meta name='description' content='A personal blog that shares computer vision papers'>
+    <script>if (/*@cc_on!@*/false || (!!window.MSInputMethodContext && !!document.documentMode)) window.location.href="https://support.dmeng.net/upgrade-your-browser.html?referrer="+encodeURIComponent(window.location.href); </script>
+    
+    
+        <link rel="shortcut icon" href="/images/avatar.jpg">
+    
+     
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/5.13.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify@2.2.30/dist/vuetify.min.css" rel="stylesheet">
+    
+<link rel="stylesheet" href="/css/main.css">
+
+    
+    
+
+
+
+
+
+
+
+    
+    
+    
+        <script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        
+            load: ['[tex]/mhchem'],
+        
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        
+            packages: {'[+]': ['mhchem']},
+        
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+          
+
+    
+    
+    
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+            <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+            <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+        
+    
+
+    
+    
+    <title>
+        
+            SBT Correlation-Aware Deep Tracking | CV home
+        
+    </title>
+    
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+    <div id="app">
+        <v-app>
+            <v-content id="page">
+                <v-container fluid>
+                    <v-row>
+                        <v-col cols="2" class="d-none d-md-block">
+                            <div id="sidebar" class="float-right">
+    <a href="/" rel="home">
+        <v-avatar size=96>
+            <img id="logo" src="/images/avatar.jpg">     
+        </v-avatar> 
+    </a>
+    <v-divider></v-divider>
+    <div class="mini-menu">
+        <v-btn icon href="/">
+            <v-icon>home</v-icon>
+        </v-btn>
+        <v-btn icon href="/categories/">
+            <v-icon>folder</v-icon>
+        </v-btn>
+        <v-btn icon href="/tags/">
+            <v-icon>bookmark</v-icon>
+        </v-btn>
+        <v-btn icon @click="SetNightMode">
+            <v-icon>{{ nightMode }}</v-icon>
+        </v-btn>
+    </div>
+    <v-list id="main-menu" class="font-weight-bold" flat>
+        
+            
+            <v-list-item href="/archives/" link>
+            <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                归档
+            </v-list-item-content>
+            </v-list-item>
+        
+            
+            <v-list-item href="https://space.bilibili.com/5567932/article" link>
+            <v-list-item-icon><v-icon>rss_feed</v-icon></v-list-item-icon>
+            <v-list-item-content>
+                b站专栏
+            </v-list-item-content>
+            </v-list-item>
+        
+    </v-list>
+    <v-divider></v-divider>
+    
+        <div class="post-toc">
+            <a href="/tracking/53-SBT/" class="toc-header">文章目录</a>
+            <div class="toc-content">
+                <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%91%98%E8%A6%81"><span class="toc-number">1.</span> <span class="toc-text">摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%95%E8%A8%80"><span class="toc-number">2.</span> <span class="toc-text">引言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">方法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Patch-Embedding"><span class="toc-number">3.1.</span> <span class="toc-text">Patch Embedding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Extract-or-Correlation-Block"><span class="toc-number">3.2.</span> <span class="toc-text">Extract-or-Correlation Block</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Position-Encoding"><span class="toc-number">3.3.</span> <span class="toc-text">Position Encoding</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Direct-Prediction"><span class="toc-number">3.4.</span> <span class="toc-text">Direct Prediction</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SBT%E8%AE%BE%E8%AE%A1%E5%87%86%E5%88%99"><span class="toc-number">4.</span> <span class="toc-text">SBT设计准则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SBT%E8%B7%9F%E8%B8%AA%E7%9A%84%E7%90%86%E8%AE%BA%E5%88%86%E6%9E%90"><span class="toc-number">5.</span> <span class="toc-text">SBT跟踪的理论分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E7%A7%8DSBT%E7%BD%91%E7%BB%9C"><span class="toc-number">6.</span> <span class="toc-text">4种SBT网络</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C"><span class="toc-number">7.</span> <span class="toc-text">实验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Comparison-to-State-of-the-Art-Trackers"><span class="toc-number">7.1.</span> <span class="toc-text">Comparison to State-of-the-Art Trackers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Exploration-Study"><span class="toc-number">7.2.</span> <span class="toc-text">Exploration Study</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BB%93%E8%AE%BA"><span class="toc-number">8.</span> <span class="toc-text">结论</span></a></li></ol>
+            </div>
+        </div>
+    
+
+    <div id="footer">
+        <div class="footer-social">
+            
+                
+                <v-btn icon href="mailto:zjphust@gmail.com" target="_blank">
+                    <v-icon>fas fa-envelope</v-icon>
+                </v-btn>
+            
+                
+                <v-btn icon href="https://github.com/kongbia" target="_blank">
+                    <v-icon>fab fa-github</v-icon>
+                </v-btn>
+            
+        </div>
+        <v-divider></v-divider>
+        <div class="footer-content">
+            
+                <span id="busuanzi_container_site_uv" style="display: none;"> 
+                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                </span>
+                <br>
+            
+            <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a></span><br>
+            <span>Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+            <span>
+                &copy; 2020 - 2022 
+                zjp
+            </span>
+        </div>
+    </div>
+</div>
+
+                        </v-col>
+                        <v-col cols="12" md="10">
+                            <v-row>
+  <v-col cols="12" md="8" align-self="end">
+    <div id="site-header">
+      <div id="site-title">
+        <a href="/" rel="home">CV home</a>
+      </div>
+      <div id="site-description">A personal blog that shares computer vision papers</div>
+      <div id="mobile-menu" class="d-block d-md-none">
+        <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-inner-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+        <div class="mobile-mini-menu">
+          <v-btn icon href="/">
+              <v-icon>home</v-icon>
+          </v-btn>
+          <v-btn icon href="/categories/">
+              <v-icon>folder</v-icon>
+          </v-btn>
+          <v-btn icon href="/tags/">
+              <v-icon>bookmark</v-icon>
+          </v-btn>
+          <v-btn icon @click="SetNightMode">
+              <v-icon>{{ nightMode }}</v-icon>
+          </v-btn>
+          
+            
+            <v-btn icon href="/archives/">
+              <v-icon>archive</v-icon>
+            </v-btn>
+          
+            
+            <v-btn icon href="https://space.bilibili.com/5567932/article">
+              <v-icon>rss_feed</v-icon>
+            </v-btn>
+          
+        </div>
+      </div>    
+    </div>
+  </v-col>  
+  <v-col cols="4" align-self="end" class="d-none d-md-block">
+    <v-col align-self="end">
+      <v-text-field label="请输入关键字" data-src="search.xml" v-model="searchHeaderValue" prepend-icon="search" clearable clear-icon="clear" @keydown.enter="EnterSearch(searchHeaderValue,true)"></v-text-field>
+    </v-col> 
+  </v-col>
+</v-row>
+
+                            <v-card class="elevation-2 post-card">
+    
+    
+        <div class="post-header">
+  <a class="post-header-title font-weight-medium" href="/tracking/53-SBT/">SBT Correlation-Aware Deep Tracking</a>
+  <div class="post-header-meta">   
+    <span>
+      <v-icon color="">event</v-icon>
+      发布于:&nbsp;2022-05-24
+    </span>
+    <span>
+      <v-icon color="">event_available</v-icon>
+      更新于:&nbsp;2022-05-31
+    </span>
+    <span>
+      <v-icon color="">folder</v-icon>
+      分类于:&nbsp;<a class="category-link" href="/categories/tracking/">目标跟踪</a>
+    </span>
+    
+    <span>
+      <v-icon color="">visibility</v-icon>
+      阅读次数:&nbsp;<span id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv"></span></span>
+    </span>
+    
+  </div>
+</div>
+
+    
+    
+    
+    
+    <div class="post-content typo">
+        <p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524105019.png" alt=""></p>
+<p>Correlation-Aware Deep Tracking <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.01666">论文</a></p>
+<p>写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。</p>
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>切入点：鲁棒性和判别性都很重要</p>
+<p>现有问题：孪生网络无法判别性的建模目标和干扰</p>
+<p>提出新方法：target-dependent feature network </p>
+<p>做法：通过attention，将跨图像的特征相关性嵌入特征网络的多个层中。</p>
+<p>好处：</p>
+<ol>
+<li>在多个层进行匹配，压制非目标特征，得到实例感知的特征提取；</li>
+<li>输出的搜索特征可以直接用于预测定位，无需互相关操作；</li>
+<li>可以在大量不成对数据上预训练，加速收敛</li>
+</ol>
+<span id="more"></span>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p><strong>指出跟踪中两个竞争的需求：</strong>1. 在剧烈形变下识别目标（鲁棒性）；2. 区分目标和背景干扰物（判别性）</p>
+<p><strong>当前方法：</strong>提取更具有表达力的Siamese特征；设计更鲁棒的相关操作。</p>
+<p><strong>当前方法的问题：</strong>很少注意到两个竞争的需求会使得网络陷入目标-干扰物困境，主要体现在三个方面</p>
+<ol>
+<li><p>Siamese特征编码过程无法感知template和search中的的实例级信息</p>
+</li>
+<li><p>backbone没有明确建模区分两个竞争的决策边界，陷入次优结果</p>
+</li>
+<li><p>每个训练视频只标注一个目标，但是跟踪过程中为包含干扰物的任意目标。这个差距进一步扩大了问题2</p>
+</li>
+</ol>
+<p><strong>本文观点：</strong>特征提取应该具有动态感知实例变化的能力，为跟踪生成适当的embeddings。具体包括：为视频中的同一对象生成连贯的特征，以及对具有相似外观的目标和干扰物生成对比特征</p>
+<p><strong>本文提出方法：</strong></p>
+<p>一个基于注意力的动态特征网络 Single Branch Transformer (SBT) network，允许模板和搜索图像的特征在特征提取的每个阶段进行深度交互。</p>
+<p>如图2所示，传统的孪生网络堆叠卷积，最后接一个互相关层进行特征交互。而SBT堆叠注意力模块Extract-or-Correlation (EoC) blocks，其中EoC-SA融合同一图像的特征，EoC-CA交互模板和搜索图的特征。最后将搜索图像特征直接输出给预测头。</p>
+<p>直观地，交叉注意力<strong>逐层</strong>过滤掉与目标无关的特征，自注意力增强了目标的特征表示。由于特征提取过程是target-dependent且非对称的，因此SBT将目标和干扰物进行区分的同时保持不同目标之间的连贯特征。如图2d所示，属于目标的特征(绿色)与背景(粉色)和干扰物(蓝色)越来越分离，而孪生网络提取的搜索特征是target-unaware的。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524111925.png" alt=""></p>
+<p><strong>关键创新</strong></p>
+<p>为模板和搜索图像对的处理引入一个单一流，通过注意力模块联合特征提取和特征关联。</p>
+<p>SBT本质上还是一个特征提取的backbone，因此可以在ImageNet等非成对数据上进行预训练，在跟踪数据中微调快速收敛。</p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112053.png" alt=""></p>
+<p>整体结构如图3所示，包含三个stage。前两个stage通过patch embedding降维，后面接自注意力EoC-SA；第三个satge交替使用自注意力EoC-SA和交叉注意力EoC-CA。该框架没有额外的互相关层，通过在在网络的不同阶段使用交叉注意力实现了信息交互融合。最后将融合后的搜索特征直接输入预测头做分类和回归。</p>
+<h2 id="Patch-Embedding"><a href="#Patch-Embedding" class="headerlink" title="Patch Embedding"></a>Patch Embedding</h2><p>使用$7 \times 7$步长为4的卷积+LN层，降低空间分辨率。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112939.png" alt=""></p>
+<h2 id="Extract-or-Correlation-Block"><a href="#Extract-or-Correlation-Block" class="headerlink" title="Extract-or-Correlation Block"></a>Extract-or-Correlation Block</h2><p>EoC模块如图3b，c所示，包括两个LN层一个MLP层以及一个注意力，注意力包含自注意力(SA)和交叉注意力(CA).。SA输入的ij是同源的，CA输入的ij分别来自模板z和搜索图x。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114016.png" alt=""></p>
+<p>作者为了计算高效，尝试了 Vanilla Global attention (VG)；Spatial-Reduction Global attention(SRG)，对k，v降分辨率；Vanilla Local window attention (VL) ，计算局部块的注意力；Shift window vanilla Local attention (SL)，即Swin Transformer。最后使用SRG。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114738.png" alt=""></p>
+<center>Spatial-Reduction Global attention(SRG)</center>
+
+<h2 id="Position-Encoding"><a href="#Position-Encoding" class="headerlink" title="Position Encoding"></a>Position Encoding</h2><p>尝试了绝对/相对位置编码，和CVPT中的条件位置编码，即一个$3 \times 3$的depth-wise卷积。</p>
+<h2 id="Direct-Prediction"><a href="#Direct-Prediction" class="headerlink" title="Direct Prediction"></a>Direct Prediction</h2><p>分类和回归分支均由两个MLP层构成，分别在空间维度$\varphi_{sp}$和通道维度$\varphi_{cn}$做MLP，其中RS表示reshape。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524115757.png" alt=""></p>
+<h1 id="SBT设计准则"><a href="#SBT设计准则" class="headerlink" title="SBT设计准则"></a>SBT设计准则</h1><p>作者做了大量实验来探究如何设计网络框架，每张实验图里都包含大量信息，微软有卡任性。这里只总结结论，具体实验可以参考原文。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120305.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120323.png" alt=""></p>
+<ol>
+<li>多尺度分层结构的性能比单级结构好 （表1 setting A）</li>
+<li>不同位置编码影响不大 （表1 setting A）</li>
+<li>卷积得到的patch embedding比手工划分的更具表现力 （表1 setting A）</li>
+<li>全局注意力SRG效果和效率综合最佳 （表1 setting A）</li>
+<li>EoC-CA越多一定范围上可以提升性能  （图4d）</li>
+<li>越早使用EoC-CA生成与目标相关的特征越好，但是放在太前面如stage1，2的计算开销较大，而带来的提升较小（图4d，b）</li>
+<li>交替使用EoC-SA和EoC-CA （图4f）</li>
+<li>浅层stage1和2不要设置过多参数和计算量（表1 setting B）</li>
+<li>网络步长一定，3个stage比4个stage好（表1 setting B）</li>
+<li>空间分辨率越大，性能越高，但计算量大（表1 setting B）</li>
+<li>平衡block的数量和channel维度（表1 setting B）</li>
+<li>SBT可以通过预训练中受益，比基于transformer的跟踪器（如transt，stark）收敛得更快（图4e）</li>
+</ol>
+<h1 id="SBT跟踪的理论分析"><a href="#SBT跟踪的理论分析" class="headerlink" title="SBT跟踪的理论分析"></a>SBT跟踪的理论分析</h1><ul>
+<li>SBT克服了孪生跟踪器平移不变性的限制</li>
+</ul>
+<p>padding破坏平移不变性，而对于SBT，padding只存在于PaE中，attention没有引入padding。此外，attention的token本身就具有排列不变性，即目标在图像上移动多少，则其所在的token也移动同样的距离。</p>
+<ul>
+<li>交叉注意力相当于执行了两次互相关</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524163539.png" alt=""></p>
+<ul>
+<li>在串行管道中嵌入了分层特征利用</li>
+</ul>
+<p>经典的孪生跟踪器如SiamRPN++是并行的的分层聚合，即对多个特征分别做互相关再叠加。SBT探索了串行的多层次的特征相关性，即将前一层相关（交叉注意力）的输出送给下一次相关的输入。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164926.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164541.png" alt=""></p>
+<h1 id="4种SBT网络"><a href="#4种SBT网络" class="headerlink" title="4种SBT网络"></a>4种SBT网络</h1><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165005.png" alt=""></p>
+<p>Imagenet预训练用4个stage，跟踪微调只用前3个stage。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="Comparison-to-State-of-the-Art-Trackers"><a href="#Comparison-to-State-of-the-Art-Trackers" class="headerlink" title="Comparison to State-of-the-Art Trackers"></a>Comparison to State-of-the-Art Trackers</h2><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165305.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165320.png" alt=""></p>
+<p>作者将本文提出的Correlation-Aware backbone 用在几个主流的跟踪器上，得到SiamFCpp-CA. DiMP-CA.STARK-CA. STM-CA，观察性能提升巨大，甚至部分计算量还下降了。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165514.png" alt=""></p>
+<h2 id="Exploration-Study"><a href="#Exploration-Study" class="headerlink" title="Exploration Study"></a>Exploration Study</h2><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165758.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170547.png" alt=""></p>
+<p><strong>Correlation-embedded structure</strong> 将特征交互嵌入特征提取中的效果比单独在最后使用互相关效果要好。并且本文使用的交叉注意力的交互形式比DCF和DW-Corr要好。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170333.png" alt=""></p>
+<p><strong>Target-dependent feature embedding</strong> (a) Correlation-embedded tracker. (b) Siamese correlation with SBT. (c) Siamese correlation with ResNet-50 </p>
+<p>本文提出的方法最具有 target-dependent的性质，即目标和干扰分的最开。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170608.png" alt=""></p>
+<p><strong>Benefits from pre-training</strong> 本文的方法可以预训练，提升性能加速收敛。</p>
+<p>补充材料里还有一些关于计算量和结构设计方面的实验，就不一一介绍了。作者团队是真的有耐心做了这么多对比实验。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171043.png" alt=""></p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171151.png" alt=""></p>
+<p>最后提下本文方法的局限性，就是对严重遮挡或者出视野不友好，这也是所有孪生跟踪器的通病了。虽然attention的逐点匹配一定程度上可以克服遮挡，但是对于图13中这些有相似属性的遮挡物还是存在很多误判。另一个局限在于本文使用了很多快速注意力，这些并不能直接通过直接调包实现。</p>
+<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171328.png" alt=""></p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>本文首次提出了一种target-dependent的跟踪特征网络。SBT大大简化了跟踪管道，比最近基于Transformer的跟踪器收敛更快。从实验和理论两方面对SBT跟踪进行了系统的研究。此外，实现了四个版本的SBT网络，可以改进其他流行的VOT和VOS跟踪器。大量实验表明，该方法取得了良好的效果，可以作为动态特征网络应用于其他跟踪管道。</p>
+
+    </div>
+    <!--文末结束语-->
+    
+        <div style="text-align:center;color: #ccc;font-size:24px;"> --- 本文结束 <i class="fas fa-heart"></i> The End --- </div>
+    
+    <!--页脚广告-->
+    
+    <v-divider></v-divider>
+    
+    <div class="post-nav">             
+        
+            <div class="post-nav-button float-left">
+                <v-icon>chevron_left</v-icon>
+                <a class="font-weight-bold text-left" href="/tracking/54-mixformer/">
+                    MixFormer End-to-End Tracking with Iterative Mixed Attention
+                </a>
+            </div>
+              
+          
+            <div class="post-nav-button float-right">
+                <a class="font-weight-bold text-right" href="/tracking/52-survey/">      
+                    相关滤波和孪生网络目标跟踪综述（Martin团队）
+                </a>
+                <v-icon>chevron_right</v-icon>
+            </div>
+        
+    </div>
+</v-card>
+
+
+
+    <v-card class="comment-card elevation-2">
+        <v-tabs v-model="commentTab"  id="comment-tabs" active-class="active-comment-tab">
+            
+                <v-tab><span id="comment-tab-0">gitalk</span></v-tab>
+            
+        </v-tabs>
+        <v-tabs-items v-model="commentTab" id="tabs-content" data=eyJ1c2UiOlsiZ2l0YWxrIl0sImdpdGFsa19jbGllbnRfaWQiOiI2OTQ1MTJjNTYxZTdkNjQyMTM5ZiIsImdpdGFsa19jbGllbnRfc2VjcmV0IjoiMjE2OTI5MTRkYWI2YWJhOGI5ZTZjZDUyZTY2ZWFkY2ExMDIyNjZlYiIsImdpdGFsa19yZXBvIjoia29uZ2JpYS5naXRodWIuaW8iLCJnaXRhbGtfb3duZXIiOiJrb25nYmlhIiwiZ2l0YWxrX3NpZF90eXBlIjpudWxsLCJnaXRhbGtfZGlzdHJhY3Rpb25GcmVlTW9kZSI6dHJ1ZSwiZGlzcXVzX3Nob3J0bmFtZSI6bnVsbCwibGl2ZXJlX2RhdGFfdWlkIjpudWxsLCJ2YWxpbmVfbGVhbmNsb3VkX2FwcF9pZCI6bnVsbCwidmFsaW5lX2xlYW5jbG91ZF9hcHBfa2V5IjpudWxsLCJ2YWxpbmVfb3B0aW9uIjpudWxsLCJjaGFuZ3lhbl9hcHBfaWQiOm51bGwsImNoYW5neWFuX2FwcF9rZXkiOm51bGwsImNoYW5neWFuX3NpZF90eXBlIjpudWxsfQ== >
+            
+                <v-tab-item eager=true>
+                    
+                        <div id="gitalk-container"></div>
+                    
+                </v-tab-item>
+            
+        </v-tabs-items>
+    </v-card>
+
+        
+                            <div id="mobile-footer" class="d-block d-md-none">
+                                <v-divider></v-divider>
+                                <div id="mobile-footer-content">
+                                    <span>Theme: <a target="_blank" rel="noopener" href="https://github.com/kb1000fx/hexo-theme-insulin">Insulin</a> &nbsp; Powered by <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a></span><br>
+                                    <span> &copy; 2020 - 2022 zjp</span>
+                                </div>
+                            </div>                   
+                        </v-col>                                            
+                    </v-row>
+                </v-container>
+            </v-content>
+        </v-app>
+    </div>
+    
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.2.30"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js"></script>
+
+<script src="/js/main.js"></script>
+
+
+
+
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({
+        startOnLoad: true,
+        theme: "default"
+    });</script>
+
+
+
+
+    
+        <script data-ad-client="ca-" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    
+
+
+</body>
+</html>

@@ -163,7 +163,7 @@
             
                 
                     <v-list-item href="/categories/tracking/" link>
-                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="24" >
+                        <v-badge :value="menuHover" transition="slide-y-transition" inline content="26" >
                             <v-hover v-model="menuHover">
                                 <v-list-item-content>
                                     <span>目标跟踪</span>                              
@@ -255,6 +255,139 @@
 </v-row>
 
                             <v-card class="elevation-2 index-card">
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2022-05-24
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/transform/ >transform</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/CVPR2022/ >CVPR2022</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/54-mixformer/">MixFormer End-to-End Tracking with Iterative Mixed Attention</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+MixFormer: End-to-End Tracking with Iterative Mixed Attention 论文 代码
+核心：用transfrom架构整合特征提取和特征融合
+Motivation
+主流的跟踪框架分三步：特征提取、特征融合、预测头分类回归
+其中特征融合是关键，下图展示了不同的融合方法。（摘自 【VALSE论文速览-68期】MixFormer:更加简洁的端到端单目标跟踪器）
+
+最近的研究使用transformer进行融合，但仍然依赖CNN提取特征，这其中存在一些局限：
+
+attention只作用在高层抽象的特征表示空间，忽略了浅层特征；
+CNN对通用对象识别进行预训练，可能会忽略用于跟踪的更精细的结构信息；
+CNN的表征能力是局部的，缺乏长距离建模的能力
+
+解决方案：
+提出一个通用的transformer结构同时进行特征提取和特征融合。
+具有如下好处:
+
+使特征提取更具体到相应的跟踪目标，并捕获更多目标特定的判别特征;
+让目标信息更extensive的融合进搜索区域；
+结构更加紧凑简洁。
+
+主要创新点：
+
+提出了 MAM 模块，应用 attnetion 机制同时进行特征提取与信息交互
+提出SPM模块进行模板更新
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/54-mixformer/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
+  
+    <article class="index-article">
+      
+      <div class="index-article-header">
+        <v-row no-gutters>
+          <v-col cols="auto">
+            <div class="index-article-header-date font-weight-medium">
+              2022-05-24
+            </div>
+          </v-col>
+          <v-spacer></v-spacer>
+          <v-col cols="auto">
+            
+              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/transform/ >transform</a>
+                  </span>
+                
+                  <span class="index-article-header-tag-content">
+                    <v-icon>fas fa-tag</v-icon>
+                    <a rel="tag" href = /tags/CVPR2022/ >CVPR2022</a>
+                  </span>
+                
+              </v-card>
+            
+          </v-col>
+        </v-row>
+        <span>
+          
+            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
+           
+        </span> 
+        <a class="index-article-header-title font-weight-medium" href="/tracking/53-SBT/">SBT Correlation-Aware Deep Tracking</a>
+      </div>
+      
+      <div class="index-article-content">
+        
+          
+Correlation-Aware Deep Tracking 论文
+写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。
+摘要切入点：鲁棒性和判别性都很重要
+现有问题：孪生网络无法判别性的建模目标和干扰
+提出新方法：target-dependent feature network 
+做法：通过attention，将跨图像的特征相关性嵌入特征网络的多个层中。
+好处：
+
+在多个层进行匹配，压制非目标特征，得到实例感知的特征提取；
+输出的搜索特征可以直接用于预测定位，无需互相关操作；
+可以在大量不成对数据上预训练，加速收敛
+
+        
+      </div>
+      
+      <div class="index-article-readmore ">
+        <v-btn text href="/tracking/53-SBT/">阅读更多</v-btn>
+      </div>
+      <v-divider></v-divider>
+    </article> 
   
     <article class="index-article">
       
@@ -662,103 +795,6 @@ transformer难以处理小目标（参考deform DETR）。
       
       <div class="index-article-readmore ">
         <v-btn text href="/tracking/45-HiFT/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-07-01
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Domain-adaption/ >Domain adaption</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/44-DASiamRPN/">Domain Adaptive SiamRPN++ for Object Tracking in the Wild</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation基于孪生网络的跟踪算法均假定训练和测试数据遵循相同的分布，然而在正常图像上训练的跟踪器并不能保证在其他领域的数据上（如雨雾天气的序列）也表现良好，即存在域偏移（domain shift）问题，如图1和图2。作者称本文是首次将域分布差异问题引入视觉跟踪领域。
-针对这一问题，本文提出一种域自适应方法，包括Pixel Domain Adaptation (PDA) 和 Semantic Domain Adaptation (SDA)。PDA分别对（不同域的）模板和搜索图像的特征对齐，消除天气、光照等引起的像素级域偏移；SDA将（不同域的）跟踪目标的特征表达对齐，以消除语义级的域偏移。二者均通过对抗训练的方式学习域分类器，域分类器强制网络学习域不变的特征表达，从而实现域自适应。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/44-DASiamRPN/">阅读更多</v-btn>
-      </div>
-      <v-divider></v-divider>
-    </article> 
-  
-    <article class="index-article">
-      
-      <div class="index-article-header">
-        <v-row no-gutters>
-          <v-col cols="auto">
-            <div class="index-article-header-date font-weight-medium">
-              2021-06-30
-            </div>
-          </v-col>
-          <v-spacer></v-spacer>
-          <v-col cols="auto">
-            
-              <v-card flat color="secondary" tile class="index-article-header-tag  font-weight-medium">
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Data-augmentation/ >Data augmentation</a>
-                  </span>
-                
-                  <span class="index-article-header-tag-content">
-                    <v-icon>fas fa-tag</v-icon>
-                    <a rel="tag" href = /tags/Self-supervised/ >Self-supervised</a>
-                  </span>
-                
-              </v-card>
-            
-          </v-col>
-        </v-row>
-        <span>
-          
-            <a class="index-article-header-category font-weight-bold" href="/categories/tracking/">目标跟踪></a>
-           
-        </span> 
-        <a class="index-article-header-title font-weight-medium" href="/tracking/43-Crop-Transform-Paste/">Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking</a>
-      </div>
-      
-      <div class="index-article-content">
-        
-          
-论文
-Motivation现有的跟踪方法依赖大量高质量标注数据集训练，但很多复杂挑战场景并未出现在训练数据中。为了避免昂贵的人工标注，本文提出一种自监督学习方式。作者设计了Crop-Transform-Paste，通过模拟跟踪过程中各种场景变化，合成足够的训练数据。在合成数据中目标状态是已知的，因此无需人工标注。
-本文提出的自监督方法可以无缝集成到任何现有的跟踪框架中进行训练，实验证明提出的方法：1）在少样本跟踪场景中取得比监督学习更好的性能；2）能够处理目标形变、遮挡、背景干扰等各种挑战；3）可以与监督学习相结合，进一步提高性能。
-        
-      </div>
-      
-      <div class="index-article-readmore ">
-        <v-btn text href="/tracking/43-Crop-Transform-Paste/">阅读更多</v-btn>
       </div>
       <v-divider></v-divider>
     </article> 
