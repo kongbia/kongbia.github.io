@@ -1500,7 +1500,7 @@
       </tags>
   </entry>
   <entry>
-    <title>SBT Correlation-Aware Deep Tracking</title>
+    <title>SBT: Correlation-Aware Deep Tracking</title>
     <url>/tracking/53-SBT/</url>
     <content><![CDATA[<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524105019.png" alt=""></p>
 <p>Correlation-Aware Deep Tracking <a href="https://arxiv.org/abs/2203.01666">论文</a></p>
@@ -1610,7 +1610,7 @@
       </tags>
   </entry>
   <entry>
-    <title>MixFormer End-to-End Tracking with Iterative Mixed Attention</title>
+    <title>MixFormer: End-to-End Tracking with Iterative Mixed Attention</title>
     <url>/tracking/54-mixformer/</url>
     <content><![CDATA[<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172159.png" alt=""></p>
 <p>MixFormer: End-to-End Tracking with Iterative Mixed Attention <a href="https://arxiv.org/abs/2203.11082">论文</a> <a href="https://github.com/MCG-NJU/MixFormer">代码</a></p>
