@@ -235,6 +235,13 @@
   </url>
   
   <url>
+    <loc>https://www.zjp97.top/tags/Anchor-free/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zjp97.top/tags/transform/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
@@ -243,13 +250,6 @@
   
   <url>
     <loc>https://www.zjp97.top/tags/CVPR2021/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/Anchor-free/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -347,13 +347,6 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/matching/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.zjp97.top/tags/Domain-adaption/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
@@ -361,7 +354,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/contrastive-learning/</loc>
+    <loc>https://www.zjp97.top/tags/matching/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -369,6 +362,13 @@
   
   <url>
     <loc>https://www.zjp97.top/tags/WACV2022/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/contrastive-learning/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
