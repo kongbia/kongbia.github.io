@@ -221,14 +221,14 @@
 
   
   <url>
-    <loc>https://www.zjp97.top/tags/CVPR2020/</loc>
+    <loc>https://www.zjp97.top/tags/%E7%BB%BC%E8%BF%B0/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/%E7%BB%BC%E8%BF%B0/</loc>
+    <loc>https://www.zjp97.top/tags/CVPR2020/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -242,7 +242,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/%E6%97%B6%E5%BA%8F/</loc>
+    <loc>https://www.zjp97.top/tags/transform/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -256,7 +256,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/transform/</loc>
+    <loc>https://www.zjp97.top/tags/%E6%97%B6%E5%BA%8F/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -291,6 +291,13 @@
   </url>
   
   <url>
+    <loc>https://www.zjp97.top/tags/Natural-Language/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zjp97.top/tags/Data-augmentation/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
@@ -319,21 +326,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/Natural-Language/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.zjp97.top/tags/IJCAI2021/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -354,6 +347,13 @@
   </url>
   
   <url>
+    <loc>https://www.zjp97.top/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zjp97.top/tags/matching/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
@@ -368,14 +368,14 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/contrastive-learning/</loc>
+    <loc>https://www.zjp97.top/tags/%E8%BD%BB%E9%87%8F%E5%8C%96/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/%E8%BD%BB%E9%87%8F%E5%8C%96/</loc>
+    <loc>https://www.zjp97.top/tags/contrastive-learning/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
