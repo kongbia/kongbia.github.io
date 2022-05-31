@@ -235,6 +235,13 @@
   </url>
   
   <url>
+    <loc>https://www.zjp97.top/tags/Anchor-free/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zjp97.top/tags/transform/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
@@ -243,13 +250,6 @@
   
   <url>
     <loc>https://www.zjp97.top/tags/CVPR2021/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/Anchor-free/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -291,20 +291,6 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/meta-learning/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/ICCV2019/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.zjp97.top/tags/Data-augmentation/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
@@ -313,6 +299,20 @@
   
   <url>
     <loc>https://www.zjp97.top/tags/ICME2021/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/meta-learning/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/ICCV2019/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -361,14 +361,14 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/contrastive-learning/</loc>
+    <loc>https://www.zjp97.top/tags/WACV2022/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/WACV2022/</loc>
+    <loc>https://www.zjp97.top/tags/contrastive-learning/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
