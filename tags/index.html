@@ -96,7 +96,7 @@
             <v-list-item href="/archives/" link>
             <v-list-item-icon><v-icon>archive</v-icon></v-list-item-icon>
             <v-list-item-content>
-                归档
+                Archives
             </v-list-item-content>
             </v-list-item>
         
@@ -146,7 +146,7 @@
         <div class="footer-content">
             
                 <span id="busuanzi_container_site_uv" style="display: none;"> 
-                    总访客量 <span id="busuanzi_value_site_uv"></span>
+                    Total Visitors <span id="busuanzi_value_site_uv"></span>
                 </span>
                 <br>
             
@@ -208,7 +208,7 @@
 
                             <v-card class="elevation-2 post-card">
     <div class="post-header">
-        <a class="post-header-title font-weight-medium" href="/tags/index.html">标签</a>
+        <a class="post-header-title font-weight-medium" href="/tags/index.html">Tags</a>
     </div>
     <div class="post-content typo">
         
@@ -236,14 +236,6 @@
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/Anchor-free/">Anchor-free</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/%E6%97%B6%E5%BA%8F/">时序</a>
                             </v-chip>
                         </v-hover>
@@ -253,14 +245,6 @@
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/CVPR2021/">CVPR2021</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="4" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/transform/">transform</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
@@ -281,10 +265,34 @@
                         </v-hover>
                     </v-badge>
                 
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/Anchor-free/">Anchor-free</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="4" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/ICCV2021/">ICCV2021</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="4" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/transform/">transform</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/Natural-Language/">Natural Language</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
@@ -332,7 +340,7 @@
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/Natural-Language/">Natural Language</a>
+                                <a href="/tags/Self-supervised/">Self-supervised</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
@@ -356,14 +364,6 @@
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/Self-supervised/">Self-supervised</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/Domain-adaption/">Domain adaption</a>
                             </v-chip>
                         </v-hover>
@@ -380,14 +380,6 @@
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/WACV2022/">WACV2022</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/contrastive-learning/">contrastive learning</a>
                             </v-chip>
                         </v-hover>
@@ -396,7 +388,23 @@
                     <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/WACV2022/">WACV2022</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/%E8%BD%BB%E9%87%8F%E5%8C%96/">轻量化</a>
+                            </v-chip>
+                        </v-hover>
+                    </v-badge>
+                
+                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
+                        <v-hover v-model="tagHover">
+                            <v-chip color="secondary" class="tags-chip font-weight-medium">
+                                <a href="/tags/CVPR2022/">CVPR2022</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
@@ -413,14 +421,6 @@
                         <v-hover v-model="tagHover">
                             <v-chip color="secondary" class="tags-chip font-weight-medium">
                                 <a href="/tags/%E5%AD%AA%E7%94%9F%E7%BD%91%E7%BB%9C/">孪生网络</a>
-                            </v-chip>
-                        </v-hover>
-                    </v-badge>
-                
-                    <v-badge :value="tagHover" transition="slide-x-transition" inline content="1" >
-                        <v-hover v-model="tagHover">
-                            <v-chip color="secondary" class="tags-chip font-weight-medium">
-                                <a href="/tags/CVPR2022/">CVPR2022</a>
                             </v-chip>
                         </v-hover>
                     </v-badge>
