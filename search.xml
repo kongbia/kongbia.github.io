@@ -151,9 +151,9 @@
     <title>Anchor Free的孪生目标跟踪</title>
     <url>/tracking/3-anchorfree-siamese/</url>
     <content><![CDATA[<p>Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。</p>
-<span id="more"></span>
 <p><a href="https://www.bilibili.com/read/cv4987634/?from=readlist">[Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com)</a></p>
 <p><a href="https://www.bilibili.com/read/cv6518222/?from=readlist">[Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)</a></p>
+<span id="more"></span>
 <p>跟踪任务可以看成是分类任务与状态估计任务的结合。分类任务的目的是精确定位目标的位置，而状态估计获得目标的姿态（即目标框）。SiamFC++一文将当前的跟踪器按照不同<strong>状态估计</strong>的方法分为三类：</p>
 <ol>
 <li>以DCF和SiamFC为主的跟踪器，构建多尺度金字塔，将搜索区域缩放到多个比例，选择最高得分对应的尺度，这种方式是最不精确的同时先验的固定长宽比不适合现实任务；</li>
@@ -720,7 +720,6 @@
     <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810211247.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/1712.09153">论文</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
-<span id="more"></span>
 <p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
 <p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
