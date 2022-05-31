@@ -1659,9 +1659,9 @@
 <p>SOTA性能就一个字：恐怖！</p>
 <h2 id="探究实验"><a href="#探究实验" class="headerlink" title="探究实验"></a>探究实验</h2><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524234504.png" alt=""></p>
 <ul>
-<li><h1 id="1-2-3-8-统一特征提取和融合的MAM比先提特征SAM再融合CAM要好，因为耦合的方式可以互相促进。"><a href="#1-2-3-8-统一特征提取和融合的MAM比先提特征SAM再融合CAM要好，因为耦合的方式可以互相促进。" class="headerlink" title="1 #2 #3 #8 统一特征提取和融合的MAM比先提特征SAM再融合CAM要好，因为耦合的方式可以互相促进。"></a>1 #2 #3 #8 统一特征提取和融合的MAM比先提特征SAM再融合CAM要好，因为耦合的方式可以互相促进。</h1></li>
-<li><h1 id="4-5-6-7-8-MAM的数量越多越好，因为这样可以获得更extensive-的目标感知特征提取和分层融合。"><a href="#4-5-6-7-8-MAM的数量越多越好，因为这样可以获得更extensive-的目标感知特征提取和分层融合。" class="headerlink" title="4 #5 #6 #7 #8 MAM的数量越多越好，因为这样可以获得更extensive 的目标感知特征提取和分层融合。"></a>4 #5 #6 #7 #8 MAM的数量越多越好，因为这样可以获得更extensive 的目标感知特征提取和分层融合。</h1></li>
-<li><h1 id="8-9-corner-head比query-head效果更好"><a href="#8-9-corner-head比query-head效果更好" class="headerlink" title="8 #9 corner head比query head效果更好"></a>8 #9 corner head比query head效果更好</h1></li>
+<li>1 2 3 8 统一特征提取和融合的MAM比先提特征SAM再融合CAM要好，因为耦合的方式可以互相促进。</li>
+<li>4 5 6 7 8 MAM的数量越多越好，因为这样可以获得更extensive 的目标感知特征提取和分层融合。</li>
+<li>8 9 corner head比query head效果更好</li>
 </ul>
 <p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524235111.png" alt=""></p>
 <ul>
