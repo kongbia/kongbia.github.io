@@ -2,9 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.zjp97.top/tracking/53-SBT/</loc>
+    <loc>https://www.zjp97.top/tracking/48-RPT/</loc>
     
-    <lastmod>2022-05-24</lastmod>
+    <lastmod>2022-05-31</lastmod>
     
   </url>
   
@@ -38,13 +38,6 @@
   
   <url>
     <loc>https://www.zjp97.top/tracking/49-SiamTPN/</loc>
-    
-    <lastmod>2022-04-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tracking/48-RPT/</loc>
     
     <lastmod>2022-04-05</lastmod>
     
@@ -228,7 +221,14 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/%E6%97%B6%E5%BA%8F/</loc>
+    <loc>https://www.zjp97.top/tags/Anchor-free/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/transform/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -256,7 +256,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/Anchor-free/</loc>
+    <loc>https://www.zjp97.top/tags/%E6%97%B6%E5%BA%8F/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -270,35 +270,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/transform/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/Natural-Language/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.zjp97.top/tags/%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/Data-augmentation/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/ICME2021/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -319,7 +291,14 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/Self-supervised/</loc>
+    <loc>https://www.zjp97.top/tags/Data-augmentation/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/ICME2021/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -333,7 +312,21 @@
   </url>
   
   <url>
+    <loc>https://www.zjp97.top/tags/Natural-Language/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zjp97.top/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</loc>
+    <lastmod>2022-05-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/Self-supervised/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -354,13 +347,6 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/contrastive-learning/</loc>
-    <lastmod>2022-05-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.zjp97.top/tags/WACV2022/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
@@ -375,7 +361,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/CVPR2022/</loc>
+    <loc>https://www.zjp97.top/tags/contrastive-learning/</loc>
     <lastmod>2022-05-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
