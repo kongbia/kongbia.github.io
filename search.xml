@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Siam R-CNN: Visual Tracking by Re-Detection</title>
+    <url>/tracking/1-siamrcnn/</url>
+    <content><![CDATA[<p>Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。</p>
+<span id="more"></span>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105346.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/1911.12836">论文</a><br><a href="https://github.com/SJTU-DL-lab/SiamRCNN">代码</a></p>
+<h1 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h1><ol>
+<li>将重检测思想用于跟踪。通过判断建议区域（region proposal）是否与模板区域（template region）相同，重检测图像中任何位置的模板对象，并对该对象的边界框进行回归，这种方法对目标大小和长宽比变化比较鲁棒；</li>
+<li>提出一种新颖的 hard example mining 方法，专门针对困难干扰物训练；</li>
+<li>提出 Tracklet Dynamic Programming Algorithm (TDPA)，可以同时跟踪所有潜在的目标，包括干扰物。通过重检测前一帧所有目标候选框，并将这些候选框随时间分组到tracklets(短目标轨迹)中。然后利用动态规划的思想，根据视频中所有目标和干扰物tracklets的完整历史选择当前时间步长的最佳对象。Siam R-CNN通过明确地建模所有潜在对象的运动和交互作用，并将检测到的相似信息汇集到tracklets中，能够有效地进行长时跟踪，同时抵抗跟踪器漂移，在物体消失后可以立即重检测目标。</li>
+</ol>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105651.png" alt=""></p>
+<p>上图为Siam RCNN整体框架，作者设计了一个Siamese two-stage detection network作为跟踪器。第一阶段是RPN，第二阶段通过将感兴趣区域(RoI)的特征和参考特征拼接起来，包括以第一帧的GT作为参考和以前一帧的检测结果作为参考的两个redetction head。最后构建Tracklet Dynamic Programming Algorithm (TDPA)去跟踪所有潜在目标。</p>
+<p>接下来按照论文结构对每一部分进行说明：</p>
+<h2 id="Siam-RCNN"><a href="#Siam-RCNN" class="headerlink" title="Siam RCNN"></a>Siam RCNN</h2><p>本小节主要是讲如何将 Faster RCNN 的那一套用于重检测，核心是将固定类别的detection head换成本文的re-detection head。re-detection head的输出只有两类，即候选区域是否是参考对象目标。训练时backbone和RPN的参数冻结，只有re-detection head参与训练。</p>
+<h2 id="Video-Hard-Example-Mining"><a href="#Video-Hard-Example-Mining" class="headerlink" title="Video Hard Example Mining"></a>Video Hard Example Mining</h2><p>在传统 Faster RCNN 训练中，负样本是从RPN得到的区域中采样得到的。但是，在许多图像中，仅有少量负样本。为了最大化 re-detection head 的判别能力，作者认为需要在难负样本（hard negative samples）上训练。并且与检测中的通用难样本不同，这里的难样本是从其他视频中检索出来的与参考目标类似的样本。</p>
+<ul>
+<li><p><strong>Embedding Network</strong> 最直接的方法就是从其他视频中寻找与当前对象属于同一个类别的对象作为难负样本。然而，物体的类别标签并不总是可靠，一些同类的物体很容易区分，不同类别的物体反而可能是理想的难负样本。所以，本文受到行人重识别的启发，提出利用 embedding network 的方法，将 GT Box 中的物体映射为 embedding vector。这个网络来源于 PReMVOS，用 batch-hard triplet loss 来训练，期望达到的效果是消除单个对象实例之间的歧义，例如，两个不同的人在嵌入空间中应该离得很远，而同一个人在不同帧中的向量距离应该很近。</p>
+</li>
+<li><p><strong>Index Structure</strong> 接下来为近邻 queries 构建一个有效的索引结构，将其用于寻找所需要跟踪的物体在 embedding space 中的最近邻。图 3 展示了一些检索得到的难负样本。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105907.png" alt=""></p>
+</li>
+<li><p><strong>Training Procedure</strong> 训练时在其他视频上实时检索当前视频帧的难负样本过于耗时。本文预先对训练数据的每一个 GT Box 都提取其 RoI-aligned  features。在训练的每一步，随机选择一个 video 和 object，然后随机的选择一个 reference 和 target frame。在此之后，用上一节提到的 indexing structure 来检索 10000 个最近邻的 reference box，从中选择出 100 个 negative training examples。</p>
+</li>
+</ul>
+<h2 id="Tracklet-Dynamic-Programming-Algorithm"><a href="#Tracklet-Dynamic-Programming-Algorithm" class="headerlink" title="Tracklet Dynamic Programming Algorithm"></a>Tracklet Dynamic Programming Algorithm</h2><p>本文所提出的 片段动态规划算法（Tracklet Dynamic Programming Algorithm）隐式地跟踪感兴趣目标和潜在干扰物，从而持续抑制干扰对象。为此，TDPA 维护一组 tracklets，即：short sequences of detections。然后利用动态规划的评分算法为模板对象在第一帧和当前帧之间选择最可能的 tracklets序列。每个detection都定义为：a bounding box, a re-dection score 和 RoI-aligned features。此外，每个 detection 都是 tracklet 的组成部分。tracklet有一个开始时间和一个结束时间，并由一组 detection 定义，从开始到结束时间的每一个时间步对应一个detection ，也就是说，在tracklet中不允许有空隙。</p>
+<ul>
+<li><strong>Tracklet Building</strong> </li>
+</ul>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424110139.png" alt=""></p>
+<p>Line 2 提取backbone特征</p>
+<p>Line 3 RPN得到感兴趣区域，为了补偿潜在的假负例影响，加入上一帧的结果；</p>
+<p>Line 4 将Roi和gt送入redetection head得到第一帧的重检测结果 $ det_{S_t} $（包括相似性得分和目标框）；</p>
+<p>Line 5-6 将当前帧结果 $ det_{S_t} $ 与上一帧结果 $ det_{S_{t-1}} $ 送入redetection head计算每一对检测结果的相似性得分（为了减少计算，仅把当前帧与上一帧框的归一化空间距离小于 r 时才送入head计算，否则相似性得分设为负无穷。如图2，上一帧有3个结果，当前帧有2个结果，理论上两两之间应该计算6个相似得分，但通过框的空间距离约束，实际参与相似得分计算的只有4组）；</p>
+<p>Line 7-20 扩展tracklets。遍历当前帧的检测结果 $d_t \in det_{S_t}$ 加入tracklet需要满足：</p>
+<ol>
+<li>当前结果 $d_t$ 与上一帧结果 $\hat{d} _ {t-1}$ 的最大相似性得分 $s_{1}$ 大于阈值 $\alpha$</li>
+<li>当前帧没有其他检测结果与 $ \hat{d} _ {t-1} $ 具有同样高的相似性，即当前帧除 $d_t$ 以外的结果与 $ \hat{d} _ {t-1} $ 的相似性要满足 $s_{2} \leq s_{1}-\beta$</li>
+<li>上一帧没有其他检测结果与当前的 $d_t$ 具有同样高的相似性，即上一帧除 $ \hat{d} _ {t-1} $ 以外的结果与 $d_t$ 的相似性要满足 $s_{3} \leq s_{1}-\beta$</li>
+</ol>
+<p><br/></p>
+<ul>
+<li><strong>Scoring</strong>  </li>
+</ul>
+<p>轨迹 $A=(a_1,…,a_N)$ 是一个包含N个不重复tracklets的序列，其中 $end(a_i) &lt; start(a_{i+1}), \forall i∈\{1,…,N-1\}$ ，即后一个tracklet的开始帧一定比前一个tracklet的结束帧大。一个轨迹的总分由衡量单个轨迹质量的一元分数 unuary 和惩罚轨迹之间空间距离的位置分数 loc_score 组成。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111306.png" style="zoom:80%;" /></p>
+<p>其中 ff_score 表示tracklet $a_{i}$ 在 t 时刻以第一帧gt为参考的重检测分数；</p>
+<p>而 ff_tracklet_score 表示 $a_{i}$ 以gt所在tracklet的最后一个检测结果为参考的重检测分数（因为一个tracklet的所有检测结果都有很高概率与这个tracklet的第一个检测结果相同，否则这个tracklet就会终止，所以gt所在的tracklet的最后一个检测结果也有很大概率是正确的）；</p>
+<p>Location score是计算前一个tracklet最后一个检测结果和后一个tracklet的第一个检测结果的bbox之间的L1距离，是负的，作为惩罚项，越小越好。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111534.png" style="zoom:80%;" /></p>
+<ul>
+<li><strong>Online Dynamic Programming</strong> </li>
+</ul>
+<p>这一节介绍如何高效找到具有最大总得分的tracklets序列。</p>
+<p>定义 $\theta[a]$ 表示从第一个tracklet开始到第a个tracklet的总得分。由于一旦tracklet不被扩展，就会终止。因此当新的一帧到来时，只有被扩展或者新建的tracklet需要重新计算score。</p>
+<p>首先设置 $\theta[a_{ff}]=0$，$a_{ff}$ 是first-frame tracklet（即包含gt的tracklet），当每一个tracklet a被创建或需要更新时</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111717.png" style="zoom:80%;" /></p>
+<p>在更新了当前帧的 $\theta$ 后，选择最大动态规划得分的tracklet $\hat{a}=arg max_{a} \theta[a]$；如果被选中的tracklet在当前帧中没有检测结果，则算法会指出目标不存在。由于benchmarks要求每帧都输出结果，所以我们用选定的tracklet最近一次的检测的box，并且将其得分置0。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>实验做的很充分，在目前主流数据集中都有结果。在short-term的测试中，大部分达到SOTA水平或者比SOTA稍低一些，在long-term的测试效果则非常好，基本吊打第二名。其中VOT的测试因为其自带一个重启，会与算法本身的重启冲突，所以作者专门做了一个short-term版本的用于VOT测试。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111909.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111922.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424112042.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424113951.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111947.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424114012.png" alt=""></p>
+<p>消融实验比较了 使用hard example mining的效果，TPDA与直接使用每一帧最大的重检测得分(Argmax)的对比，和专门用于测试VOT2018的short-term版本；以及改变backbone和ROI的参数量来提速的验证。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文最大的贡献在于将两阶段结构和重检测用于跟踪，设计了一套适合长时跟踪的算法。两阶段结构在SPM-Tracker已经证明了其对于鲁棒性和判别性之间有较好的平衡；而重检测这类检索的方法同样对于目标变化的适应性更强。整套算法做的非常完善，美中不足在于速度太慢。</p>
+<p>P.S. SiamRCNN很长一段时间都作为各类跟踪数据集的天花板，直到CVPR2021各类transform架构的跟踪算法出现后才被超过，可以参考 <a href="https://kongbia.github.io/2021/04/23/tracking/33-transform-tracking/">Transform与目标跟踪</a></p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>CVPR2020</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>目标检测框架在目标跟踪中的应用</title>
     <url>/tracking/2-detection-in-tracking/</url>
     <content><![CDATA[<p>从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。</p>
@@ -158,83 +235,6 @@
       <tags>
         <tag>综述</tag>
         <tag>Anchor-free</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Siam R-CNN: Visual Tracking by Re-Detection</title>
-    <url>/tracking/1-siamrcnn/</url>
-    <content><![CDATA[<p>Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。</p>
-<span id="more"></span>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105346.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/1911.12836">论文</a><br><a href="https://github.com/SJTU-DL-lab/SiamRCNN">代码</a></p>
-<h1 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h1><ol>
-<li>将重检测思想用于跟踪。通过判断建议区域（region proposal）是否与模板区域（template region）相同，重检测图像中任何位置的模板对象，并对该对象的边界框进行回归，这种方法对目标大小和长宽比变化比较鲁棒；</li>
-<li>提出一种新颖的 hard example mining 方法，专门针对困难干扰物训练；</li>
-<li>提出 Tracklet Dynamic Programming Algorithm (TDPA)，可以同时跟踪所有潜在的目标，包括干扰物。通过重检测前一帧所有目标候选框，并将这些候选框随时间分组到tracklets(短目标轨迹)中。然后利用动态规划的思想，根据视频中所有目标和干扰物tracklets的完整历史选择当前时间步长的最佳对象。Siam R-CNN通过明确地建模所有潜在对象的运动和交互作用，并将检测到的相似信息汇集到tracklets中，能够有效地进行长时跟踪，同时抵抗跟踪器漂移，在物体消失后可以立即重检测目标。</li>
-</ol>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105651.png" alt=""></p>
-<p>上图为Siam RCNN整体框架，作者设计了一个Siamese two-stage detection network作为跟踪器。第一阶段是RPN，第二阶段通过将感兴趣区域(RoI)的特征和参考特征拼接起来，包括以第一帧的GT作为参考和以前一帧的检测结果作为参考的两个redetction head。最后构建Tracklet Dynamic Programming Algorithm (TDPA)去跟踪所有潜在目标。</p>
-<p>接下来按照论文结构对每一部分进行说明：</p>
-<h2 id="Siam-RCNN"><a href="#Siam-RCNN" class="headerlink" title="Siam RCNN"></a>Siam RCNN</h2><p>本小节主要是讲如何将 Faster RCNN 的那一套用于重检测，核心是将固定类别的detection head换成本文的re-detection head。re-detection head的输出只有两类，即候选区域是否是参考对象目标。训练时backbone和RPN的参数冻结，只有re-detection head参与训练。</p>
-<h2 id="Video-Hard-Example-Mining"><a href="#Video-Hard-Example-Mining" class="headerlink" title="Video Hard Example Mining"></a>Video Hard Example Mining</h2><p>在传统 Faster RCNN 训练中，负样本是从RPN得到的区域中采样得到的。但是，在许多图像中，仅有少量负样本。为了最大化 re-detection head 的判别能力，作者认为需要在难负样本（hard negative samples）上训练。并且与检测中的通用难样本不同，这里的难样本是从其他视频中检索出来的与参考目标类似的样本。</p>
-<ul>
-<li><p><strong>Embedding Network</strong> 最直接的方法就是从其他视频中寻找与当前对象属于同一个类别的对象作为难负样本。然而，物体的类别标签并不总是可靠，一些同类的物体很容易区分，不同类别的物体反而可能是理想的难负样本。所以，本文受到行人重识别的启发，提出利用 embedding network 的方法，将 GT Box 中的物体映射为 embedding vector。这个网络来源于 PReMVOS，用 batch-hard triplet loss 来训练，期望达到的效果是消除单个对象实例之间的歧义，例如，两个不同的人在嵌入空间中应该离得很远，而同一个人在不同帧中的向量距离应该很近。</p>
-</li>
-<li><p><strong>Index Structure</strong> 接下来为近邻 queries 构建一个有效的索引结构，将其用于寻找所需要跟踪的物体在 embedding space 中的最近邻。图 3 展示了一些检索得到的难负样本。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105907.png" alt=""></p>
-</li>
-<li><p><strong>Training Procedure</strong> 训练时在其他视频上实时检索当前视频帧的难负样本过于耗时。本文预先对训练数据的每一个 GT Box 都提取其 RoI-aligned  features。在训练的每一步，随机选择一个 video 和 object，然后随机的选择一个 reference 和 target frame。在此之后，用上一节提到的 indexing structure 来检索 10000 个最近邻的 reference box，从中选择出 100 个 negative training examples。</p>
-</li>
-</ul>
-<h2 id="Tracklet-Dynamic-Programming-Algorithm"><a href="#Tracklet-Dynamic-Programming-Algorithm" class="headerlink" title="Tracklet Dynamic Programming Algorithm"></a>Tracklet Dynamic Programming Algorithm</h2><p>本文所提出的 片段动态规划算法（Tracklet Dynamic Programming Algorithm）隐式地跟踪感兴趣目标和潜在干扰物，从而持续抑制干扰对象。为此，TDPA 维护一组 tracklets，即：short sequences of detections。然后利用动态规划的评分算法为模板对象在第一帧和当前帧之间选择最可能的 tracklets序列。每个detection都定义为：a bounding box, a re-dection score 和 RoI-aligned features。此外，每个 detection 都是 tracklet 的组成部分。tracklet有一个开始时间和一个结束时间，并由一组 detection 定义，从开始到结束时间的每一个时间步对应一个detection ，也就是说，在tracklet中不允许有空隙。</p>
-<ul>
-<li><strong>Tracklet Building</strong> </li>
-</ul>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424110139.png" alt=""></p>
-<p>Line 2 提取backbone特征</p>
-<p>Line 3 RPN得到感兴趣区域，为了补偿潜在的假负例影响，加入上一帧的结果；</p>
-<p>Line 4 将Roi和gt送入redetection head得到第一帧的重检测结果 $ det_{S_t} $（包括相似性得分和目标框）；</p>
-<p>Line 5-6 将当前帧结果 $ det_{S_t} $ 与上一帧结果 $ det_{S_{t-1}} $ 送入redetection head计算每一对检测结果的相似性得分（为了减少计算，仅把当前帧与上一帧框的归一化空间距离小于 r 时才送入head计算，否则相似性得分设为负无穷。如图2，上一帧有3个结果，当前帧有2个结果，理论上两两之间应该计算6个相似得分，但通过框的空间距离约束，实际参与相似得分计算的只有4组）；</p>
-<p>Line 7-20 扩展tracklets。遍历当前帧的检测结果 $d_t \in det_{S_t}$ 加入tracklet需要满足：</p>
-<ol>
-<li>当前结果 $d_t$ 与上一帧结果 $\hat{d} _ {t-1}$ 的最大相似性得分 $s_{1}$ 大于阈值 $\alpha$</li>
-<li>当前帧没有其他检测结果与 $ \hat{d} _ {t-1} $ 具有同样高的相似性，即当前帧除 $d_t$ 以外的结果与 $ \hat{d} _ {t-1} $ 的相似性要满足 $s_{2} \leq s_{1}-\beta$</li>
-<li>上一帧没有其他检测结果与当前的 $d_t$ 具有同样高的相似性，即上一帧除 $ \hat{d} _ {t-1} $ 以外的结果与 $d_t$ 的相似性要满足 $s_{3} \leq s_{1}-\beta$</li>
-</ol>
-<p><br/></p>
-<ul>
-<li><strong>Scoring</strong>  </li>
-</ul>
-<p>轨迹 $A=(a_1,…,a_N)$ 是一个包含N个不重复tracklets的序列，其中 $end(a_i) &lt; start(a_{i+1}), \forall i∈\{1,…,N-1\}$ ，即后一个tracklet的开始帧一定比前一个tracklet的结束帧大。一个轨迹的总分由衡量单个轨迹质量的一元分数 unuary 和惩罚轨迹之间空间距离的位置分数 loc_score 组成。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111306.png" style="zoom:80%;" /></p>
-<p>其中 ff_score 表示tracklet $a_{i}$ 在 t 时刻以第一帧gt为参考的重检测分数；</p>
-<p>而 ff_tracklet_score 表示 $a_{i}$ 以gt所在tracklet的最后一个检测结果为参考的重检测分数（因为一个tracklet的所有检测结果都有很高概率与这个tracklet的第一个检测结果相同，否则这个tracklet就会终止，所以gt所在的tracklet的最后一个检测结果也有很大概率是正确的）；</p>
-<p>Location score是计算前一个tracklet最后一个检测结果和后一个tracklet的第一个检测结果的bbox之间的L1距离，是负的，作为惩罚项，越小越好。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111534.png" style="zoom:80%;" /></p>
-<ul>
-<li><strong>Online Dynamic Programming</strong> </li>
-</ul>
-<p>这一节介绍如何高效找到具有最大总得分的tracklets序列。</p>
-<p>定义 $\theta[a]$ 表示从第一个tracklet开始到第a个tracklet的总得分。由于一旦tracklet不被扩展，就会终止。因此当新的一帧到来时，只有被扩展或者新建的tracklet需要重新计算score。</p>
-<p>首先设置 $\theta[a_{ff}]=0$，$a_{ff}$ 是first-frame tracklet（即包含gt的tracklet），当每一个tracklet a被创建或需要更新时</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111717.png" style="zoom:80%;" /></p>
-<p>在更新了当前帧的 $\theta$ 后，选择最大动态规划得分的tracklet $\hat{a}=arg max_{a} \theta[a]$；如果被选中的tracklet在当前帧中没有检测结果，则算法会指出目标不存在。由于benchmarks要求每帧都输出结果，所以我们用选定的tracklet最近一次的检测的box，并且将其得分置0。</p>
-<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>实验做的很充分，在目前主流数据集中都有结果。在short-term的测试中，大部分达到SOTA水平或者比SOTA稍低一些，在long-term的测试效果则非常好，基本吊打第二名。其中VOT的测试因为其自带一个重启，会与算法本身的重启冲突，所以作者专门做了一个short-term版本的用于VOT测试。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111909.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111922.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424112042.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424113951.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111947.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424114012.png" alt=""></p>
-<p>消融实验比较了 使用hard example mining的效果，TPDA与直接使用每一帧最大的重检测得分(Argmax)的对比，和专门用于测试VOT2018的short-term版本；以及改变backbone和ROI的参数量来提速的验证。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文最大的贡献在于将两阶段结构和重检测用于跟踪，设计了一套适合长时跟踪的算法。两阶段结构在SPM-Tracker已经证明了其对于鲁棒性和判别性之间有较好的平衡；而重检测这类检索的方法同样对于目标变化的适应性更强。整套算法做的非常完善，美中不足在于速度太慢。</p>
-<p>P.S. SiamRCNN很长一段时间都作为各类跟踪数据集的天花板，直到CVPR2021各类transform架构的跟踪算法出现后才被超过，可以参考 <a href="https://kongbia.github.io/2021/04/23/tracking/33-transform-tracking/">Transform与目标跟踪</a></p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>CVPR2020</tag>
       </tags>
   </entry>
   <entry>
@@ -621,53 +621,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Updatable Siamese Tracker with Two-stage One-shot Learning</title>
-    <url>/tracking/38-siamtol/</url>
-    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510102825.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2104.15049">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文主要解决孪生跟踪器缺乏在线更新能力的问题。传统的线性模板更新难以处理目标的不规则变化和采样噪声，造成跟踪漂移；而一些像updatenet采用网络进行自适应更新的方法，其更新网络和跟踪器在结构上是分离的，不能从联合训练中受益，也不能以最佳方式合作。</p>
-<p>为了实现高质量的自适应更新，作者从 one-shot learning的角度提出一个two-stage one-shot learner，利用不同阶段的目标样本预测分类器的参数。具体来说，除了使用模板分支来学习初始目标特征，作者额外增加了一个输入分支用于捕获后续帧中的目标特征，并设计了一个残差模块来使用这些特征更新初始模板。通过残差学习融合多帧目标特征，跟踪器可以用更合适的模板跟踪当前目标。此外，还设计了一种多方面(multi-aspect)的训练损失来避免过拟合。</p>
-<span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="One-shot-learning-formulation"><a href="#One-shot-learning-formulation" class="headerlink" title="One-shot learning formulation"></a>One-shot learning formulation</h2><p>SiamRPN指出孪生跟踪框架是一个one-shot learner，即通过初始帧的一次学习使得模型能够跟踪到后续帧中的目标，本节首先对其进行公式化定义。</p>
-<p>目标跟踪的典型框架是判别分类器$\varphi (x,W)$，目标是在训练数据集上找到能使总损失L最小化的参数W：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510115919.png" alt=""></p>
-<p>$n$表示训练样本数，$l_i$是样本$x_i$的标签。尽管分类器在目标跟踪上具有很强的竞争力，但需要大量计算量和样本在线训练学习。</p>
-<p>另外一种跟踪框架是孪生网络，目标是学习模板和搜索区域之间的相似性度量：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510152537.png" alt=""></p>
-<p>$z_i$和$x_i$分别表示模板和搜索区域，$\varphi ‘$和 $\zeta$ 分别表示特征提取网络和匹配网络。</p>
-<p>进一步分析，我们发现公式2的孪生网络模型可以被重新解释为类似公式1的one-shot分类器模型。对于分类器$\varphi (x,W)$，若仅通过一个感兴趣样本$z_i$就能学到分类器参数$W$，那么这就是一个one-shot learner。因此，孪生网络的模板分支可以看成是一个元学习函数$\omega$，它将模板特征映射成分类器参数$W$；而搜索分支和互相关就是一个检测器，整个目标函数定义如下：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510154435.png" alt=""></p>
-<p>至此，我们就把孪生框架解释为了one-shot learning，图1直观展示了这种表达方式</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510155519.png" alt=""></p>
-<h2 id="Two-stage-One-shot-learner"><a href="#Two-stage-One-shot-learner" class="headerlink" title="Two-stage One-shot learner"></a>Two-stage One-shot learner</h2><p>孪生网络框架只能在初始帧这个stage通过one-shot learning学到目标信息，因此无法在线更新。那自然会想能不能让这个learner在不同的stage（跟踪阶段）去学习目标信息呢？因此作者提出了 two-stage one-shot learner (TOL)，可以结合具有不同属性的样本来预测分类器的参数$W$。目标函数定义如下：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510160306.png" alt=""></p>
-<p>相比公式3，就是增加了一个来自后续帧中的样本$u_i$来学习$\omega$ 。</p>
-<h2 id="Updatable-Siamese-Network"><a href="#Updatable-Siamese-Network" class="headerlink" title="Updatable Siamese Network"></a>Updatable Siamese Network</h2><p>基于上述的 two-stage one-shot learner，本文提出一个可更新的孪生网络，如下图</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510162506.png" alt=""></p>
-<p>相比原始的孪生框架，增加了一个update分支，然后把两个分支的目标特征进行融合。其实抛开上面讲的那些one-shot learning也不妨碍理解这个结构，无非就是把初始帧和跟踪过程中的历史帧通过网络融合生成一个更好的模板以适应跟踪中的变化。</p>
-<p>融合模板的过程（或者说元学习函数）定义如下：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510163640.png" alt=""></p>
-<p>其中$zf$和$uf$分别表示模板和更新样本的特征，M表示特征融合网络（三层卷积）。</p>
-<p><strong>Multi-aspect loss training</strong> 训练网络时在模板和搜索图像之间的间隔图像中额外扣一个更新样本，并且计算损失分别考虑了模板样本-搜索样本，更新样本-搜索样本，融合模板样本-搜索样本三方面损失，如图3所示。这样做是因为网络包括一个基本的孪生跟踪器和一个在线调整的更新器两部分，如果直接用一个整体损失训练，网络可能难以平衡这两部分。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510164536.png" alt=""></p>
-<p><strong>Online update</strong> 在线跟踪过程中，更新样本每N=10帧更新一次，且满足置信度大于阈值0.9。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Comparison-with-the-state-of-the-arts"><a href="#Comparison-with-the-state-of-the-arts" class="headerlink" title="Comparison with the state-of-the-arts"></a>Comparison with the state-of-the-arts</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165043.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165257.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165536.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165551.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165627.png" alt=""></p>
-<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165730.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>FSL</tag>
-        <tag>arxiv</tag>
-        <tag>模型更新</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DeepMix: Online Auto Data Augmentation for Robust Visual Object Tracking</title>
     <url>/tracking/39-deepmix/</url>
     <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/39-deepmixl/20210510171656.png" alt=""></p>
@@ -715,50 +668,50 @@
       </tags>
   </entry>
   <entry>
-    <title>Deep Meta Learning for Real-Time Target-Aware Visual Tracking</title>
-    <url>/tracking/4-mlt/</url>
-    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810211247.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/1712.09153">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
+    <title>Updatable Siamese Tracker with Two-stage One-shot Learning</title>
+    <url>/tracking/38-siamtol/</url>
+    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510102825.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2104.15049">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文主要解决孪生跟踪器缺乏在线更新能力的问题。传统的线性模板更新难以处理目标的不规则变化和采样噪声，造成跟踪漂移；而一些像updatenet采用网络进行自适应更新的方法，其更新网络和跟踪器在结构上是分离的，不能从联合训练中受益，也不能以最佳方式合作。</p>
+<p>为了实现高质量的自适应更新，作者从 one-shot learning的角度提出一个two-stage one-shot learner，利用不同阶段的目标样本预测分类器的参数。具体来说，除了使用模板分支来学习初始目标特征，作者额外增加了一个输入分支用于捕获后续帧中的目标特征，并设计了一个残差模块来使用这些特征更新初始模板。通过残差学习融合多帧目标特征，跟踪器可以用更合适的模板跟踪当前目标。此外，还设计了一种多方面(multi-aspect)的训练损失来避免过拟合。</p>
 <span id="more"></span>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
-<p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
-<p><strong>Components</strong></p>
-<p>匹配网络是标准的孪生网络</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
-<p>其中，$x$是模板，$z$是搜索区域，$w = \{ w_1, w_2, …, w_N \}$​表示每一层卷积层的权重参数。</p>
-<p>元学习网络根据历史得到的M个context patch $z = \{z_1, z_2, …, z_M\}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
-<p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094325.png" style="zoom:80%;" /></p>
-<p>将生成的$\omega^{target}$与原始的权重拼接起来得到新的自适应权重$w^{adapt} = \{ w_1, w_2, …, [w_N, \omega^{target}] \}$​，将其用于目标定位</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094727.png" style="zoom:80%;" /></p>
-<p>此外，元学习网络还生成了通道注意力权重进一步调整特征表示空间。</p>
-<p><strong>Tracking algorithm</strong></p>
-<p>在跟踪过程中，会保存一个context image的集合 $z_{mem} = \{ z_1, z_2, …, z_K \}$​​​​​​ 以及对应生成的响应图$\hat{y}_{mem} = \{ \hat{y}_1, \hat{y}_2, …, \hat{y}_K \}$​​​​​​。只有当 $\hat{y}$​​​​​​ 的最大响应值大于阈值时，$z$​​​​​​才会被加入memory集合中。在更新权重时，从K个context image中选择M个来进行计算，筛选标准是$\hat{y}_{mem}$​​​​​​​的最小熵，熵越大响应图分布越杂乱，这样可以避免模糊的响应图引入false positive。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811101915.png" style="zoom:80%;" /></p>
-<p>整体跟踪流程如下：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094851.png" style="zoom:80%;" /></p>
-<p><strong>Training</strong></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102117.png" style="zoom: 67%;" /></p>
-<p>首先单独训练匹配网络，然后在此基础上按照图3的方式训练元学习网络。类似在线跟踪过程，从同一个视频序列中随机采样 M’ 个context patch，然后从中选取M个送入元学习网络训练（M’ ＞M），这样是为了避免过拟合。优化损失为：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102811.png" style="zoom:80%;" /></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103012.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103215.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103248.png" alt=""></p>
-<p>消融实验，MLT-mt表示只有匹配网络，MLT-mt+ft表示对匹配网络最后一层进行在线微调更新。可以发现在线微调甚至比不进行更新效果更差，因为过拟合。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103028.png" style="zoom: 67%;" /></p>
-<p>最后可视化了target-specific特征空间的效果，可以更聚焦目标并且抑制周围的干扰。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103525.png" style="zoom:80%;" /></p>
-<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>这篇文章发表在ICCV2019，整体实验结果并没有刷得太高，但是meta learning运用在siamese跟踪中的思想无疑是优秀的。目标跟踪同样可以看做是一个few-shot learning的任务，如何运用历史跟踪的少量结果来微调模型参数，meta learning是一个不错的方案。</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="One-shot-learning-formulation"><a href="#One-shot-learning-formulation" class="headerlink" title="One-shot learning formulation"></a>One-shot learning formulation</h2><p>SiamRPN指出孪生跟踪框架是一个one-shot learner，即通过初始帧的一次学习使得模型能够跟踪到后续帧中的目标，本节首先对其进行公式化定义。</p>
+<p>目标跟踪的典型框架是判别分类器$\varphi (x,W)$，目标是在训练数据集上找到能使总损失L最小化的参数W：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510115919.png" alt=""></p>
+<p>$n$表示训练样本数，$l_i$是样本$x_i$的标签。尽管分类器在目标跟踪上具有很强的竞争力，但需要大量计算量和样本在线训练学习。</p>
+<p>另外一种跟踪框架是孪生网络，目标是学习模板和搜索区域之间的相似性度量：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510152537.png" alt=""></p>
+<p>$z_i$和$x_i$分别表示模板和搜索区域，$\varphi ‘$和 $\zeta$ 分别表示特征提取网络和匹配网络。</p>
+<p>进一步分析，我们发现公式2的孪生网络模型可以被重新解释为类似公式1的one-shot分类器模型。对于分类器$\varphi (x,W)$，若仅通过一个感兴趣样本$z_i$就能学到分类器参数$W$，那么这就是一个one-shot learner。因此，孪生网络的模板分支可以看成是一个元学习函数$\omega$，它将模板特征映射成分类器参数$W$；而搜索分支和互相关就是一个检测器，整个目标函数定义如下：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510154435.png" alt=""></p>
+<p>至此，我们就把孪生框架解释为了one-shot learning，图1直观展示了这种表达方式</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510155519.png" alt=""></p>
+<h2 id="Two-stage-One-shot-learner"><a href="#Two-stage-One-shot-learner" class="headerlink" title="Two-stage One-shot learner"></a>Two-stage One-shot learner</h2><p>孪生网络框架只能在初始帧这个stage通过one-shot learning学到目标信息，因此无法在线更新。那自然会想能不能让这个learner在不同的stage（跟踪阶段）去学习目标信息呢？因此作者提出了 two-stage one-shot learner (TOL)，可以结合具有不同属性的样本来预测分类器的参数$W$。目标函数定义如下：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510160306.png" alt=""></p>
+<p>相比公式3，就是增加了一个来自后续帧中的样本$u_i$来学习$\omega$ 。</p>
+<h2 id="Updatable-Siamese-Network"><a href="#Updatable-Siamese-Network" class="headerlink" title="Updatable Siamese Network"></a>Updatable Siamese Network</h2><p>基于上述的 two-stage one-shot learner，本文提出一个可更新的孪生网络，如下图</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510162506.png" alt=""></p>
+<p>相比原始的孪生框架，增加了一个update分支，然后把两个分支的目标特征进行融合。其实抛开上面讲的那些one-shot learning也不妨碍理解这个结构，无非就是把初始帧和跟踪过程中的历史帧通过网络融合生成一个更好的模板以适应跟踪中的变化。</p>
+<p>融合模板的过程（或者说元学习函数）定义如下：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510163640.png" alt=""></p>
+<p>其中$zf$和$uf$分别表示模板和更新样本的特征，M表示特征融合网络（三层卷积）。</p>
+<p><strong>Multi-aspect loss training</strong> 训练网络时在模板和搜索图像之间的间隔图像中额外扣一个更新样本，并且计算损失分别考虑了模板样本-搜索样本，更新样本-搜索样本，融合模板样本-搜索样本三方面损失，如图3所示。这样做是因为网络包括一个基本的孪生跟踪器和一个在线调整的更新器两部分，如果直接用一个整体损失训练，网络可能难以平衡这两部分。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510164536.png" alt=""></p>
+<p><strong>Online update</strong> 在线跟踪过程中，更新样本每N=10帧更新一次，且满足置信度大于阈值0.9。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Comparison-with-the-state-of-the-arts"><a href="#Comparison-with-the-state-of-the-arts" class="headerlink" title="Comparison with the state-of-the-arts"></a>Comparison with the state-of-the-arts</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165043.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165257.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165536.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165551.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165627.png" alt=""></p>
+<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/38-siamtol/20210510165730.png" alt=""></p>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
       </categories>
       <tags>
-        <tag>meta learning</tag>
-        <tag>ICCV2019</tag>
+        <tag>FSL</tag>
+        <tag>arxiv</tag>
+        <tag>模型更新</tag>
       </tags>
   </entry>
   <entry>
@@ -810,6 +763,99 @@
       <tags>
         <tag>CVPR2021</tag>
         <tag>Natural Language</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Deep Meta Learning for Real-Time Target-Aware Visual Tracking</title>
+    <url>/tracking/4-mlt/</url>
+    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810211247.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/1712.09153">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
+<span id="more"></span>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
+<p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
+<p><strong>Components</strong></p>
+<p>匹配网络是标准的孪生网络</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
+<p>其中，$x$是模板，$z$是搜索区域，$w = \{ w_1, w_2, …, w_N \}$​表示每一层卷积层的权重参数。</p>
+<p>元学习网络根据历史得到的M个context patch $z = \{z_1, z_2, …, z_M\}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
+<p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094325.png" style="zoom:80%;" /></p>
+<p>将生成的$\omega^{target}$与原始的权重拼接起来得到新的自适应权重$w^{adapt} = \{ w_1, w_2, …, [w_N, \omega^{target}] \}$​，将其用于目标定位</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094727.png" style="zoom:80%;" /></p>
+<p>此外，元学习网络还生成了通道注意力权重进一步调整特征表示空间。</p>
+<p><strong>Tracking algorithm</strong></p>
+<p>在跟踪过程中，会保存一个context image的集合 $z_{mem} = \{ z_1, z_2, …, z_K \}$​​​​​​ 以及对应生成的响应图$\hat{y}_{mem} = \{ \hat{y}_1, \hat{y}_2, …, \hat{y}_K \}$​​​​​​。只有当 $\hat{y}$​​​​​​ 的最大响应值大于阈值时，$z$​​​​​​才会被加入memory集合中。在更新权重时，从K个context image中选择M个来进行计算，筛选标准是$\hat{y}_{mem}$​​​​​​​的最小熵，熵越大响应图分布越杂乱，这样可以避免模糊的响应图引入false positive。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811101915.png" style="zoom:80%;" /></p>
+<p>整体跟踪流程如下：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094851.png" style="zoom:80%;" /></p>
+<p><strong>Training</strong></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102117.png" style="zoom: 67%;" /></p>
+<p>首先单独训练匹配网络，然后在此基础上按照图3的方式训练元学习网络。类似在线跟踪过程，从同一个视频序列中随机采样 M’ 个context patch，然后从中选取M个送入元学习网络训练（M’ ＞M），这样是为了避免过拟合。优化损失为：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102811.png" style="zoom:80%;" /></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103012.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103215.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103248.png" alt=""></p>
+<p>消融实验，MLT-mt表示只有匹配网络，MLT-mt+ft表示对匹配网络最后一层进行在线微调更新。可以发现在线微调甚至比不进行更新效果更差，因为过拟合。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103028.png" style="zoom: 67%;" /></p>
+<p>最后可视化了target-specific特征空间的效果，可以更聚焦目标并且抑制周围的干扰。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103525.png" style="zoom:80%;" /></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>这篇文章发表在ICCV2019，整体实验结果并没有刷得太高，但是meta learning运用在siamese跟踪中的思想无疑是优秀的。目标跟踪同样可以看做是一个few-shot learning的任务，如何运用历史跟踪的少量结果来微调模型参数，meta learning是一个不错的方案。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>meta learning</tag>
+        <tag>ICCV2019</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</title>
+    <url>/tracking/41-siamrcr/</url>
+    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526210529.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2105.11237">论文</a></p>
+<p>本文解决的是老生常谈的分类和回归不匹配的问题。作者提出在分类和回归之间建立<strong>双向</strong>的连接，可以动态地重新加权每个正样本的损失。此外，增加了一个定位分支用于预测定位精度，可以在推理过程中替代回归辅助连接(regression assistance link)，使得训练和测试更加一致。最终运行速度为65FPS。</p>
+<span id="more"></span>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526212918.png" alt=""></p>
+<p>首先点出问题，即孪生跟踪架构中分类和回归是分开独立优化的，导致二者不匹配。如图1所示，分类得分最高的位置生成的预测框不一定是最好的，或者预测比较好的框分类得分很低。这个图和IOUNet中的图很相似，事实上，这个问题在检测任务中已经被很多学者研究，并且有些成果也被应用到跟踪中。比如SiamFC++借鉴FCOS架构增加了一个衡量定位精度的分支，ATOM/DiMP系列使用IOUNet进行回归。作者指出这些方法仍然存在不匹配，因为并没有解决分类和回归独立优化的问题。</p>
+<p>因此，本文提出在分类和回归之间建立一个互惠关系 (reciprocal relationship)，使它们同步优化，以生成精度一致的输出。整体框架如图2所示，在分类和回归分支之间增加了两个连接 classification / regression assistance link。classification assistance 用分类置信度给回归损失加权，使得回归可以更关注高置信度的位置；regression assistance 用定位精度（预测框和gt的IOU）给分类损失加权，迫使分类分数与回归精度更加一致。</p>
+<p>而在推理阶段，gt是未知的，无法通过计算IOU得到定位精度，因此额外增加一个定位分支专门用于预测定位精度。将分类置信度与定位预测置信度相乘，在推理阶段生成新的跟踪评分/置信度图，保证了与训练过程的一致性（类似FCOS / SiamFC++）。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526221151.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>图2整体是一个anchor-free的孪生框架，预测头部分采用的是CenterNet的中心、中心偏移量、宽高的形式。这里将中心偏移量和宽高放在同一个分支输出，所以回归分支输出维度是4  $t^<em>_{x,y} = (w^</em>, h^<em>, \Delta x^</em>, \Delta y^*)$ 。</p>
+<h2 id="Reciprocal-Classification-and-Regression"><a href="#Reciprocal-Classification-and-Regression" class="headerlink" title="Reciprocal Classification and Regression"></a>Reciprocal Classification and Regression</h2><p>下面开始介绍两种辅助连接，设计原则就是：</p>
+<ol>
+<li>当回归框的定位精度较低时，相应的分类得分不应该很高，因为如果该位置成为分类置信度的赢家，差的回归结果将导致跟踪性能较差；</li>
+<li>当回归框的分类分数较低时，提高其定位精度是没有意义的，因为这个框一定不会是最后的输出。</li>
+</ol>
+<p><strong>Regression Assistance Link</strong> 针对准则1，将回归分支生成的框与gt计算IOU，看成一种动态的样本重加权作用于分类损失：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526223907.png" alt=""></p>
+<p>$N_{pos}$表示正样本个数，$B,B^*$分别表示预测框和gt。</p>
+<p><strong>Classification Assistance Link</strong> 针对准则2，将分类置信度 $p^{cls}_{x,y}$ 动态地重新加权回归损失：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526225051.png" alt=""></p>
+<p><strong>Localization Score Branch</strong> 在训练时，regression assistance link使得分类分支考虑了回归精度，但这需要借助gt。而在推理阶段没有gt，为了保证训练和推理的一致性，使得推理阶段的分类分支也能考虑定位精度，作者额外增加了一个定位分支专门用于预测定位精度，作用类似FCOS / SiamFC++的centerness。其训练损失就是计算定位分支输出与IOU之间的交叉熵损失。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526225941.png" alt=""></p>
+<p>推理阶段示意图如图3，将分类分支和定位分支的得分相乘生成最后的跟踪分数图。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210527094602.png" alt=""></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526230610.png" alt=""></p>
+<p>表1中这两个组件的性能提升几乎是正交的，联合使用的提升(5.05%)几乎等于单独使用时各自性能提升的和(3.54%+2.86%)。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234418.png" alt=""></p>
+<p>图4展示了不同方法的跟踪分数和回归框IOU之间的相关性，(a)是baseline，(b)是centerness，(c)是basline+定位分支，(d)是SiamRCR。其中(b)和(c)类似，区别是分别使用IOU和centerness来衡量定位精度。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234837.png" alt=""></p>
+<p>最后展示了划分正负样本时不同半径对结果的影响。</p>
+<h2 id="Comparison-with-the-State-of-the-Art"><a href="#Comparison-with-the-State-of-the-Art" class="headerlink" title="Comparison with the State-of-the-Art"></a>Comparison with the State-of-the-Art</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234927.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234937.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234948.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234956.png" alt=""></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文解决了孪生跟踪框架中分类和回归不一致的问题。印象中最先研究这个问题的是检测领域的PISA (Prime Sample Attention in Object Detection)，根据IOU对样本进行排序然后选择prime sample。之后也有许多相关文章，包括本文的Regression Assistance Link也能看到一些检测里面的影子（吐槽一下我19年投了一篇文章有个点和这个一毛一样然而到现在都还没中hhh）。但目前的研究其实基本上都是在用回归矫正分类，而本文做了一个双向的矫正，（显式地）增加了用分类矫正回归的过程（为什么说是显式，因为其实只要把分类和回归乘到一起，这个作用就是相互的，比如公式2中，我可以把focal loss当成权重，IOU当成优化变量，那就变成了分类矫正回归）。这种显式的矫正似乎监督能力更强，如果有个消融实验对比一下单独使用公式3和公式4的效果就更直观了。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>IJCAI2021</tag>
       </tags>
   </entry>
   <entry>
@@ -919,52 +965,6 @@
       <tags>
         <tag>综述</tag>
         <tag>强化学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</title>
-    <url>/tracking/41-siamrcr/</url>
-    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526210529.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2105.11237">论文</a></p>
-<p>本文解决的是老生常谈的分类和回归不匹配的问题。作者提出在分类和回归之间建立<strong>双向</strong>的连接，可以动态地重新加权每个正样本的损失。此外，增加了一个定位分支用于预测定位精度，可以在推理过程中替代回归辅助连接(regression assistance link)，使得训练和测试更加一致。最终运行速度为65FPS。</p>
-<span id="more"></span>
-<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526212918.png" alt=""></p>
-<p>首先点出问题，即孪生跟踪架构中分类和回归是分开独立优化的，导致二者不匹配。如图1所示，分类得分最高的位置生成的预测框不一定是最好的，或者预测比较好的框分类得分很低。这个图和IOUNet中的图很相似，事实上，这个问题在检测任务中已经被很多学者研究，并且有些成果也被应用到跟踪中。比如SiamFC++借鉴FCOS架构增加了一个衡量定位精度的分支，ATOM/DiMP系列使用IOUNet进行回归。作者指出这些方法仍然存在不匹配，因为并没有解决分类和回归独立优化的问题。</p>
-<p>因此，本文提出在分类和回归之间建立一个互惠关系 (reciprocal relationship)，使它们同步优化，以生成精度一致的输出。整体框架如图2所示，在分类和回归分支之间增加了两个连接 classification / regression assistance link。classification assistance 用分类置信度给回归损失加权，使得回归可以更关注高置信度的位置；regression assistance 用定位精度（预测框和gt的IOU）给分类损失加权，迫使分类分数与回归精度更加一致。</p>
-<p>而在推理阶段，gt是未知的，无法通过计算IOU得到定位精度，因此额外增加一个定位分支专门用于预测定位精度。将分类置信度与定位预测置信度相乘，在推理阶段生成新的跟踪评分/置信度图，保证了与训练过程的一致性（类似FCOS / SiamFC++）。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526221151.png" alt=""></p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>图2整体是一个anchor-free的孪生框架，预测头部分采用的是CenterNet的中心、中心偏移量、宽高的形式。这里将中心偏移量和宽高放在同一个分支输出，所以回归分支输出维度是4  $t^<em>_{x,y} = (w^</em>, h^<em>, \Delta x^</em>, \Delta y^*)$ 。</p>
-<h2 id="Reciprocal-Classification-and-Regression"><a href="#Reciprocal-Classification-and-Regression" class="headerlink" title="Reciprocal Classification and Regression"></a>Reciprocal Classification and Regression</h2><p>下面开始介绍两种辅助连接，设计原则就是：</p>
-<ol>
-<li>当回归框的定位精度较低时，相应的分类得分不应该很高，因为如果该位置成为分类置信度的赢家，差的回归结果将导致跟踪性能较差；</li>
-<li>当回归框的分类分数较低时，提高其定位精度是没有意义的，因为这个框一定不会是最后的输出。</li>
-</ol>
-<p><strong>Regression Assistance Link</strong> 针对准则1，将回归分支生成的框与gt计算IOU，看成一种动态的样本重加权作用于分类损失：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526223907.png" alt=""></p>
-<p>$N_{pos}$表示正样本个数，$B,B^*$分别表示预测框和gt。</p>
-<p><strong>Classification Assistance Link</strong> 针对准则2，将分类置信度 $p^{cls}_{x,y}$ 动态地重新加权回归损失：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526225051.png" alt=""></p>
-<p><strong>Localization Score Branch</strong> 在训练时，regression assistance link使得分类分支考虑了回归精度，但这需要借助gt。而在推理阶段没有gt，为了保证训练和推理的一致性，使得推理阶段的分类分支也能考虑定位精度，作者额外增加了一个定位分支专门用于预测定位精度，作用类似FCOS / SiamFC++的centerness。其训练损失就是计算定位分支输出与IOU之间的交叉熵损失。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526225941.png" alt=""></p>
-<p>推理阶段示意图如图3，将分类分支和定位分支的得分相乘生成最后的跟踪分数图。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210527094602.png" alt=""></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526230610.png" alt=""></p>
-<p>表1中这两个组件的性能提升几乎是正交的，联合使用的提升(5.05%)几乎等于单独使用时各自性能提升的和(3.54%+2.86%)。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234418.png" alt=""></p>
-<p>图4展示了不同方法的跟踪分数和回归框IOU之间的相关性，(a)是baseline，(b)是centerness，(c)是basline+定位分支，(d)是SiamRCR。其中(b)和(c)类似，区别是分别使用IOU和centerness来衡量定位精度。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234837.png" alt=""></p>
-<p>最后展示了划分正负样本时不同半径对结果的影响。</p>
-<h2 id="Comparison-with-the-State-of-the-Art"><a href="#Comparison-with-the-State-of-the-Art" class="headerlink" title="Comparison with the State-of-the-Art"></a>Comparison with the State-of-the-Art</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234927.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234937.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234948.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/41-siamrcr/20210526234956.png" alt=""></p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文解决了孪生跟踪框架中分类和回归不一致的问题。印象中最先研究这个问题的是检测领域的PISA (Prime Sample Attention in Object Detection)，根据IOU对样本进行排序然后选择prime sample。之后也有许多相关文章，包括本文的Regression Assistance Link也能看到一些检测里面的影子（吐槽一下我19年投了一篇文章有个点和这个一毛一样然而到现在都还没中hhh）。但目前的研究其实基本上都是在用回归矫正分类，而本文做了一个双向的矫正，（显式地）增加了用分类矫正回归的过程（为什么说是显式，因为其实只要把分类和回归乘到一起，这个作用就是相互的，比如公式2中，我可以把focal loss当成权重，IOU当成优化变量，那就变成了分类矫正回归）。这种显式的矫正似乎监督能力更强，如果有个消融实验对比一下单独使用公式3和公式4的效果就更直观了。</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>IJCAI2021</tag>
       </tags>
   </entry>
   <entry>
@@ -1125,6 +1125,73 @@
       </tags>
   </entry>
   <entry>
+    <title>Saliency-Associated Object Tracking</title>
+    <url>/tracking/47-SAOT/</url>
+    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210817170638.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2108.03637">论文</a> <a href="https://github.com/ZikunZhou/SAOT.git">代码</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>和上一篇一样是研究跟踪的匹配问题。目前主流的跟踪策略分为全局和局部两种，全局策略（如DW-Corr）学习目标的整体表示，当目标发生较大变化时表现不佳。局部策略（如PG-Corr）将目标分割成多个patch，并行跟踪所有patch，通过聚合这些patch的跟踪结果，推断出目标状态。而局部策略的局限在于并不是所有patch都包含丰富的信息，一些没有判别能力的patch难以跟踪，可能对推断目标状态产生不利影响。因此，本文提出只跟踪目标的显著局部区域而不是简单跟踪所有局部块，具体提出了细粒度的显著性挖掘模块(fine-grained saliency mining module)，用于捕获局部显著性；以及显著性关联模块(saliency-association modeling module) 将捕获的显著区域关联在一起，学习目标模板与搜索图像之间的全局相关性，以进行状态估计。</p>
+<span id="more"></span>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210817211327.png" alt=""></p>
+<h2 id="Overall-Framework"><a href="#Overall-Framework" class="headerlink" title="Overall Framework"></a>Overall Framework</h2><p>整体框架如图2所示，模板特征$F_x \in \mathbb{R}^{h_x \times w_x \times c } $ 和搜索特征 $F_s \in \mathbb{R}^{h_s \times w_s \times c } $ 首先送入Saliency Mining module用于提取模板的局部显著性，该模块计算模板和搜索特征的pixel-to-pixel相似性，选择局部最大且最锐利的点(local sharp maximum points) 作为显著点，这些显著点表示模板中最具判别性的区域。</p>
+<p>然后，Saliency-Association Modeling module将捕获的显著点进行关联，以学习模板和搜索图像之间的有效全局相关性表示。最后再对相关性结果进行状态估计。</p>
+<h2 id="Saliency-Mining"><a href="#Saliency-Mining" class="headerlink" title="Saliency Mining"></a>Saliency Mining</h2><p>显著性挖掘模块用于捕获模板中具有判别能力的局部显著区域，包括两个步骤：</p>
+<ol>
+<li>为模板$F_x$中的每个点构建与搜索特征$F_s$的相似图；</li>
+<li>根据相似图衡量$F_x$中每个点的显著性，从而进行选择。</li>
+</ol>
+<p><strong>Construction of similarity maps</strong> </p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818103912.png" alt=""></p>
+<p>pixel-to-pixel相似图的构建如图3所示，将模板特征中的每个点$(u,v)$与搜索特征计算余弦距离，得到单通道的相似图$S_(u,v) \in  \mathbb{R}^{h_s \times w_s}$，总共会生成$h_x \times w_x$这样的相似图。</p>
+<p><strong>Saliency evaluation</strong> 接下来根据每个相似性图中最大值点附近的峰值分布（包括强度和集中度）来评估对应模板特征点的显著性。强度使用峰值旁瓣比PSR进行衡量</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818112612.png" style="zoom:80%;" /></p>
+<p>其中，$\Phi$表示旁瓣，$\mu_{\Phi}, \sigma_{\Phi}$分别表示旁瓣的均值和方差。在原始的PSR中，主瓣$\Psi$的大小是预定义的固定值，作者认为这样定义是不合理的，因为没有考虑响应图的分布。图4展示了两种不同峰分布的相似图，这两个相似图显然对应着主瓣的大小不同。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818115217.png" alt=""></p>
+<p>为了消除这一影响，作者将主瓣的边界定义为峰附近最靠近的轮廓，其高度等于整个相似图的平均值。至此，我们可以得到相似图$S_{ (u,v) }$的峰强度$\gamma$：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818160143.png" style="zoom:80%;" /></p>
+<p>用于显著性评价的另一个度量是峰分布的集中度(concentration)，它与主瓣覆盖面积$A_{\Psi}$成反比。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818160322.png" style="zoom:80%;" /></p>
+<p>将上面的强度和集中度结合起来就得到了相似图$S_{ (u,v) }$的显著性$s( S_{ (u,v) } )$：</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818160635.png" style="zoom:80%;" /></p>
+<p>考虑到应该尽可能跟踪目标模板的中心，因此在计算显著性时额外增加一个高斯正则项，公式7中的高斯项$g$是与模板中心对齐的。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818161803.png" style="zoom:80%;" /></p>
+<p>根据公式7的显著性评价方式，我们可以计算模板特征$F_x$中每个点的显著性，并选取K个最大的点构成显著性集合 $P_x = \{ p_x^k \}_{k=1}^K$，这个显著性结合在搜索特征$F_s$的对应匹配点集合为$P_s = \{ p_s^k \}_{k=1}^K$。</p>
+<h2 id="Saliency-Association-Modeling"><a href="#Saliency-Association-Modeling" class="headerlink" title="Saliency-Association Modeling"></a>Saliency-Association Modeling</h2><p>显著性关联模块利用捕获的显著性来学习模板和搜索特征之间的全局关联，作者利用图的方式进行构建，同样包括两步：</p>
+<ol>
+<li>在捕获的显著性之间构建一个图，以建模这些显著性之间的交互关系；</li>
+<li>基于构造的图聚合显著性。</li>
+</ol>
+<p><strong>Construction of the saliency graph</strong>  构建显著性图时同时考虑了相似图$S$和搜索特征$F_s$，将二者拼接得到 $F_g$，共有$h_s \times w_s$ 个节点，每个节点的维度是 $h_x w_x + c$。然后构建图的边，如图5所示，包括两种类型，一种是对显著点之间进行连接，另一种是对每个点和其邻域点进行连接，边的集合定义为$C$。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818164636.png" alt=""></p>
+<p>本文用两层全连接层来学习边的权重，定义权重的邻接矩阵为 $A \in \mathbb{R}^{N \times N}, N=h_s w_s $</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818170326.png" alt=""></p>
+<p>其中 $v1, v2$是图的两个节点，$\phi_1, \phi_2$是两层全连接层，用sigmoid函数约束权值范围在0到1之间。只有当边$\langle i, j \rangle$符合图5中的两种情况才有权值。</p>
+<p><strong>Aggregation of the captured saliencies</strong>  使用两层的GCN进行显著性聚合</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818172505.png" alt=""></p>
+<p>其中m和M表示多项式的阶数和总阶数，$\omega_m$是可学习权重。$\hat{A} = \tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{\frac{1}{2}}$是normalized邻接矩阵，$\tilde{A}=A+I$，$ \tilde{D}$是$\tilde{A}$的对角阵，这些均为图卷积知识。$X^{l} \in \mathbb{R}^{N \times d_l}$和$X^{l+1} \in \mathbb{R}^{N \times d_{l+1} }$是第 l 层上所有节点的输入和输出特征，其中 $d_l, d_{l+1}$是对应的特征维度，$d_0 = h_x w_x + c$，$ \Theta_m^l \in \mathbb{R}^{d_l \times d_{l+1}} $是第l层第m阶的参数矩阵。</p>
+<p>通过构造显著性图并进一步进行显著性聚合，Saliency-Association Modeling module能够学习目标模板与搜索图像之间的全局相关表示，进而用于预测搜索图像中的目标状态。</p>
+<h2 id="Tracking-Framework"><a href="#Tracking-Framework" class="headerlink" title="Tracking Framework"></a>Tracking Framework</h2><p>跟踪框架如图2所示，预测头采用FCOS，并增加DiMP的在线跟踪。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818212315.png" alt=""></p>
+<p><strong>Base model</strong> 只有特征提取，DiMP的在线分类，以及预测头；</p>
+<p><strong>PPFM</strong> 只做图3的Pixel-to-Pixel匹配，然后将拼接后的$S$和$F_s$直接过两层卷积得到相关结果；</p>
+<p><strong>PAM</strong> 没有提取显著性，将所有局部平等的进行关联（类似self-attention）；</p>
+<p>PPFM和base model的对比证明建模模板和搜索图像之间的相似性是有益的，PAM和PPFM的对比证明将匹配的局部进行关联是有益的；最后SAOT和PAM的对比证明了局部显著性是有益的。最后还与经典的DW-Corr和PG-Corr进行比较。</p>
+<h2 id="SOTA-Comparison"><a href="#SOTA-Comparison" class="headerlink" title="SOTA Comparison"></a>SOTA Comparison</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818213939.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818213952.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818214010.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818214021.png" alt=""></p>
+<h2 id="Qualitative-Study"><a href="#Qualitative-Study" class="headerlink" title="Qualitative Study"></a>Qualitative Study</h2><p>可视化结果有点牛逼，对于形变和干扰场景的响应看上去非常好。</p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818214434.png" alt=""></p>
+<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818214104.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>ICCV2021</tag>
+        <tag>matching</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Learn to Match: Automatic Matching Network Design for Visual Tracking</title>
     <url>/tracking/46-AutoMatch/</url>
     <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/46-AutoMatch/20210808103150.png" alt=""></p>
@@ -1187,73 +1254,6 @@
 <li>DW-Corr并不是孪生跟踪算法的最优选择，本文设计了6种新的匹配算子；</li>
 <li>本文用一种自动搜索的方式组合出最优的匹配网络。</li>
 </ol>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>ICCV2021</tag>
-        <tag>matching</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Saliency-Associated Object Tracking</title>
-    <url>/tracking/47-SAOT/</url>
-    <content><![CDATA[<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210817170638.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2108.03637">论文</a> <a href="https://github.com/ZikunZhou/SAOT.git">代码</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>和上一篇一样是研究跟踪的匹配问题。目前主流的跟踪策略分为全局和局部两种，全局策略（如DW-Corr）学习目标的整体表示，当目标发生较大变化时表现不佳。局部策略（如PG-Corr）将目标分割成多个patch，并行跟踪所有patch，通过聚合这些patch的跟踪结果，推断出目标状态。而局部策略的局限在于并不是所有patch都包含丰富的信息，一些没有判别能力的patch难以跟踪，可能对推断目标状态产生不利影响。因此，本文提出只跟踪目标的显著局部区域而不是简单跟踪所有局部块，具体提出了细粒度的显著性挖掘模块(fine-grained saliency mining module)，用于捕获局部显著性；以及显著性关联模块(saliency-association modeling module) 将捕获的显著区域关联在一起，学习目标模板与搜索图像之间的全局相关性，以进行状态估计。</p>
-<span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210817211327.png" alt=""></p>
-<h2 id="Overall-Framework"><a href="#Overall-Framework" class="headerlink" title="Overall Framework"></a>Overall Framework</h2><p>整体框架如图2所示，模板特征$F_x \in \mathbb{R}^{h_x \times w_x \times c } $ 和搜索特征 $F_s \in \mathbb{R}^{h_s \times w_s \times c } $ 首先送入Saliency Mining module用于提取模板的局部显著性，该模块计算模板和搜索特征的pixel-to-pixel相似性，选择局部最大且最锐利的点(local sharp maximum points) 作为显著点，这些显著点表示模板中最具判别性的区域。</p>
-<p>然后，Saliency-Association Modeling module将捕获的显著点进行关联，以学习模板和搜索图像之间的有效全局相关性表示。最后再对相关性结果进行状态估计。</p>
-<h2 id="Saliency-Mining"><a href="#Saliency-Mining" class="headerlink" title="Saliency Mining"></a>Saliency Mining</h2><p>显著性挖掘模块用于捕获模板中具有判别能力的局部显著区域，包括两个步骤：</p>
-<ol>
-<li>为模板$F_x$中的每个点构建与搜索特征$F_s$的相似图；</li>
-<li>根据相似图衡量$F_x$中每个点的显著性，从而进行选择。</li>
-</ol>
-<p><strong>Construction of similarity maps</strong> </p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818103912.png" alt=""></p>
-<p>pixel-to-pixel相似图的构建如图3所示，将模板特征中的每个点$(u,v)$与搜索特征计算余弦距离，得到单通道的相似图$S_(u,v) \in  \mathbb{R}^{h_s \times w_s}$，总共会生成$h_x \times w_x$这样的相似图。</p>
-<p><strong>Saliency evaluation</strong> 接下来根据每个相似性图中最大值点附近的峰值分布（包括强度和集中度）来评估对应模板特征点的显著性。强度使用峰值旁瓣比PSR进行衡量</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818112612.png" style="zoom:80%;" /></p>
-<p>其中，$\Phi$表示旁瓣，$\mu_{\Phi}, \sigma_{\Phi}$分别表示旁瓣的均值和方差。在原始的PSR中，主瓣$\Psi$的大小是预定义的固定值，作者认为这样定义是不合理的，因为没有考虑响应图的分布。图4展示了两种不同峰分布的相似图，这两个相似图显然对应着主瓣的大小不同。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818115217.png" alt=""></p>
-<p>为了消除这一影响，作者将主瓣的边界定义为峰附近最靠近的轮廓，其高度等于整个相似图的平均值。至此，我们可以得到相似图$S_{ (u,v) }$的峰强度$\gamma$：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818160143.png" style="zoom:80%;" /></p>
-<p>用于显著性评价的另一个度量是峰分布的集中度(concentration)，它与主瓣覆盖面积$A_{\Psi}$成反比。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818160322.png" style="zoom:80%;" /></p>
-<p>将上面的强度和集中度结合起来就得到了相似图$S_{ (u,v) }$的显著性$s( S_{ (u,v) } )$：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818160635.png" style="zoom:80%;" /></p>
-<p>考虑到应该尽可能跟踪目标模板的中心，因此在计算显著性时额外增加一个高斯正则项，公式7中的高斯项$g$是与模板中心对齐的。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818161803.png" style="zoom:80%;" /></p>
-<p>根据公式7的显著性评价方式，我们可以计算模板特征$F_x$中每个点的显著性，并选取K个最大的点构成显著性集合 $P_x = \{ p_x^k \}_{k=1}^K$，这个显著性结合在搜索特征$F_s$的对应匹配点集合为$P_s = \{ p_s^k \}_{k=1}^K$。</p>
-<h2 id="Saliency-Association-Modeling"><a href="#Saliency-Association-Modeling" class="headerlink" title="Saliency-Association Modeling"></a>Saliency-Association Modeling</h2><p>显著性关联模块利用捕获的显著性来学习模板和搜索特征之间的全局关联，作者利用图的方式进行构建，同样包括两步：</p>
-<ol>
-<li>在捕获的显著性之间构建一个图，以建模这些显著性之间的交互关系；</li>
-<li>基于构造的图聚合显著性。</li>
-</ol>
-<p><strong>Construction of the saliency graph</strong>  构建显著性图时同时考虑了相似图$S$和搜索特征$F_s$，将二者拼接得到 $F_g$，共有$h_s \times w_s$ 个节点，每个节点的维度是 $h_x w_x + c$。然后构建图的边，如图5所示，包括两种类型，一种是对显著点之间进行连接，另一种是对每个点和其邻域点进行连接，边的集合定义为$C$。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818164636.png" alt=""></p>
-<p>本文用两层全连接层来学习边的权重，定义权重的邻接矩阵为 $A \in \mathbb{R}^{N \times N}, N=h_s w_s $</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818170326.png" alt=""></p>
-<p>其中 $v1, v2$是图的两个节点，$\phi_1, \phi_2$是两层全连接层，用sigmoid函数约束权值范围在0到1之间。只有当边$\langle i, j \rangle$符合图5中的两种情况才有权值。</p>
-<p><strong>Aggregation of the captured saliencies</strong>  使用两层的GCN进行显著性聚合</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818172505.png" alt=""></p>
-<p>其中m和M表示多项式的阶数和总阶数，$\omega_m$是可学习权重。$\hat{A} = \tilde{D}^{-\frac{1}{2}} \tilde{A} \tilde{D}^{\frac{1}{2}}$是normalized邻接矩阵，$\tilde{A}=A+I$，$ \tilde{D}$是$\tilde{A}$的对角阵，这些均为图卷积知识。$X^{l} \in \mathbb{R}^{N \times d_l}$和$X^{l+1} \in \mathbb{R}^{N \times d_{l+1} }$是第 l 层上所有节点的输入和输出特征，其中 $d_l, d_{l+1}$是对应的特征维度，$d_0 = h_x w_x + c$，$ \Theta_m^l \in \mathbb{R}^{d_l \times d_{l+1}} $是第l层第m阶的参数矩阵。</p>
-<p>通过构造显著性图并进一步进行显著性聚合，Saliency-Association Modeling module能够学习目标模板与搜索图像之间的全局相关表示，进而用于预测搜索图像中的目标状态。</p>
-<h2 id="Tracking-Framework"><a href="#Tracking-Framework" class="headerlink" title="Tracking Framework"></a>Tracking Framework</h2><p>跟踪框架如图2所示，预测头采用FCOS，并增加DiMP的在线跟踪。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818212315.png" alt=""></p>
-<p><strong>Base model</strong> 只有特征提取，DiMP的在线分类，以及预测头；</p>
-<p><strong>PPFM</strong> 只做图3的Pixel-to-Pixel匹配，然后将拼接后的$S$和$F_s$直接过两层卷积得到相关结果；</p>
-<p><strong>PAM</strong> 没有提取显著性，将所有局部平等的进行关联（类似self-attention）；</p>
-<p>PPFM和base model的对比证明建模模板和搜索图像之间的相似性是有益的，PAM和PPFM的对比证明将匹配的局部进行关联是有益的；最后SAOT和PAM的对比证明了局部显著性是有益的。最后还与经典的DW-Corr和PG-Corr进行比较。</p>
-<h2 id="SOTA-Comparison"><a href="#SOTA-Comparison" class="headerlink" title="SOTA Comparison"></a>SOTA Comparison</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818213939.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818213952.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818214010.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818214021.png" alt=""></p>
-<h2 id="Qualitative-Study"><a href="#Qualitative-Study" class="headerlink" title="Qualitative Study"></a>Qualitative Study</h2><p>可视化结果有点牛逼，对于形变和干扰场景的响应看上去非常好。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818214434.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/47-SAOT/20210818214104.png" alt=""></p>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
