@@ -18,8 +18,9 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="引言近些年的目标跟踪算法都在往做大做强的方向发展，比如更深的网络和更复杂的模块。尽管性能越刷越高，但是却很少考虑效率问题，以至于几乎无法在边缘设备上实时运行部署，实用性较低，因此研究轻量化的目标跟踪算法是非常必要的（另外一个原因也可能是做大做强上能水论文的点越来越不好找了 &#x2F;狗头保命）。本篇博客总结了三篇最近研究跟踪模型轻量化的工作。  LightTrack: Finding Lightweigh">
 <meta property="og:type" content="article">
@@ -326,11 +327,11 @@
 <li><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2112.07957">FEAR: Fast, Efficient, Accurate and Robust Visual Tracker</a></li>
 </ul>
 <span id="more"></span>
-<h1 id="LightTrack"><a href="#LightTrack" class="headerlink" title="LightTrack"></a>LightTrack</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211440.png" alt=""></p>
+<h1 id="LightTrack"><a href="#LightTrack" class="headerlink" title="LightTrack"></a>LightTrack</h1><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211440.png" alt=""></p>
 <p>详细解读：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1r54y1V7EC?from=search&amp;seid=5643544047018487388&amp;spm_id_from=333.337.0.0">【极市直播】严彬：CVPR 2021-LightTrack：基于网络结构搜索的超轻量级跟踪模型设计</a></p>
 <p>LightTrack使用神经架构搜索（NAS）来设计更轻量级和高效的目标追踪器。实验表明，LightTrack与手工设计的 SOTA 跟踪器（如SiamRPN++和Ocean）相比，可以实现更优越的性能，而需要的计算量和参数要少得多。此外，当部署在资源受限的移动芯片上时，也能以更快的速度运行。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222114947.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222115004.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222114947.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222115004.png" alt=""></p>
 <p>LightTrack采用one-shot NAS的方法搜索结构，流程如图2所示。整个过程训练与搜索是解耦的，首先训练超网（随机采样路径进行训练），然后用进化算法从超网中寻找最优子结构。</p>
 <p>最后搜索到的LightTrack-Mobile结构如图3所示，具有如下特点：</p>
 <ol>
@@ -338,14 +339,14 @@
 <li>搜索架构选择了倒数第二个block作为特征输出，可能是因为跟踪网络并不倾向太高级的语义特征；</li>
 <li>分类分支需要的网络层数比回归分支要少，可能是因为粗目标定位比精确的边框回归更容易。</li>
 </ol>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222120151.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222120211.png" alt=""><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222120235.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222120151.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222120211.png" alt=""><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222120235.png" alt=""></p>
 <p>实验可以看到三个版本mobile，largeA，largeB在性能、计算量和参数量上都具有优势。在骁龙845中，LightTrack运行速度比Ocean快12倍，参数量减少13倍，计算量减少38倍。作者称这种改进可能会缩小学术模型和工业部署在物体跟踪任务中的差距。</p>
-<h1 id="Exemplar-Transformer"><a href="#Exemplar-Transformer" class="headerlink" title="Exemplar Transformer"></a>Exemplar Transformer</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211457.png" alt=""></p>
+<h1 id="Exemplar-Transformer"><a href="#Exemplar-Transformer" class="headerlink" title="Exemplar Transformer"></a>Exemplar Transformer</h1><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211457.png" alt=""></p>
 <p>本文对transformer架构进行轻量化，提出了一种高效的Exemplar Transformer来替代卷积。E.T.Track在CPU上速度达到47FPS，比其他基于transformer的跟踪器快8倍，作者称这是目前唯一的实时transformer-based的跟踪器。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222213402.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222213402.png" alt=""></p>
 <h2 id="Exemplar-Transformers"><a href="#Exemplar-Transformers" class="headerlink" title="Exemplar Transformers"></a>Exemplar Transformers</h2><p>transformer中self-attention计算如公式2：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222160932.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222160932.png" alt=""></p>
 <p>Q,K的序列长度均为图像尺寸，公式2计算复杂度为图像尺寸的平方，这样带来较大计算负担。作者认为，对所有特征之间的关联在机器翻译中是必要的，但是在视觉任务中是不必要的。因为机器翻译中每个特征都代表一个特定的单词或标记，而视觉任务中相邻的空间通常表示相同的物体。因此在视觉任务中，可以减少特征向量的数量，构建一个更粗略更具描述性的视觉表达，从而显著降低计算复杂度。</p>
 <p>作者首先提出了两个假设：</p>
 <ol>
@@ -353,43 +354,43 @@
 <li>一个粗略的查询具有足够的描述性来利用这些exemplar value。</li>
 </ol>
 <p>为此，作者在构建query时首先将输入特征图$X \in \mathbb{R}^{H \times W \times C}$通过平均池化压缩成空间维度为S的大小，再经过线性映射得到Q。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222203001.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222203001.png" alt=""></p>
 <p>其中S=1，即将query映射成一个向量，这样可以使效率最大化。作者认为对于单目标跟踪，一个查询就足够了。</p>
 <p>对于Key，作者学习了一小组捕获数据集信息的范例表示，而不是一个细粒度的特征映射和仅仅依赖于样本内部的关系。 Exemplar keys可以表示成$K=\hat{W}_K \in \mathbb{R}^{E \times D} $，数量从HW降为E。这个Key与输入特征是无关的，是从整个训练数据集中学习出来的一个变量。</p>
 <p>对于Value，采用卷积操作在局部层面进行操作。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222203750.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222203750.png" alt=""></p>
 <p>其中$W_V \in \mathbb{R}^{E \times K \times K}$。整个exemplar attention可以表示为：</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222203939.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222203939.png" alt=""></p>
 <p>exemplar attention和传统的self-attention对比如图2和3所示，本文方法利用卷积处理局部特征，利用相似性度量处理全局特征。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222204310.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222204324.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222204310.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222204324.png" alt=""></p>
 <p>计算复杂度分析如表1所示，其中Key的数量E=4，所以Exemplar Attention的计算量和卷积是同一个量级的。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222210355.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222210355.png" alt=""></p>
 <h2 id="E-T-Track-Architecture"><a href="#E-T-Track-Architecture" class="headerlink" title="E.T.Track Architecture"></a>E.T.Track Architecture</h2><p>上述提出的Exemplar Transformer layer可以作为卷积的替代，作者将LightTrack的预测头分支所有卷积换成了Exemplar Transformer，构建新的跟踪器E.T.Track如图4所示。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211042.png" alt=""></p>
-<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211237.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211248.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211303.png" alt=""></p>
-<h1 id="FEAR"><a href="#FEAR" class="headerlink" title="FEAR"></a>FEAR</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222213350.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211042.png" alt=""></p>
+<h2 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h2><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211237.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211248.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222211303.png" alt=""></p>
+<h1 id="FEAR"><a href="#FEAR" class="headerlink" title="FEAR"></a>FEAR</h1><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222213350.png" alt=""></p>
 <p>本文的目的是设计快速、高效、准确、鲁棒的跟踪器，提出两个轻量化模型，dual-template module和pixel-wise fusion block。前者使用一个可学习的参数集成了时域信息，而后者使用更少的参数编码了更有判别性的特征。使用复杂的backbone，本文方法FEAR-M和FEAR-L在速度和精度上超过大多数算法；而使用轻量backbone的版本FEAR-XS比目前的Siamese跟踪器快10倍以上的跟踪速度，同时保持接近的精度。FEAR-XS比LightTrack小2.4倍，快4.3倍，且具有更高的精度。此外，本文引入能耗和速度来扩展模型效率的定义。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222214236.png" alt=""></p>
-<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222214256.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222214236.png" alt=""></p>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222214256.png" alt=""></p>
 <p>整体方法如图2所示，跟经典siamese方法的差别在于输入增加了一个动态模板，将静态和动态模板进行线性插值后再与搜索特征进行融合。</p>
 <p>特征提取部分使用轻量的FBNet，特征融合部分设计了像素级别的融合，如图3所示，这个和PGNet，CGACD等方法的操作是一样的。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222214656.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222214656.png" alt=""></p>
 <p><strong>Dynamic Template Update</strong></p>
 <p>初始模板$F_T$和动态模板$F_d$通过可学习的参数$\omega$进行线性融合。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222215132.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222215132.png" alt=""></p>
 <p>动态模板的选择如图4所示</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222215336.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222215336.png" alt=""></p>
 <p>将搜索特征与分类分数相乘后池化得到向量$e_s$，动态模板进行池化得到向量$e_t$，计算二者的余弦相似度。推理阶段从每N个历史搜索帧中选择相似度最大的帧裁剪更新动态模板。训练时还额外增加了负样本$e_T$构建三元损失。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220117.png" alt=""></p>
-<h2 id="实验-1"><a href="#实验-1" class="headerlink" title="实验"></a>实验</h2><p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220456.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220504.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220117.png" alt=""></p>
+<h2 id="实验-1"><a href="#实验-1" class="headerlink" title="实验"></a>实验</h2><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220456.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220504.png" alt=""></p>
 <p>实验除了常规的benchmark性能测试还专门做了效率分析。作者引入了FEAR Benchmark来评估跟踪算法对移动设备电池和热状态的影响，以及随着时间的推移对处理速度的影响。如图5所示，随着运行时间的增加，其他算法均出现了速度下降、电量下降，温度升高的现象，但本文的FEAR-XS在这些指标上均能保持稳定（高速、耗电少、温度低）。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220712.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220712.png" alt=""></p>
 <p>速度上在多款手机处理器上均大幅超过了LightTrack。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220858.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/51-lighttrack/20211222220858.png" alt=""></p>
 
     </div>
 
@@ -468,6 +469,10 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   
@@ -476,6 +481,7 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
 
   

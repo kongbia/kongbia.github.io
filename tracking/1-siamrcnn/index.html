@@ -18,8 +18,9 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。">
 <meta property="og:type" content="article">
@@ -303,14 +304,14 @@
     <div class="post-body" itemprop="articleBody">
         <p>Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。</p>
 <span id="more"></span>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105346.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105346.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.12836">论文</a><br><a target="_blank" rel="noopener" href="https://github.com/SJTU-DL-lab/SiamRCNN">代码</a></p>
 <h1 id="Contributions"><a href="#Contributions" class="headerlink" title="Contributions"></a>Contributions</h1><ol>
 <li>将重检测思想用于跟踪。通过判断建议区域（region proposal）是否与模板区域（template region）相同，重检测图像中任何位置的模板对象，并对该对象的边界框进行回归，这种方法对目标大小和长宽比变化比较鲁棒；</li>
 <li>提出一种新颖的 hard example mining 方法，专门针对困难干扰物训练；</li>
 <li>提出 Tracklet Dynamic Programming Algorithm (TDPA)，可以同时跟踪所有潜在的目标，包括干扰物。通过重检测前一帧所有目标候选框，并将这些候选框随时间分组到tracklets(短目标轨迹)中。然后利用动态规划的思想，根据视频中所有目标和干扰物tracklets的完整历史选择当前时间步长的最佳对象。Siam R-CNN通过明确地建模所有潜在对象的运动和交互作用，并将检测到的相似信息汇集到tracklets中，能够有效地进行长时跟踪，同时抵抗跟踪器漂移，在物体消失后可以立即重检测目标。</li>
 </ol>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105651.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105651.png" alt=""></p>
 <p>上图为Siam RCNN整体框架，作者设计了一个Siamese two-stage detection network作为跟踪器。第一阶段是RPN，第二阶段通过将感兴趣区域(RoI)的特征和参考特征拼接起来，包括以第一帧的GT作为参考和以前一帧的检测结果作为参考的两个redetction head。最后构建Tracklet Dynamic Programming Algorithm (TDPA)去跟踪所有潜在目标。</p>
 <p>接下来按照论文结构对每一部分进行说明：</p>
 <h2 id="Siam-RCNN"><a href="#Siam-RCNN" class="headerlink" title="Siam RCNN"></a>Siam RCNN</h2><p>本小节主要是讲如何将 Faster RCNN 的那一套用于重检测，核心是将固定类别的detection head换成本文的re-detection head。re-detection head的输出只有两类，即候选区域是否是参考对象目标。训练时backbone和RPN的参数冻结，只有re-detection head参与训练。</p>
@@ -319,7 +320,7 @@
 <li><p><strong>Embedding Network</strong> 最直接的方法就是从其他视频中寻找与当前对象属于同一个类别的对象作为难负样本。然而，物体的类别标签并不总是可靠，一些同类的物体很容易区分，不同类别的物体反而可能是理想的难负样本。所以，本文受到行人重识别的启发，提出利用 embedding network 的方法，将 GT Box 中的物体映射为 embedding vector。这个网络来源于 PReMVOS，用 batch-hard triplet loss 来训练，期望达到的效果是消除单个对象实例之间的歧义，例如，两个不同的人在嵌入空间中应该离得很远，而同一个人在不同帧中的向量距离应该很近。</p>
 </li>
 <li><p><strong>Index Structure</strong> 接下来为近邻 queries 构建一个有效的索引结构，将其用于寻找所需要跟踪的物体在 embedding space 中的最近邻。图 3 展示了一些检索得到的难负样本。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105907.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424105907.png" alt=""></p>
 </li>
 <li><p><strong>Training Procedure</strong> 训练时在其他视频上实时检索当前视频帧的难负样本过于耗时。本文预先对训练数据的每一个 GT Box 都提取其 RoI-aligned  features。在训练的每一步，随机选择一个 video 和 object，然后随机的选择一个 reference 和 target frame。在此之后，用上一节提到的 indexing structure 来检索 10000 个最近邻的 reference box，从中选择出 100 个 negative training examples。</p>
 </li>
@@ -328,7 +329,7 @@
 <ul>
 <li><strong>Tracklet Building</strong> </li>
 </ul>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424110139.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424110139.png" alt=""></p>
 <p>Line 2 提取backbone特征</p>
 <p>Line 3 RPN得到感兴趣区域，为了补偿潜在的假负例影响，加入上一帧的结果；</p>
 <p>Line 4 将Roi和gt送入redetection head得到第一帧的重检测结果 $ det_{S_t} $（包括相似性得分和目标框）；</p>
@@ -344,26 +345,26 @@
 <li><strong>Scoring</strong>  </li>
 </ul>
 <p>轨迹 $A=(a_1,…,a_N)$ 是一个包含N个不重复tracklets的序列，其中 $end(a_i) &lt; start(a_{i+1}), \forall i∈\{1,…,N-1\}$ ，即后一个tracklet的开始帧一定比前一个tracklet的结束帧大。一个轨迹的总分由衡量单个轨迹质量的一元分数 unuary 和惩罚轨迹之间空间距离的位置分数 loc_score 组成。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111306.png" style="zoom:80%;" /></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111306.png" style="zoom:80%;" /></p>
 <p>其中 ff_score 表示tracklet $a_{i}$ 在 t 时刻以第一帧gt为参考的重检测分数；</p>
 <p>而 ff_tracklet_score 表示 $a_{i}$ 以gt所在tracklet的最后一个检测结果为参考的重检测分数（因为一个tracklet的所有检测结果都有很高概率与这个tracklet的第一个检测结果相同，否则这个tracklet就会终止，所以gt所在的tracklet的最后一个检测结果也有很大概率是正确的）；</p>
 <p>Location score是计算前一个tracklet最后一个检测结果和后一个tracklet的第一个检测结果的bbox之间的L1距离，是负的，作为惩罚项，越小越好。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111534.png" style="zoom:80%;" /></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111534.png" style="zoom:80%;" /></p>
 <ul>
 <li><strong>Online Dynamic Programming</strong> </li>
 </ul>
 <p>这一节介绍如何高效找到具有最大总得分的tracklets序列。</p>
 <p>定义 $\theta[a]$ 表示从第一个tracklet开始到第a个tracklet的总得分。由于一旦tracklet不被扩展，就会终止。因此当新的一帧到来时，只有被扩展或者新建的tracklet需要重新计算score。</p>
 <p>首先设置 $\theta[a_{ff}]=0$，$a_{ff}$ 是first-frame tracklet（即包含gt的tracklet），当每一个tracklet a被创建或需要更新时</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111717.png" style="zoom:80%;" /></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111717.png" style="zoom:80%;" /></p>
 <p>在更新了当前帧的 $\theta$ 后，选择最大动态规划得分的tracklet $\hat{a}=arg max_{a} \theta[a]$；如果被选中的tracklet在当前帧中没有检测结果，则算法会指出目标不存在。由于benchmarks要求每帧都输出结果，所以我们用选定的tracklet最近一次的检测的box，并且将其得分置0。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>实验做的很充分，在目前主流数据集中都有结果。在short-term的测试中，大部分达到SOTA水平或者比SOTA稍低一些，在long-term的测试效果则非常好，基本吊打第二名。其中VOT的测试因为其自带一个重启，会与算法本身的重启冲突，所以作者专门做了一个short-term版本的用于VOT测试。</p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111909.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111922.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424112042.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424113951.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111947.png" alt=""></p>
-<p><img src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424114012.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111909.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111922.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424112042.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424113951.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424111947.png" alt=""></p>
+<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/0-siamrcnn/20210424114012.png" alt=""></p>
 <p>消融实验比较了 使用hard example mining的效果，TPDA与直接使用每一帧最大的重检测得分(Argmax)的对比，和专门用于测试VOT2018的short-term版本；以及改变backbone和ROI的参数量来提速的验证。</p>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文最大的贡献在于将两阶段结构和重检测用于跟踪，设计了一套适合长时跟踪的算法。两阶段结构在SPM-Tracker已经证明了其对于鲁棒性和判别性之间有较好的平衡；而重检测这类检索的方法同样对于目标变化的适应性更强。整套算法做的非常完善，美中不足在于速度太慢。</p>
 <p>P.S. SiamRCNN很长一段时间都作为各类跟踪数据集的天花板，直到CVPR2021各类transform架构的跟踪算法出现后才被超过，可以参考 <a target="_blank" rel="noopener" href="https://kongbia.github.io/2021/04/23/tracking/33-transform-tracking/">Transform与目标跟踪</a></p>
@@ -441,6 +442,10 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   
@@ -449,6 +454,7 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
 
   

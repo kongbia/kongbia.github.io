@@ -18,8 +18,9 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="论文 写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。 摘要切入点：鲁棒性和判别性都很重要 现有问题：孪生网络无法判别性的建模目标和干扰 提出新方法：target-dependent feature network  做法：通过attention，将跨图像的特征相关性嵌入特征网络的多个层中。 好处：  在多个">
 <meta property="og:type" content="article">
@@ -312,7 +313,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524105019.png" alt=""></p>
+        <p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524105019.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.01666">论文</a></p>
 <p>写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。</p>
 <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>切入点：鲁棒性和判别性都很重要</p>
@@ -342,26 +343,26 @@
 <p>一个基于注意力的动态特征网络 Single Branch Transformer (SBT) network，允许模板和搜索图像的特征在特征提取的每个阶段进行深度交互。</p>
 <p>如图2所示，传统的孪生网络堆叠卷积，最后接一个互相关层进行特征交互。而SBT堆叠注意力模块Extract-or-Correlation (EoC) blocks，其中EoC-SA融合同一图像的特征，EoC-CA交互模板和搜索图的特征。最后将搜索图像特征直接输出给预测头。</p>
 <p>直观地，交叉注意力<strong>逐层</strong>过滤掉与目标无关的特征，自注意力增强了目标的特征表示。由于特征提取过程是target-dependent且非对称的，因此SBT将目标和干扰物进行区分的同时保持不同目标之间的连贯特征。如图2d所示，属于目标的特征(绿色)与背景(粉色)和干扰物(蓝色)越来越分离，而孪生网络提取的搜索特征是target-unaware的。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524111925.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524111925.png" alt=""></p>
 <p><strong>关键创新</strong></p>
 <p>为模板和搜索图像对的处理引入一个单一流，通过注意力模块联合特征提取和特征关联。</p>
 <p>SBT本质上还是一个特征提取的backbone，因此可以在ImageNet等非成对数据上进行预训练，在跟踪数据中微调快速收敛。</p>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112053.png" alt=""></p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112053.png" alt=""></p>
 <p>整体结构如图3所示，包含三个stage。前两个stage通过patch embedding降维，后面接自注意力EoC-SA；第三个satge交替使用自注意力EoC-SA和交叉注意力EoC-CA。该框架没有额外的互相关层，通过在在网络的不同阶段使用交叉注意力实现了信息交互融合。最后将融合后的搜索特征直接输入预测头做分类和回归。</p>
 <h2 id="Patch-Embedding"><a href="#Patch-Embedding" class="headerlink" title="Patch Embedding"></a>Patch Embedding</h2><p>使用$7 \times 7$步长为4的卷积+LN层，降低空间分辨率。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112939.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112939.png" alt=""></p>
 <h2 id="Extract-or-Correlation-Block"><a href="#Extract-or-Correlation-Block" class="headerlink" title="Extract-or-Correlation Block"></a>Extract-or-Correlation Block</h2><p>EoC模块如图3b，c所示，包括两个LN层一个MLP层以及一个注意力，注意力包含自注意力(SA)和交叉注意力(CA).。SA输入的ij是同源的，CA输入的ij分别来自模板z和搜索图x。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114016.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114016.png" alt=""></p>
 <p>作者为了计算高效，尝试了 Vanilla Global attention (VG)；Spatial-Reduction Global attention(SRG)，对k，v降分辨率；Vanilla Local window attention (VL) ，计算局部块的注意力；Shift window vanilla Local attention (SL)，即Swin Transformer。最后使用SRG。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114738.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114738.png" alt=""></p>
 <center>Spatial-Reduction Global attention(SRG)</center>
 
 <h2 id="Position-Encoding"><a href="#Position-Encoding" class="headerlink" title="Position Encoding"></a>Position Encoding</h2><p>尝试了绝对/相对位置编码，和CVPT中的条件位置编码，即一个$3 \times 3$的depth-wise卷积。</p>
 <h2 id="Direct-Prediction"><a href="#Direct-Prediction" class="headerlink" title="Direct Prediction"></a>Direct Prediction</h2><p>分类和回归分支均由两个MLP层构成，分别在空间维度$\varphi_{sp}$和通道维度$\varphi_{cn}$做MLP，其中RS表示reshape。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524115757.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524115757.png" alt=""></p>
 <h1 id="SBT设计准则"><a href="#SBT设计准则" class="headerlink" title="SBT设计准则"></a>SBT设计准则</h1><p>作者做了大量实验来探究如何设计网络框架，每张实验图里都包含大量信息，微软有卡任性。这里只总结结论，具体实验可以参考原文。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120305.png" alt=""></p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120323.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120305.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120323.png" alt=""></p>
 <ol>
 <li>多尺度分层结构的性能比单级结构好 （表1 setting A）</li>
 <li>不同位置编码影响不大 （表1 setting A）</li>
@@ -383,32 +384,32 @@
 <ul>
 <li>交叉注意力相当于执行了两次互相关</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524163539.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524163539.png" alt=""></p>
 <ul>
 <li>在串行管道中嵌入了分层特征利用</li>
 </ul>
 <p>经典的孪生跟踪器如SiamRPN++是并行的的分层聚合，即对多个特征分别做互相关再叠加。SBT探索了串行的多层次的特征相关性，即将前一层相关（交叉注意力）的输出送给下一次相关的输入。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164926.png" alt=""></p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164541.png" alt=""></p>
-<h1 id="4种SBT网络"><a href="#4种SBT网络" class="headerlink" title="4种SBT网络"></a>4种SBT网络</h1><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165005.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164926.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164541.png" alt=""></p>
+<h1 id="4种SBT网络"><a href="#4种SBT网络" class="headerlink" title="4种SBT网络"></a>4种SBT网络</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165005.png" alt=""></p>
 <p>Imagenet预训练用4个stage，跟踪微调只用前3个stage。</p>
-<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="Comparison-to-State-of-the-Art-Trackers"><a href="#Comparison-to-State-of-the-Art-Trackers" class="headerlink" title="Comparison to State-of-the-Art Trackers"></a>Comparison to State-of-the-Art Trackers</h2><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165305.png" alt=""></p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165320.png" alt=""></p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="Comparison-to-State-of-the-Art-Trackers"><a href="#Comparison-to-State-of-the-Art-Trackers" class="headerlink" title="Comparison to State-of-the-Art Trackers"></a>Comparison to State-of-the-Art Trackers</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165305.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165320.png" alt=""></p>
 <p>作者将本文提出的Correlation-Aware backbone 用在几个主流的跟踪器上，得到SiamFCpp-CA. DiMP-CA.STARK-CA. STM-CA，观察性能提升巨大，甚至部分计算量还下降了。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165514.png" alt=""></p>
-<h2 id="Exploration-Study"><a href="#Exploration-Study" class="headerlink" title="Exploration Study"></a>Exploration Study</h2><p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165758.png" alt=""></p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170547.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165514.png" alt=""></p>
+<h2 id="Exploration-Study"><a href="#Exploration-Study" class="headerlink" title="Exploration Study"></a>Exploration Study</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165758.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170547.png" alt=""></p>
 <p><strong>Correlation-embedded structure</strong> 将特征交互嵌入特征提取中的效果比单独在最后使用互相关效果要好。并且本文使用的交叉注意力的交互形式比DCF和DW-Corr要好。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170333.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170333.png" alt=""></p>
 <p><strong>Target-dependent feature embedding</strong> (a) Correlation-embedded tracker. (b) Siamese correlation with SBT. (c) Siamese correlation with ResNet-50 </p>
 <p>本文提出的方法最具有 target-dependent的性质，即目标和干扰分的最开。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170608.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170608.png" alt=""></p>
 <p><strong>Benefits from pre-training</strong> 本文的方法可以预训练，提升性能加速收敛。</p>
 <p>补充材料里还有一些关于计算量和结构设计方面的实验，就不一一介绍了。作者团队是真的有耐心做了这么多对比实验。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171043.png" alt=""></p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171151.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171043.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171151.png" alt=""></p>
 <p>最后提下本文方法的局限性，就是对严重遮挡或者出视野不友好，这也是所有孪生跟踪器的通病了。虽然attention的逐点匹配一定程度上可以克服遮挡，但是对于图13中这些有相似属性的遮挡物还是存在很多误判。另一个局限在于本文使用了很多快速注意力，这些并不能直接通过直接调包实现。</p>
-<p><img src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171328.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171328.png" alt=""></p>
 <h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>本文首次提出了一种target-dependent的跟踪特征网络。SBT大大简化了跟踪管道，比最近基于Transformer的跟踪器收敛更快。从实验和理论两方面对SBT跟踪进行了系统的研究。此外，实现了四个版本的SBT网络，可以改进其他流行的VOT和VOS跟踪器。大量实验表明，该方法取得了良好的效果，可以作为动态特征网络应用于其他跟踪管道。</p>
 
     </div>
@@ -488,6 +489,10 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   
@@ -496,6 +501,7 @@
 
 
 
+  <script src="/js/third-party/fancybox.js"></script>
 
 
   
