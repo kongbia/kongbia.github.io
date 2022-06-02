@@ -1841,4 +1841,101 @@
         <tag>孪生网络</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Transforming Model Prediction for Tracking</title>
+    <url>/tracking/55-ToMP/</url>
+    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602110219.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2203.11192">论文</a> <a href="https://github.com/visionml/pytracking">代码</a></p>
+<p>马丁团队的新工作，依然是延续dimp的故事，这次是用transformer作为目标预测模型，取代了之前延续好几代的基于优化的模型预测方法。</p>
+<span id="more"></span>
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>基于优化的跟踪方法取得了广泛的成功，其通过最小化目标函数来优化一个目标模型预测模块(target model prediction module)，从而提供有效的全局推理。但是这种方式会产生严重的归纳偏差，限制了网络的表达能力。</p>
+<p>本文提出一种基于Transformer的模型预测模块。Transformer以很小的归纳偏差捕获全局关系，使其能够学习更强大的目标模型预测。此外，进一步扩展model predictor来预测边框回归的权重（之前的方法如dimp的predictor只用于分类，回归采用额外的iounet）。因此最终的跟踪器可以依靠训练和测试帧transductive地预测所有的权重。(transductive不好翻译，个人理解大概就是直推式地生成权重而不是优化迭代生成)</p>
+<p>实验在三个数据集达到SOTA，LaSOT的AUC达到68.5。</p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p><strong>研究背景：</strong>DCF通过最小化判别式目标函数来学习一个目标模型，用于定位每一帧中的目标。本文的作者团队几乎以一己之力推动了DCF在深度学习时代端到端模型的发展。具体来说，就是将目标函数设置成一个卷积核，这个卷积核可以为跟踪目标提供一个紧凑且通用的表达。然后设计一些快速优化方法使其能够借助少量训练帧在少数迭代次数下进行学习，代表性的ATOM,DiMP,superDiMP等。</p>
+<p><strong>发现问题：</strong>DCF的优点是同时考虑了历史帧的前景和背景，可以提供有效的全局推理。但缺点就是严重的<strong>归纳偏差</strong>(inductive bias)。因为训练目标函数的样本只有历史的几帧，限制模型的灵活性。并且，不能集成先验知识，非常容易过拟合。</p>
+<p><strong>解决方案</strong>：Transformer通过注意力机制同样可以跨帧全局推理，因此作者将二者结合，用Transformer来估计目标模型的权重，从而避开了迭代优化，这样可以得到更powerful的目标模型。</p>
+<p><strong>具体贡献：</strong></p>
+<ol>
+<li>提出一个基于Transformer的模型预测器取代传统的基于优化的方法</li>
+<li>扩展模型预测器不但用于分类还用于回归</li>
+<li>设计了两种编码方式嵌入目标位置和目标扩展，后续的Transformer预测器可以利用这些信息</li>
+<li>在测试阶段提出一个并行的两阶段跟踪过程解耦目标定位和边框回归，得到更精确的目标检测结果</li>
+<li>充分的实验</li>
+</ol>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602113256.png" alt=""></p>
+<p>左边是传统的基于优化的方法，如ATOM, DiMP等，具有如下局限：</p>
+<ol>
+<li>只使用历史帧的有限信息来计算目标模型，无法嵌入先验知识</li>
+<li>无法以transductive的方式利用当前测试帧来计算模型权重</li>
+<li>基于优化的方法需要设置多个超参数，容易过拟合/欠拟合</li>
+<li>只有测试帧（搜索帧）被送入目标模型，如果能用训练帧（模板帧）中所包含的目标状态信息来增强特征，可以更可靠地区分目标和背景。</li>
+</ol>
+<p>右边是本文提出的方法，设计了一个基于Transformer的Model Predictor替代了左边的Model Optimizer，主要包括以下特点：</p>
+<ol>
+<li>通过端到端纯数据训练来学习直接预测目标模型，而不是在线优化目标函数。好处：嵌入目标特定的先验，使得模型更专注于目标的特性，以及区分目标和背景的特征。</li>
+<li>模型预测器除了历史训练帧的特征，还利用了当前测试帧的特征，以transductive的方法预测目标模型。好处：得到一个更合适的目标模型。</li>
+<li>利用目标信息为每一帧动态构建一个更具辨别性的特征空间。</li>
+</ol>
+<p>下面详细介绍各个模块，整体框架如图3所示，我在上面注释了一部分流程：</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602114145.png" alt=""></p>
+<h2 id="基于Transformer的模型预测器"><a href="#基于Transformer的模型预测器" class="headerlink" title="基于Transformer的模型预测器"></a>基于Transformer的模型预测器</h2><p><strong>Target Location Encoding</strong> 嵌入训练帧的位置信息，设置了一个可学习的token embedding来表示前景 $e_{fg} \in \mathbb{R}^{1 \times C}$，将其与以目标位置为中心的高斯图 $y_i \in \mathbb{R}^{H \times W \times 1} $ 点乘作为编码：</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602115643.png" alt=""></p>
+<p>然后将目标编码与原始特征叠加</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602115659.png" alt=""></p>
+<p>这样得到的训练特征 $v_i \in \mathbb{R}^{H \times W \times C} $ 是编码了目标状态信息的。为了对称，对测试特征也增加了一个编码</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602115923.png" alt=""></p>
+<p>因为测试帧不知道目标位置，所以将token $e_{test}$ 叠加到每一个patch位置上。</p>
+<p><strong>Transformer Encoder</strong> 和stark类似，将训练和测试特征堆叠后送入encoder，输出用于decoder的特征，此外还保留增强后的测试特征 $z_{test}$ 用于后续分类回归。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602151024.png" alt=""></p>
+<p><strong>Transformer Decoder</strong> 将目标状态编码中的 $e_{fg}$ 作为query，和encoder生成的 $z_i, z_{test}$ 一起输入decoder，来预测目标模型权重。</p>
+<p><strong>Target Model</strong> 利用DCF模型来获得目标分类分数</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602151709.png" alt=""></p>
+<p>其中，$\omega \in \mathbb{R}^{1 \times C}$ 是decoder输出的convolution filter的权重，$z_{test}$是encoder中经过训练特征增强后的测试特征，可以更有效定位目标。</p>
+<h2 id="联合定位和边框回归"><a href="#联合定位和边框回归" class="headerlink" title="联合定位和边框回归"></a>联合定位和边框回归</h2><p>上面的方法只是用于预测目标中心，在之前的DiMP中是额外通过iounet来预测回归框。本文提出要联合预测定位和回归，因为这两者可以相互受益。为了实现这一点，需要额外扩展两个地方：1. 生成目标状态编码时，不仅需要目标中心位置，还需要编码目标大小信息，为模型预测器提供更丰富的输入；2. 除了目标模型的权重，还需扩展模型预测器来估计边框回归的权重。</p>
+<p><strong>Target Extent Encoding</strong> 增加一个目标bbox的编码，其实就是计算特征图上每个点距离目标框上下左右四条边的距离，得到一个密集分布的目标框表示 $d=(l,t,r,b), d\in \mathbb{R}^{H \times W \times 4} $</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602153254.png" alt=""></p>
+<p>然后经过一个MLP升维后与上文公式3中的图像特征和目标位置编码叠加一起送入encoder</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602153434.png" alt=""></p>
+<p><strong>Model Prediction</strong> 将decoder输出的权重$\omega$经过一个线性层得到边框回归权重$\omega_{bbreg}$和目标分类权重$\omega_{cls}$。</p>
+<p><strong>Bounding Box Regression</strong> 为了让encoder输出的测试特征$z_{test}$是目标感知的，仿照stark，计算$\omega_{bbreg}*z_{test}$得到一个注意力图，再将其与$z_{test}$点乘后输入回归分支，回归分支是采用FCOS的边框回归。</p>
+<h2 id="离线训练"><a href="#离线训练" class="headerlink" title="离线训练"></a>离线训练</h2><p>类似之前DCF类的训练，从一个序列中采样两张训练图片和一张测试图片送入网络，损失采用FCOS的损失类型，但没有centerness loss。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602154416.png" alt=""></p>
+<h2 id="在线跟踪"><a href="#在线跟踪" class="headerlink" title="在线跟踪"></a>在线跟踪</h2><p>在线跟踪中的训练图像包含一张初始帧和其标注，以及一个在线更新的历史中间帧，其分类得分必须高于阈值。作者发现用这个训练集相比只用初始帧可以提高定位精度，但是会下降回归精度。作者解释为中间帧的预测框不准确可能会影响回归精度，因此提出一个两阶段的跟踪方式。1. 使用完整的两帧来获得分类权重；2. 只用初始帧来计算回归权重。</p>
+<p>这两个步骤可以并行处理，复制一份数据在batch维度堆叠，然后在预测回归模型时通过key_padding_mask来控制某些key不参与计算attention。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>两个模型ToMP-101和ToMP-50，2080Ti运行速度分别是19.6和24.8FPS</p>
+<h2 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602155815.png" alt=""></p>
+<p><strong>Target State Encoding</strong> 表1分析了不同目标状态编码组合的效果，目标位置编码中除了正文中提到的前景嵌入$e_{fg}$和测试嵌入$e_{test}$ ，额外增加了一个背景嵌入$e_{bg}$。</p>
+<ul>
+<li>增加背景嵌入没什么用，反而性能下降 （4 vs 5）</li>
+<li>只用target extent encoding $\phi$也能取得不错的效果（1）</li>
+<li>解耦Decoder的query和前景嵌入$e_{fg}$会导致性能下降（6）</li>
+<li>嵌入边框信息target extent encoding非常重要，如果没有性能会剧烈下降（7）</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602160907.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602161522.png" alt=""></p>
+<p><strong>Model Predictor</strong> 表2显示用两个独立的query分别做分类和回归，效果会大幅下降，原因还是query和前景嵌入$e_{fg}$解耦了。</p>
+<p><strong>Inference Settings</strong> 表3显示增加历史跟踪帧比只用初始帧效果好，但如果不用本文提出的两阶段方法，效果会下降。原因还是边框预测器对历史帧中不准确的预测框敏感。</p>
+<p><strong>Transforming Model Prediction Step-by-Step</strong> 表4和图1展示了在基于优化的DiMP上一步步替换本文的transformer的效果提升。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602161714.png" alt=""></p>
+<p>表10展示了使用更多的帧训练效果可以进一步提升，但是速度会下降。</p>
+<h2 id="SOTA比较"><a href="#SOTA比较" class="headerlink" title="SOTA比较"></a>SOTA比较</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602161928.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602162013.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602162058.png" alt=""></p>
+<h2 id="可视化结果"><a href="#可视化结果" class="headerlink" title="可视化结果"></a>可视化结果</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602162325.png" alt=""></p>
+<p>对比SuperDiMP的响应图，ToMP的响应更加干净，抑制了周围的干扰。但这样带来一个风险，一旦目标丢失，跟踪如果转移到干扰物被后基本不可能恢复，因为此时真实目标就被当成干扰抑制了。</p>
+<h2 id="方法局限"><a href="#方法局限" class="headerlink" title="方法局限"></a>方法局限</h2><ol>
+<li>attention的计算量</li>
+<li>遮挡和干扰同时出现</li>
+</ol>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602162623.png" alt=""></p>
+<p>最后瞎逼逼一些作为一个菜鸡的感想，每年马丁团队的文章我都会抽一个完整的时间来仔细研读，因为总是包含很多优美巧妙的数学推导需要慢慢嚼。但今年的文章意外地很好读，因为偏向模型设计方面了。包括去年的<a href="https://www.zjp97.top/tracking/36-learning-target-candidate-association/?highlight=keep">KeepTrack</a>（一作和本文相同），出发点和实现依然巧妙，但是慢慢地都开始减少数学优化方面的工作了。大家开玩笑常说，端到端优化的深度学习DCF框架只有马丁自己能够继续更新。而他们现在也不继续做优化方面的工作了，那么基于优化的DCF框架在后续会如何发展？这篇文章给出了一个不错的答案。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>transform</tag>
+        <tag>CVPR2022</tag>
+      </tags>
+  </entry>
 </search>
