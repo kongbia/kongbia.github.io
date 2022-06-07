@@ -22,44 +22,45 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="论文 代码 Motivation现有的孪生跟踪算法大多是基于相似得分图对目标对象进行分类和回归，使用单一的相似图会降低复杂场景下的定位精度，而像SiamRPN++那样单独使用多个相似图分别进行预测又会引入较大计算负担，不适用于移动设备。因此，本文提出一种 hierarchical feature transformer (HiFT) 对多个层级的相似图进行融合，既可以捕获全局的依赖关系，又可以高">
+    <meta name="description" content="论文 核心：联合单目标和多目标跟踪 Motivation问题：跟踪现在分成了单目标（SOT）和多目标（MOT）两个独立的社区。由于两种任务的训练数据集和跟踪对象的不同，使得它们的方法无法互通 现有方法：UniTrack使用共享的外观模型和多个多个不用训练的跟踪头来处理不同跟踪任务。但是无法利用大规模跟踪数据集进行训练，并且在SOT表现较差 本文方法：  提出Unified Transformer">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HiFT: Hierarchical Feature Transformer for Aerial Tracking">
-<meta property="og:url" content="https://www.zjp97.top/tracking/45-HiFT/index.html">
+<meta property="og:title" content="56-UTT">
+<meta property="og:url" content="https://www.zjp97.top/tracking/56-UTT/index.html">
 <meta property="og:site_name" content="CV home">
-<meta property="og:description" content="论文 代码 Motivation现有的孪生跟踪算法大多是基于相似得分图对目标对象进行分类和回归，使用单一的相似图会降低复杂场景下的定位精度，而像SiamRPN++那样单独使用多个相似图分别进行预测又会引入较大计算负担，不适用于移动设备。因此，本文提出一种 hierarchical feature transformer (HiFT) 对多个层级的相似图进行融合，既可以捕获全局的依赖关系，又可以高">
+<meta property="og:description" content="论文 核心：联合单目标和多目标跟踪 Motivation问题：跟踪现在分成了单目标（SOT）和多目标（MOT）两个独立的社区。由于两种任务的训练数据集和跟踪对象的不同，使得它们的方法无法互通 现有方法：UniTrack使用共享的外观模型和多个多个不用训练的跟踪头来处理不同跟踪任务。但是无法利用大规模跟踪数据集进行训练，并且在SOT表现较差 本文方法：  提出Unified Transformer">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807114323.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807215745.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807221543.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807225118.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808094324.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808095158.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100142.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100159.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100237.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100251.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100338.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808102502.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808102632.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808102731.png">
-<meta property="article:published_time" content="2021-08-07T03:32:22.000Z">
-<meta property="article:modified_time" content="2022-04-05T14:26:22.973Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104510.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104830.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105015.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105324.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105603.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105759.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110351.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110400.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110409.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110811.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111020.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111032.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111143.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111226.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111301.png">
+<meta property="article:published_time" content="2022-06-07T02:43:54.000Z">
+<meta property="article:modified_time" content="2022-06-07T03:18:34.634Z">
 <meta property="article:author" content="摸鱼的SAO年">
 <meta property="article:tag" content="transform">
-<meta property="article:tag" content="ICCV2021">
+<meta property="article:tag" content="CVPR2022">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807114323.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104510.png">
 
 
-<link rel="canonical" href="https://www.zjp97.top/tracking/45-HiFT/">
+<link rel="canonical" href="https://www.zjp97.top/tracking/56-UTT/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.zjp97.top/tracking/45-HiFT/","path":"tracking/45-HiFT/","title":"HiFT: Hierarchical Feature Transformer for Aerial Tracking"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.zjp97.top/tracking/56-UTT/","path":"tracking/56-UTT/","title":"56-UTT"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>HiFT: Hierarchical Feature Transformer for Aerial Tracking | CV home</title>
+<title>56-UTT | CV home</title>
   
 
 
@@ -162,7 +163,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hierarchical-Feature-Transformer"><span class="nav-number">2.1.</span> <span class="nav-text">Hierarchical Feature Transformer</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiments"><span class="nav-number">3.</span> <span class="nav-text">Experiments</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Evaluation-on-Aerial-Benchmarks"><span class="nav-number">3.1.</span> <span class="nav-text">Evaluation on Aerial Benchmarks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ablation-Study"><span class="nav-number">3.2.</span> <span class="nav-text">Ablation Study</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Training"><span class="nav-number">3.</span> <span class="nav-text">Training</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiment"><span class="nav-number">4.</span> <span class="nav-text">Experiment</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -239,7 +240,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/45-HiFT/">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/56-UTT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
@@ -252,12 +253,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="HiFT: Hierarchical Feature Transformer for Aerial Tracking | CV home">
+      <meta itemprop="name" content="56-UTT | CV home">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          HiFT: Hierarchical Feature Transformer for Aerial Tracking
+          56-UTT
         </h1>
 
         <div class="post-meta-container">
@@ -267,15 +268,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2021-08-07 11:32:22" itemprop="dateCreated datePublished" datetime="2021-08-07T11:32:22+08:00">2021-08-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-04-05 22:26:22" itemprop="dateModified" datetime="2022-04-05T22:26:22+08:00">2022-04-05</time>
+      <time title="创建时间：2022-06-07 10:43:54 / 修改时间：11:18:34" itemprop="dateCreated datePublished" datetime="2022-06-07T10:43:54+08:00">2022-06-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -304,41 +299,60 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807114323.png" alt=""></p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2108.00202">论文</a> <a target="_blank" rel="noopener" href="https://github.com/vision4robotics/HiFT">代码</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>现有的孪生跟踪算法大多是基于相似得分图对目标对象进行分类和回归，使用单一的相似图会降低复杂场景下的定位精度，而像SiamRPN++那样单独使用多个相似图分别进行预测又会引入较大计算负担，不适用于移动设备。因此，本文提出一种 hierarchical feature transformer (HiFT) 对多个层级的相似图进行融合，既可以捕获全局的依赖关系，又可以高效地学习多层级特征之间的依赖关系。</p>
-<p>在介绍本文方法前，我们先分析经典的transformer架构应用于目标跟踪任务中的难点。</p>
-<ol>
-<li>预定义的(或学习的)解码query在面对任意跟踪对象时很难保持有效性；</li>
-<li>transformer难以处理小目标（参考deform DETR）。</li>
-</ol>
+        <p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104510.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.15175">论文</a></p>
+<p>核心：联合单目标和多目标跟踪</p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>问题：跟踪现在分成了单目标（SOT）和多目标（MOT）两个独立的社区。由于两种任务的训练数据集和跟踪对象的不同，使得它们的方法无法互通</p>
+<p>现有方法：UniTrack使用共享的外观模型和多个多个不用训练的跟踪头来处理不同跟踪任务。但是无法利用大规模跟踪数据集进行训练，并且在SOT表现较差</p>
+<p>本文方法：</p>
+<ul>
+<li>提出Unified Transformer Tracker (UTT) ，构建一个Transformer Tracker在SOT和MOT中跟踪目标，利用目标特征和跟踪帧特征之间的<strong>相关性</strong>来定位目标；</li>
+<li>在各自的数据集上交替优化SOT和MOT，使得一个框架可以同时处理两个任务</li>
+</ul>
 <span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807215745.png" alt=""></p>
-<p>图2为整体框架，分成特征提取，transformer和预测头三部分。特征提取采用高效的alexnet，最后三层特征输入到transformer中，预测头采用类似FCOS的三分支预测（分类、回归、定位质量）。下面详细介绍本文提出的Hierarchical Transformer。</p>
-<h2 id="Hierarchical-Feature-Transformer"><a href="#Hierarchical-Feature-Transformer" class="headerlink" title="Hierarchical Feature Transformer"></a>Hierarchical Feature Transformer</h2><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807221543.png" style="zoom:80%;" /></p>
-<p>HiFT包含高分辨率特征编码和低分辨率特征解码，前者学习不同特征层和空间信息之间的相互依赖关系，以提高对不同尺度(特别是低分辨率)目标的关注；而后者聚合了来自低分辨率深层特征的语义信息。这种全局上下文和层次特征之间的相互依赖大大提升了对复杂跟踪场景的适应能力。</p>
-<p>transform的输入是三层不同尺度的互相关相似图，如公式1所示。图3中的$M_3’$ 和 $M_4’$ 则是加上了位置编码。​</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210807225118.png" style="zoom:80%;" /></p>
-<p><strong>Feature Encoding</strong></p>
-<p>首先对$M_3’$ 和 $M_4’$ 进行相加和归一化的融合，得到$M_E^1 = Norm(M_3’+M_4’)$；然后经过multi-head attention得到 $M_E^2 \in WH \times C$，attention矩阵中同时包含了$M_3’$ 和 $M_4’$的多尺度信息，注意这里MHA中Q, K, V的输入差异；</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808094324.png" style="zoom:80%;" /></p>
-<p>此外还额外增加了一个调制层 (modulation layer)，探索$M_4’$ 和 $M_E^3$ 之间的空间信息。</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808095158.png" style="zoom:80%;" /></p>
-<p><strong>Feature Decoding</strong></p>
-<p>decoder部分和标准的transformer类似，差别在于输入的查询向量不是预定义的query，而是低分辨率的特征$M_5 \in WH \times C$​​，并且无需位置编码。</p>
-<p>作者在实验中堆叠了一个编码和两个解码结构。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Evaluation-on-Aerial-Benchmarks"><a href="#Evaluation-on-Aerial-Benchmarks" class="headerlink" title="Evaluation on Aerial Benchmarks"></a>Evaluation on Aerial Benchmarks</h2><p>本文的应用环境是无人机跟踪，所以测试数据集均在无人机数据集测试。</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100142.png" style="zoom:80%;" /></p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100159.png" style="zoom:80%;" /></p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100237.png" alt=""></p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100251.png" style="zoom:80%;" /></p>
-<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808100338.png" style="zoom:80%;" /></p>
-<p>图5中OT表示标准transformer结构，FT表示用特征取代解码器中的object query，PE表示在解码输入中加入位置编码，RL表示在GT的矩形框内采样正样本（本文用的椭圆采样策略）。可以看到，OT使得性能下降，证明预定义的object query不适用于目标任意的跟踪任务；增加了PE后相比不用PE性能大幅下降；使用RL性能同样大幅下降，这样看上去似乎label assign策略的影响都要大于HFT了。</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808102502.png" style="zoom:80%;" /></p>
-<p>图5展示了本文方法在快速运动、低分辨率和遮挡等场景均可以更聚焦目标。</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808102632.png" alt=""></p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/45-HiFT/20210808102731.png" alt=""></p>
-<p>速度一骑绝尘，大于100FPS，并且使用alexnet的性能超过了很多resnet50的算法。并且作者在嵌入式平台NVIDIA AGX Xavier中实验也达到了31.2FPS(未使用tensorrt)，非常适合应用。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104830.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>首先回顾SOT和MOT的定义：</p>
+<ul>
+<li>SOT——给定一个初始帧目标位置B0，定位后续T帧中该目标的位置。跟踪对象可以是任意未知类别；</li>
+<li>MOT——检测并跟踪一组特定类别的目标。MOT需要将第t-1帧中检测到的N个目标，和第t帧中检测到的M个目标进行关联，对于相同的目标赋予唯一的ID。同时需要考虑旧目标的丢失和新目标的出现。</li>
+</ul>
+<p>为了统一两个任务，作者将SOT的初始帧和MOT的前一帧都看成是参考帧，SOT的初始框和MOT中的检测框都看成参考目标框。依此设计了 UTT，如图2所示，经过特征提取后，将参考帧特征 $I^0,I^{t-1}$、跟踪帧特征 $I^t$，以及参考帧中的目标框 $B$ 输入Track Transformer 用于预测当前跟踪帧中的目标位置。Track Transformer有三部分：首先Target Decoder提取目标特征，然后Proposal Decoder在跟踪帧中为每个目标产生候选搜索区域。最后将目标特征和搜索特征都送入Target Tansformer预测目标位置。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105015.png" alt=""></p>
+<p><strong>Target Decoder</strong></p>
+<p>为了引入更多上下文信息，使用交叉注意力对目标特征和跟踪帧特征进行交互</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105324.png" alt=""></p>
+<p><strong>Proposal Decoder</strong></p>
+<p>将目标特征与完整的跟踪特征做相关计算量太大，因此需要裁剪一个更小的搜索区域。最简单的方法是直接将上一帧的跟踪框作为搜索区域，但是如果里面没有目标那后面都是白搭。因此作者将目标特征与跟踪帧特征相关联来产生候选区域。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105603.png" alt=""></p>
+<p>这个过程类似stark，公式5得到的heatmap $H$表示两个角点的分布概率，对所有位置的概率求和得到proposal $P^t$</p>
+<p><strong>Target Transformer</strong></p>
+<p>通过Self-Attention和Correlation将目标特征与proposal 关联。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105759.png" alt=""></p>
+<p>公式11的FC 层是将$K^2C$的通道维度降维到$C$，相当于把$K^2$的空间特征压缩成一维向量。最后将得到的N个向量送入boxhead预测相对proposal的偏移量得到预测跟踪框。</p>
+<p>作者迭代了L次target transformer来进行目标定位。第一次的proposal是通过proposal decoder生成的，而后续的proposal就是前一次迭代预测的目标框。</p>
+<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110351.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110400.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110409.png" alt=""></p>
+<ul>
+<li><p>分别构建SOT和MOT两个dataloader<strong>交替训练</strong>。SOT将图片crop到352，MOT直接对原图进行随机resize；</p>
+</li>
+<li><p>SOT的初始proposal由proposal decoder 生成，并且该proposal（B0）也用于计算loss；MOT的初始proposal是在GT上添加高斯抖动生成的；</p>
+</li>
+<li><p>对于MOT还需要一个额外的 detection head用于检测每一帧的目标类别和位置。MOT的推理阶段需要将track transformer生成的跟踪框和Detection head 生成的检测框进行关联（图5）</p>
+</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110811.png" alt=""></p>
+<h1 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h1><p>SOT在LaSOT、TrackingNet和Got-10k测试，MOT在MOT16测试</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111020.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111032.png" alt=""></p>
+<p>SOT相比UniTrack提点明显，MOT的效果还有提升空间</p>
+<p><strong>Ablative Studies</strong></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111143.png" alt=""></p>
+<p>高亮部分似乎应该是MSA，不知是否是笔误</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111226.png" alt=""></p>
+<p>表5对比了联合训练和分别单独训练。总体来说联合训练效果更好，只有MOT的IDF1指标比单独用MOT训练低一些。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111301.png" alt=""></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文证明了一个模型能够同时解决SOT和MOT任务。这将鼓励社区开发更多统一的跟踪算法，应用于更复杂的跟踪场景，比如VR/AR应用中经常需要进行SOT和MOT的切换。同时这种联合的范式也更加符合人类的直觉。</p>
 
     </div>
 
@@ -349,21 +363,18 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/transform/" rel="tag"># transform</a>
-              <a href="/tags/ICCV2021/" rel="tag"># ICCV2021</a>
+              <a href="/tags/CVPR2022/" rel="tag"># CVPR2022</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/tracking/44-DASiamRPN/" rel="prev" title="Domain Adaptive SiamRPN++ for Object Tracking in the Wild">
-                  <i class="fa fa-chevron-left"></i> Domain Adaptive SiamRPN++ for Object Tracking in the Wild
+                <a href="/tracking/55-ToMP/" rel="prev" title="Transforming Model Prediction for Tracking">
+                  <i class="fa fa-chevron-left"></i> Transforming Model Prediction for Tracking
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/tracking/46-AutoMatch/" rel="next" title="Learn to Match: Automatic Matching Network Design for Visual Tracking">
-                  Learn to Match: Automatic Matching Network Design for Visual Tracking <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -446,7 +457,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"a239ce3f63418d3ffa02e47be98ef84e"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"dcfb331e6299e6d8c0b2cfc24db46412"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>

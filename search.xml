@@ -1938,4 +1938,70 @@
         <tag>CVPR2022</tag>
       </tags>
   </entry>
+  <entry>
+    <title>56-UTT</title>
+    <url>/tracking/56-UTT/</url>
+    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104510.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2203.15175">论文</a></p>
+<p>核心：联合单目标和多目标跟踪</p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>问题：跟踪现在分成了单目标（SOT）和多目标（MOT）两个独立的社区。由于两种任务的训练数据集和跟踪对象的不同，使得它们的方法无法互通</p>
+<p>现有方法：UniTrack使用共享的外观模型和多个多个不用训练的跟踪头来处理不同跟踪任务。但是无法利用大规模跟踪数据集进行训练，并且在SOT表现较差</p>
+<p>本文方法：</p>
+<ul>
+<li>提出Unified Transformer Tracker (UTT) ，构建一个Transformer Tracker在SOT和MOT中跟踪目标，利用目标特征和跟踪帧特征之间的<strong>相关性</strong>来定位目标；</li>
+<li>在各自的数据集上交替优化SOT和MOT，使得一个框架可以同时处理两个任务</li>
+</ul>
+<span id="more"></span>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104830.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>首先回顾SOT和MOT的定义：</p>
+<ul>
+<li>SOT——给定一个初始帧目标位置B0，定位后续T帧中该目标的位置。跟踪对象可以是任意未知类别；</li>
+<li>MOT——检测并跟踪一组特定类别的目标。MOT需要将第t-1帧中检测到的N个目标，和第t帧中检测到的M个目标进行关联，对于相同的目标赋予唯一的ID。同时需要考虑旧目标的丢失和新目标的出现。</li>
+</ul>
+<p>为了统一两个任务，作者将SOT的初始帧和MOT的前一帧都看成是参考帧，SOT的初始框和MOT中的检测框都看成参考目标框。依此设计了 UTT，如图2所示，经过特征提取后，将参考帧特征 $I^0,I^{t-1}$、跟踪帧特征 $I^t$，以及参考帧中的目标框 $B$ 输入Track Transformer 用于预测当前跟踪帧中的目标位置。Track Transformer有三部分：首先Target Decoder提取目标特征，然后Proposal Decoder在跟踪帧中为每个目标产生候选搜索区域。最后将目标特征和搜索特征都送入Target Tansformer预测目标位置。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105015.png" alt=""></p>
+<p><strong>Target Decoder</strong></p>
+<p>为了引入更多上下文信息，使用交叉注意力对目标特征和跟踪帧特征进行交互</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105324.png" alt=""></p>
+<p><strong>Proposal Decoder</strong></p>
+<p>将目标特征与完整的跟踪特征做相关计算量太大，因此需要裁剪一个更小的搜索区域。最简单的方法是直接将上一帧的跟踪框作为搜索区域，但是如果里面没有目标那后面都是白搭。因此作者将目标特征与跟踪帧特征相关联来产生候选区域。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105603.png" alt=""></p>
+<p>这个过程类似stark，公式5得到的heatmap $H$表示两个角点的分布概率，对所有位置的概率求和得到proposal $P^t$</p>
+<p><strong>Target Transformer</strong></p>
+<p>通过Self-Attention和Correlation将目标特征与proposal 关联。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105759.png" alt=""></p>
+<p>公式11的FC 层是将$K^2C$的通道维度降维到$C$，相当于把$K^2$的空间特征压缩成一维向量。最后将得到的N个向量送入boxhead预测相对proposal的偏移量得到预测跟踪框。</p>
+<p>作者迭代了L次target transformer来进行目标定位。第一次的proposal是通过proposal decoder生成的，而后续的proposal就是前一次迭代预测的目标框。</p>
+<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110351.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110400.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110409.png" alt=""></p>
+<ul>
+<li><p>分别构建SOT和MOT两个dataloader<strong>交替训练</strong>。SOT将图片crop到352，MOT直接对原图进行随机resize；</p>
+</li>
+<li><p>SOT的初始proposal由proposal decoder 生成，并且该proposal（B0）也用于计算loss；MOT的初始proposal是在GT上添加高斯抖动生成的；</p>
+</li>
+<li><p>对于MOT还需要一个额外的 detection head用于检测每一帧的目标类别和位置。MOT的推理阶段需要将track transformer生成的跟踪框和Detection head 生成的检测框进行关联（图5）</p>
+</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110811.png" alt=""></p>
+<h1 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h1><p>SOT在LaSOT、TrackingNet和Got-10k测试，MOT在MOT16测试</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111020.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111032.png" alt=""></p>
+<p>SOT相比UniTrack提点明显，MOT的效果还有提升空间</p>
+<p><strong>Ablative Studies</strong></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111143.png" alt=""></p>
+<p>高亮部分似乎应该是MSA，不知是否是笔误</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111226.png" alt=""></p>
+<p>表5对比了联合训练和分别单独训练。总体来说联合训练效果更好，只有MOT的IDF1指标比单独用MOT训练低一些。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111301.png" alt=""></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文证明了一个模型能够同时解决SOT和MOT任务。这将鼓励社区开发更多统一的跟踪算法，应用于更复杂的跟踪场景，比如VR/AR应用中经常需要进行SOT和MOT的切换。同时这种联合的范式也更加符合人类的直觉。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>transform</tag>
+        <tag>CVPR2022</tag>
+      </tags>
+  </entry>
 </search>
