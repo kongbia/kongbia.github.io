@@ -248,7 +248,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2022-06-07 10:43:54 / 修改时间：11:19:29" itemprop="dateCreated datePublished" datetime="2022-06-07T10:43:54+08:00">2022-06-07</time>
+      <time title="创建时间：2022-06-07 10:43:54 / 修改时间：11:21:07" itemprop="dateCreated datePublished" datetime="2022-06-07T10:43:54+08:00">2022-06-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -273,13 +273,6 @@
           <p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104510.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.15175">论文</a></p>
 <p>核心：联合单目标和多目标跟踪</p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>问题：跟踪现在分成了单目标（SOT）和多目标（MOT）两个独立的社区。由于两种任务的训练数据集和跟踪对象的不同，使得它们的方法无法互通</p>
-<p>现有方法：UniTrack使用共享的外观模型和多个多个不用训练的跟踪头来处理不同跟踪任务。但是无法利用大规模跟踪数据集进行训练，并且在SOT表现较差</p>
-<p>本文方法：</p>
-<ul>
-<li>提出Unified Transformer Tracker (UTT) ，构建一个Transformer Tracker在SOT和MOT中跟踪目标，利用目标特征和跟踪帧特征之间的<strong>相关性</strong>来定位目标；</li>
-<li>在各自的数据集上交替优化SOT和MOT，使得一个框架可以同时处理两个任务</li>
-</ul>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/tracking/56-UTT/#more" rel="contents">
