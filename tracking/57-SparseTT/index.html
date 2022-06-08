@@ -22,45 +22,42 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="论文 核心：联合单目标和多目标跟踪">
+    <meta name="description" content="论文 代码 Transformer中自注意力的全局视角导致主要信息（如搜索区域中的目标）聚焦不足，而次要信息（如搜索区域中的背景）聚焦过度，使前景和背景的区分变得模糊，从而降低了跟踪性能。简单来说就是和每一个点计算注意力，导致背景部分占据了过大的权重，一定程度上削弱了目标。本文使用稀疏注意力缓解这一问题，来突出搜索区域中的潜在目标。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Unified Transformer Tracker for Object Tracking">
-<meta property="og:url" content="https://www.zjp97.top/tracking/56-UTT/index.html">
+<meta property="og:title" content="SparseTT: Visual Tracking with Sparse Transformers">
+<meta property="og:url" content="https://www.zjp97.top/tracking/57-SparseTT/index.html">
 <meta property="og:site_name" content="CV home">
-<meta property="og:description" content="论文 核心：联合单目标和多目标跟踪">
+<meta property="og:description" content="论文 代码 Transformer中自注意力的全局视角导致主要信息（如搜索区域中的目标）聚焦不足，而次要信息（如搜索区域中的背景）聚焦过度，使前景和背景的区分变得模糊，从而降低了跟踪性能。简单来说就是和每一个点计算注意力，导致背景部分占据了过大的权重，一定程度上削弱了目标。本文使用稀疏注意力缓解这一问题，来突出搜索区域中的潜在目标。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607104510.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607104830.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105015.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105324.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105603.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105759.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110351.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110400.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110409.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110811.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111020.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111032.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111143.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111226.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111301.png">
-<meta property="article:published_time" content="2022-06-07T02:43:54.000Z">
-<meta property="article:modified_time" content="2022-06-08T06:58:44.130Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608111802.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608112131.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608112259.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608113034.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114210.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114342.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114417.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114627.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114659.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114746.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114759.png">
+<meta property="article:published_time" content="2022-06-08T03:16:26.000Z">
+<meta property="article:modified_time" content="2022-06-08T06:58:52.822Z">
 <meta property="article:author" content="摸鱼的SAO年">
 <meta property="article:tag" content="transform">
-<meta property="article:tag" content="CVPR2022">
+<meta property="article:tag" content="IJCAI2022">
+<meta property="article:tag" content="sparse attention">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607104510.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608111802.png">
 
 
-<link rel="canonical" href="https://www.zjp97.top/tracking/56-UTT/">
+<link rel="canonical" href="https://www.zjp97.top/tracking/57-SparseTT/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.zjp97.top/tracking/56-UTT/","path":"tracking/56-UTT/","title":"Unified Transformer Tracker for Object Tracking"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.zjp97.top/tracking/57-SparseTT/","path":"tracking/57-SparseTT/","title":"SparseTT: Visual Tracking with Sparse Transformers"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Unified Transformer Tracker for Object Tracking | CV home</title>
+<title>SparseTT: Visual Tracking with Sparse Transformers | CV home</title>
   
 
 
@@ -163,7 +160,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Training"><span class="nav-number">3.</span> <span class="nav-text">Training</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiment"><span class="nav-number">4.</span> <span class="nav-text">Experiment</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">小结</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E6%A0%87%E8%81%9A%E7%84%A6%E7%BD%91%E7%BB%9C"><span class="nav-number">2.1.</span> <span class="nav-text">目标聚焦网络</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8C%E5%A4%B4%E9%A2%84%E6%B5%8B%E5%99%A8"><span class="nav-number">2.2.</span> <span class="nav-text">双头预测器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiments"><span class="nav-number">3.</span> <span class="nav-text">Experiments</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ablation-Study"><span class="nav-number">3.1.</span> <span class="nav-text">Ablation Study</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SOTA-Comparison"><span class="nav-number">3.2.</span> <span class="nav-text">SOTA Comparison</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -240,7 +237,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/56-UTT/">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/57-SparseTT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
@@ -253,12 +250,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Unified Transformer Tracker for Object Tracking | CV home">
+      <meta itemprop="name" content="SparseTT: Visual Tracking with Sparse Transformers | CV home">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Unified Transformer Tracker for Object Tracking
+          SparseTT: Visual Tracking with Sparse Transformers
         </h1>
 
         <div class="post-meta-container">
@@ -268,24 +265,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2022-06-07 10:43:54" itemprop="dateCreated datePublished" datetime="2022-06-07T10:43:54+08:00">2022-06-07</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-06-08 14:58:44" itemprop="dateModified" datetime="2022-06-08T14:58:44+08:00">2022-06-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
-        </span>
+      <time title="创建时间：2022-06-08 11:16:26 / 修改时间：14:58:52" itemprop="dateCreated datePublished" datetime="2022-06-08T11:16:26+08:00">2022-06-08</time>
     </span>
 
   
@@ -305,60 +287,40 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607104510.png" alt=""></p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.15175">论文</a></p>
-<p>核心：联合单目标和多目标跟踪</p>
+        <p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608111802.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2205.03776">论文</a> <a target="_blank" rel="noopener" href="https://github.com/fzh0917/SparseTT">代码</a></p>
+<p>Transformer中自注意力的全局视角导致主要信息（如搜索区域中的目标）聚焦不足，而次要信息（如搜索区域中的背景）聚焦过度，使前景和背景的区分变得模糊，从而降低了跟踪性能。简单来说就是和每一个点计算注意力，导致背景部分占据了过大的权重，一定程度上削弱了目标。本文使用稀疏注意力缓解这一问题，来突出搜索区域中的潜在目标。</p>
 <span id="more"></span>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>问题：跟踪现在分成了单目标（SOT）和多目标（MOT）两个独立的社区。由于两种任务的训练数据集和跟踪对象的不同，使得它们的方法无法互通</p>
-<p>现有方法：UniTrack使用共享的外观模型和多个多个不用训练的跟踪头来处理不同跟踪任务。但是无法利用大规模跟踪数据集进行训练，并且在SOT表现较差</p>
-<p>本文方法：</p>
-<ul>
-<li>提出Unified Transformer Tracker (UTT) ，构建一个Transformer Tracker在SOT和MOT中跟踪目标，利用目标特征和跟踪帧特征之间的<strong>相关性</strong>来定位目标；</li>
-<li>在各自的数据集上交替优化SOT和MOT，使得一个框架可以同时处理两个任务</li>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
+<li>自注意力缺乏对搜索区域中最相关信息的关注，因此很容易被背景分散注意力</li>
+<li>设计稀疏注意力关注搜索区域中最相关的信息</li>
+<li>设计双头预测器，提高分类和回归的精度</li>
+<li>稀疏注意力更容易收敛，训练时间相比TransT减少了75%</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607104830.png" alt=""></p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>首先回顾SOT和MOT的定义：</p>
-<ul>
-<li>SOT——给定一个初始帧目标位置B0，定位后续T帧中该目标的位置。跟踪对象可以是任意未知类别；</li>
-<li>MOT——检测并跟踪一组特定类别的目标。MOT需要将第t-1帧中检测到的N个目标，和第t帧中检测到的M个目标进行关联，对于相同的目标赋予唯一的ID。同时需要考虑旧目标的丢失和新目标的出现。</li>
-</ul>
-<p>为了统一两个任务，作者将SOT的初始帧和MOT的前一帧都看成是参考帧，SOT的初始框和MOT中的检测框都看成参考目标框。依此设计了 UTT，如图2所示，经过特征提取后，将参考帧特征 $I^0,I^{t-1}$、跟踪帧特征 $I^t$，以及参考帧中的目标框 $B$ 输入Track Transformer 用于预测当前跟踪帧中的目标位置。Track Transformer有三部分：首先Target Decoder提取目标特征，然后Proposal Decoder在跟踪帧中为每个目标产生候选搜索区域。最后将目标特征和搜索特征都送入Target Tansformer预测目标位置。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105015.png" alt=""></p>
-<p><strong>Target Decoder</strong></p>
-<p>为了引入更多上下文信息，使用交叉注意力对目标特征和跟踪帧特征进行交互</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105324.png" alt=""></p>
-<p><strong>Proposal Decoder</strong></p>
-<p>将每一个目标特征与完整的跟踪特征做相关计算量太大，因此需要裁剪一个更小的搜索区域。对于MOT，直接根据前一帧的跟踪框来确定proposal；而对于SOT，考虑到目标丢失导致前一帧跟踪框中没有目标的情况，作者将目标特征与跟踪帧特征相关联来产生更精确的proposal。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105603.png" alt=""></p>
-<p>这个过程类似stark，公式5得到的heatmap $H$表示两个角点的分布概率，对所有位置的概率求和得到proposal $P^t$。虽然公式5中的维度是N，其实只会生成SOT的一个heatmap，因为对MOT每个目标计算一遍成本还是太高。</p>
-<p><strong>Target Transformer</strong></p>
-<p>通过Self-Attention和Correlation将目标特征与proposal 关联。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105759.png" alt=""></p>
-<p>公式11的FC 层是将$K^2C$的通道维度降维到$C$，相当于把$K^2$的空间特征压缩成一维向量。最后将得到的N个向量送入boxhead预测相对proposal的偏移量得到预测跟踪框。</p>
-<p>作者迭代了L次target transformer来进行目标定位。第一次的proposal是通过proposal decoder生成的，而后续的proposal就是前一次迭代预测的目标框。</p>
-<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110351.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110400.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110409.png" alt=""></p>
-<ul>
-<li><p>分别构建SOT和MOT两个dataloader<strong>交替训练</strong>。SOT将图片crop到352，MOT直接对原图进行随机resize；</p>
-</li>
-<li><p>SOT的初始proposal由proposal decoder 生成，并且该proposal（B0）也用于计算loss；MOT的初始proposal是在GT上添加高斯抖动生成的；</p>
-</li>
-<li><p>对于MOT还需要一个额外的 detection head用于检测每一帧的目标类别和位置。MOT的推理阶段需要将track transformer生成的跟踪框和Detection head 生成的检测框进行关联（图5）</p>
-</li>
-</ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110811.png" alt=""></p>
-<h1 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h1><p>SOT在LaSOT、TrackingNet和Got-10k测试，MOT在MOT16测试</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111020.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111032.png" alt=""></p>
-<p>SOT相比UniTrack提点明显，MOT的效果还有提升空间</p>
-<p><strong>Ablative Studies</strong></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111143.png" alt=""></p>
-<p>高亮部分似乎应该是MSA，不知是否是笔误</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111226.png" alt=""></p>
-<p>表5对比了联合训练和分别单独训练。总体来说联合训练效果更好，只有MOT的IDF1指标比单独用MOT训练低一些。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111301.png" alt=""></p>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文证明了一个模型能够同时解决SOT和MOT任务。这将鼓励社区开发更多统一的跟踪算法，应用于更复杂的跟踪场景，比如VR/AR应用中经常需要进行SOT和MOT的切换。同时这种联合的范式也更加符合人类的直觉。</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608112131.png" alt=""></p>
+<p>标准的三段结构，特征提取，目标聚焦网络和双头预测器。</p>
+<h2 id="目标聚焦网络"><a href="#目标聚焦网络" class="headerlink" title="目标聚焦网络"></a>目标聚焦网络</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608112259.png" alt=""></p>
+<p>目标聚焦网络是encoder-decoder架构，encoder输入模板特征，decoder输入搜索特征。其中encoder重要但非必要，后续实验会证明。而本文的核心创新在于decoder橙色部分的<strong>稀疏多头注意力Sparse Multi-Head Self-Attention</strong>。</p>
+<p>朴素MSA中，注意力特征的每个像素值都是由输入特征的所有像素值来计算的，这使得前景边缘区域变得模糊。本文提出的稀疏方法中，注意力特征的每个像素值都只由与其最相似的K个像素值决定，这使得前景更加集中，前景边缘区域更加具有分辨力。</p>
+<p>具体实现如图4中间所示，首先计算query和key的相似度矩阵，然后仅使用softmax函数对相似矩阵每行的K个最大元素进行归一化，其他元素置0。最后将相似度矩阵和value相乘，得到最终结果。图4最右边展示了两种注意力归一化的区别，朴素点积注意力放大了相对较小的相似权重，这使得输出特征容易受到噪声和背景干扰的影响。然而，稀疏缩放点积注意力可以显著缓解这个问题。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608113034.png" alt=""></p>
+<h2 id="双头预测器"><a href="#双头预测器" class="headerlink" title="双头预测器"></a>双头预测器</h2><p>对于分类和回归，均同时使用2层FC层和L个卷积层来预测。</p>
+<p>推理阶段，对于分类任务，融合FC头和卷积头的分类分数；对于回归任务，只取卷积头输出的预测偏移量。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p>在4张2080ti上训练60个小时，相比TransT在同等硬件下训练10天。</p>
+<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p>编码器数量：即使不使用编码器效果依然很好，编码器数量过多导致过拟合。最佳数量为2</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114210.png" alt=""></p>
+<p>解码器数量：最佳数量为2</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114342.png" alt=""></p>
+<p>SMSA中的稀疏度K：最佳数量为32</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114417.png" alt=""></p>
+<h2 id="SOTA-Comparison"><a href="#SOTA-Comparison" class="headerlink" title="SOTA Comparison"></a>SOTA Comparison</h2><p>LaSOT</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114627.png" alt=""></p>
+<p>Got10k</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114659.png" alt=""></p>
+<p>OTB UAV</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114746.png" alt=""></p>
+<p>TrackingNet</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114759.png" alt=""></p>
 
     </div>
 
@@ -369,21 +331,19 @@
     <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/transform/" rel="tag"># transform</a>
-              <a href="/tags/CVPR2022/" rel="tag"># CVPR2022</a>
+              <a href="/tags/IJCAI2022/" rel="tag"># IJCAI2022</a>
+              <a href="/tags/sparse-attention/" rel="tag"># sparse attention</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/tracking/55-ToMP/" rel="prev" title="Transforming Model Prediction for Tracking">
-                  <i class="fa fa-chevron-left"></i> Transforming Model Prediction for Tracking
+                <a href="/tracking/56-UTT/" rel="prev" title="Unified Transformer Tracker for Object Tracking">
+                  <i class="fa fa-chevron-left"></i> Unified Transformer Tracker for Object Tracking
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/tracking/57-SparseTT/" rel="next" title="SparseTT: Visual Tracking with Sparse Transformers">
-                  SparseTT: Visual Tracking with Sparse Transformers <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -466,7 +426,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"dcfb331e6299e6d8c0b2cfc24db46412"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"c345a371bcac769da086882b3bb488e4"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>

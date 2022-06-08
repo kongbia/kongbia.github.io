@@ -1844,7 +1844,7 @@
   <entry>
     <title>Transforming Model Prediction for Tracking</title>
     <url>/tracking/55-ToMP/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602110219.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602110219.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2203.11192">论文</a> <a href="https://github.com/visionml/pytracking">代码</a></p>
 <p>马丁团队的新工作，依然是延续dimp的故事，这次是用transformer作为目标预测模型，取代了之前延续好几代的基于优化的模型预测方法。</p>
 <span id="more"></span>
@@ -1862,7 +1862,7 @@
 <li>在测试阶段提出一个并行的两阶段跟踪过程解耦目标定位和边框回归，得到更精确的目标检测结果</li>
 <li>充分的实验</li>
 </ol>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602113256.png" alt=""></p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602113256.png" alt=""></p>
 <p>左边是传统的基于优化的方法，如ATOM, DiMP等，具有如下局限：</p>
 <ol>
 <li>只使用历史帧的有限信息来计算目标模型，无法嵌入先验知识</li>
@@ -1877,33 +1877,33 @@
 <li>利用目标信息为每一帧动态构建一个更具辨别性的特征空间。</li>
 </ol>
 <p>下面详细介绍各个模块，整体框架如图3所示，我在上面注释了一部分流程：</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602114145.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602114145.png" alt=""></p>
 <h2 id="基于Transformer的模型预测器"><a href="#基于Transformer的模型预测器" class="headerlink" title="基于Transformer的模型预测器"></a>基于Transformer的模型预测器</h2><p><strong>Target Location Encoding</strong> 嵌入训练帧的位置信息，设置了一个可学习的token embedding来表示前景 $e_{fg} \in \mathbb{R}^{1 \times C}$，将其与以目标位置为中心的高斯图 $y_i \in \mathbb{R}^{H \times W \times 1} $ 点乘作为编码：</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602115643.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602115643.png" alt=""></p>
 <p>然后将目标编码与原始特征叠加</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602115659.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602115659.png" alt=""></p>
 <p>这样得到的训练特征 $v_i \in \mathbb{R}^{H \times W \times C} $ 是编码了目标状态信息的。为了对称，对测试特征也增加了一个编码</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602115923.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602115923.png" alt=""></p>
 <p>因为测试帧不知道目标位置，所以将token $e_{test}$ 叠加到每一个patch位置上。</p>
 <p><strong>Transformer Encoder</strong> 和stark类似，将训练和测试特征堆叠后送入encoder，输出用于decoder的特征，此外还保留增强后的测试特征 $z_{test}$ 用于后续分类回归。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602151024.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602151024.png" alt=""></p>
 <p><strong>Transformer Decoder</strong> 将目标状态编码中的 $e_{fg}$ 作为query，和encoder生成的 $z_i, z_{test}$ 一起输入decoder，来预测目标模型权重。</p>
 <p><strong>Target Model</strong> 利用DCF模型来获得目标分类分数</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602151709.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602151709.png" alt=""></p>
 <p>其中，$\omega \in \mathbb{R}^{1 \times C}$ 是decoder输出的convolution filter的权重，$z_{test}$是encoder中经过训练特征增强后的测试特征，可以更有效定位目标。</p>
 <h2 id="联合定位和边框回归"><a href="#联合定位和边框回归" class="headerlink" title="联合定位和边框回归"></a>联合定位和边框回归</h2><p>上面的方法只是用于预测目标中心，在之前的DiMP中是额外通过iounet来预测回归框。本文提出要联合预测定位和回归，因为这两者可以相互受益。为了实现这一点，需要额外扩展两个地方：1. 生成目标状态编码时，不仅需要目标中心位置，还需要编码目标大小信息，为模型预测器提供更丰富的输入；2. 除了目标模型的权重，还需扩展模型预测器来估计边框回归的权重。</p>
 <p><strong>Target Extent Encoding</strong> 增加一个目标bbox的编码，其实就是计算特征图上每个点距离目标框上下左右四条边的距离，得到一个密集分布的目标框表示 $d=(l,t,r,b), d\in \mathbb{R}^{H \times W \times 4} $</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602153254.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602153254.png" alt=""></p>
 <p>然后经过一个MLP升维后与上文公式3中的图像特征和目标位置编码叠加一起送入encoder</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602153434.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602153434.png" alt=""></p>
 <p><strong>Model Prediction</strong> 将decoder输出的权重$\omega$经过一个线性层得到边框回归权重$\omega_{bbreg}$和目标分类权重$\omega_{cls}$。</p>
 <p><strong>Bounding Box Regression</strong> 为了让encoder输出的测试特征$z_{test}$是目标感知的，仿照stark，计算$\omega_{bbreg}*z_{test}$得到一个注意力图，再将其与$z_{test}$点乘后输入回归分支，回归分支是采用FCOS的边框回归。</p>
 <h2 id="离线训练"><a href="#离线训练" class="headerlink" title="离线训练"></a>离线训练</h2><p>类似之前DCF类的训练，从一个序列中采样两张训练图片和一张测试图片送入网络，损失采用FCOS的损失类型，但没有centerness loss。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602154416.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602154416.png" alt=""></p>
 <h2 id="在线跟踪"><a href="#在线跟踪" class="headerlink" title="在线跟踪"></a>在线跟踪</h2><p>在线跟踪中的训练图像包含一张初始帧和其标注，以及一个在线更新的历史中间帧，其分类得分必须高于阈值。作者发现用这个训练集相比只用初始帧可以提高定位精度，但是会下降回归精度。作者解释为中间帧的预测框不准确可能会影响回归精度，因此提出一个两阶段的跟踪方式。1. 使用完整的两帧来获得分类权重；2. 只用初始帧来计算回归权重。</p>
 <p>这两个步骤可以并行处理，复制一份数据在batch维度堆叠，然后在预测回归模型时通过key_padding_mask来控制某些key不参与计算attention。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>两个模型ToMP-101和ToMP-50，2080Ti运行速度分别是19.6和24.8FPS</p>
-<h2 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602155815.png" alt=""></p>
+<h2 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602155815.png" alt=""></p>
 <p><strong>Target State Encoding</strong> 表1分析了不同目标状态编码组合的效果，目标位置编码中除了正文中提到的前景嵌入$e_{fg}$和测试嵌入$e_{test}$ ，额外增加了一个背景嵌入$e_{bg}$。</p>
 <ul>
 <li>增加背景嵌入没什么用，反而性能下降 （4 vs 5）</li>
@@ -1911,23 +1911,23 @@
 <li>解耦Decoder的query和前景嵌入$e_{fg}$会导致性能下降（6）</li>
 <li>嵌入边框信息target extent encoding非常重要，如果没有性能会剧烈下降（7）</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602160907.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602161522.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602160907.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602161522.png" alt=""></p>
 <p><strong>Model Predictor</strong> 表2显示用两个独立的query分别做分类和回归，效果会大幅下降，原因还是query和前景嵌入$e_{fg}$解耦了。</p>
 <p><strong>Inference Settings</strong> 表3显示增加历史跟踪帧比只用初始帧效果好，但如果不用本文提出的两阶段方法，效果会下降。原因还是边框预测器对历史帧中不准确的预测框敏感。</p>
 <p><strong>Transforming Model Prediction Step-by-Step</strong> 表4和图1展示了在基于优化的DiMP上一步步替换本文的transformer的效果提升。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602161714.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602161714.png" alt=""></p>
 <p>表10展示了使用更多的帧训练效果可以进一步提升，但是速度会下降。</p>
-<h2 id="SOTA比较"><a href="#SOTA比较" class="headerlink" title="SOTA比较"></a>SOTA比较</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602161928.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602162013.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602162058.png" alt=""></p>
-<h2 id="可视化结果"><a href="#可视化结果" class="headerlink" title="可视化结果"></a>可视化结果</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602162325.png" alt=""></p>
+<h2 id="SOTA比较"><a href="#SOTA比较" class="headerlink" title="SOTA比较"></a>SOTA比较</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602161928.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602162013.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602162058.png" alt=""></p>
+<h2 id="可视化结果"><a href="#可视化结果" class="headerlink" title="可视化结果"></a>可视化结果</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602162325.png" alt=""></p>
 <p>对比SuperDiMP的响应图，ToMP的响应更加干净，抑制了周围的干扰。但这样带来一个风险，一旦目标丢失，跟踪如果转移到干扰物被后基本不可能恢复，因为此时真实目标就被当成干扰抑制了。</p>
 <h2 id="方法局限"><a href="#方法局限" class="headerlink" title="方法局限"></a>方法局限</h2><ol>
 <li>attention的计算量</li>
 <li>遮挡和干扰同时出现</li>
 </ol>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP20220602162623.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602162623.png" alt=""></p>
 <p>最后瞎逼逼一些感想，每年马丁团队的文章我都会抽一个完整的时间来仔细研读，因为总是包含很多优美巧妙的数学推导需要慢慢嚼。但今年的文章意外地很好读，因为偏向模型设计方面了。包括去年的<a href="https://www.zjp97.top/tracking/36-learning-target-candidate-association/?highlight=keep">KeepTrack</a>（一作和本文相同），出发点和实现依然巧妙，但是慢慢地都开始减少数学优化方面的工作了。大家开玩笑常说，端到端优化的深度学习DCF框架只有马丁自己能够继续更新，而他们现在也不继续做优化方面的工作了。那么基于优化的DCF框架在后续会如何发展？这篇文章给出了一个不错的答案。</p>
 ]]></content>
       <categories>
@@ -1941,7 +1941,7 @@
   <entry>
     <title>Unified Transformer Tracker for Object Tracking</title>
     <url>/tracking/56-UTT/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104510.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607104510.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2203.15175">论文</a></p>
 <p>核心：联合单目标和多目标跟踪</p>
 <span id="more"></span>
@@ -1952,29 +1952,29 @@
 <li>提出Unified Transformer Tracker (UTT) ，构建一个Transformer Tracker在SOT和MOT中跟踪目标，利用目标特征和跟踪帧特征之间的<strong>相关性</strong>来定位目标；</li>
 <li>在各自的数据集上交替优化SOT和MOT，使得一个框架可以同时处理两个任务</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607104830.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607104830.png" alt=""></p>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>首先回顾SOT和MOT的定义：</p>
 <ul>
 <li>SOT——给定一个初始帧目标位置B0，定位后续T帧中该目标的位置。跟踪对象可以是任意未知类别；</li>
 <li>MOT——检测并跟踪一组特定类别的目标。MOT需要将第t-1帧中检测到的N个目标，和第t帧中检测到的M个目标进行关联，对于相同的目标赋予唯一的ID。同时需要考虑旧目标的丢失和新目标的出现。</li>
 </ul>
 <p>为了统一两个任务，作者将SOT的初始帧和MOT的前一帧都看成是参考帧，SOT的初始框和MOT中的检测框都看成参考目标框。依此设计了 UTT，如图2所示，经过特征提取后，将参考帧特征 $I^0,I^{t-1}$、跟踪帧特征 $I^t$，以及参考帧中的目标框 $B$ 输入Track Transformer 用于预测当前跟踪帧中的目标位置。Track Transformer有三部分：首先Target Decoder提取目标特征，然后Proposal Decoder在跟踪帧中为每个目标产生候选搜索区域。最后将目标特征和搜索特征都送入Target Tansformer预测目标位置。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105015.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105015.png" alt=""></p>
 <p><strong>Target Decoder</strong></p>
 <p>为了引入更多上下文信息，使用交叉注意力对目标特征和跟踪帧特征进行交互</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105324.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105324.png" alt=""></p>
 <p><strong>Proposal Decoder</strong></p>
-<p>将目标特征与完整的跟踪特征做相关计算量太大，因此需要裁剪一个更小的搜索区域。最简单的方法是直接将上一帧的跟踪框作为搜索区域，但是如果里面没有目标那后面都是白搭。因此作者将目标特征与跟踪帧特征相关联来产生候选区域。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105603.png" alt=""></p>
-<p>这个过程类似stark，公式5得到的heatmap $H$表示两个角点的分布概率，对所有位置的概率求和得到proposal $P^t$</p>
+<p>将每一个目标特征与完整的跟踪特征做相关计算量太大，因此需要裁剪一个更小的搜索区域。对于MOT，直接根据前一帧的跟踪框来确定proposal；而对于SOT，考虑到目标丢失导致前一帧跟踪框中没有目标的情况，作者将目标特征与跟踪帧特征相关联来产生更精确的proposal。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105603.png" alt=""></p>
+<p>这个过程类似stark，公式5得到的heatmap $H$表示两个角点的分布概率，对所有位置的概率求和得到proposal $P^t$。虽然公式5中的维度是N，其实只会生成SOT的一个heatmap，因为对MOT每个目标计算一遍成本还是太高。</p>
 <p><strong>Target Transformer</strong></p>
 <p>通过Self-Attention和Correlation将目标特征与proposal 关联。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607105759.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105759.png" alt=""></p>
 <p>公式11的FC 层是将$K^2C$的通道维度降维到$C$，相当于把$K^2$的空间特征压缩成一维向量。最后将得到的N个向量送入boxhead预测相对proposal的偏移量得到预测跟踪框。</p>
 <p>作者迭代了L次target transformer来进行目标定位。第一次的proposal是通过proposal decoder生成的，而后续的proposal就是前一次迭代预测的目标框。</p>
-<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110351.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110400.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110409.png" alt=""></p>
+<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110351.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110400.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110409.png" alt=""></p>
 <ul>
 <li><p>分别构建SOT和MOT两个dataloader<strong>交替训练</strong>。SOT将图片crop到352，MOT直接对原图进行随机resize；</p>
 </li>
@@ -1983,17 +1983,17 @@
 <li><p>对于MOT还需要一个额外的 detection head用于检测每一帧的目标类别和位置。MOT的推理阶段需要将track transformer生成的跟踪框和Detection head 生成的检测框进行关联（图5）</p>
 </li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607110811.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110811.png" alt=""></p>
 <h1 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h1><p>SOT在LaSOT、TrackingNet和Got-10k测试，MOT在MOT16测试</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111020.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111032.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111020.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111032.png" alt=""></p>
 <p>SOT相比UniTrack提点明显，MOT的效果还有提升空间</p>
 <p><strong>Ablative Studies</strong></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111143.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111143.png" alt=""></p>
 <p>高亮部分似乎应该是MSA，不知是否是笔误</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111226.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111226.png" alt=""></p>
 <p>表5对比了联合训练和分别单独训练。总体来说联合训练效果更好，只有MOT的IDF1指标比单独用MOT训练低一些。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT20220607111301.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111301.png" alt=""></p>
 <h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文证明了一个模型能够同时解决SOT和MOT任务。这将鼓励社区开发更多统一的跟踪算法，应用于更复杂的跟踪场景，比如VR/AR应用中经常需要进行SOT和MOT的切换。同时这种联合的范式也更加符合人类的直觉。</p>
 ]]></content>
       <categories>
@@ -2002,6 +2002,50 @@
       <tags>
         <tag>transform</tag>
         <tag>CVPR2022</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SparseTT: Visual Tracking with Sparse Transformers</title>
+    <url>/tracking/57-SparseTT/</url>
+    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608111802.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2205.03776">论文</a> <a href="https://github.com/fzh0917/SparseTT">代码</a></p>
+<p>Transformer中自注意力的全局视角导致主要信息（如搜索区域中的目标）聚焦不足，而次要信息（如搜索区域中的背景）聚焦过度，使前景和背景的区分变得模糊，从而降低了跟踪性能。简单来说就是和每一个点计算注意力，导致背景部分占据了过大的权重，一定程度上削弱了目标。本文使用稀疏注意力缓解这一问题，来突出搜索区域中的潜在目标。</p>
+<span id="more"></span>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
+<li>自注意力缺乏对搜索区域中最相关信息的关注，因此很容易被背景分散注意力</li>
+<li>设计稀疏注意力关注搜索区域中最相关的信息</li>
+<li>设计双头预测器，提高分类和回归的精度</li>
+<li>稀疏注意力更容易收敛，训练时间相比TransT减少了75%</li>
+</ul>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608112131.png" alt=""></p>
+<p>标准的三段结构，特征提取，目标聚焦网络和双头预测器。</p>
+<h2 id="目标聚焦网络"><a href="#目标聚焦网络" class="headerlink" title="目标聚焦网络"></a>目标聚焦网络</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608112259.png" alt=""></p>
+<p>目标聚焦网络是encoder-decoder架构，encoder输入模板特征，decoder输入搜索特征。其中encoder重要但非必要，后续实验会证明。而本文的核心创新在于decoder橙色部分的<strong>稀疏多头注意力Sparse Multi-Head Self-Attention</strong>。</p>
+<p>朴素MSA中，注意力特征的每个像素值都是由输入特征的所有像素值来计算的，这使得前景边缘区域变得模糊。本文提出的稀疏方法中，注意力特征的每个像素值都只由与其最相似的K个像素值决定，这使得前景更加集中，前景边缘区域更加具有分辨力。</p>
+<p>具体实现如图4中间所示，首先计算query和key的相似度矩阵，然后仅使用softmax函数对相似矩阵每行的K个最大元素进行归一化，其他元素置0。最后将相似度矩阵和value相乘，得到最终结果。图4最右边展示了两种注意力归一化的区别，朴素点积注意力放大了相对较小的相似权重，这使得输出特征容易受到噪声和背景干扰的影响。然而，稀疏缩放点积注意力可以显著缓解这个问题。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608113034.png" alt=""></p>
+<h2 id="双头预测器"><a href="#双头预测器" class="headerlink" title="双头预测器"></a>双头预测器</h2><p>对于分类和回归，均同时使用2层FC层和L个卷积层来预测。</p>
+<p>推理阶段，对于分类任务，融合FC头和卷积头的分类分数；对于回归任务，只取卷积头输出的预测偏移量。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p>在4张2080ti上训练60个小时，相比TransT在同等硬件下训练10天。</p>
+<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p>编码器数量：即使不使用编码器效果依然很好，编码器数量过多导致过拟合。最佳数量为2</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114210.png" alt=""></p>
+<p>解码器数量：最佳数量为2</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114342.png" alt=""></p>
+<p>SMSA中的稀疏度K：最佳数量为32</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114417.png" alt=""></p>
+<h2 id="SOTA-Comparison"><a href="#SOTA-Comparison" class="headerlink" title="SOTA Comparison"></a>SOTA Comparison</h2><p>LaSOT</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114627.png" alt=""></p>
+<p>Got10k</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114659.png" alt=""></p>
+<p>OTB UAV</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114746.png" alt=""></p>
+<p>TrackingNet</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114759.png" alt=""></p>
+]]></content>
+      <tags>
+        <tag>transform</tag>
+        <tag>IJCAI2022</tag>
+        <tag>sparse attention</tag>
       </tags>
   </entry>
 </search>
