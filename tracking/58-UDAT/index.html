@@ -22,46 +22,39 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="论文 Motivation当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络">
+    <meta name="description" content="论文 代码 无监督域适应的夜间空中跟踪 + 夜间跟踪benchmark">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Deep Meta Learning for Real-Time Target-Aware Visual Tracking">
-<meta property="og:url" content="https://www.zjp97.top/tracking/4-mlt/index.html">
+<meta property="og:title" content="Unsupervised Domain Adaptation for Nighttime Aerial Tracking">
+<meta property="og:url" content="https://www.zjp97.top/tracking/58-UDAT/index.html">
 <meta property="og:site_name" content="CV home">
-<meta property="og:description" content="论文 Motivation当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络">
+<meta property="og:description" content="论文 代码 无监督域适应的夜间空中跟踪 + 夜间跟踪benchmark">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810211247.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810214920.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810223903.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811091726.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811092640.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094325.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094727.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811101915.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094851.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102117.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102811.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103012.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103215.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103248.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103028.png">
-<meta property="og:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103525.png">
-<meta property="article:published_time" content="2020-03-10T13:05:45.000Z">
-<meta property="article:modified_time" content="2022-05-31T03:47:32.668Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609115914.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609153243.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154323.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154428.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154917.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154943.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609155413.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609155425.png">
+<meta property="article:published_time" content="2022-06-09T03:55:46.000Z">
+<meta property="article:modified_time" content="2022-06-09T08:00:39.761Z">
 <meta property="article:author" content="摸鱼的SAO年">
-<meta property="article:tag" content="meta learning">
-<meta property="article:tag" content="ICCV2019">
+<meta property="article:tag" content="Domain adaption">
+<meta property="article:tag" content="CVPR2022">
+<meta property="article:tag" content="Unsupervised">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810211247.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609115914.png">
 
 
-<link rel="canonical" href="https://www.zjp97.top/tracking/4-mlt/">
+<link rel="canonical" href="https://www.zjp97.top/tracking/58-UDAT/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.zjp97.top/tracking/4-mlt/","path":"tracking/4-mlt/","title":"Deep Meta Learning for Real-Time Target-Aware Visual Tracking"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.zjp97.top/tracking/58-UDAT/","path":"tracking/58-UDAT/","title":"Unsupervised Domain Adaptation for Nighttime Aerial Tracking"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Deep Meta Learning for Real-Time Target-Aware Visual Tracking | CV home</title>
+<title>Unsupervised Domain Adaptation for Nighttime Aerial Tracking | CV home</title>
   
 
 
@@ -164,7 +157,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiments"><span class="nav-number">3.</span> <span class="nav-text">Experiments</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Conclusion"><span class="nav-number">4.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-preprocessing"><span class="nav-number">2.1.</span> <span class="nav-text">Data preprocessing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer-bridging-layer"><span class="nav-number">2.2.</span> <span class="nav-text">Transformer bridging layer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Transformer-discriminator"><span class="nav-number">2.3.</span> <span class="nav-text">Transformer discriminator</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NAT2021"><span class="nav-number">3.</span> <span class="nav-text">NAT2021</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -241,7 +234,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/4-mlt/">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/58-UDAT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
@@ -254,12 +247,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Deep Meta Learning for Real-Time Target-Aware Visual Tracking | CV home">
+      <meta itemprop="name" content="Unsupervised Domain Adaptation for Nighttime Aerial Tracking | CV home">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Deep Meta Learning for Real-Time Target-Aware Visual Tracking
+          Unsupervised Domain Adaptation for Nighttime Aerial Tracking
         </h1>
 
         <div class="post-meta-container">
@@ -269,15 +262,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2020-03-10 21:05:45" itemprop="dateCreated datePublished" datetime="2020-03-10T21:05:45+08:00">2020-03-10</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-05-31 11:47:32" itemprop="dateModified" datetime="2022-05-31T11:47:32+08:00">2022-05-31</time>
+      <time title="创建时间：2022-06-09 11:55:46 / 修改时间：16:00:39" itemprop="dateCreated datePublished" datetime="2022-06-09T11:55:46+08:00">2022-06-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -306,41 +293,35 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810211247.png" alt=""></p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1712.09153">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
+        <p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609115914.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.10541">论文</a> <a target="_blank" rel="noopener" href="https://github.com/vision4robotics/UDAT">代码</a></p>
+<p>无监督域适应的夜间空中跟踪 + 夜间跟踪benchmark</p>
 <span id="more"></span>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210810223903.png" alt=""></p>
-<p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
-<p><strong>Components</strong></p>
-<p>匹配网络是标准的孪生网络</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
-<p>其中，$x$是模板，$z$是搜索区域，$w = \{ w_1, w_2, …, w_N \}$​表示每一层卷积层的权重参数。</p>
-<p>元学习网络根据历史得到的M个context patch $z = \{z_1, z_2, …, z_M\}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
-<p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094325.png" style="zoom:80%;" /></p>
-<p>将生成的$\omega^{target}$与原始的权重拼接起来得到新的自适应权重$w^{adapt} = \{ w_1, w_2, …, [w_N, \omega^{target}] \}$​，将其用于目标定位</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094727.png" style="zoom:80%;" /></p>
-<p>此外，元学习网络还生成了通道注意力权重进一步调整特征表示空间。</p>
-<p><strong>Tracking algorithm</strong></p>
-<p>在跟踪过程中，会保存一个context image的集合 $z_{mem} = \{ z_1, z_2, …, z_K \}$​​​​​​ 以及对应生成的响应图$\hat{y}_{mem} = \{ \hat{y}_1, \hat{y}_2, …, \hat{y}_K \}$​​​​​​。只有当 $\hat{y}$​​​​​​ 的最大响应值大于阈值时，$z$​​​​​​才会被加入memory集合中。在更新权重时，从K个context image中选择M个来进行计算，筛选标准是$\hat{y}_{mem}$​​​​​​​的最小熵，熵越大响应图分布越杂乱，这样可以避免模糊的响应图引入false positive。</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811101915.png" style="zoom:80%;" /></p>
-<p>整体跟踪流程如下：</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811094851.png" style="zoom:80%;" /></p>
-<p><strong>Training</strong></p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102117.png" style="zoom: 67%;" /></p>
-<p>首先单独训练匹配网络，然后在此基础上按照图3的方式训练元学习网络。类似在线跟踪过程，从同一个视频序列中随机采样 M’ 个context patch，然后从中选取M个送入元学习网络训练（M’ ＞M），这样是为了避免过拟合。优化损失为：</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811102811.png" style="zoom:80%;" /></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103012.png" alt=""></p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103215.png" alt=""></p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103248.png" alt=""></p>
-<p>消融实验，MLT-mt表示只有匹配网络，MLT-mt+ft表示对匹配网络最后一层进行在线微调更新。可以发现在线微调甚至比不进行更新效果更差，因为过拟合。</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103028.png" style="zoom: 67%;" /></p>
-<p>最后可视化了target-specific特征空间的效果，可以更聚焦目标并且抑制周围的干扰。</p>
-<p><img data-src="https://github.com/kongbia/picgo/raw/master/blog/4-mlt/20210811103525.png" style="zoom:80%;" /></p>
-<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>这篇文章发表在ICCV2019，整体实验结果并没有刷得太高，但是meta learning运用在siamese跟踪中的思想无疑是优秀的。目标跟踪同样可以看做是一个few-shot learning的任务，如何运用历史跟踪的少量结果来微调模型参数，meta learning是一个不错的方案。</p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>由于白天和夜间场景的域分布差异（低对比度、亮度、信噪比），导致现有的跟踪器在夜间场景表现较差。而标注大量夜间数据成本过高，因此本文提出一种无监督域适应的方式，即源域（白天）中的训练数据具有手动注释的标签，而目标域中（夜间）的训练数据没有标注。具体贡献如下：</p>
+<ul>
+<li>object discovery 用于预处理，从无标注数据中提取训练patch</li>
+<li>Transformer-based bridging layer  对齐不同域的特征</li>
+<li>Transformer day/night feature discriminator 通过对抗学习进一步缩小域差异</li>
+<li>提出一个夜间空中跟踪数据集NAT2021，包括训练和测试</li>
+</ul>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609153243.png" alt=""></p>
+<p>首先对未标记的目标域数据预处理，采用基于显著性检测的策略来定位潜在目标和裁剪成对训练patch。训练过程中，使用 bridging layer 调制，使得不同域的特征对齐。后面接一个判别器用于区分源域和目标域的特征。整个过程通过对抗性学习来减少源域和目标域之间的特征分布差异。</p>
+<h2 id="Data-preprocessing"><a href="#Data-preprocessing" class="headerlink" title="Data preprocessing"></a>Data preprocessing</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154323.png" alt=""></p>
+<ol>
+<li>low-light enhancement</li>
+<li>salient object detection</li>
+<li>dynamic programming ：根据帧与帧之间候选框的归一化距离进行动态规划，确保轨迹是平滑的。对于动态规划没有选取候选框的帧，采用相邻帧的线性插值得到一个候选框。最后，根据得到的框序列从原始图像中裁剪出成对的训练patch。</li>
+</ol>
+<h2 id="Transformer-bridging-layer"><a href="#Transformer-bridging-layer" class="headerlink" title="Transformer bridging layer"></a>Transformer bridging layer</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154428.png" alt=""></p>
+<p>在特征提取后面接一个transformer来缩小白天和夜间特征分布的gap，效果如图4所示，直接通过backbone提取的特征有明显的差异，而由桥接层修改的特征在分布上有重合。</p>
+<h2 id="Transformer-discriminator"><a href="#Transformer-discriminator" class="headerlink" title="Transformer discriminator"></a>Transformer discriminator</h2><p>首先将特征通过gradient reverse layer (GRL) 反转梯度 （参考<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/266710153/answer/1338864403">Gradient Reversal Layer指什么？ - Just4Fan的回答 - 知乎</a> )</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154917.png" alt=""></p>
+<p>然后增加一个classification token，送入两层Transformer layers输出域分类结果</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154943.png" alt=""></p>
+<p>判别器需要正确区分源域和目标域，而前面的特征提取和对齐需要混淆二者，它们形成对抗训练。</p>
+<h1 id="NAT2021"><a href="#NAT2021" class="headerlink" title="NAT2021"></a>NAT2021</h1><p>为了对夜间空中跟踪进行性能评估，并为无监督训练提供足够的无标签夜间跟踪视频，作者提出了 nighttime aerial tracking benchmark (NAT2021)。 训练集没有标注，并且增加了一个新的光照属性</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609155413.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609155425.png" alt=""></p>
 
     </div>
 
@@ -350,22 +331,20 @@
 
     <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/meta-learning/" rel="tag"># meta learning</a>
-              <a href="/tags/ICCV2019/" rel="tag"># ICCV2019</a>
+              <a href="/tags/Domain-adaption/" rel="tag"># Domain adaption</a>
+              <a href="/tags/CVPR2022/" rel="tag"># CVPR2022</a>
+              <a href="/tags/Unsupervised/" rel="tag"># Unsupervised</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/tracking/3-anchorfree-siamese/" rel="prev" title="Anchor Free的孪生目标跟踪">
-                  <i class="fa fa-chevron-left"></i> Anchor Free的孪生目标跟踪
+                <a href="/tracking/57-SparseTT/" rel="prev" title="SparseTT: Visual Tracking with Sparse Transformers">
+                  <i class="fa fa-chevron-left"></i> SparseTT: Visual Tracking with Sparse Transformers
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/tracking/33-transform-tracking/" rel="next" title="Transform与目标跟踪">
-                  Transform与目标跟踪 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -448,7 +427,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"0b66b8c195098ed848e9c6601dfe3b4a"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"1e72d1387d8c6ed48b01586ed5e2a699"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>

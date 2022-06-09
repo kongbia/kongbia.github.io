@@ -2022,7 +2022,7 @@
 <h2 id="目标聚焦网络"><a href="#目标聚焦网络" class="headerlink" title="目标聚焦网络"></a>目标聚焦网络</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608112259.png" alt=""></p>
 <p>目标聚焦网络是encoder-decoder架构，encoder输入模板特征，decoder输入搜索特征。其中encoder重要但非必要，后续实验会证明。而本文的核心创新在于decoder橙色部分的<strong>稀疏多头注意力Sparse Multi-Head Self-Attention</strong>。</p>
 <p>朴素MSA中，注意力特征的每个像素值都是由输入特征的所有像素值来计算的，这使得前景边缘区域变得模糊。本文提出的稀疏方法中，注意力特征的每个像素值都只由与其最相似的K个像素值决定，这使得前景更加集中，前景边缘区域更加具有分辨力。</p>
-<p>具体实现如图4中间所示，首先计算query和key的相似度矩阵，然后仅使用softmax函数对相似矩阵每行的K个最大元素进行归一化，其他元素置0。最后将相似度矩阵和value相乘，得到最终结果。图4最右边展示了两种注意力归一化的区别，朴素点积注意力放大了相对较小的相似权重，这使得输出特征容易受到噪声和背景干扰的影响。然而，稀疏缩放点积注意力可以显著缓解这个问题。</p>
+<p>具体实现如图4中间所示，首先计算query和key的相似度矩阵，然后仅使用softmax函数对相似矩阵每行的K个最大元素进行归一化，其他元素置0。最后将相似度矩阵和value相乘，得到最终结果。图4最右边展示了两种注意力归一ecise RoI-Pooling化的区别，朴素点积注意力放大了相对较小的相似权重，这使得输出特征容易受到噪声和背景干扰的影响。然而，稀疏缩放点积注意力可以显著缓解这个问题。</p>
 <p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608113034.png" alt=""></p>
 <h2 id="双头预测器"><a href="#双头预测器" class="headerlink" title="双头预测器"></a>双头预测器</h2><p>对于分类和回归，均同时使用2层FC层和L个卷积层来预测。</p>
 <p>推理阶段，对于分类任务，融合FC头和卷积头的分类分数；对于回归任务，只取卷积头输出的预测偏移量。</p>
@@ -2046,6 +2046,48 @@
         <tag>transform</tag>
         <tag>IJCAI2022</tag>
         <tag>sparse attention</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Unsupervised Domain Adaptation for Nighttime Aerial Tracking</title>
+    <url>/tracking/58-UDAT/</url>
+    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609115914.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2203.10541">论文</a> <a href="https://github.com/vision4robotics/UDAT">代码</a></p>
+<p>无监督域适应的夜间空中跟踪 + 夜间跟踪benchmark</p>
+<span id="more"></span>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>由于白天和夜间场景的域分布差异（低对比度、亮度、信噪比），导致现有的跟踪器在夜间场景表现较差。而标注大量夜间数据成本过高，因此本文提出一种无监督域适应的方式，即源域（白天）中的训练数据具有手动注释的标签，而目标域中（夜间）的训练数据没有标注。具体贡献如下：</p>
+<ul>
+<li>object discovery 用于预处理，从无标注数据中提取训练patch</li>
+<li>Transformer-based bridging layer  对齐不同域的特征</li>
+<li>Transformer day/night feature discriminator 通过对抗学习进一步缩小域差异</li>
+<li>提出一个夜间空中跟踪数据集NAT2021，包括训练和测试</li>
+</ul>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609153243.png" alt=""></p>
+<p>首先对未标记的目标域数据预处理，采用基于显著性检测的策略来定位潜在目标和裁剪成对训练patch。训练过程中，使用 bridging layer 调制，使得不同域的特征对齐。后面接一个判别器用于区分源域和目标域的特征。整个过程通过对抗性学习来减少源域和目标域之间的特征分布差异。</p>
+<h2 id="Data-preprocessing"><a href="#Data-preprocessing" class="headerlink" title="Data preprocessing"></a>Data preprocessing</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154323.png" alt=""></p>
+<ol>
+<li>low-light enhancement</li>
+<li>salient object detection</li>
+<li>dynamic programming ：根据帧与帧之间候选框的归一化距离进行动态规划，确保轨迹是平滑的。对于动态规划没有选取候选框的帧，采用相邻帧的线性插值得到一个候选框。最后，根据得到的框序列从原始图像中裁剪出成对的训练patch。</li>
+</ol>
+<h2 id="Transformer-bridging-layer"><a href="#Transformer-bridging-layer" class="headerlink" title="Transformer bridging layer"></a>Transformer bridging layer</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154428.png" alt=""></p>
+<p>在特征提取后面接一个transformer来缩小白天和夜间特征分布的gap，效果如图4所示，直接通过backbone提取的特征有明显的差异，而由桥接层修改的特征在分布上有重合。</p>
+<h2 id="Transformer-discriminator"><a href="#Transformer-discriminator" class="headerlink" title="Transformer discriminator"></a>Transformer discriminator</h2><p>首先将特征通过gradient reverse layer (GRL) 反转梯度 （参考<a href="https://www.zhihu.com/question/266710153/answer/1338864403">Gradient Reversal Layer指什么？ - Just4Fan的回答 - 知乎</a> )</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154917.png" alt=""></p>
+<p>然后增加一个classification token，送入两层Transformer layers输出域分类结果</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154943.png" alt=""></p>
+<p>判别器需要正确区分源域和目标域，而前面的特征提取和对齐需要混淆二者，它们形成对抗训练。</p>
+<h1 id="NAT2021"><a href="#NAT2021" class="headerlink" title="NAT2021"></a>NAT2021</h1><p>为了对夜间空中跟踪进行性能评估，并为无监督训练提供足够的无标签夜间跟踪视频，作者提出了 nighttime aerial tracking benchmark (NAT2021)。 训练集没有标注，并且增加了一个新的光照属性</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609155413.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609155425.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>Domain adaption</tag>
+        <tag>CVPR2022</tag>
+        <tag>Unsupervised</tag>
       </tags>
   </entry>
 </search>
