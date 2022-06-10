@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zjp-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zjp-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="论文 代码 具有循环移位窗口注意力">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Transformer Tracking with Cyclic Shifting Window Attention">
+<meta property="og:url" content="https://www.zjp97.top/tracking/59-CSWinTT/index.html">
+<meta property="og:site_name" content="CV home">
+<meta property="og:description" content="论文 代码 具有循环移位窗口注意力">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609234559.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609235231.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609235347.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609235402.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610103521.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610105959.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610105638.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115500.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115512.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115614.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115632.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115643.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115658.png">
+<meta property="article:published_time" content="2022-06-09T15:44:48.000Z">
+<meta property="article:modified_time" content="2022-06-10T07:10:16.878Z">
+<meta property="article:author" content="摸鱼的SAO年">
+<meta property="article:tag" content="transform">
+<meta property="article:tag" content="CVPR2022">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609234559.png">
+
+
+<link rel="canonical" href="https://www.zjp97.top/tracking/59-CSWinTT/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.zjp97.top/tracking/59-CSWinTT/","path":"tracking/59-CSWinTT/","title":"Transformer Tracking with Cyclic Shifting Window Attention"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Transformer Tracking with Cyclic Shifting Window Attention | CV home</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CV home</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Computer vision paper notes</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Multi-Scale-Cyclic-Shifting-Window-Attention"><span class="nav-number">2.1.</span> <span class="nav-text">Multi-Scale Cyclic Shifting Window Attention</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spatially-regularized-attention-mask"><span class="nav-number">2.2.</span> <span class="nav-text">Spatially regularized attention mask</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Computational-optimization"><span class="nav-number">2.3.</span> <span class="nav-text">Computational optimization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%92%8CSwin-Transformer%E5%B7%AE%E5%BC%82"><span class="nav-number">2.4.</span> <span class="nav-text">和Swin Transformer差异</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiments"><span class="nav-number">3.</span> <span class="nav-text">Experiments</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="摸鱼的SAO年"
+      src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
+  <p class="site-author-name" itemprop="name">摸鱼的SAO年</p>
+  <div class="site-description" itemprop="description">Stay Hungry Stay Foolish</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kongbia" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;kongbia" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zjphust@gmail.com" title="E-Mail → mailto:zjphust@gmail.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/5567932/article" title="BiliBili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5567932&#x2F;article" rel="noopener" target="_blank"><i class="fab fa-bilibili fa-fw"></i>BiliBili</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/59-CSWinTT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
+      <meta itemprop="name" content="摸鱼的SAO年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="Stay Hungry Stay Foolish">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Transformer Tracking with Cyclic Shifting Window Attention | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Transformer Tracking with Cyclic Shifting Window Attention
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-06-09 23:44:48" itemprop="dateCreated datePublished" datetime="2022-06-09T23:44:48+08:00">2022-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-06-10 15:10:16" itemprop="dateModified" datetime="2022-06-10T15:10:16+08:00">2022-06-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609234559.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2205.03806">论文</a> <a target="_blank" rel="noopener" href="https://github.com/SkyeSong38/CSWinTT">代码</a></p>
+<p>具有循环移位窗口注意力</p>
+<span id="more"></span>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><strong>问题：</strong>现在基于transformer的跟踪器都采用逐像素的attention，破坏了目标的完整性，并丢失了像素间的相对位置信息。（感觉就是说attention没有像卷积那样的局部归纳偏置）</p>
+<p><strong>创新点：</strong></p>
+<ul>
+<li>multi-scale cyclic shifting window attention，将注意力机制从像素级提升到窗口级。（这个名字跟叠buff一样我们拆成三要素来看 ：window——保留目标的完整性和相对位置关系；cyclic shifting——增加window的数量； multi-scale——在attention的多头上分别设置不同的window 大小来表示多尺度）</li>
+<li>空间正则化mask，消除循环位移的边界效应影响</li>
+<li>计算优化策略减小计算冗余</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609235231.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609235347.png" alt=""></p>
+<h2 id="Multi-Scale-Cyclic-Shifting-Window-Attention"><a href="#Multi-Scale-Cyclic-Shifting-Window-Attention" class="headerlink" title="Multi-Scale Cyclic Shifting Window Attention"></a>Multi-Scale Cyclic Shifting Window Attention</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609235402.png" alt=""></p>
+<p>论文对方法描述的比较复杂，我这里就简化一下，按照开始提到的三要素来描述：</p>
+<p><strong>构建window序列</strong> 经过特征提取后，将维度为$H \times W \times d$的特征按窗口大小 $r$ reshape成一个窗口序列$H/r \times W/r \times r \times r \times d$，然后把窗口看成一个整体，将窗口中的每个空间位置拉平到通道维度，变成$(H/r \times W/r) \times (r \times r \times d)$，相当于有 $H/r \times W/r$ 个维度为 $r \times r \times d$ 的向量。对模板和搜索特征做相同的操作并且将两个窗口序列拼接。</p>
+<p><strong>multi-scale</strong> 通过在attention的多头上分别设置不同的窗口大小来表示多尺度。</p>
+<p><strong>cyclic shifting</strong> 设计循环位移主要有两个动机：</p>
+<ol>
+<li>window attention 减少了序列的个数，即从$H \times W$下降到$H/r \times W/r$，使得attention map的分辨率降低，相似性分数比较粗糙。</li>
+<li>多头注意力在每个头设置了不同的窗口大小，使每个头的尺寸$H/r \times W/r$不一样，难以融合。</li>
+</ol>
+<p>因此作者设计了循环位移增加窗口的数量，参照相关滤波中的循环位移，将窗口沿着x和y方向分别每次移动一个像素，最远移动距离是$r$，即一个$r\times r$的窗口经过循环位移后产生$r^2$个同样大小的窗口样本。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610103521.png" alt=""></p>
+<p>经过循环位移后，得到的窗口序列维度为$(H/r \times W/r \times \textcolor{Red}{r \times r}) \times (\textcolor{Green}{r \times r} \times d)$，其中$\textcolor{Red}{r \times r}$表示循环位移窗口数量，$\textcolor{Green}{r \times r}$表示窗口的大小。然后拿它去做标准的multi-head attention。</p>
+<h2 id="Spatially-regularized-attention-mask"><a href="#Spatially-regularized-attention-mask" class="headerlink" title="Spatially regularized attention mask"></a>Spatially regularized attention mask</h2><p>类似相关滤波中的空间正则化，用于抑制循环位移边界效应带来的性能下降，正则化mask直接叠加到attention map上。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610105959.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610105638.png" alt=""></p>
+<h2 id="Computational-optimization"><a href="#Computational-optimization" class="headerlink" title="Computational optimization"></a>Computational optimization</h2><p>循环移位操作极大地增加了计算冗余，提出了3种优化策略提升计算效率：</p>
+<ul>
+<li>query不使用循环位移：此时Q的维度保持$(H/r \times W/r) \times (\textcolor{Green}{r \times r} \times d)$，而K,V的维度是$(H/r \times W/r \times \textcolor{Red}{r \times r}) \times (\textcolor{Green}{r \times r} \times d)$。这样每个head计算$Attention(Q, K, V)$后的维度是$(H/r \times W/r) \times (\textcolor{Green}{r \times r} \times d)$，多头融合时似乎又面临尺度不一致的问题。在代码实现中，通过两次<code>view</code>将$\textcolor{Green}{r \times r}$提到前面又变回了$H \times W \times d$，然后再进行多头融合。这么看来，不管有没有循环位移，都可以进行多头融合。那么循环位移的唯一目的就是增加窗口数量，获得更精细的注意力相似图。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">t1 = merge_feat[:, :first_L, :]  <span class="comment"># (b, first_L, window_size*window_size*c)</span></span><br><span class="line">t1 = t1.view(b, self.h2 // window_size_h,</span><br><span class="line">             self.w2 // window_size_w, window_size_h, window_size_w, c)</span><br><span class="line">t1 = t1.permute(<span class="number">0</span>, <span class="number">1</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">4</span>, <span class="number">5</span>).contiguous().view(b, -<span class="number">1</span>, c)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>移位周期减半：将循环位移的生成的的样本数量从$(2r-1)^2$减半变成$r^2$，主要是为了避免重复样本。比如一个一维数组[1,2,3,4,5]，将其向左位移4次[5,1,2,3,4]和向右位移1次[5,1,2,3,4]，其结果是一样的，所以减半了位移次数（向左和向右都只位移2次）。本博文都是按 $r^2$ 的样本数量来描述。</p>
+</li>
+<li><p>编程技巧：使用矩阵坐标来进行循环移位，而不是对矩阵进行直接平移。</p>
+</li>
+</ul>
+<h2 id="和Swin-Transformer差异"><a href="#和Swin-Transformer差异" class="headerlink" title="和Swin Transformer差异"></a>和Swin Transformer差异</h2><p>本文和Swin Transformer都使用了位移和窗口两个概念，主要有三点差异：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">Swin Transformer</th>
+<th style="text-align:left">CSWinTT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">(1) 注意力应用</td>
+<td style="text-align:left">计算每个窗口内部的像素注意力。</td>
+<td style="text-align:left">将每个窗口看作一个整体，计算窗口间的注意力。</td>
+</tr>
+<tr>
+<td style="text-align:left">(2) 多尺度策略</td>
+<td style="text-align:left">每层用同样大小的窗口，分层合并窗口，在更深的层得到更大的窗口</td>
+<td style="text-align:left">不同的注意力头使用不同的窗口尺寸</td>
+</tr>
+<tr>
+<td style="text-align:left">(3) 窗口位移</td>
+<td style="text-align:left">移位整个特征图，在不同窗口之间交换信息和提供连接</td>
+<td style="text-align:left">在每个窗口中应用独立的循环位移。  每个窗口根据其尺寸移位多次。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115500.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115512.png" alt=""></p>
+<p><strong>Ablation Study</strong></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115614.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115632.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115643.png" alt=""></p>
+<p>本文提出的三个优化策略虽然大幅提升了速度，但是依然存在计算冗余，主要是循环位移的窗口内依然有很多重复的pixel计算。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115658.png" alt=""></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/transform/" rel="tag"># transform</a>
+              <a href="/tags/CVPR2022/" rel="tag"># CVPR2022</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/tracking/58-UDAT/" rel="prev" title="Unsupervised Domain Adaptation for Nighttime Aerial Tracking">
+                  <i class="fa fa-chevron-left"></i> Unsupervised Domain Adaptation for Nighttime Aerial Tracking
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">摸鱼的SAO年</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"321ac6a74b1c6e91cabcf01799e32c2b"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
