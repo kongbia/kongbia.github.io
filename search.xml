@@ -1122,6 +1122,7 @@
       <tags>
         <tag>transform</tag>
         <tag>ICCV2021</tag>
+        <tag>UAV</tag>
       </tags>
   </entry>
   <entry>
@@ -1362,6 +1363,7 @@
       <tags>
         <tag>transform</tag>
         <tag>WACV2022</tag>
+        <tag>UAV</tag>
       </tags>
   </entry>
   <entry>
@@ -2182,6 +2184,53 @@
       <tags>
         <tag>transform</tag>
         <tag>CVPR2022</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Global Tracking via Ensemble of Local Trackers</title>
+    <url>/tracking/60-GTELT/</url>
+    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610154935.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2203.16092">论文</a> <a href="https://github.com/ZikunZhou/GTELT">代码</a> 暂未开源</p>
+<p>针对长时跟踪问题，通过集成多个局部跟踪器实现全局跟踪，以全局视角跟踪目标并且利用时间上下文。</p>
+<span id="more"></span>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><strong>问题：</strong>长时跟踪的难点在于出视野或遮挡导致的目标运动不连续；</p>
+<p><strong>现有方法：</strong></p>
+<ul>
+<li>局部-全局切换的策略——局部跟踪器进行平滑跟踪，目标丢失后切换到全局重检测。</li>
+</ul>
+<p>局限：难以确定切换时机，是否切换完全由局部跟踪器决定，有可能漂移到干扰物上还认为在稳定跟踪导致没有进入重捕。</p>
+<ul>
+<li>在整张图全局搜索——全局的one-shot detection，如GlobalTrack</li>
+</ul>
+<p>局限：忽视了时序上下文，对目标外观变化和背景干扰敏感</p>
+<p> <strong>本文方法：</strong>通过集成多个局部跟踪器实现全局跟踪，结合了上述方法的优点：以全局视角跟踪目标并且利用时间上下文。</p>
+<p> <strong>实现：</strong></p>
+<ul>
+<li>在整张图像不同参考位置上分别设置局部跟踪器，每个局部跟踪器在参考位置周围的局部区域内搜索目标，所有局部跟踪器的搜索区域就可以覆盖整个图像。</li>
+<li>当目标平滑移动时，一个局部跟踪器可以稳定处理；当目标丢失时，靠近目标的另一个局部跟踪器就会被激活接管跟踪，而之前的跟踪器会被重置到初始位置。</li>
+<li>局部跟踪器稳定跟踪目标期间，利用时间上下文提高局部跟踪的鲁棒性</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155357.png" alt=""></p>
+<p><strong>创新点：</strong></p>
+<ul>
+<li>deformable attention-based local tracker 通过动态移动局部搜索区域，在全局视野中模拟局部跟踪</li>
+<li>temporal context transferring scheme 探索局部跟踪器中的时序上下文</li>
+</ul>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155457.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155528.png" alt=""></p>
+<p>有点借鉴Deformable DETR来做跟踪的意思。设置了N个query，每个query在其参考点附近做Deformable Attention来生成一个候选目标向量，候选目标向量送入预测头生成置信度和目标框，然后通过匈牙利算法匹配真实目标计算损失。</p>
+<p>当选中一个query进行稳定跟踪后，就用跟踪结果来更新该query对应的参考点位置，不断在每一帧上进行检测，这就是一个动态变化搜索区域的局部跟踪器。同时利用图3的时域聚合模块来更新这个query。</p>
+<p>当目标丢失时，即跟踪置信度小于阈值，选择目标附近的另一个query接管跟踪，而先前的query会被重置到它的初始参考点位置。</p>
+<p>具体实现可以参考论文，挺有意思的。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610161831.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>transform</tag>
+        <tag>CVPR2022</tag>
+        <tag>long-term</tag>
       </tags>
   </entry>
 </search>

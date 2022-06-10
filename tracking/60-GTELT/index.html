@@ -22,25 +22,36 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Stay Hungry Stay Foolish">
-<meta property="og:type" content="website">
-<meta property="og:title" content="CV home">
-<meta property="og:url" content="https://www.zjp97.top/archives/2021/06/index.html">
+    <meta name="description" content="论文 代码 暂未开源 针对长时跟踪问题，通过集成多个局部跟踪器实现全局跟踪，以全局视角跟踪目标并且利用时间上下文。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Global Tracking via Ensemble of Local Trackers">
+<meta property="og:url" content="https://www.zjp97.top/tracking/60-GTELT/index.html">
 <meta property="og:site_name" content="CV home">
-<meta property="og:description" content="Stay Hungry Stay Foolish">
+<meta property="og:description" content="论文 代码 暂未开源 针对长时跟踪问题，通过集成多个局部跟踪器实现全局跟踪，以全局视角跟踪目标并且利用时间上下文。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610154935.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155357.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155457.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155528.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610161831.png">
+<meta property="article:published_time" content="2022-06-10T07:47:08.000Z">
+<meta property="article:modified_time" content="2022-06-10T08:19:06.663Z">
 <meta property="article:author" content="摸鱼的SAO年">
+<meta property="article:tag" content="transform">
+<meta property="article:tag" content="CVPR2022">
+<meta property="article:tag" content="long-term">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610154935.png">
 
 
-<link rel="canonical" href="https://www.zjp97.top/archives/2021/06/">
+<link rel="canonical" href="https://www.zjp97.top/tracking/60-GTELT/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"archives/2021/06/index.html","title":""}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.zjp97.top/tracking/60-GTELT/","path":"tracking/60-GTELT/","title":"Global Tracking via Ensemble of Local Trackers"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>归档 | CV home</title>
+<title>Global Tracking via Ensemble of Local Trackers | CV home</title>
   
 
 
@@ -70,7 +81,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <h1 class="site-title">CV home</h1>
+      <p class="site-title">CV home</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">Computer vision paper notes</p>
@@ -130,7 +141,7 @@
 
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -143,6 +154,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Motivation"><span class="nav-number">1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Method"><span class="nav-number">2.</span> <span class="nav-text">Method</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -208,71 +220,145 @@
 </noscript>
 
 
-    <div class="main-inner archive posts-collapse">
+    <div class="main-inner post posts-expand">
 
 
   
+
+
+<div class="post-block">
   
   
-  <div class="post-block">
-    <div class="post-content">
-      <div class="collection-title">
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/60-GTELT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
+      <meta itemprop="name" content="摸鱼的SAO年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="Stay Hungry Stay Foolish">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Global Tracking via Ensemble of Local Trackers | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Global Tracking via Ensemble of Local Trackers
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-06-10 15:47:08 / 修改时间：16:19:06" itemprop="dateCreated datePublished" datetime="2022-06-10T15:47:08+08:00">2022-06-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610154935.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.16092">论文</a> <a target="_blank" rel="noopener" href="https://github.com/ZikunZhou/GTELT">代码</a> 暂未开源</p>
+<p>针对长时跟踪问题，通过集成多个局部跟踪器实现全局跟踪，以全局视角跟踪目标并且利用时间上下文。</p>
+<span id="more"></span>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><strong>问题：</strong>长时跟踪的难点在于出视野或遮挡导致的目标运动不连续；</p>
+<p><strong>现有方法：</strong></p>
+<ul>
+<li>局部-全局切换的策略——局部跟踪器进行平滑跟踪，目标丢失后切换到全局重检测。</li>
+</ul>
+<p>局限：难以确定切换时机，是否切换完全由局部跟踪器决定，有可能漂移到干扰物上还认为在稳定跟踪导致没有进入重捕。</p>
+<ul>
+<li>在整张图全局搜索——全局的one-shot detection，如GlobalTrack</li>
+</ul>
+<p>局限：忽视了时序上下文，对目标外观变化和背景干扰敏感</p>
+<p> <strong>本文方法：</strong>通过集成多个局部跟踪器实现全局跟踪，结合了上述方法的优点：以全局视角跟踪目标并且利用时间上下文。</p>
+<p> <strong>实现：</strong></p>
+<ul>
+<li>在整张图像不同参考位置上分别设置局部跟踪器，每个局部跟踪器在参考位置周围的局部区域内搜索目标，所有局部跟踪器的搜索区域就可以覆盖整个图像。</li>
+<li>当目标平滑移动时，一个局部跟踪器可以稳定处理；当目标丢失时，靠近目标的另一个局部跟踪器就会被激活接管跟踪，而之前的跟踪器会被重置到初始位置。</li>
+<li>局部跟踪器稳定跟踪目标期间，利用时间上下文提高局部跟踪的鲁棒性</li>
+</ul>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155357.png" alt=""></p>
+<p><strong>创新点：</strong></p>
+<ul>
+<li>deformable attention-based local tracker 通过动态移动局部搜索区域，在全局视野中模拟局部跟踪</li>
+<li>temporal context transferring scheme 探索局部跟踪器中的时序上下文</li>
+</ul>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155457.png" alt=""></p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155528.png" alt=""></p>
+<p>有点借鉴Deformable DETR来做跟踪的意思。设置了N个query，每个query在其参考点附近做Deformable Attention来生成一个候选目标向量，候选目标向量送入预测头生成置信度和目标框，然后通过匈牙利算法匹配真实目标计算损失。</p>
+<p>当选中一个query进行稳定跟踪后，就用跟踪结果来更新该query对应的参考点位置，不断在每一帧上进行检测，这就是一个动态变化搜索区域的局部跟踪器。同时利用图3的时域聚合模块来更新这个query。</p>
+<p>当目标丢失时，即跟踪置信度小于阈值，选择目标附近的另一个query接管跟踪，而先前的query会被重置到它的初始参考点位置。</p>
+<p>具体实现可以参考论文，挺有意思的。</p>
+<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610161831.png" alt=""></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/transform/" rel="tag"># transform</a>
+              <a href="/tags/CVPR2022/" rel="tag"># CVPR2022</a>
+              <a href="/tags/long-term/" rel="tag"># long-term</a>
+          </div>
+
         
-        <span class="collection-header">还行! 目前共计 32 篇日志。 继续努力。</span>
-      </div>
 
-      
-    <div class="collection-year">
-      <span class="collection-header">2021</span>
-    </div>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-06-30T20:27:54+08:00"
-              content="2021-06-30">
-          06-30
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/tracking/43-Crop-Transform-Paste/" itemprop="url">
-            <span itemprop="name">Crop-Transform-Paste: Self-Supervised Learning for Visual Tracking</span>
-          </a>
-      </div>
-
-      
-    </header>
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/tracking/59-CSWinTT/" rel="prev" title="Transformer Tracking with Cyclic Shifting Window Attention">
+                  <i class="fa fa-chevron-left"></i> Transformer Tracking with Cyclic Shifting Window Attention
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
   </article>
-
-  <article itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-      <div class="post-meta-container">
-        <time itemprop="dateCreated"
-              datetime="2021-06-08T16:28:12+08:00"
-              content="2021-06-08">
-          06-08
-        </time>
-      </div>
-
-      <div class="post-title">
-          <a class="post-title-link" href="/tracking/42-rl-tracking/" itemprop="url">
-            <span itemprop="name">强化学习在目标跟踪中的应用</span>
-          </a>
-      </div>
-
-      
-    </header>
-  </article>
+</div>
 
 
-    </div>
-  </div>
-  
-  
-  
 
+
+
+
+    <div class="comments gitalk-container"></div>
 </div>
   </main>
 
@@ -343,7 +429,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"8d436b0247b9e914a3ca6100e27b5791"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"4d082c0f89a8d98a117133ddfc7a92d3"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 </body>
