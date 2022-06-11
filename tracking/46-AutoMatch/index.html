@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="论文 代码 Motivation本文聚焦于孪生跟踪算法的匹配过程，目前主流的互相关操作是启发式设计的，严重依赖人工经验，并且单一的匹配方法无法适应各种复杂的跟踪场景。因此，本文引入了6种新的匹配算子来替代互相关。通过分析这些算子在不同跟踪挑战场景下的适应性，作者发现可以将它们结合起来进行互补，并借鉴NAS思想提出一种搜索方法 binary channel manipulation (BCM) 探">
 <meta property="og:type" content="article">
@@ -180,7 +180,7 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="摸鱼的SAO年"
-      src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
+      src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/20220531093720.png">
   <p class="site-author-name" itemprop="name">摸鱼的SAO年</p>
   <div class="site-description" itemprop="description">Stay Hungry Stay Foolish</div>
 </div>
@@ -253,7 +253,7 @@
     <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/46-AutoMatch/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
+      <meta itemprop="image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/20220531093720.png">
       <meta itemprop="name" content="摸鱼的SAO年">
     </span>
 
@@ -315,62 +315,62 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808103150.png" alt=""></p>
+        <p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808103150.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2108.00803">论文</a> <a target="_blank" rel="noopener" href="https://github.com/JudasDie/SOTS">代码</a></p>
 <h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文聚焦于孪生跟踪算法的匹配过程，目前主流的互相关操作是启发式设计的，严重依赖人工经验，并且单一的匹配方法无法适应各种复杂的跟踪场景。因此，本文引入了6种新的匹配算子来替代互相关。通过分析这些算子在不同跟踪挑战场景下的适应性，作者发现可以将它们结合起来进行互补，并借鉴NAS思想提出一种搜索方法 binary channel manipulation (BCM) 探索这些匹配算子的最优组合。</p>
 <span id="more"></span>
 <h1 id="Analysis-of-Matching-Operators"><a href="#Analysis-of-Matching-Operators" class="headerlink" title="Analysis of Matching Operators"></a>Analysis of Matching Operators</h1><p>首先介绍本文采用的6种匹配算子，Concatenation, Pointwise-Addition , Pairwise-Relation , FiLM , Simple-Transformer 和Transductive-Guidance。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808161330.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808161330.png" alt=""></p>
 <p><strong>Concatenation</strong> 图2(a)，将模板特征$F_z$ pool成 $f_z \in 1 \times 1 \times C$，再与搜索特征$F_x$拼接。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808161411.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808161411.png" style="zoom:80%;" /></p>
 <p><strong>Pointwise-Addition</strong> 图2(b)，将上面的拼接换成了对应元素相加。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808161701.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808161701.png" style="zoom:80%;" /></p>
 <p><strong>Pairwise-Relation</strong> 图2(c)，类似non-local，将$F_x, F_z$分别reshape成 $H_x W_x \times C$ 和 $C \times H_z W_z $​，然后做矩阵乘法。相当于将模板中的每个元素都与搜索特征的所有元素衡量相似性。​</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808192301.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808192301.png" style="zoom:80%;" /></p>
 <p><strong>FiLM</strong> 图2(d)，这个思路源于视觉推理，通过对神经网络的“中间特征”应用仿射变换来自适应地影响网络的输出。如公式5所示，对$f_Z$卷积变换后得到系数$\gamma$和偏置$\beta$，将其作用于搜索特征$F_x$​</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808202649.png" style="zoom:80%;" /></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808202908.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808202649.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808202908.png" style="zoom:80%;" /></p>
 <p><strong>Simple-Transformer</strong> 图3(a)，就是multi head attention。</p>
 <p><strong>Transductive-Guidance</strong>  图3(b)，源于VOS中的掩码传播机制，即用前一帧的掩码引导当前帧的预测。首先像Pairwise-Relation一样计算模板和搜索特征之间的对应关系(affinity)（公式7），然后用第一帧的伪掩码进行调制（公式8），生成的$G$中的每个位置表示前景的概率，最后将$G$与原始搜索特征$F_x$相加（公式9）。整个过程可以参考该作者另一篇文章<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2008.02745v2">OceanPlus</a>。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808221525.png" style="zoom:80%;" /></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808222703.png" style="zoom:80%;" /></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808222743.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808221525.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808222703.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808222743.png" style="zoom:80%;" /></p>
 <p><strong>Analysis</strong></p>
 <p>作者将上述6种算子与传统的互相关匹配分别在OTB100上进行测试，比较其性能，如表1所示。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808223451.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808223451.png" alt=""></p>
 <p>对于单一的匹配算子，除了6和7，其他的均取得了和dw-corr相当的性能，甚至2（直接拼接）的性能更好。</p>
 <p>虽然2的性能最优，但并不能保证其在所有跟踪挑战中都是最好的，比如在SV，OPR，OV和LR上就被其他算子超过。作者在图4进一步可视化了响应图，可以看到depthwise cross-correlation (a), Pairwise-relation (d), and Transductive-Guidance (g)更关注目标本身；而the concatenation (b), Pointwise-Addition (c), Simple-Transformer (e), and FiLM (e)则包含了更多上下文信息。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808225804.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210808225804.png" style="zoom:80%;" /></p>
 <p>上述结果表明不同的匹配算子在不同跟踪场景下具有不同的可靠性，由此想到是否可以将它们结合起来，利用这些特征进行互补。因此，作者接下来提出一种自适应学习的自动选择和组合匹配算子的方法。</p>
-<h1 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809101847.png" alt=""></p>
+<h1 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809101847.png" alt=""></p>
 <p>图5为整体框架，首先将模板和搜索特征送入多个匹配算子构成的搜索空间，生成m个响应特征 $\{ r_1, r_2, … , r_m \}$​，给每个响应特征的每个通道都赋予一个可学习的调制器(manipulator) $\omega_i^j$​​​，表示该通道的贡献。然后引入二元Gumbel-Softmax来离散化这些调制器进行二元决策，训练过程参考DARTS的两层优化。最后根据学好的调制器保留两个匹配算子构建新的跟踪器再次训练。</p>
 <p>下面分别介绍二元的通道调制器(Binary Channel Manipulation)和两层优化(Bilevel Optimization)</p>
 <h2 id="Binary-Channel-Manipulation"><a href="#Binary-Channel-Manipulation" class="headerlink" title="Binary Channel Manipulation"></a>Binary Channel Manipulation</h2><p>Binary Channel Manipulation (BCM) 用于决定匹配算子对目标状态预测的贡献，它给每个匹配响应特征的每个通道都赋予一个可学习的调制器(manipulator) $\omega_i^j$​​，将所有调制后的特征拼接聚合成一个大的特征（有点类似NAS里的supernet）。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809111736.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809111736.png" style="zoom:80%;" /></p>
 <p>其中$r_i^j$​ 表示第 i 个响应特征的第 j 个通道。对于每个匹配算子，我们将其对应的所有通道调制器相加得到该算子的potential $p_i$​，这个在后面选择匹配算子时会用到。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809112703.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809112703.png" style="zoom:80%;" /></p>
 <p>接下来，将连续的$\omega_i^j$​​转换为离散的，离散后的类别是二值分类，概率向量为$\pi = \{ \pi_1 = \sigma(\omega_i^j), \pi_2 = 1 - \sigma(\omega_i^j) \}$​​。为了能够可微的反向传播，这里利用<a target="_blank" rel="noopener" href="https://www.cnblogs.com/initial-h/p/9468974.html">Gumbel-Softmax</a>进行训练。对概率向量$\pi$​​对应的随机变量添加Gumbel噪声$g_k$​​后随机采样</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809114815.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809114815.png" style="zoom:80%;" /></p>
 <p>然后将argmax替换为Softmax定义一个连续可微的近似</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809114947.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809114947.png" style="zoom:80%;" /></p>
 <p>因为这只是一个二值概率分布，公式14带入$\pi$的表达式后可以被简化成</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809115114.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809115114.png" style="zoom:80%;" /></p>
 <p>推导如下：</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809120120.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809120120.png" alt=""></p>
 <p>作者这里令$\tau=1, g_k=0$​​，对于离散采样的样本d，前向传播时使用硬值(0或1)，反向传播采用软值获得梯度。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809120823.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809120823.png" style="zoom:80%;" /></p>
 <h2 id="Bilevel-Optimization"><a href="#Bilevel-Optimization" class="headerlink" title="Bilevel Optimization"></a>Bilevel Optimization</h2><p>优化的目标有两部分，一个是调制器参数$\omega$，另一个是匹配网络的卷积层参数$\theta$。这里借鉴DARTS的优化方法，利用训练集优化$\theta$，利用验证集优化$\omega$，记作</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809154925.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809154925.png" style="zoom:80%;" /></p>
 <p>为了加速收敛，将其简化成</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809155027.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809155027.png" style="zoom:80%;" /></p>
 <p>按上述方式训练后，保留potential $p_i$最高的两个匹配算子构成新的跟踪器重新训练。</p>
 <h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h2><p>训练过程分成匹配网络的搜索和新跟踪器的训练两个阶段，第一阶段用Bilevel Optimization搜索最优的匹配网络组合，第二阶段用优化的匹配网络构建一个新的跟踪器进行常规的训练。搜索算法为分类和回归分支确定不同的匹配网络。经过第一阶段的训练后，分类分支使用Simple-Transformer和FiLM，而回归分支使用FiLM 和 Pairwise-Relation。</p>
-<h2 id="State-of-the-art-Comparison"><a href="#State-of-the-art-Comparison" class="headerlink" title="State-of-the-art Comparison"></a>State-of-the-art Comparison</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809163533.png" alt=""></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809163718.png" style="zoom:80%;" /></p>
+<h2 id="State-of-the-art-Comparison"><a href="#State-of-the-art-Comparison" class="headerlink" title="State-of-the-art Comparison"></a>State-of-the-art Comparison</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809163533.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809163718.png" style="zoom:80%;" /></p>
 <h2 id="Ablation-and-Analysis"><a href="#Ablation-and-Analysis" class="headerlink" title="Ablation and Analysis"></a>Ablation and Analysis</h2><p><strong>One or Many Manipulators</strong> 本文给匹配算子的每个通道都赋予一个调制器，作者也尝试了给每个匹配算子只赋予一个标量的调制器，性能会有所下降 OTB100 69.5，LaSOT 54.7。</p>
 <p><strong>Random Search</strong> 随机选择匹配算子同样会使性能下降，OTB100 69.1，LaSOT 53.2。</p>
 <p><strong>NAS-like Matching Cell</strong> 用DARTS的方法构建一个有向无环图进行搜索，如图7所示，同样不如本文的结果，且速度会大幅下降。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809165018.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/46-AutoMatch/20210809165018.png" style="zoom:80%;" /></p>
 <h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><ol>
 <li>DW-Corr并不是孪生跟踪算法的最优选择，本文设计了6种新的匹配算子；</li>
 <li>本文用一种自动搜索的方式组合出最优的匹配网络。</li>
@@ -455,7 +455,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 

@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="Anchor-free+孪生网络做跟踪在2020年非常火爆，相关笔记在b站记录。本文主要对其整合进行简单归纳。 [Note3] Anchor Free的目标跟踪 - 哔哩哔哩专栏 (bilibili.com) [Note17] Anchor-free的目标跟踪(下) - 哔哩哔哩专栏 (bilibili.com)">
 <meta property="og:type" content="article">
@@ -174,7 +174,7 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="摸鱼的SAO年"
-      src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
+      src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/20220531093720.png">
   <p class="site-author-name" itemprop="name">摸鱼的SAO年</p>
   <div class="site-description" itemprop="description">Stay Hungry Stay Foolish</div>
 </div>
@@ -247,7 +247,7 @@
     <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/3-anchorfree-siamese/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
+      <meta itemprop="image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/20220531093720.png">
       <meta itemprop="name" content="摸鱼的SAO年">
     </span>
 
@@ -327,10 +327,10 @@
 <p>G3：prior knowledge-free：跟踪器不应该依赖过多的先验知识（如尺度/长宽比）。现有的方法普遍存在对数据分布先验知识的依赖，阻碍了其泛化能力；</p>
 <p>G4：estimation quality assessment：不能直接使用分类置信度来评价状态估计，需要使用独立于分类的质量评估方式。（如RPN系列直接就是选择分类置信度最高的位置进行边框预测，而ATOM，DIMP则另外加入了IOU信息来指导边框调整）</p>
 <p>作者依据这4条guidelines设计了SiamFC++，将目标检测中的Anchor Free的FCOS应用到Siamese框架中，整体结构如下，细节部分可以去开头我在b站的专栏。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426104215.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426104215.png" alt=""></p>
 <hr>
 <h2 id="SiamCAR-Siamese-Fully-Convolutional-Classification-and-Regression-for-Visual-Tracking"><a href="#SiamCAR-Siamese-Fully-Convolutional-Classification-and-Regression-for-Visual-Tracking" class="headerlink" title="SiamCAR: Siamese Fully Convolutional Classification and Regression for Visual Tracking"></a>SiamCAR: Siamese Fully Convolutional Classification and Regression for Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1911.07241v2">论文</a> <a target="_blank" rel="noopener" href="https://github.com/ohhhyeahhh/SiamCAR">代码</a></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426111123.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426111123.png" alt=""></p>
 <p>这一篇和SiamFC++很类似，这里仅标注一些实践细节的差异。</p>
 <ul>
 <li>backbone采用了改造的resnet50；</li>
@@ -341,18 +341,18 @@
 <p>细节同样参照开头b站专栏。</p>
 <hr>
 <h2 id="Siamese-Box-Adaptive-Network-for-Visual-Tracking"><a href="#Siamese-Box-Adaptive-Network-for-Visual-Tracking" class="headerlink" title="Siamese Box Adaptive Network for Visual Tracking"></a>Siamese Box Adaptive Network for Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2003.06761">论文</a> <a target="_blank" rel="noopener" href="https://github.com/hqucv/siamban">代码</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv5400217">解读</a></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426112506.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426112506.png" alt=""></p>
 <p>同样是FCOS的应用，比较insight的地方是打标签的时候使用椭圆标签，两个椭圆，小椭圆E2内的点是positive，大椭圆E1外的点是negative，两个椭圆中间的部分为ignore。椭圆标签能够更紧凑地标注正负样本，并且设置了缓冲(ignore)以忽略模棱两可的样本。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426112854.png" style="zoom:67%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426112854.png" style="zoom:67%;" /></p>
 <hr>
 <h2 id="Fully-Conventional-Anchor-Free-Siamese-Networks-for-Object-Tracking"><a href="#Fully-Conventional-Anchor-Free-Siamese-Networks-for-Object-Tracking" class="headerlink" title="Fully Conventional Anchor-Free Siamese Networks for Object Tracking"></a>Fully Conventional Anchor-Free Siamese Networks for Object Tracking</h2><p><a target="_blank" rel="noopener" href="https://www.researchgate.net/publication/335467780_Fully_Conventional_Anchor-Free_Siamese_Networks_for_Object_Tracking">论文</a></p>
 <p>将FCOS与级联结构结合，另一个就是分配GT到AFPN层时采用了FCOS一样的思路（划分[0,64], [64,128], [128,∞]）</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426114147.png" alt=""></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426114239.png" style="zoom: 50%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426114147.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426114239.png" style="zoom: 50%;" /></p>
 <hr>
 <h2 id="Ocean-Object-aware-Anchor-free-Tracking"><a href="#Ocean-Object-aware-Anchor-free-Tracking" class="headerlink" title="Ocean: Object-aware Anchor-free Tracking"></a>Ocean: Object-aware Anchor-free Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.10721">论文</a> <a target="_blank" rel="noopener" href="https://github.com/researchmm/TracKit">代码</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6615313">解读</a></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426115451.png" alt=""></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426115537.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426115451.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426115537.png" alt=""></p>
 <ul>
 <li>anchor-base方法对于弱预测的修正能力较差，因为训练时只考虑了IOU大于阈值的anchor的回归，对于跟踪过程中如果出现overlap很小的anchor很难去refine。而anchor-free可以针对每个点进行预测；</li>
 <li>作者设计了一个feature alignment module来从预测框中学习object-aware feature（图2c），从而对物体尺度敏感；</li>
@@ -361,32 +361,32 @@
 <hr>
 <h1 id="CenterNet类"><a href="#CenterNet类" class="headerlink" title="CenterNet类"></a>CenterNet类</h1><h2 id="Siamese-Attentional-Keypoint-Network-for-High-Performance-Visual-Tracking"><a href="#Siamese-Attentional-Keypoint-Network-for-High-Performance-Visual-Tracking" class="headerlink" title="Siamese Attentional Keypoint Network for High Performance Visual Tracking"></a>Siamese Attentional Keypoint Network for High Performance Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1904.10128v2">论文</a></p>
 <p>这篇将CenterNet和CornerNet结合到跟踪中，分别预测中心点和两个角点，以及运用了CBAM注意力机制强化上下文信息，应该是第一个将CenterNet/CornerNet用进来的，遗憾的是性能没有刷的很高。细节同样参照开头b站专栏。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426164747.png" alt=""></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426164810.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426164747.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426164810.png" alt=""></p>
 <hr>
 <h2 id="Accurate-Anchor-Free-Tracking"><a href="#Accurate-Anchor-Free-Tracking" class="headerlink" title="Accurate Anchor Free Tracking"></a>Accurate Anchor Free Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.07560">论文</a></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426165201.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426165201.png" alt=""></p>
 <p>这篇就是比较典型的CenterNet模式了，预测中心点，中心偏移以及宽高。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426165235.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426165235.png" alt=""></p>
 <p>作者另外设计了backbone，最后在VOT2018性能虽然比siamrpn++略低但是速度是它的3.9倍（136FPS v.s. 35FPS）。</p>
 <hr>
 <h2 id="Siamese-Keypoint-Prediction-Network-for-Visual-Object-Tracking"><a href="#Siamese-Keypoint-Prediction-Network-for-Visual-Object-Tracking" class="headerlink" title="Siamese Keypoint Prediction Network for Visual Object Tracking"></a>Siamese Keypoint Prediction Network for Visual Object Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2006.04078">论文</a> <a target="_blank" rel="noopener" href="https://github.com/ZekuiQin/SiamKPN">代码</a></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426171705.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426171705.png" alt=""></p>
 <p>这一篇将casscade的思想结合在centernet类的siamese跟踪器中，看上面图2结构已经很清晰了，KPN结构如下：</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426171748.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426171748.png" style="zoom:80%;" /></p>
 <p>还有一个需要关注的就是每个stage训练的时候分类标签的高斯方差不一样，遵循的原则就是越高的stage峰值越收束。目的即随着级联的进行，监管信号越来越严格。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426171845.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426171845.png" alt=""></p>
 <hr>
 <h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="Correlation-Guided-Attention-for-Corner-Detection-Based-Visual-Tracking"><a href="#Correlation-Guided-Attention-for-Corner-Detection-Based-Visual-Tracking" class="headerlink" title="Correlation-Guided Attention for Corner Detection Based Visual Tracking"></a>Correlation-Guided Attention for Corner Detection Based Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://openaccess.thecvf.com/content_CVPR_2020/papers/Du_Correlation-Guided_Attention_for_Corner_Detection_Based_Visual_Tracking_CVPR_2020_paper.pdf">论文</a> <a target="_blank" rel="noopener" href="https://www.bilibili.com/read/cv6647311">解读</a></p>
 <p>作者为了解决跟踪中回归框估计不准确的问题，引入角点检测来得到更紧致的回归框。分析了之前一些角点检测方法在目标跟踪中无法取得好性能的原因，并提出了两阶段的correlation-guided attentional corner detection (CGACD)方法。第一阶段使用siamese网络得到目标区域的粗略ROI，第二阶段通过空间和通道两个correlation-guided attention来探索模板和ROI之间的关系，突出角点区域进行检测。速度可以达到70FPS。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426173132.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426173132.png" alt=""></p>
 <hr>
 <h2 id="RPT-Learning-Point-Set-Representation-for-Siamese-Visual-Tracking"><a href="#RPT-Learning-Point-Set-Representation-for-Siamese-Visual-Tracking" class="headerlink" title="RPT: Learning Point Set Representation for Siamese Visual Tracking"></a>RPT: Learning Point Set Representation for Siamese Visual Tracking</h2><p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2008.03467">论文</a> <a target="_blank" rel="noopener" href="https://github.com/zhanght021/RPT">代码</a> <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/257854666">原作者解读</a></p>
 <p>现有的跟踪方法往往采用矩形框或四边形来表示目标的状态（位置和大小），这种方式忽略了目标自身会变化的特点（形变、姿态变化），因此作者受启发自Reppoints检测方法，采用表示点（Representative Points）方法来描述目标的外观特征，学习表示点的特征，根据表示点的分布确定目标的状态，实现更精确的目标状态估计。</p>
 <p>具体可以参考原作者在知乎的解读，该方法取得了VOT2020-ST的冠军。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426173720.png" alt=""></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426173734.png" alt=""></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426173759.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426173720.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426173734.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/3-anchorfree-siamese/20210426173759.png" style="zoom:80%;" /></p>
 
     </div>
 
@@ -467,7 +467,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 

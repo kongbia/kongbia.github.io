@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":true,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="论文 核心：联合单目标和多目标跟踪">
 <meta property="og:type" content="article">
@@ -170,7 +170,7 @@
         <div class="site-overview-wrap sidebar-panel">
           <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="摸鱼的SAO年"
-      src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
+      src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/20220531093720.png">
   <p class="site-author-name" itemprop="name">摸鱼的SAO年</p>
   <div class="site-description" itemprop="description">Stay Hungry Stay Foolish</div>
 </div>
@@ -243,7 +243,7 @@
     <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/56-UTT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="https://raw.githubusercontent.com/kongbia/picgo/master/blog/20220531093720.png">
+      <meta itemprop="image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/20220531093720.png">
       <meta itemprop="name" content="摸鱼的SAO年">
     </span>
 
@@ -305,7 +305,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607104510.png" alt=""></p>
+        <p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607104510.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2203.15175">论文</a></p>
 <p>核心：联合单目标和多目标跟踪</p>
 <span id="more"></span>
@@ -316,29 +316,29 @@
 <li>提出Unified Transformer Tracker (UTT) ，构建一个Transformer Tracker在SOT和MOT中跟踪目标，利用目标特征和跟踪帧特征之间的<strong>相关性</strong>来定位目标；</li>
 <li>在各自的数据集上交替优化SOT和MOT，使得一个框架可以同时处理两个任务</li>
 </ul>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607104830.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607104830.png" alt=""></p>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>首先回顾SOT和MOT的定义：</p>
 <ul>
 <li>SOT——给定一个初始帧目标位置B0，定位后续T帧中该目标的位置。跟踪对象可以是任意未知类别；</li>
 <li>MOT——检测并跟踪一组特定类别的目标。MOT需要将第t-1帧中检测到的N个目标，和第t帧中检测到的M个目标进行关联，对于相同的目标赋予唯一的ID。同时需要考虑旧目标的丢失和新目标的出现。</li>
 </ul>
 <p>为了统一两个任务，作者将SOT的初始帧和MOT的前一帧都看成是参考帧，SOT的初始框和MOT中的检测框都看成参考目标框。依此设计了 UTT，如图2所示，经过特征提取后，将参考帧特征 $I^0,I^{t-1}$、跟踪帧特征 $I^t$，以及参考帧中的目标框 $B$ 输入Track Transformer 用于预测当前跟踪帧中的目标位置。Track Transformer有三部分：首先Target Decoder提取目标特征，然后Proposal Decoder在跟踪帧中为每个目标产生候选搜索区域。最后将目标特征和搜索特征都送入Target Tansformer预测目标位置。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105015.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105015.png" alt=""></p>
 <p><strong>Target Decoder</strong></p>
 <p>为了引入更多上下文信息，使用交叉注意力对目标特征和跟踪帧特征进行交互</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105324.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105324.png" alt=""></p>
 <p><strong>Proposal Decoder</strong></p>
 <p>将每一个目标特征与完整的跟踪特征做相关计算量太大，因此需要裁剪一个更小的搜索区域。对于MOT，直接根据前一帧的跟踪框来确定proposal；而对于SOT，考虑到目标丢失导致前一帧跟踪框中没有目标的情况，作者将目标特征与跟踪帧特征相关联来产生更精确的proposal。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105603.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105603.png" alt=""></p>
 <p>这个过程类似stark，公式5得到的heatmap $H$表示两个角点的分布概率，对所有位置的概率求和得到proposal $P^t$。虽然公式5中的维度是N，其实只会生成SOT的一个heatmap，因为对MOT每个目标计算一遍成本还是太高。</p>
 <p><strong>Target Transformer</strong></p>
 <p>通过Self-Attention和Correlation将目标特征与proposal 关联。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105759.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105759.png" alt=""></p>
 <p>公式11的FC 层是将$K^2C$的通道维度降维到$C$，相当于把$K^2$的空间特征压缩成一维向量。最后将得到的N个向量送入boxhead预测相对proposal的偏移量得到预测跟踪框。</p>
 <p>作者迭代了L次target transformer来进行目标定位。第一次的proposal是通过proposal decoder生成的，而后续的proposal就是前一次迭代预测的目标框。</p>
-<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110351.png" alt=""></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110400.png" alt=""></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110409.png" alt=""></p>
+<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110351.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110400.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110409.png" alt=""></p>
 <ul>
 <li><p>分别构建SOT和MOT两个dataloader<strong>交替训练</strong>。SOT将图片crop到352，MOT直接对原图进行随机resize；</p>
 </li>
@@ -347,17 +347,17 @@
 <li><p>对于MOT还需要一个额外的 detection head用于检测每一帧的目标类别和位置。MOT的推理阶段需要将track transformer生成的跟踪框和Detection head 生成的检测框进行关联（图5）</p>
 </li>
 </ul>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110811.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110811.png" alt=""></p>
 <h1 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h1><p>SOT在LaSOT、TrackingNet和Got-10k测试，MOT在MOT16测试</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111020.png" alt=""></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111032.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111020.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111032.png" alt=""></p>
 <p>SOT相比UniTrack提点明显，MOT的效果还有提升空间</p>
 <p><strong>Ablative Studies</strong></p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111143.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111143.png" alt=""></p>
 <p>高亮部分似乎应该是MSA，不知是否是笔误</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111226.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111226.png" alt=""></p>
 <p>表5对比了联合训练和分别单独训练。总体来说联合训练效果更好，只有MOT的IDF1指标比单独用MOT训练低一些。</p>
-<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111301.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111301.png" alt=""></p>
 <h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文证明了一个模型能够同时解决SOT和MOT任务。这将鼓励社区开发更多统一的跟踪算法，应用于更复杂的跟踪场景，比如VR/AR应用中经常需要进行SOT和MOT的切换。同时这种联合的范式也更加符合人类的直觉。</p>
 
     </div>
@@ -439,7 +439,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lozad.js/1.16.0/lozad.min.js" integrity="sha256-mOFREFhqmHeQbXpK2lp4nA3qooVgACfh88fpJftLBbc=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
 <script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
