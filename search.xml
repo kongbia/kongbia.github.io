@@ -1504,7 +1504,7 @@
   <entry>
     <title>SBT: Correlation-Aware Deep Tracking</title>
     <url>/tracking/53-SBT/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524105019.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524105019.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2203.01666">论文</a></p>
 <p>写在开头：本文的写作值得学习，实验极其详尽。本篇博文按照作者的写作思路过一遍摘要和引言，对于我们大多数人写文章按照这个套路都没什么问题。</p>
 <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>切入点：鲁棒性和判别性都很重要</p>
@@ -1534,26 +1534,26 @@
 <p>一个基于注意力的动态特征网络 Single Branch Transformer (SBT) network，允许模板和搜索图像的特征在特征提取的每个阶段进行深度交互。</p>
 <p>如图2所示，传统的孪生网络堆叠卷积，最后接一个互相关层进行特征交互。而SBT堆叠注意力模块Extract-or-Correlation (EoC) blocks，其中EoC-SA融合同一图像的特征，EoC-CA交互模板和搜索图的特征。最后将搜索图像特征直接输出给预测头。</p>
 <p>直观地，交叉注意力<strong>逐层</strong>过滤掉与目标无关的特征，自注意力增强了目标的特征表示。由于特征提取过程是target-dependent且非对称的，因此SBT将目标和干扰物进行区分的同时保持不同目标之间的连贯特征。如图2d所示，属于目标的特征(绿色)与背景(粉色)和干扰物(蓝色)越来越分离，而孪生网络提取的搜索特征是target-unaware的。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524111925.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524111925.png" alt=""></p>
 <p><strong>关键创新</strong></p>
 <p>为模板和搜索图像对的处理引入一个单一流，通过注意力模块联合特征提取和特征关联。</p>
 <p>SBT本质上还是一个特征提取的backbone，因此可以在ImageNet等非成对数据上进行预训练，在跟踪数据中微调快速收敛。</p>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112053.png" alt=""></p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524112053.png" alt=""></p>
 <p>整体结构如图3所示，包含三个stage。前两个stage通过patch embedding降维，后面接自注意力EoC-SA；第三个satge交替使用自注意力EoC-SA和交叉注意力EoC-CA。该框架没有额外的互相关层，通过在在网络的不同阶段使用交叉注意力实现了信息交互融合。最后将融合后的搜索特征直接输入预测头做分类和回归。</p>
 <h2 id="Patch-Embedding"><a href="#Patch-Embedding" class="headerlink" title="Patch Embedding"></a>Patch Embedding</h2><p>使用$7 \times 7$步长为4的卷积+LN层，降低空间分辨率。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524112939.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524112939.png" alt=""></p>
 <h2 id="Extract-or-Correlation-Block"><a href="#Extract-or-Correlation-Block" class="headerlink" title="Extract-or-Correlation Block"></a>Extract-or-Correlation Block</h2><p>EoC模块如图3b，c所示，包括两个LN层一个MLP层以及一个注意力，注意力包含自注意力(SA)和交叉注意力(CA).。SA输入的ij是同源的，CA输入的ij分别来自模板z和搜索图x。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114016.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524114016.png" alt=""></p>
 <p>作者为了计算高效，尝试了 Vanilla Global attention (VG)；Spatial-Reduction Global attention(SRG)，对k，v降分辨率；Vanilla Local window attention (VL) ，计算局部块的注意力；Shift window vanilla Local attention (SL)，即Swin Transformer。最后使用SRG。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524114738.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524114738.png" alt=""></p>
 <center>Spatial-Reduction Global attention(SRG)</center>
 
 <h2 id="Position-Encoding"><a href="#Position-Encoding" class="headerlink" title="Position Encoding"></a>Position Encoding</h2><p>尝试了绝对/相对位置编码，和CVPT中的条件位置编码，即一个$3 \times 3$的depth-wise卷积。</p>
 <h2 id="Direct-Prediction"><a href="#Direct-Prediction" class="headerlink" title="Direct Prediction"></a>Direct Prediction</h2><p>分类和回归分支均由两个MLP层构成，分别在空间维度$\varphi_{sp}$和通道维度$\varphi_{cn}$做MLP，其中RS表示reshape。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524115757.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524115757.png" alt=""></p>
 <h1 id="SBT设计准则"><a href="#SBT设计准则" class="headerlink" title="SBT设计准则"></a>SBT设计准则</h1><p>作者做了大量实验来探究如何设计网络框架，每张实验图里都包含大量信息，微软有卡任性。这里只总结结论，具体实验可以参考原文。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120305.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524120323.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524120305.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524120323.png" alt=""></p>
 <ol>
 <li>多尺度分层结构的性能比单级结构好 （表1 setting A）</li>
 <li>不同位置编码影响不大 （表1 setting A）</li>
@@ -1575,32 +1575,32 @@
 <ul>
 <li>交叉注意力相当于执行了两次互相关</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524163539.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524163539.png" alt=""></p>
 <ul>
 <li>在串行管道中嵌入了分层特征利用</li>
 </ul>
 <p>经典的孪生跟踪器如SiamRPN++是并行的的分层聚合，即对多个特征分别做互相关再叠加。SBT探索了串行的多层次的特征相关性，即将前一层相关（交叉注意力）的输出送给下一次相关的输入。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164926.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524164541.png" alt=""></p>
-<h1 id="4种SBT网络"><a href="#4种SBT网络" class="headerlink" title="4种SBT网络"></a>4种SBT网络</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165005.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524164926.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524164541.png" alt=""></p>
+<h1 id="4种SBT网络"><a href="#4种SBT网络" class="headerlink" title="4种SBT网络"></a>4种SBT网络</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524165005.png" alt=""></p>
 <p>Imagenet预训练用4个stage，跟踪微调只用前3个stage。</p>
-<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="Comparison-to-State-of-the-Art-Trackers"><a href="#Comparison-to-State-of-the-Art-Trackers" class="headerlink" title="Comparison to State-of-the-Art Trackers"></a>Comparison to State-of-the-Art Trackers</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165305.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165320.png" alt=""></p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="Comparison-to-State-of-the-Art-Trackers"><a href="#Comparison-to-State-of-the-Art-Trackers" class="headerlink" title="Comparison to State-of-the-Art Trackers"></a>Comparison to State-of-the-Art Trackers</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524165305.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524165320.png" alt=""></p>
 <p>作者将本文提出的Correlation-Aware backbone 用在几个主流的跟踪器上，得到SiamFCpp-CA. DiMP-CA.STARK-CA. STM-CA，观察性能提升巨大，甚至部分计算量还下降了。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165514.png" alt=""></p>
-<h2 id="Exploration-Study"><a href="#Exploration-Study" class="headerlink" title="Exploration Study"></a>Exploration Study</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524165758.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170547.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524165514.png" alt=""></p>
+<h2 id="Exploration-Study"><a href="#Exploration-Study" class="headerlink" title="Exploration Study"></a>Exploration Study</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524165758.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524170547.png" alt=""></p>
 <p><strong>Correlation-embedded structure</strong> 将特征交互嵌入特征提取中的效果比单独在最后使用互相关效果要好。并且本文使用的交叉注意力的交互形式比DCF和DW-Corr要好。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170333.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524170333.png" alt=""></p>
 <p><strong>Target-dependent feature embedding</strong> (a) Correlation-embedded tracker. (b) Siamese correlation with SBT. (c) Siamese correlation with ResNet-50 </p>
 <p>本文提出的方法最具有 target-dependent的性质，即目标和干扰分的最开。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524170608.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524170608.png" alt=""></p>
 <p><strong>Benefits from pre-training</strong> 本文的方法可以预训练，提升性能加速收敛。</p>
 <p>补充材料里还有一些关于计算量和结构设计方面的实验，就不一一介绍了。作者团队是真的有耐心做了这么多对比实验。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171043.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171151.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524171043.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524171151.png" alt=""></p>
 <p>最后提下本文方法的局限性，就是对严重遮挡或者出视野不友好，这也是所有孪生跟踪器的通病了。虽然attention的逐点匹配一定程度上可以克服遮挡，但是对于图13中这些有相似属性的遮挡物还是存在很多误判。另一个局限在于本文使用了很多快速注意力，这些并不能直接通过直接调包实现。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/53-SBT/20220524171328.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524171328.png" alt=""></p>
 <h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>本文首次提出了一种target-dependent的跟踪特征网络。SBT大大简化了跟踪管道，比最近基于Transformer的跟踪器收敛更快。从实验和理论两方面对SBT跟踪进行了系统的研究。此外，实现了四个版本的SBT网络，可以改进其他流行的VOT和VOS跟踪器。大量实验表明，该方法取得了良好的效果，可以作为动态特征网络应用于其他跟踪管道。</p>
 ]]></content>
       <categories>
@@ -1614,14 +1614,14 @@
   <entry>
     <title>MixFormer: End-to-End Tracking with Iterative Mixed Attention</title>
     <url>/tracking/54-mixformer/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172159.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524172159.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2203.11082">论文</a> <a href="https://github.com/MCG-NJU/MixFormer">代码</a></p>
 <p>核心：用transfrom架构整合特征提取和特征融合</p>
 <span id="more"></span>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172748.png" alt=""></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524172748.png" alt=""></p>
 <p>主流的跟踪框架分三步：特征提取、特征融合、预测头分类回归</p>
 <p>其中特征融合是关键，下图展示了不同的融合方法。（摘自 <a href="https://www.bilibili.com/video/BV1L541127MD?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">【VALSE论文速览-68期】MixFormer:更加简洁的端到端单目标跟踪器</a>）</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524172920.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524172920.png" alt=""></p>
 <p>最近的研究使用transformer进行融合，但仍然依赖CNN提取特征，这其中存在一些局限：</p>
 <ol>
 <li>attention只作用在高层抽象的特征表示空间，忽略了浅层特征；</li>
@@ -1641,37 +1641,37 @@
 <li>提出了 MAM 模块，应用 attnetion 机制同时进行特征提取与信息交互</li>
 <li>提出SPM模块进行模板更新</li>
 </ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524213439.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524213439.png" alt=""></p>
 <p>网络整体框架如图3所示，包括两部分：模板和搜索图像经过基于mixed attention module(MAM)的backbone进行特征提取和融合，再通过预测头输出结果。backbone部分包含3个stage，每个stage输入特征首先经过patch embedding变成一系列token，然后送入MAM模块提取并融合特征。预测头部分直接将融合后的搜索区域的token输入进行预测。</p>
-<h2 id="Mixed-Attention-Module-MAM"><a href="#Mixed-Attention-Module-MAM" class="headerlink" title="Mixed Attention Module (MAM)"></a>Mixed Attention Module (MAM)</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524220836.png" alt=""></p>
+<h2 id="Mixed-Attention-Module-MAM"><a href="#Mixed-Attention-Module-MAM" class="headerlink" title="Mixed Attention Module (MAM)"></a>Mixed Attention Module (MAM)</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524220836.png" alt=""></p>
 <p>本文的核心模块MAM，目的是同时提取并融合模板和搜索图像的特征，因此设计了dual attention分别用于二者。具体来说，MAM输入模板和搜索特征拼接成的 token序列，首先会将输入分开并reshape 成二维的模板和搜索特征，经过$3\times3$ DW卷积编码局部上下文和线性映射生成q，k，v后，同时进行 self-attention和 cross-attention。</p>
 <p>注意MAM 是一个非对称的attention，删去了target-to-search的cross-attention。如图2所示，模板的q只会和模板自己的k，v计算attention（黄色虚线）；而搜索图的q会同时和模板和搜索图的k，v计算attention（蓝色虚线）。用公式表达为：</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524222647.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524222647.png" alt=""></p>
 <p>这样做可以使得模板的token在跟踪过程中保持不变，避免被动态的搜索区域影响。为后续引入多个在线模板做铺垫，无需每帧重新计算模板token。</p>
 <h2 id="Localization-Head"><a href="#Localization-Head" class="headerlink" title="Localization Head"></a>Localization Head</h2><p>采用类似stark的角点预测模式。作者也额外尝试了类似detr的采用一个query进行预测的方式。均无需后处理。</p>
 <h2 id="Template-Online-Update"><a href="#Template-Online-Update" class="headerlink" title="Template Online Update"></a>Template Online Update</h2><p>在线更新模板能够很好的利用时序信息处理一些形变和外观变化，然而低质量的更新模板可能使得结果变差。本文设计了一个score prediction module (SPM)，根据预测置信度得分来选择可靠的在线模板，如图4所示。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524224125.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524224125.png" alt=""></p>
 <p>SPM由两个attention和一个三层的MLP组成，该模块接在backbone最后一个stage后，和预测头是并行的。首先输入一个可学习的score token，与search ROI token计算attention，对搜索图中挖掘的目标信息进行编码。然后将score token与第一帧的模板token做attention，隐式地将挖掘的目标与初始目标进行比较。最后过一个MLP预测出置信度得分，小于0.5判断为不可靠。</p>
 <h2 id="Training-and-Inference"><a href="#Training-and-Inference" class="headerlink" title="Training and Inference"></a>Training and Inference</h2><p>作者设计了两种网络架构MixFormer 和 MixFormer-L ，分别基于CVT-21 和 CVT24-W，也就是说可以使用CVT在Imagenet上预训练的权重来初始化backbone（虽然原始的CVT并没有两个输入，计算attention的方式也不一样，但是每个block的参数是一样的）。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524225610.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524225610.png" alt=""></p>
 <p>训练过程分为两步，首先用500个epoch训练backbone和head；最后用40个epoch单独训练SPM，冻结其他部分参数。这个训练流程和stark类似。</p>
 <p>推理阶段每隔200帧更新一次模板，选择区间中得分最高的模板替换先前的模板。本文的框架允许输入任意张数的模板，代码实现中只包含两张模板，一张初始模板，一张在线更新模板。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="SOTA比较"><a href="#SOTA比较" class="headerlink" title="SOTA比较"></a>SOTA比较</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524234306.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524234318.png" alt=""></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="SOTA比较"><a href="#SOTA比较" class="headerlink" title="SOTA比较"></a>SOTA比较</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524234306.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524234318.png" alt=""></p>
 <p>SOTA性能就一个字：恐怖！</p>
-<h2 id="探究实验"><a href="#探究实验" class="headerlink" title="探究实验"></a>探究实验</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524234504.png" alt=""></p>
+<h2 id="探究实验"><a href="#探究实验" class="headerlink" title="探究实验"></a>探究实验</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524234504.png" alt=""></p>
 <ul>
 <li>1 2 3 8 统一特征提取和融合的MAM比先提特征SAM再融合CAM要好，因为耦合的方式可以互相促进。</li>
 <li>4 5 6 7 8 MAM的数量越多越好，因为这样可以获得更extensive 的目标感知特征提取和分层融合。</li>
 <li>8 9 corner head比query head效果更好</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524235111.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524235111.png" alt=""></p>
 <ul>
 <li>使用非堆成结构效果略有下降，但是速度提升了</li>
 <li>从固定间隔中随机采样更新模板效果变差了，加上预测得分后才能提升效果</li>
 <li>pretrain的规模越大，对效果也是有提升的。</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/54-MixFormer/20220524235732.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524235732.png" alt=""></p>
 <p>Attention可视化</p>
 <ul>
 <li>背景中的干扰物逐层受到抑制</li>
@@ -1846,7 +1846,7 @@
   <entry>
     <title>Transforming Model Prediction for Tracking</title>
     <url>/tracking/55-ToMP/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602110219.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602110219.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2203.11192">论文</a> <a href="https://github.com/visionml/pytracking">代码</a></p>
 <p>马丁团队的新工作，依然是延续dimp的故事，这次是用transformer作为目标预测模型，取代了之前延续好几代的基于优化的模型预测方法。</p>
 <span id="more"></span>
@@ -1864,7 +1864,7 @@
 <li>在测试阶段提出一个并行的两阶段跟踪过程解耦目标定位和边框回归，得到更精确的目标检测结果</li>
 <li>充分的实验</li>
 </ol>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602113256.png" alt=""></p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602113256.png" alt=""></p>
 <p>左边是传统的基于优化的方法，如ATOM, DiMP等，具有如下局限：</p>
 <ol>
 <li>只使用历史帧的有限信息来计算目标模型，无法嵌入先验知识</li>
@@ -1879,33 +1879,33 @@
 <li>利用目标信息为每一帧动态构建一个更具辨别性的特征空间。</li>
 </ol>
 <p>下面详细介绍各个模块，整体框架如图3所示，我在上面注释了一部分流程：</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602114145.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602114145.png" alt=""></p>
 <h2 id="基于Transformer的模型预测器"><a href="#基于Transformer的模型预测器" class="headerlink" title="基于Transformer的模型预测器"></a>基于Transformer的模型预测器</h2><p><strong>Target Location Encoding</strong> 嵌入训练帧的位置信息，设置了一个可学习的token embedding来表示前景 $e_{fg} \in \mathbb{R}^{1 \times C}$，将其与以目标位置为中心的高斯图 $y_i \in \mathbb{R}^{H \times W \times 1} $ 点乘作为编码：</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602115643.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602115643.png" alt=""></p>
 <p>然后将目标编码与原始特征叠加</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602115659.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602115659.png" alt=""></p>
 <p>这样得到的训练特征 $v_i \in \mathbb{R}^{H \times W \times C} $ 是编码了目标状态信息的。为了对称，对测试特征也增加了一个编码</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602115923.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602115923.png" alt=""></p>
 <p>因为测试帧不知道目标位置，所以将token $e_{test}$ 叠加到每一个patch位置上。</p>
 <p><strong>Transformer Encoder</strong> 和stark类似，将训练和测试特征堆叠后送入encoder，输出用于decoder的特征，此外还保留增强后的测试特征 $z_{test}$ 用于后续分类回归。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602151024.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602151024.png" alt=""></p>
 <p><strong>Transformer Decoder</strong> 将目标状态编码中的 $e_{fg}$ 作为query，和encoder生成的 $z_i, z_{test}$ 一起输入decoder，来预测目标模型权重。</p>
 <p><strong>Target Model</strong> 利用DCF模型来获得目标分类分数</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602151709.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602151709.png" alt=""></p>
 <p>其中，$\omega \in \mathbb{R}^{1 \times C}$ 是decoder输出的convolution filter的权重，$z_{test}$是encoder中经过训练特征增强后的测试特征，可以更有效定位目标。</p>
 <h2 id="联合定位和边框回归"><a href="#联合定位和边框回归" class="headerlink" title="联合定位和边框回归"></a>联合定位和边框回归</h2><p>上面的方法只是用于预测目标中心，在之前的DiMP中是额外通过iounet来预测回归框。本文提出要联合预测定位和回归，因为这两者可以相互受益。为了实现这一点，需要额外扩展两个地方：1. 生成目标状态编码时，不仅需要目标中心位置，还需要编码目标大小信息，为模型预测器提供更丰富的输入；2. 除了目标模型的权重，还需扩展模型预测器来估计边框回归的权重。</p>
 <p><strong>Target Extent Encoding</strong> 增加一个目标bbox的编码，其实就是计算特征图上每个点距离目标框上下左右四条边的距离，得到一个密集分布的目标框表示 $d=(l,t,r,b), d\in \mathbb{R}^{H \times W \times 4} $</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602153254.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602153254.png" alt=""></p>
 <p>然后经过一个MLP升维后与上文公式3中的图像特征和目标位置编码叠加一起送入encoder</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602153434.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602153434.png" alt=""></p>
 <p><strong>Model Prediction</strong> 将decoder输出的权重$\omega$经过一个线性层得到边框回归权重$\omega_{bbreg}$和目标分类权重$\omega_{cls}$。</p>
 <p><strong>Bounding Box Regression</strong> 为了让encoder输出的测试特征$z_{test}$是目标感知的，仿照stark，计算$\omega_{bbreg}*z_{test}$得到一个注意力图，再将其与$z_{test}$点乘后输入回归分支，回归分支是采用FCOS的边框回归。</p>
 <h2 id="离线训练"><a href="#离线训练" class="headerlink" title="离线训练"></a>离线训练</h2><p>类似之前DCF类的训练，从一个序列中采样两张训练图片和一张测试图片送入网络，损失采用FCOS的损失类型，但没有centerness loss。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602154416.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602154416.png" alt=""></p>
 <h2 id="在线跟踪"><a href="#在线跟踪" class="headerlink" title="在线跟踪"></a>在线跟踪</h2><p>在线跟踪中的训练图像包含一张初始帧和其标注，以及一个在线更新的历史中间帧，其分类得分必须高于阈值。作者发现用这个训练集相比只用初始帧可以提高定位精度，但是会下降回归精度。作者解释为中间帧的预测框不准确可能会影响回归精度，因此提出一个两阶段的跟踪方式。1. 使用完整的两帧来获得分类权重；2. 只用初始帧来计算回归权重。</p>
 <p>这两个步骤可以并行处理，复制一份数据在batch维度堆叠，然后在预测回归模型时通过key_padding_mask来控制某些key不参与计算attention。</p>
 <h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><p>两个模型ToMP-101和ToMP-50，2080Ti运行速度分别是19.6和24.8FPS</p>
-<h2 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602155815.png" alt=""></p>
+<h2 id="消融实验"><a href="#消融实验" class="headerlink" title="消融实验"></a>消融实验</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602155815.png" alt=""></p>
 <p><strong>Target State Encoding</strong> 表1分析了不同目标状态编码组合的效果，目标位置编码中除了正文中提到的前景嵌入$e_{fg}$和测试嵌入$e_{test}$ ，额外增加了一个背景嵌入$e_{bg}$。</p>
 <ul>
 <li>增加背景嵌入没什么用，反而性能下降 （4 vs 5）</li>
@@ -1913,23 +1913,23 @@
 <li>解耦Decoder的query和前景嵌入$e_{fg}$会导致性能下降（6）</li>
 <li>嵌入边框信息target extent encoding非常重要，如果没有性能会剧烈下降（7）</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602160907.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602161522.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602160907.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602161522.png" alt=""></p>
 <p><strong>Model Predictor</strong> 表2显示用两个独立的query分别做分类和回归，效果会大幅下降，原因还是query和前景嵌入$e_{fg}$解耦了。</p>
 <p><strong>Inference Settings</strong> 表3显示增加历史跟踪帧比只用初始帧效果好，但如果不用本文提出的两阶段方法，效果会下降。原因还是边框预测器对历史帧中不准确的预测框敏感。</p>
 <p><strong>Transforming Model Prediction Step-by-Step</strong> 表4和图1展示了在基于优化的DiMP上一步步替换本文的transformer的效果提升。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602161714.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602161714.png" alt=""></p>
 <p>表10展示了使用更多的帧训练效果可以进一步提升，但是速度会下降。</p>
-<h2 id="SOTA比较"><a href="#SOTA比较" class="headerlink" title="SOTA比较"></a>SOTA比较</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602161928.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602162013.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602162058.png" alt=""></p>
-<h2 id="可视化结果"><a href="#可视化结果" class="headerlink" title="可视化结果"></a>可视化结果</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602162325.png" alt=""></p>
+<h2 id="SOTA比较"><a href="#SOTA比较" class="headerlink" title="SOTA比较"></a>SOTA比较</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602161928.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602162013.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602162058.png" alt=""></p>
+<h2 id="可视化结果"><a href="#可视化结果" class="headerlink" title="可视化结果"></a>可视化结果</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602162325.png" alt=""></p>
 <p>对比SuperDiMP的响应图，ToMP的响应更加干净，抑制了周围的干扰。但这样带来一个风险，一旦目标丢失，跟踪如果转移到干扰物被后基本不可能恢复，因为此时真实目标就被当成干扰抑制了。</p>
 <h2 id="方法局限"><a href="#方法局限" class="headerlink" title="方法局限"></a>方法局限</h2><ol>
 <li>attention的计算量</li>
 <li>遮挡和干扰同时出现</li>
 </ol>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/55-ToMP/20220602162623.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/55-ToMP/20220602162623.png" alt=""></p>
 <p>最后瞎逼逼一些感想，每年马丁团队的文章我都会抽一个完整的时间来仔细研读，因为总是包含很多优美巧妙的数学推导需要慢慢嚼。但今年的文章意外地很好读，因为偏向模型设计方面了。包括去年的<a href="https://www.zjp97.top/tracking/36-learning-target-candidate-association/?highlight=keep">KeepTrack</a>（一作和本文相同），出发点和实现依然巧妙，但是慢慢地都开始减少数学优化方面的工作了。大家开玩笑常说，端到端优化的深度学习DCF框架只有马丁自己能够继续更新，而他们现在也不继续做优化方面的工作了。那么基于优化的DCF框架在后续会如何发展？这篇文章给出了一个不错的答案。</p>
 ]]></content>
       <categories>
@@ -1943,7 +1943,7 @@
   <entry>
     <title>Unified Transformer Tracker for Object Tracking</title>
     <url>/tracking/56-UTT/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607104510.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607104510.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2203.15175">论文</a></p>
 <p>核心：联合单目标和多目标跟踪</p>
 <span id="more"></span>
@@ -1954,29 +1954,29 @@
 <li>提出Unified Transformer Tracker (UTT) ，构建一个Transformer Tracker在SOT和MOT中跟踪目标，利用目标特征和跟踪帧特征之间的<strong>相关性</strong>来定位目标；</li>
 <li>在各自的数据集上交替优化SOT和MOT，使得一个框架可以同时处理两个任务</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607104830.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607104830.png" alt=""></p>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>首先回顾SOT和MOT的定义：</p>
 <ul>
 <li>SOT——给定一个初始帧目标位置B0，定位后续T帧中该目标的位置。跟踪对象可以是任意未知类别；</li>
 <li>MOT——检测并跟踪一组特定类别的目标。MOT需要将第t-1帧中检测到的N个目标，和第t帧中检测到的M个目标进行关联，对于相同的目标赋予唯一的ID。同时需要考虑旧目标的丢失和新目标的出现。</li>
 </ul>
 <p>为了统一两个任务，作者将SOT的初始帧和MOT的前一帧都看成是参考帧，SOT的初始框和MOT中的检测框都看成参考目标框。依此设计了 UTT，如图2所示，经过特征提取后，将参考帧特征 $I^0,I^{t-1}$、跟踪帧特征 $I^t$，以及参考帧中的目标框 $B$ 输入Track Transformer 用于预测当前跟踪帧中的目标位置。Track Transformer有三部分：首先Target Decoder提取目标特征，然后Proposal Decoder在跟踪帧中为每个目标产生候选搜索区域。最后将目标特征和搜索特征都送入Target Tansformer预测目标位置。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105015.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105015.png" alt=""></p>
 <p><strong>Target Decoder</strong></p>
 <p>为了引入更多上下文信息，使用交叉注意力对目标特征和跟踪帧特征进行交互</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105324.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105324.png" alt=""></p>
 <p><strong>Proposal Decoder</strong></p>
 <p>将每一个目标特征与完整的跟踪特征做相关计算量太大，因此需要裁剪一个更小的搜索区域。对于MOT，直接根据前一帧的跟踪框来确定proposal；而对于SOT，考虑到目标丢失导致前一帧跟踪框中没有目标的情况，作者将目标特征与跟踪帧特征相关联来产生更精确的proposal。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105603.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105603.png" alt=""></p>
 <p>这个过程类似stark，公式5得到的heatmap $H$表示两个角点的分布概率，对所有位置的概率求和得到proposal $P^t$。虽然公式5中的维度是N，其实只会生成SOT的一个heatmap，因为对MOT每个目标计算一遍成本还是太高。</p>
 <p><strong>Target Transformer</strong></p>
 <p>通过Self-Attention和Correlation将目标特征与proposal 关联。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607105759.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607105759.png" alt=""></p>
 <p>公式11的FC 层是将$K^2C$的通道维度降维到$C$，相当于把$K^2$的空间特征压缩成一维向量。最后将得到的N个向量送入boxhead预测相对proposal的偏移量得到预测跟踪框。</p>
 <p>作者迭代了L次target transformer来进行目标定位。第一次的proposal是通过proposal decoder生成的，而后续的proposal就是前一次迭代预测的目标框。</p>
-<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110351.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110400.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110409.png" alt=""></p>
+<h1 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110351.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110400.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110409.png" alt=""></p>
 <ul>
 <li><p>分别构建SOT和MOT两个dataloader<strong>交替训练</strong>。SOT将图片crop到352，MOT直接对原图进行随机resize；</p>
 </li>
@@ -1985,17 +1985,17 @@
 <li><p>对于MOT还需要一个额外的 detection head用于检测每一帧的目标类别和位置。MOT的推理阶段需要将track transformer生成的跟踪框和Detection head 生成的检测框进行关联（图5）</p>
 </li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607110811.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607110811.png" alt=""></p>
 <h1 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h1><p>SOT在LaSOT、TrackingNet和Got-10k测试，MOT在MOT16测试</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111020.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111032.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111020.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111032.png" alt=""></p>
 <p>SOT相比UniTrack提点明显，MOT的效果还有提升空间</p>
 <p><strong>Ablative Studies</strong></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111143.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111143.png" alt=""></p>
 <p>高亮部分似乎应该是MSA，不知是否是笔误</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111226.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111226.png" alt=""></p>
 <p>表5对比了联合训练和分别单独训练。总体来说联合训练效果更好，只有MOT的IDF1指标比单独用MOT训练低一些。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/56-UTT/20220607111301.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/56-UTT/20220607111301.png" alt=""></p>
 <h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>本文证明了一个模型能够同时解决SOT和MOT任务。这将鼓励社区开发更多统一的跟踪算法，应用于更复杂的跟踪场景，比如VR/AR应用中经常需要进行SOT和MOT的切换。同时这种联合的范式也更加符合人类的直觉。</p>
 ]]></content>
       <categories>
@@ -2009,7 +2009,7 @@
   <entry>
     <title>SparseTT: Visual Tracking with Sparse Transformers</title>
     <url>/tracking/57-SparseTT/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608111802.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608111802.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2205.03776">论文</a> <a href="https://github.com/fzh0917/SparseTT">代码</a></p>
 <p>Transformer中自注意力的全局视角导致主要信息（如搜索区域中的目标）聚焦不足，而次要信息（如搜索区域中的背景）聚焦过度，使前景和背景的区分变得模糊，从而降低了跟踪性能。简单来说就是和每一个点计算注意力，导致背景部分占据了过大的权重，一定程度上削弱了目标。本文使用稀疏注意力缓解这一问题，来突出搜索区域中的潜在目标。</p>
 <span id="more"></span>
@@ -2019,30 +2019,30 @@
 <li>设计双头预测器，提高分类和回归的精度</li>
 <li>稀疏注意力更容易收敛，训练时间相比TransT减少了75%</li>
 </ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608112131.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608112131.png" alt=""></p>
 <p>标准的三段结构，特征提取，目标聚焦网络和双头预测器。</p>
-<h2 id="目标聚焦网络"><a href="#目标聚焦网络" class="headerlink" title="目标聚焦网络"></a>目标聚焦网络</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608112259.png" alt=""></p>
+<h2 id="目标聚焦网络"><a href="#目标聚焦网络" class="headerlink" title="目标聚焦网络"></a>目标聚焦网络</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608112259.png" alt=""></p>
 <p>目标聚焦网络是encoder-decoder架构，encoder输入模板特征，decoder输入搜索特征。其中encoder重要但非必要，后续实验会证明。而本文的核心创新在于decoder橙色部分的<strong>稀疏多头注意力Sparse Multi-Head Self-Attention</strong>。</p>
 <p>朴素MSA中，注意力特征的每个像素值都是由输入特征的所有像素值来计算的，这使得前景边缘区域变得模糊。本文提出的稀疏方法中，注意力特征的每个像素值都只由与其最相似的K个像素值决定，这使得前景更加集中，前景边缘区域更加具有分辨力。</p>
 <p>具体实现如图4中间所示，首先计算query和key的相似度矩阵，然后仅使用softmax函数对相似矩阵每行的K个最大元素进行归一化，其他元素置0。最后将相似度矩阵和value相乘，得到最终结果。图4最右边展示了两种注意力归一ecise RoI-Pooling化的区别，朴素点积注意力放大了相对较小的相似权重，这使得输出特征容易受到噪声和背景干扰的影响。然而，稀疏缩放点积注意力可以显著缓解这个问题。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608113034.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608113034.png" alt=""></p>
 <h2 id="双头预测器"><a href="#双头预测器" class="headerlink" title="双头预测器"></a>双头预测器</h2><p>对于分类和回归，均同时使用2层FC层和L个卷积层来预测。</p>
 <p>推理阶段，对于分类任务，融合FC头和卷积头的分类分数；对于回归任务，只取卷积头输出的预测偏移量。</p>
 <h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p>在4张2080ti上训练60个小时，相比TransT在同等硬件下训练10天。</p>
 <h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p>编码器数量：即使不使用编码器效果依然很好，编码器数量过多导致过拟合。最佳数量为2</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114210.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608114210.png" alt=""></p>
 <p>解码器数量：最佳数量为2</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114342.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608114342.png" alt=""></p>
 <p>SMSA中的稀疏度K：最佳数量为32</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114417.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608114417.png" alt=""></p>
 <h2 id="SOTA-Comparison"><a href="#SOTA-Comparison" class="headerlink" title="SOTA Comparison"></a>SOTA Comparison</h2><p>LaSOT</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114627.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608114627.png" alt=""></p>
 <p>Got10k</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114659.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608114659.png" alt=""></p>
 <p>OTB UAV</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114746.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608114746.png" alt=""></p>
 <p>TrackingNet</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/57-SparseTT/20220608114759.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/57-SparseTT/20220608114759.png" alt=""></p>
 ]]></content>
       <tags>
         <tag>transform</tag>
@@ -2053,7 +2053,7 @@
   <entry>
     <title>Unsupervised Domain Adaptation for Nighttime Aerial Tracking</title>
     <url>/tracking/58-UDAT/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609115914.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609115914.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2203.10541">论文</a> <a href="https://github.com/vision4robotics/UDAT">代码</a></p>
 <p>无监督域适应的夜间空中跟踪 + 夜间跟踪benchmark</p>
 <span id="more"></span>
@@ -2064,30 +2064,30 @@
 <li>Transformer day/night feature discriminator 通过对抗学习进一步缩小域差异</li>
 <li>提出一个夜间空中跟踪数据集NAT2021，包括训练和测试</li>
 </ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609153243.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609153243.png" alt=""></p>
 <p>首先对未标记的目标域数据预处理，采用基于显著性检测的策略来定位潜在目标和裁剪成对训练patch。训练过程中，使用 bridging layer 调制，使得不同域的特征对齐。后面接一个判别器用于区分源域和目标域的特征。整个过程通过对抗性学习来减少源域和目标域之间的特征分布差异。</p>
-<h2 id="Data-preprocessing"><a href="#Data-preprocessing" class="headerlink" title="Data preprocessing"></a>Data preprocessing</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154323.png" alt=""></p>
+<h2 id="Data-preprocessing"><a href="#Data-preprocessing" class="headerlink" title="Data preprocessing"></a>Data preprocessing</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609154323.png" alt=""></p>
 <ol>
 <li>low-light enhancement：<a href="https://arxiv.org/abs/2103.00860">Learning to Enhance Low-Light Image via Zero-Reference Deep Curve Estimation</a></li>
 <li>salient object detection：<a href="https://drive.google.com/file/d/1czSEpwTaAL4eZpqigzYNPqeyY1Z_XREu/view">Dynamic Context-Sensitive Filtering Network for Video Salient Object Detection</a></li>
 <li>dynamic programming ：根据帧与帧之间候选框的归一化距离进行动态规划，确保轨迹是平滑的。对于动态规划没有选取候选框的帧，采用相邻帧的线性插值得到一个候选框。最后，根据得到的框序列从原始图像中裁剪出成对的训练patch。</li>
 </ol>
-<h2 id="Transformer-bridging-layer"><a href="#Transformer-bridging-layer" class="headerlink" title="Transformer bridging layer"></a>Transformer bridging layer</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154428.png" alt=""></p>
+<h2 id="Transformer-bridging-layer"><a href="#Transformer-bridging-layer" class="headerlink" title="Transformer bridging layer"></a>Transformer bridging layer</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609154428.png" alt=""></p>
 <p>在特征提取后面接一个transformer来缩小白天和夜间特征分布的gap，效果如图4所示，直接通过backbone提取的特征有明显的差异，而由桥接层修改的特征在分布上有重合。</p>
 <h2 id="Transformer-discriminator"><a href="#Transformer-discriminator" class="headerlink" title="Transformer discriminator"></a>Transformer discriminator</h2><p>首先将特征通过gradient reverse layer (GRL) 反转梯度 （参考<a href="https://www.zhihu.com/question/266710153/answer/1338864403">Gradient Reversal Layer指什么？ - Just4Fan的回答 - 知乎</a> )</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154917.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609154917.png" alt=""></p>
 <p>然后增加一个classification token，送入两层Transformer layers输出域分类结果</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609154943.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609154943.png" alt=""></p>
 <p>判别器需要正确区分源域和目标域，而前面的特征提取和对齐需要混淆二者，它们形成对抗训练。</p>
 <h1 id="NAT2021"><a href="#NAT2021" class="headerlink" title="NAT2021"></a>NAT2021</h1><p>为了对夜间空中跟踪进行性能评估，并为无监督训练提供足够的无标签夜间跟踪视频，作者提出了 nighttime aerial tracking benchmark (NAT2021)。 训练集没有标注，并且增加了一个新的光照属性</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609155413.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609155425.png" alt=""></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609234059.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609234121.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609234257.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609234307.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609234341.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/58-UDAT/20220609234356.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609155413.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609155425.png" alt=""></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609234059.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609234121.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609234257.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609234307.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609234341.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/58-UDAT/20220609234356.png" alt=""></p>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
@@ -2101,7 +2101,7 @@
   <entry>
     <title>Transformer Tracking with Cyclic Shifting Window Attention</title>
     <url>/tracking/59-CSWinTT/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609234559.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220609234559.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2205.03806">论文</a> <a href="https://github.com/SkyeSong38/CSWinTT">代码</a></p>
 <p>具有循环移位窗口注意力</p>
 <span id="more"></span>
@@ -2112,9 +2112,9 @@
 <li>空间正则化mask，消除循环位移的边界效应影响</li>
 <li>计算优化策略减小计算冗余</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609235231.png" alt=""></p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609235347.png" alt=""></p>
-<h2 id="Multi-Scale-Cyclic-Shifting-Window-Attention"><a href="#Multi-Scale-Cyclic-Shifting-Window-Attention" class="headerlink" title="Multi-Scale Cyclic Shifting Window Attention"></a>Multi-Scale Cyclic Shifting Window Attention</h2><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220609235402.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220609235231.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220609235347.png" alt=""></p>
+<h2 id="Multi-Scale-Cyclic-Shifting-Window-Attention"><a href="#Multi-Scale-Cyclic-Shifting-Window-Attention" class="headerlink" title="Multi-Scale Cyclic Shifting Window Attention"></a>Multi-Scale Cyclic Shifting Window Attention</h2><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220609235402.png" alt=""></p>
 <p>论文描述的比较复杂，我这里就简化一下，按照开始提到的三要素来介绍：</p>
 <p><strong>构建window序列</strong> 经过特征提取后，将维度为$H \times W \times d$的特征按窗口大小 $r$ reshape成一个窗口序列$H/r \times W/r \times r \times r \times d$，然后把窗口看成一个整体，将窗口中的每个空间位置拉平到通道维度，变成$(H/r \times W/r) \times (r \times r \times d)$，相当于有 $H/r \times W/r$ 个维度为 $r \times r \times d$ 的向量。对模板和搜索特征做相同的操作并且将两个窗口序列拼接。</p>
 <p><strong>multi-scale</strong> 通过在attention的多头上分别设置不同的窗口大小来表示多尺度。</p>
@@ -2124,11 +2124,11 @@
 <li>多头注意力在每个头设置了不同的窗口大小，使每个头的尺寸$H/r \times W/r$不一样，难以融合。</li>
 </ol>
 <p>因此作者设计了循环位移增加窗口的数量，参照相关滤波中的循环位移，将窗口沿着x和y方向分别每次移动一个像素，最远移动距离是$r$，即一个$r\times r$的窗口经过循环位移后产生$r^2$个同样大小的窗口样本。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610103521.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220610103521.png" alt=""></p>
 <p>经过循环位移后，得到的窗口序列维度为$(H/r \times W/r \times \textcolor{Red}{r \times r}) \times (\textcolor{Green}{r \times r} \times d)$，其中$\textcolor{Red}{r \times r}$表示循环位移窗口数量，$\textcolor{Green}{r \times r}$表示窗口的大小。然后拿它去做标准的multi-head attention。</p>
 <h2 id="Spatially-regularized-attention-mask"><a href="#Spatially-regularized-attention-mask" class="headerlink" title="Spatially regularized attention mask"></a>Spatially regularized attention mask</h2><p>类似相关滤波中的空间正则化，用于抑制循环位移边界效应带来的性能下降，正则化mask直接叠加到attention map上。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610105959.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610105638.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220610105959.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220610105638.png" alt=""></p>
 <h2 id="Computational-optimization"><a href="#Computational-optimization" class="headerlink" title="Computational optimization"></a>Computational optimization</h2><p>循环移位操作极大地增加了计算冗余，提出了3种优化策略提升计算效率：</p>
 <ul>
 <li>query不使用循环位移：此时Q的维度保持$(H/r \times W/r) \times (\textcolor{Green}{r \times r} \times d)$，而K,V的维度是$(H/r \times W/r \times \textcolor{Red}{r \times r}) \times (\textcolor{Green}{r \times r} \times d)$。这样每个head计算$Attention(Q, K, V)$后的维度是$(H/r \times W/r) \times (\textcolor{Green}{r \times r} \times d)$，多头融合时似乎又面临尺度不一致的问题。在代码实现中，通过两次<code>view</code>将$\textcolor{Green}{r \times r}$提到前面又变回了$H \times W \times d$，然后再进行多头融合。这么看来，不管有没有循环位移，都可以进行多头融合。那么循环位移的唯一目的就是增加窗口数量，获得更精细的注意力相似图。</li>
@@ -2169,14 +2169,14 @@
 </tbody>
 </table>
 </div>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115500.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115512.png" alt=""></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220610115500.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220610115512.png" alt=""></p>
 <p><strong>Ablation Study</strong></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115614.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115632.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115643.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220610115614.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220610115632.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220610115643.png" alt=""></p>
 <p>本文提出的三个优化策略虽然大幅提升了速度，但是依然存在计算冗余，主要是循环位移的窗口内依然有很多重复的pixel计算。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/59-CSWinTT/20220610115658.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220610115658.png" alt=""></p>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
@@ -2189,7 +2189,7 @@
   <entry>
     <title>Global Tracking via Ensemble of Local Trackers</title>
     <url>/tracking/60-GTELT/</url>
-    <content><![CDATA[<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610154935.png" alt=""></p>
+    <content><![CDATA[<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610154935.png" alt=""></p>
 <p><a href="https://arxiv.org/abs/2203.16092">论文</a> <a href="https://github.com/ZikunZhou/GTELT">代码</a> 暂未开源</p>
 <p>针对长时跟踪问题，通过集成多个局部跟踪器实现全局跟踪，以全局视角跟踪目标并且利用时间上下文。</p>
 <span id="more"></span>
@@ -2210,19 +2210,19 @@
 <li>当目标平滑移动时，一个局部跟踪器可以稳定处理；当目标丢失时，靠近目标的另一个局部跟踪器就会被激活接管跟踪，而之前的跟踪器会被重置到初始位置。</li>
 <li>局部跟踪器稳定跟踪目标期间，利用时间上下文提高局部跟踪的鲁棒性</li>
 </ul>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155357.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610155357.png" alt=""></p>
 <p><strong>创新点：</strong></p>
 <ul>
 <li>deformable attention-based local tracker 通过动态移动局部搜索区域，在全局视野中模拟局部跟踪</li>
 <li>temporal context transferring scheme 探索局部跟踪器中的时序上下文</li>
 </ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155457.png" alt=""></p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610155528.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610155457.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610155528.png" alt=""></p>
 <p>有点借鉴Deformable DETR来做跟踪的意思。设置了N个query，每个query在其参考点附近做Deformable Attention来生成一个候选目标向量，候选目标向量送入预测头生成置信度和目标框，然后通过匈牙利算法匹配真实目标计算损失。</p>
 <p>当选中一个query进行稳定跟踪后，就用跟踪结果来更新该query对应的参考点位置，不断在每一帧上进行检测，这就是一个动态变化搜索区域的局部跟踪器。同时利用图3的时域聚合模块来更新这个query。</p>
 <p>当目标丢失时，即跟踪置信度小于阈值，选择目标附近的另一个query接管跟踪，而先前的query会被重置到它的初始参考点位置。</p>
 <p>具体实现可以参考论文，挺有意思的。</p>
-<p><img data-src="https://raw.githubusercontent.com/kongbia/picgo/master/blog/60-GTELT/20220610161831.png" alt=""></p>
+<p><img data-src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610161831.png" alt=""></p>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
