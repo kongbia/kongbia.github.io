@@ -434,9 +434,9 @@
     <category term="目标跟踪" scheme="https://www.zjp97.top/categories/tracking/"/>
     
     
-    <category term="ICCV2021" scheme="https://www.zjp97.top/tags/ICCV2021/"/>
-    
     <category term="transform" scheme="https://www.zjp97.top/tags/transform/"/>
+    
+    <category term="ICCV2021" scheme="https://www.zjp97.top/tags/ICCV2021/"/>
     
     <category term="UAV" scheme="https://www.zjp97.top/tags/UAV/"/>
     
@@ -743,9 +743,9 @@
     <category term="目标跟踪" scheme="https://www.zjp97.top/categories/tracking/"/>
     
     
-    <category term="时序" scheme="https://www.zjp97.top/tags/%E6%97%B6%E5%BA%8F/"/>
-    
     <category term="CVPR2021" scheme="https://www.zjp97.top/tags/CVPR2021/"/>
+    
+    <category term="时序" scheme="https://www.zjp97.top/tags/%E6%97%B6%E5%BA%8F/"/>
     
   </entry>
   
@@ -766,11 +766,11 @@
     <category term="目标跟踪" scheme="https://www.zjp97.top/categories/tracking/"/>
     
     
-    <category term="CVPR2021" scheme="https://www.zjp97.top/tags/CVPR2021/"/>
-    
     <category term="综述" scheme="https://www.zjp97.top/tags/%E7%BB%BC%E8%BF%B0/"/>
     
     <category term="transform" scheme="https://www.zjp97.top/tags/transform/"/>
+    
+    <category term="CVPR2021" scheme="https://www.zjp97.top/tags/CVPR2021/"/>
     
   </entry>
   
