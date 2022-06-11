@@ -65,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tracking/3-anchorfree-siamese/</loc>
+    <loc>https://www.zjp97.top/tracking/34-stmtrack/</loc>
     
     <lastmod>2022-06-11</lastmod>
     
@@ -79,20 +79,6 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tracking/33-transform-tracking/</loc>
-    
-    <lastmod>2022-06-11</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tracking/34-stmtrack/</loc>
-    
-    <lastmod>2022-06-11</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.zjp97.top/tracking/35-FSL-tracking/</loc>
     
     <lastmod>2022-06-11</lastmod>
@@ -100,7 +86,21 @@
   </url>
   
   <url>
+    <loc>https://www.zjp97.top/tracking/3-anchorfree-siamese/</loc>
+    
+    <lastmod>2022-06-11</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.zjp97.top/tracking/36-learning-target-candidate-association/</loc>
+    
+    <lastmod>2022-06-11</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tracking/33-transform-tracking/</loc>
     
     <lastmod>2022-06-11</lastmod>
     
@@ -128,14 +128,14 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tracking/39-deepmix/</loc>
+    <loc>https://www.zjp97.top/tracking/40-snlt/</loc>
     
     <lastmod>2022-06-11</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tracking/40-snlt/</loc>
+    <loc>https://www.zjp97.top/tracking/39-deepmix/</loc>
     
     <lastmod>2022-06-11</lastmod>
     
@@ -263,28 +263,7 @@
 
   
   <url>
-    <loc>https://www.zjp97.top/tags/CVPR2020/</loc>
-    <lastmod>2022-06-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/%E7%BB%BC%E8%BF%B0/</loc>
-    <lastmod>2022-06-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/Anchor-free/</loc>
-    <lastmod>2022-06-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/transform/</loc>
+    <loc>https://www.zjp97.top/tags/%E6%97%B6%E5%BA%8F/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -298,7 +277,14 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/%E6%97%B6%E5%BA%8F/</loc>
+    <loc>https://www.zjp97.top/tags/CVPR2020/</loc>
+    <lastmod>2022-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/%E7%BB%BC%E8%BF%B0/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -319,6 +305,13 @@
   </url>
   
   <url>
+    <loc>https://www.zjp97.top/tags/Anchor-free/</loc>
+    <lastmod>2022-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zjp97.top/tags/ICCV2021/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>daily</changefreq>
@@ -326,7 +319,21 @@
   </url>
   
   <url>
+    <loc>https://www.zjp97.top/tags/transform/</loc>
+    <lastmod>2022-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.zjp97.top/tags/%E6%A8%A1%E5%9E%8B%E6%9B%B4%E6%96%B0/</loc>
+    <lastmod>2022-06-11</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.zjp97.top/tags/Natural-Language/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -361,7 +368,7 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/Natural-Language/</loc>
+    <loc>https://www.zjp97.top/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -369,13 +376,6 @@
   
   <url>
     <loc>https://www.zjp97.top/tags/IJCAI2021/</loc>
-    <lastmod>2022-06-11</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.zjp97.top/tags/%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -424,14 +424,14 @@
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/%E8%BD%BB%E9%87%8F%E5%8C%96/</loc>
+    <loc>https://www.zjp97.top/tags/CVPR2022/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://www.zjp97.top/tags/CVPR2022/</loc>
+    <loc>https://www.zjp97.top/tags/%E8%BD%BB%E9%87%8F%E5%8C%96/</loc>
     <lastmod>2022-06-11</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

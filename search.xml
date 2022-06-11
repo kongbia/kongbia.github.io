@@ -1,6 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>STMTrack: Template-free Visual Tracking with Space-time Memory Networks</title>
+    <url>/tracking/34-stmtrack/</url>
+    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427102245.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2104.00324">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>离线训练的Siamese跟踪器已经充分完全挖掘了第一帧模板信息，但它们抵抗目标外观变化的能力依然有限。现有的模板更新机制大多依赖耗时的数值优化或复杂的手工设计策略，这阻碍了它们的实时跟踪和实际应用。本文提出了一种基于时空记忆网络的跟踪框架，该框架能够充分利用与目标相关的历史信息，从而更好地适应跟踪过程中的外观变化。这样避免了模板更新，所以叫template-free。主要创新点包括：</p>
+<ul>
+<li>引入记忆机制存储目标的历史信息，引导跟踪器聚焦在当前帧中信息最丰富的区域；</li>
+<li>memory network的像素级相似度计算能够生成更精确的目标框。</li>
+</ul>
+<p>运行速度37 FPS</p>
+<span id="more"></span>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427102842.png" alt=""></p>
+<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p>整体框架如图2所示，主要包括三部分：特征提取网络、时空记忆网络和头部预测。特征提取网络包括<font color=LightGreen>绿色</font>的记忆分支和<font color=LightBlue>蓝色</font>的查询分支。记忆分支输入多个历史帧以及对应的前背景标签，查询分支输入当前帧。特征提取后，时空记忆网络从所有记忆帧中检索与目标相关的信息，生成综合特征图进行最后的分类回归。</p>
+<h2 id="Feature-Extraction-Network"><a href="#Feature-Extraction-Network" class="headerlink" title="Feature Extraction Network"></a>Feature Extraction Network</h2><p>对memory的每个分支，特征提取为：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427104555.png" style="zoom:80%;" /></p>
+<p>$m_i$ 表示第i帧图像，$c_i$ 表示第i个前背景标签（根据gt构建的0/1 mask），$ \varphi_0^m $ 和 $g$ 将图像和标签统一到同一维度从而相加，$ h_m $ 对特征降维到512。</p>
+<p>对于query分支：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427105233.png" style="zoom:80%;" /></p>
+<p>$ \varphi^m $ 和 $ \varphi^q $ 结构一样但<strong>参数不共享</strong>。</p>
+<h2 id="Space-time-Memory-Network"><a href="#Space-time-Memory-Network" class="headerlink" title="Space-time Memory Network"></a>Space-time Memory Network</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427111921.png" alt=""></p>
+<p>首先计算memory的 $f_m $ 和 query的 $f_q $  每个像素之间的相似性 $\omega \in THW \times HW $</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427111950.png" style="zoom:80%;" /></p>
+<p>这个操作类似non-local或self-attention，相当于用query去检索历史帧中与目标相关的信息作为<strong>软权重</strong>来加权 $f_m $。最后将加权后的结果与$f_q $ 拼接起来</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427112745.png" style="zoom:80%;" /></p>
+<p>与non-local区别在于该方法采用相似性矩阵作为软权值从多个记忆帧中检索目标信息，而不是计算特征图中每个像素对的非局部自注意。</p>
+<h2 id="Head-Network"><a href="#Head-Network" class="headerlink" title="Head Network"></a>Head Network</h2><p>常规的FCOS类预测头。</p>
+<h2 id="Inference-Phase"><a href="#Inference-Phase" class="headerlink" title="Inference Phase"></a>Inference Phase</h2><p>训练和推理时记忆帧的数量是可以不一致的，因为不影响优化参数的数量。</p>
+<p>推理时的记忆帧采样策略为：首先保留最可靠的第一帧和最相似的上一帧，剩下的帧数均匀采样</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427113629.png" style="zoom:80%;" /></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p>主要分析了是否共享backbone参数，前背景标签的作用，记忆帧的数量的影响。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427114407.png" style="zoom:80%;" /></p>
+<p>加了 fb_label 之后，不共享backbone参数效果更好。可能是因为此时两个分支的特征空间已经不一样了，期望学到的东西也是不一样的。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115130.png" style="zoom:80%;" /></p>
+<p>随着记忆帧的数量增加，性能都是先增后减。</p>
+<p>训练时帧数越多，可以训练的目标模式越多，但与当前帧相似的帧也会越多。在这种情况下，网络倾向于比较最相似的图像对，而不是学习当前帧与有杂波背景或部分遮挡的帧之间的相似性。</p>
+<h2 id="Comparison-with-the-stateoftheart"><a href="#Comparison-with-the-stateoftheart" class="headerlink" title="Comparison with the stateoftheart"></a>Comparison with the stateoftheart</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115649.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115737.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115757.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115804.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115816.png" style="zoom:80%;" /></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>提出了一种新的基于时空记忆网络的跟踪框架。该框架摒弃了传统的基于模板的跟踪机制，使用多个记忆帧和前背景标签映射来定位查询帧中的目标。在时空记忆网络中，通过查询帧自适应地检索存储在多个记忆帧中的目标信息，使跟踪器对目标变化具有较强的自适应能力。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>时序</tag>
+        <tag>CVPR2021</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Siam R-CNN: Visual Tracking by Re-Detection</title>
     <url>/tracking/1-siamrcnn/</url>
     <content><![CDATA[<p>Siam R-CNN是亚琛工业大学&amp;牛津大学联合推出的，核心是通过重检测进行视觉跟踪，并构建了基于轨迹的动态规划算法，建模被跟踪对象和潜在干扰对象的完整历史。效率方面，该方法可以在 ResNet-101 上达到 4.7 FPS，在 ResNet-50 上达到 15 FPS 。</p>
@@ -75,6 +126,143 @@
       </categories>
       <tags>
         <tag>CVPR2020</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>目标检测框架在目标跟踪中的应用</title>
+    <url>/tracking/2-detection-in-tracking/</url>
+    <content><![CDATA[<p>从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。</p>
+<p>本篇笔记关注如何将目标检测框架应用在跟踪中，主要介绍其思想，细节部分不做过多描述，记录论文包含：</p>
+<ul>
+<li><a href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Huang_Bridging_the_Gap_Between_Detection_and_Tracking_A_Unified_Approach_ICCV_2019_paper.pdf">Bridging the Gap Between Detection and Tracking: A Unified Approach</a></li>
+<li><a href="https://arxiv.org/abs/1912.08531">GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</a></li>
+<li><a href="https://arxiv.org/abs/1910.11844">Learning to Track Any Object</a></li>
+<li><a href="https://arxiv.org/abs/1911.12836">Siam R-CNN: Visual Tracking by Re-Detection</a></li>
+<li><a href="https://arxiv.org/abs/2004.00830">Tracking by Instance Detection: A Meta-Learning Approach</a></li>
+</ul>
+<span id="more"></span>
+<h1 id="Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><a href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach" class="headerlink" title="Bridging the Gap Between Detection and Tracking: A Unified Approach"></a>Bridging the Gap Between Detection and Tracking: A Unified Approach</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234243.png" alt=""></p>
+<p>从结构图可以很直观的看出这就是Faster RCNN的框架，作者将目标跟踪任务看成是one-shot object detection 和 few-shot instance classification 的组合。前者是一个class-level的子任务用来寻找和目标相似的候选框，后者是instance-level的任务用来区分目标和干扰物。主要有两个模块：Target-guidence module(TGM) 和 few-shot instance classifier。</p>
+<p>TGM对目标和搜索区域的特征以及它们在主干中的相互作用进行编码，相当于让网络更关注于与目标相关的instance，后面几篇文章也用了不同的方法来实现这个目的。</p>
+<p>TGM虽然使检测器聚焦于与目标相关的物体，但忽略了周围的背景干扰。为了弥补这一点，提出了few-shot instance classifier。 然而，直接从头开始训练耗时且容易导过拟合。因此作者通过Model-Agnostic Meta Learning (MAML)进行few-shot finetune，增强判别性进一步消除distractors。</p>
+<p>MAML的目的是训练一组初始化参数，<strong>通过在初始参数的基础上进行一或多步的梯度调整，来达到仅用少量数据就能快速适应新task的目的，</strong>示意图如下：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234331.png" alt=""></p>
+<p>域自适应的检测器整体训练流程如下图：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234353.png" alt=""></p>
+<p>输入是三元组，包括examplar, support, query，训练分为inner and outer optimization loops。对于Inner optimization loop中，在support image上计算的loss用来微调meta-layers即detector heads的参数，然后用微调后的参数计算meta-loss其梯度用于更新outer optimization loop。具体公式可以参考原文。</p>
+<p>在线跟踪中将之前帧的检测结果作为训练样本在线更新detector head的参数。</p>
+<p>作者称这是第一篇将目标检测框架应用到跟踪上的通用框架，检测模型可以用Faster RCNN，SSD等，速度上SSD模型为10FPS   Faster RCNN模型为3FPS。</p>
+<hr>
+<h1 id="GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><a href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking" class="headerlink" title="GlobalTrack: A Simple and Strong Baseline for Long-term Tracking"></a>GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234652.png" alt=""></p>
+<p>这篇文章构建了一个global instance search tracker，主要思想是利用target来引导网络搜索特定instance，与上一篇的TGM模块思想类似，不过这里对在RPN阶段和分类回归阶段都加入了target信息进行引导。对应的就是Query-guided RPN 和 Query-guided RCNN。</p>
+<p><strong>Query-guided RPN</strong></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234747.png" alt=""></p>
+<p>$z \in [k,k,c]$ 是query的ROI特征，$x \in [h,w,c]$ 是搜索图像的特征。$f_z$ 用 $k \times k$ 0-padding的卷积将 $z$ 转换为 $1 \times 1$ 的核作用于搜索区域，$f_x$ 使用 $3 \times 3$ 1-padding的卷积。$f_{out}$ 是 $1 \times 1 \times c$  的卷积将通道数变回为c，这个过程不使用正则化和激活函数。</p>
+<p><strong>Query-guided RCNN</strong></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424235530.png" alt=""></p>
+<p> $z$ 定义同上，$x_i \in [k,k,c]$ 是提取的proposal的特征。$h_z$ 和 $h_x$ 均为 $3 \times 3$ 1-padding的卷积，$h_{out}$ 为$1 \times 1 \times c$  卷积。</p>
+<p>GlobalTrack 对视频每一帧的跟踪完全不依赖相邻帧，没有累计误差使得它在长期跟踪问题中准确率保持稳定。速度为6FPS。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426092832.png" alt=""></p>
+<center>车牌在长期跟踪过程中消失了一段时间，当车牌再次出现的时候，其他跟踪算法就再也无法恢复跟踪了，而没有累计误差的 GlobalTrack不受前面的影响立刻跟踪到了目标。</center>
+
+<hr>
+<h1 id="Learning-to-Track-Any-Object"><a href="#Learning-to-Track-Any-Object" class="headerlink" title="Learning to Track Any Object"></a>Learning to Track Any Object</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426093105.png" alt=""></p>
+<center>图1 (a)从基于图像的数据集学习一个通用对象先验，(b)通过计算一个封闭形式的目标和背景之间的线性判别器使其适应于一个感兴趣的特定对象(例如左上角的总线)。这允许跟踪物体通过显著的变形，而不捕获干扰物</center>
+
+<p>本文重点在于将category-specific object detector 变成 category-agnostic, object-specific detector来做跟踪。想达到这个目的，需要处理如下两个关键的问题，如图1所示：</p>
+<ol>
+<li>如何将 category specific prior 改为 generic objectness prior？</li>
+<li>如何进一步的将这种 generic prior 改为 particular instance of interst？</li>
+</ol>
+<p>针对问题1，作者构建了 a joint model for category-specific object detection and category-agnostic tracking。和之前类似，也是添加了目标特征的检测框架（基于 Mask R-CNN）如下图2所示 。其将目标模板作为输入，计算 feature embedding。然后该模板特征与测试图像计算相似性得到attention mask。attention mask又被用于重新加权空间特征，以检测感兴趣的物体。另外这个框架可以同时用于检测、跟踪和分割。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426100348.png" alt=""></p>
+<p>针对问题 2，本文计算一个线性分类器来区分第一帧的感兴趣目标和其他目标，通过最小二乘方法得到闭式解从而可以学习到一个更关注感兴趣instance的鲁棒特征。下图3通过一个例子说明，左下是直接用feature embedding计算的attention map，右下是用线性分类器计算的attention map，显然右下效果更好。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426100433.png" alt=""></p>
+<p>最后运行速度为7FPS。</p>
+<hr>
+<h1 id="Siam-R-CNN-Visual-Tracking-by-Re-Detection"><a href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection" class="headerlink" title="Siam R-CNN: Visual Tracking by Re-Detection"></a>Siam R-CNN: Visual Tracking by Re-Detection</h1><p>这个就是用重检测的思想做跟踪，也是基于RCNN框架的，同时使用Tracklet Dynamic Programming Algorithm去跟踪所有潜在的目标。</p>
+<p>具体解读见前一篇笔记</p>
+<p><a href="https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection | CV home (kongbia.github.io)</a></p>
+<hr>
+<h1 id="Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><a href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach" class="headerlink" title="Tracking by Instance Detection: A Meta-Learning Approach"></a>Tracking by Instance Detection: A Meta-Learning Approach</h1><p>同样是域自适应方法将检测器转化成跟踪器，此篇更像是第一篇Bridging the Gap Between Detection and Tracking: A Unified Approach的进阶，不同的是本文没有额外添加模板引导分支，而是直接用标准的检测器通过元学习的方式做域自适应。避免了冗余结构使得速度大幅提升，达到40FPS。另外就是训练的时候加入了很多来自MAML++喝MetaSGD的技巧，效果更好。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426100802.png" alt=""></p>
+<p>具体的解读可以参考我b站的笔记，后续会搬运到博客。</p>
+<p><a href="https://www.bilibili.com/read/cv5521209/">[Note7] Tracking by Instance Detection: A Meta-Learning Approach - 哔哩哔哩专栏 (bilibili.com)</a></p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这几篇文章的一个共同思路都是融合了Siamese架构和目标检测框架，将目标实例信息以各种形式加入待检测图像中，从而将class-level的通用检测转变成instance-level的实例检测（跟踪）。借助目标检测对尺度，形变等复杂条件的优越性来解决跟踪中的问题，同时将跟踪转变成one-shot的检测任务也避免了更新带来的漂移（第一篇里面使用了MAML进行更新，主要原因猜测是单纯往RPN中融合目标信息还不够work，像globaltracker在head上也添加了instance，而第三篇则是构建一个分类器增强鲁棒性）。当然引入检测框架带来的计算开销也是很大的，最后一种方法避免了额外的模板分支相当于跳出了Siamese框架，给实时带来了可能。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>综述</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Real-Time Visual Object Tracking via Few-Shot Learning</title>
+    <url>/tracking/35-FSL-tracking/</url>
+    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427173306.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2103.10130">论文</a></p>
+<p>跟踪可以看成是一个特殊的 few-shot learning (FSL) 问题，本文提出了一个通用的两阶段框架，它能够使用大量的FSL算法并且保持较快的速度。第一阶段通过SiamRPN生成若干潜在候选框，第二阶段通过少样本分类的思想对候选框进行分类。按照这种coarse-to-fine结构，第一阶段为第二阶段提供稀疏的样本，在第二阶段可以更方便、高效地进行多种FSL算法。作者选取了几种基于优化的少样本学习方法进行证明。此外，该框架可将大多数FSL算法直接应用到视觉跟踪中，使研究人员能够在这两个领域相互交流。</p>
+<span id="more"></span>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>跟踪任务要求在有限的时间内通过少量数据学习对目标和背景的分类，这与FSL任务非常相似。在少样本学习中，我们假设训练任务和新任务之间存在共享的元知识；在视觉跟踪领域，这可以解释为模型在序列中跟踪任何未见过对象的适应性。</p>
+<p>已经有一些方法将FSL的概念引入跟踪了，比如DiMP和一些MAML的方法，它们将在线更新纳入离线训练阶段作为内环 (inner loop)，使得在线更新可以由手工设计转变成数据驱动。然而，这些方法大多局限于对<strong>整个图像</strong>的<strong>特定卷积核</strong>进行优化设计，而不是像在FSL中，使用<strong>稀疏样本</strong>进行<strong>更定制化的权值学习</strong>(例如矩阵乘法因子)，这限制了直接引入各种新的FSL算法，因为直接应用各种FSL算法，将整个图像的所有位置作为输入样本，必然会牺牲其跟踪速度，而且大量简单负样本会在学习中占主导导致模型判别力下降。</p>
+<p>因此作者提出这个通用的两阶段级联结构，在第一阶段过滤掉大量简单负样本，从而使得第二阶段可以应用各种FSL算法在信息丰富的稀疏样本上实现高效的跟踪。作者选取了几种具有不同目标函数，优化方法，或解空间的少样本学习方法进行验证，速度在40-60 FPS。</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Cascaded-Tracking"><a href="#Cascaded-Tracking" class="headerlink" title="Cascaded Tracking"></a>Cascaded Tracking</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427203740.png" alt=""></p>
+<p>整体跟踪框架如图1所示，第一阶段利用SiamRPN++生成若干个候选框，经过ROI Align后送入第二阶段进行少样本分类。第二阶段是一个N-shot-2-way的分类任务，所有候选使用在线生成的伪标签进行标记。</p>
+<h2 id="Second-Stage-as-Few-Shot-Learning"><a href="#Second-Stage-as-Few-Shot-Learning" class="headerlink" title="Second Stage as Few-Shot Learning"></a>Second Stage as Few-Shot Learning</h2><p>首先用数学形式定义任务，公式比较多直接贴图：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427205448.png" style="zoom:80%;" /></p>
+<p>其中 $\theta$ 是meta-training stage (inner loop)中使用base loss $ L_{base} $ 优化得到的sequence-specific参数；然后用$\theta$ 去计算meta loss $ L_{meta} $，用于 meta-testing (outer loop) stage 来更新few-shot learner 的参数 $\rho$ 。而$\varphi $ 表示feature embedding的参数，就是前面一大堆特征提取之类的。</p>
+<p>这里的meta loss是用于分类，所以采用focal loss：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427211809.png" style="zoom:80%;" /></p>
+<p>其中 $\gamma$ 是可学习的缩放因子，$\theta^T$ 是前景和背景的权重。$\alpha, \beta$ 是focal loss的超参数。</p>
+<p>few-shot learner $\Lambda$ 的选择对于公式1的影响巨大，它会被用来分类第一阶段得到的稀疏候选样本，下面介绍几种常用的基于优化（optimization-based）的方法。</p>
+<h2 id="Optimization-Based-Few-Shot-Learners"><a href="#Optimization-Based-Few-Shot-Learners" class="headerlink" title="Optimization-Based Few-Shot Learners"></a>Optimization-Based Few-Shot Learners</h2><p>首先默认目标是一个线性凸优化问题。</p>
+<p><strong>RR-prim-itr</strong> 就是在原空间求解岭回归问题，base loss $ L_{base} $ 为L2 loss，可以看成MAML的一种特例。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427215927.png" style="zoom:80%;" /></p>
+<p>其中 $\omega_n$ 是每个样本的权重，为了加速优化，借鉴DiMP中的最速梯度下降：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427220212.png" style="zoom:80%;" /></p>
+<p><strong>RR-dual-itr</strong> 迭代求解对偶空间中的岭回归，$\theta$ 当成训练集的特征向量的线性组合。对偶变量 $a$ 作为权重因子。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427220526.png" style="zoom:80%;" /></p>
+<p>将公式5带入公式3，得到优化目标</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427220643.png" style="zoom:80%;" /></p>
+<p>用二次规划的方式求解对偶变量 $a$ ，同样可以利用GPU加速。此外，特征向量在训练集中进行线性组合可以缓解过拟合问题。</p>
+<p><strong>RR-dual-cls</strong> 在对偶空间中开发了岭回归的封闭解用于分类。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427221514.png" style="zoom:80%;" /></p>
+<p>优势就是把原始闭式解形式中的 $ \Phi_T\ \Phi$ 变成了 $ \Phi \Phi_T$，使得计算量由 $O(Nd^2)$ 下降到了$O(N^2d)$ ，样本量N远小于特征维数d。</p>
+<p><strong>SVM-dual-itr</strong> 在对偶空间迭代求解稀疏核用于线性分类。主要解决岭回归容易过拟合以及对噪声不鲁棒的问题。用SVM替换了最小二乘，细节不太明白，要去看原文。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427222444.png" style="zoom:80%;" /></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427222555.png" style="zoom:80%;" /></p>
+<h2 id="Online-Tracking"><a href="#Online-Tracking" class="headerlink" title="Online Tracking"></a>Online Tracking</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427230231.png" alt=""></p>
+<p><strong>Candidate Selection</strong> 候选框根据第一阶段的检测结果用阈值为0.2的NMS进行筛选，再通过ROI Align作用于第二阶段。初始化时选择24个样本，IOU最高的作为正样本，其余为负样本，并通过数据增广生成额外的8个正样本，共同用于初始化few-shot learner。跟踪过程中，选择NMS后M=8个样本送入few-shot learner进行判断输出最终结果。用融合得分（两个阶段的得分加权相加）top-k个候选框更新support set中最老的样本，其中最高的为正样本，其余为负样本，k=4。</p>
+<p><strong>Support Set Maintenance</strong> 先入先出（FIFO），对于每个样本赋予权重 $\omega$，随着与当前帧的间隔而指数衰减。原空间中的求解存储1000个样本，对偶空间只有60个，一方面是对CPU资源要求高，另外60个的性能已经很好。此外，第一帧的正样本永远会留在support set中。</p>
+<p><strong>Few-Shot Learner Update</strong> 原空间用公式4更新，对偶空间用滑动平均更新</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427231851.png" style="zoom:80%;" /></p>
+<p><strong>Stage Fusion</strong> 将两个阶段的分类和回归结果融合，第二阶段除了得到分类得分，还会进行类似RCNN的回归refine。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427232137.png" style="zoom:80%;" /></p>
+<h1 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h1><p>训练类似DiMP，每个task从一个视频中选择3个support和2个query。对于第二阶段，NMS后采样16个样本，IOU大于0.8为正，小于0.2为负。每张图片总共8个样本，其中最多两个正样本。meta-training和meta-test均按照上述准则。第一阶段的SiamRPN++用ATSS进行label assign。</p>
+<p>训练loss如下：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427233344.png" style="zoom:80%;" /></p>
+<p>两个阶段都需要分类回归，分类为focal loss，回归为L1 loss。注意这里rcnn的回归是在第一阶段的正样本基础上进行的。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427234324.png" alt=""></p>
+<p>比较了baseline（第一栏），不使用FSL的基于全连接的距离度量方法（第二栏），metric-based少样本学习方法（第三栏），以及本文使用的四种optimization-based少样本学习方法（第四栏）。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427234748.png" alt=""></p>
+<p>只用第一阶段方法，SiamRPN++远不如DiMP；加入第二阶段后，这个差距被消除了，且速度将近领先了3倍。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427234945.png" alt=""></p>
+<p>support set数量的影响，对于不同数据集最佳的数量是不一样的。但是即使是最低限度的M=40鲁棒性依然不错。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210428093340.png" alt=""></p>
+<p>最后可视化了候选框及置信度，可以看到第二阶段对于区分目标和干扰物非常有效。</p>
+<h2 id="Comparison-with-State-of-the-Arts"><a href="#Comparison-with-State-of-the-Arts" class="headerlink" title="Comparison with State-of-the-Arts"></a>Comparison with State-of-the-Arts</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427235535.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427235554.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427235609.png" alt=""></p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文的创新点主要集中在两阶段和少样本学习。这两个东西单独来看都分别有人做过了，像SPM，SPLT就是先检候选框再分类的两阶段方法；而DiMP还有一些用了MAML的跟踪方法都属于少样本学习。作者将二者结合，最大的好处在于第二阶段得到的稀疏样本更适合FSL的任务设置，可以不用局限于任何特定类型的FSL算法，大幅加强了跟踪和FSL的联系。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>FSL</tag>
+        <tag>arxiv</tag>
       </tags>
   </entry>
   <entry>
@@ -168,73 +356,81 @@
       </tags>
   </entry>
   <entry>
-    <title>目标检测框架在目标跟踪中的应用</title>
-    <url>/tracking/2-detection-in-tracking/</url>
-    <content><![CDATA[<p>从SiamRPN将跟踪问题定义为one-shot detection任务之后，出现了大量将检测组件由于跟踪的研究。不过Siamese系列一个很大的问题在于其本质仍然是一个模板匹配问题，网络关注的是寻找与target相似的东西，而忽视了区分target和distractor的判别能力，这正是目标检测任务所擅长的。目标检测和目标跟踪的关键差异在于检测是一个class-level的任务，而跟踪是一个instance-level的任务（即检测只关注类间差异而不重视类内差异，跟踪需要关注每一个实例，同时跟踪的类别是不可知的）。</p>
-<p>本篇笔记关注如何将目标检测框架应用在跟踪中，主要介绍其思想，细节部分不做过多描述，记录论文包含：</p>
+    <title>Learning Target Candidate Association to Keep Track of What Not to Track</title>
+    <url>/tracking/36-learning-target-candidate-association/</url>
+    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428110851.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2103.16556">论文</a> <a href="https://github.com/visionml/pytracking">代码</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>Martin参与的新作，出发点和之前的<a href="https://arxiv.org/abs/2003.11014">KYS</a>类似，均指出仅外观模型不足以区分目标和干扰物，因此需要对所有潜在目标保持跟踪。不同的是KYS是通过一个传播模块隐式地跟踪所有对象，最后作用于外观模型的输出来抑制干扰响应；而本文则是借助SuperGlue显式地匹配帧间所有的候选对象，构建跟踪链，有点多目标跟踪的意思，可解释性也更强。</p>
 <ul>
-<li><a href="https://openaccess.thecvf.com/content_ICCV_2019/papers/Huang_Bridging_the_Gap_Between_Detection_and_Tracking_A_Unified_Approach_ICCV_2019_paper.pdf">Bridging the Gap Between Detection and Tracking: A Unified Approach</a></li>
-<li><a href="https://arxiv.org/abs/1912.08531">GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</a></li>
-<li><a href="https://arxiv.org/abs/1910.11844">Learning to Track Any Object</a></li>
-<li><a href="https://arxiv.org/abs/1911.12836">Siam R-CNN: Visual Tracking by Re-Detection</a></li>
-<li><a href="https://arxiv.org/abs/2004.00830">Tracking by Instance Detection: A Meta-Learning Approach</a></li>
+<li>主流跟踪方法大多聚焦于建立强大的外观模型，然而仅依靠外观模型对于干扰物的鲁棒性较差；</li>
+<li>作者提出另一种思路，即对干扰物也保持跟踪。为此构建一个可学习的关联网络（受启发自SuperGlue），允许在帧与帧之间传播所有候选目标；</li>
+<li>针对跟踪数据集没有对干扰物标注的问题，提出了一种结合部分标注和自监督的训练策略。</li>
 </ul>
 <span id="more"></span>
-<h1 id="Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach"><a href="#Bridging-the-Gap-Between-Detection-and-Tracking-A-Unified-Approach" class="headerlink" title="Bridging the Gap Between Detection and Tracking: A Unified Approach"></a>Bridging the Gap Between Detection and Tracking: A Unified Approach</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234243.png" alt=""></p>
-<p>从结构图可以很直观的看出这就是Faster RCNN的框架，作者将目标跟踪任务看成是one-shot object detection 和 few-shot instance classification 的组合。前者是一个class-level的子任务用来寻找和目标相似的候选框，后者是instance-level的任务用来区分目标和干扰物。主要有两个模块：Target-guidence module(TGM) 和 few-shot instance classifier。</p>
-<p>TGM对目标和搜索区域的特征以及它们在主干中的相互作用进行编码，相当于让网络更关注于与目标相关的instance，后面几篇文章也用了不同的方法来实现这个目的。</p>
-<p>TGM虽然使检测器聚焦于与目标相关的物体，但忽略了周围的背景干扰。为了弥补这一点，提出了few-shot instance classifier。 然而，直接从头开始训练耗时且容易导过拟合。因此作者通过Model-Agnostic Meta Learning (MAML)进行few-shot finetune，增强判别性进一步消除distractors。</p>
-<p>MAML的目的是训练一组初始化参数，<strong>通过在初始参数的基础上进行一或多步的梯度调整，来达到仅用少量数据就能快速适应新task的目的，</strong>示意图如下：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234331.png" alt=""></p>
-<p>域自适应的检测器整体训练流程如下图：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234353.png" alt=""></p>
-<p>输入是三元组，包括examplar, support, query，训练分为inner and outer optimization loops。对于Inner optimization loop中，在support image上计算的loss用来微调meta-layers即detector heads的参数，然后用微调后的参数计算meta-loss其梯度用于更新outer optimization loop。具体公式可以参考原文。</p>
-<p>在线跟踪中将之前帧的检测结果作为训练样本在线更新detector head的参数。</p>
-<p>作者称这是第一篇将目标检测框架应用到跟踪上的通用框架，检测模型可以用Faster RCNN，SSD等，速度上SSD模型为10FPS   Faster RCNN模型为3FPS。</p>
-<hr>
-<h1 id="GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking"><a href="#GlobalTrack-A-Simple-and-Strong-Baseline-for-Long-term-Tracking" class="headerlink" title="GlobalTrack: A Simple and Strong Baseline for Long-term Tracking"></a>GlobalTrack: A Simple and Strong Baseline for Long-term Tracking</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234652.png" alt=""></p>
-<p>这篇文章构建了一个global instance search tracker，主要思想是利用target来引导网络搜索特定instance，与上一篇的TGM模块思想类似，不过这里对在RPN阶段和分类回归阶段都加入了target信息进行引导。对应的就是Query-guided RPN 和 Query-guided RCNN。</p>
-<p><strong>Query-guided RPN</strong></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424234747.png" alt=""></p>
-<p>$z \in [k,k,c]$ 是query的ROI特征，$x \in [h,w,c]$ 是搜索图像的特征。$f_z$ 用 $k \times k$ 0-padding的卷积将 $z$ 转换为 $1 \times 1$ 的核作用于搜索区域，$f_x$ 使用 $3 \times 3$ 1-padding的卷积。$f_{out}$ 是 $1 \times 1 \times c$  的卷积将通道数变回为c，这个过程不使用正则化和激活函数。</p>
-<p><strong>Query-guided RCNN</strong></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210424235530.png" alt=""></p>
-<p> $z$ 定义同上，$x_i \in [k,k,c]$ 是提取的proposal的特征。$h_z$ 和 $h_x$ 均为 $3 \times 3$ 1-padding的卷积，$h_{out}$ 为$1 \times 1 \times c$  卷积。</p>
-<p>GlobalTrack 对视频每一帧的跟踪完全不依赖相邻帧，没有累计误差使得它在长期跟踪问题中准确率保持稳定。速度为6FPS。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426092832.png" alt=""></p>
-<center>车牌在长期跟踪过程中消失了一段时间，当车牌再次出现的时候，其他跟踪算法就再也无法恢复跟踪了，而没有累计误差的 GlobalTrack不受前面的影响立刻跟踪到了目标。</center>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428113928.png" alt=""></p>
+<p>整体框架如上图，base tracker使用SuperDiMP预测出分数图$s$，选择高得分的几个位置用于生成目标候选 $v_i$。然后对每个候选提取一系列特征，包括分类分数$s_i$，位置$c_i$，和 backbone提取的外观模型$f_i$，将这些特征编码编码成一个单独的特征向量$z_i$。将当前帧和前一帧的所有候选送入candidate embedding network，一起处理得到每个候选对象的丰富嵌入$h_i$。最后利用这些特征来计算相似矩阵S，并使用最优匹配策略估计两个连续帧之间的候选分配矩阵A。</p>
+<p>有了这个分配概率矩阵，就可以建立当前帧的所有候选目标$O$与上一帧所有识别出来的目标$O’$之间的关联，包括消失和新出现的目标。用这种传播策略来推断当前帧中的真实目标对象$\hat{o}$。此外，在在线更新目标分类器时，通过计算目标检测置信度$\beta$来管理存储和控制样本权重。</p>
+<h2 id="Problem-Formulation"><a href="#Problem-Formulation" class="headerlink" title="Problem Formulation"></a>Problem Formulation</h2><p>首先将问题公式化，定义候选目标集合 $V = \{v_i\} _ {i=1}^N$，N为候选个数，$V’$和$V$分别表示前一帧和当前帧的候选集合。两帧的候选关联问题就是寻找$V’$和$V$之间的分配矩阵$A$。若$v’ _ {i}$和$v_{j}$关联，那么$A_{i,j}=1$，否则$A_{i,j}=0$。</p>
+<p>实际操作中，并不是每个候选都能找到相应的匹配，因此引入dustbin来处理未匹配的节点。大致的想法就是额外增加一行一列来存放未匹配的节点。比如候选$v_j$只在集合$V$中出现，则$A_{N’+1,j}=1$；类似的，若$v’ _ i$ 在集合$V$中没有匹配对象，则$A_{i,N+1}=1$。</p>
+<p>作者设计了一种可学习方法来预测这个分配矩阵A，首先需要提取候选对象的特征表示，接下来讨论。</p>
+<h2 id="Target-Candidate-Extraction"><a href="#Target-Candidate-Extraction" class="headerlink" title="Target Candidate Extraction"></a>Target Candidate Extraction</h2><p>目标候选对象需要满足两个条件，响应得分是局部最大，且要超过一定阈值。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428170210.png" style="zoom:;" /></p>
+<p>实现时使用$5 \times 5$ max-pooling找到局部极值，阈值$\tau=0.05$。</p>
+<p>接下来为目标候选构建特征编码</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428170144.png"  /></p>
+<p>包括响应得分$s_i$，位置$c_i$，和 backbone在该位置提取的外观模型$f_i$。$\psi$ 表示MLP，将 s 和 c 变换到和 f 一样的维度。</p>
+<h2 id="Candidate-Embedding-Network"><a href="#Candidate-Embedding-Network" class="headerlink" title="Candidate Embedding Network"></a>Candidate Embedding Network</h2><p>为了进一步丰富编码特征，特别是便于提取特征的同时又能识别邻近的候选特征，作者引入了候选嵌入网络。这里借鉴了SuperGlue中的self-attention和cross-attention交换不同节点的信息。最后经过一个线性变换，得到每个候选$v_i$的编码$h_i$。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428171233.png" alt=""></p>
+<h2 id="Candidate-Matching"><a href="#Candidate-Matching" class="headerlink" title="Candidate Matching"></a>Candidate Matching</h2><p>用特征点积来度量候选$v’ _ {i} \in V’$和$v_j \in V$之间的相似性，$S_{i,j}=&lt;h’_i,h_j&gt;$，h是对应的特征编码。</p>
+<p>有了相似性得分矩阵S，接下来需要构建分配矩阵A，通过最大化总体得分$\Sigma_{i,j} S_{i,j} A_{i,j} $ 可得到A，这是一个最优传输问题。</p>
+<p>在此之前，还需要考虑dustbin，它是一个虚拟概念，没有对应的特征编码h，因此不能直接预测相似性得分。只有当一个候选对象与所有其他候选对象的相似度分数足够低时，它才属于dustbin。上面得到的相似度矩阵S仅代表了不考虑dustbin的候选对象之间的初始关联预测。本文没有提及如何处理dustbin的相似性得分，参照SuperGlue是给所有dustbin赋予一个相同的可学习参数。</p>
+<p>下面就是给这个最优匹配问题设计约束条件：</p>
+<ul>
+<li>当$v’ _ i$和$v_j$匹配时，需要同时满足 $\Sigma_{i=1}^{N’} A_{i,j}=1$ 和 $\Sigma_{j=1}^{N} A_{i,j}=1$，确保一对一的匹配，即(i, j)所在行和列仅有唯一的匹配位置；</li>
+<li>所有未匹配到其他候选的候选必须匹配到dustbin，数学表达为$\Sigma_{j} A_{N’+1,j}=N-M$ 和$\Sigma_{i} A_{i,N+1}=N’-M$，其中$M = \Sigma_{(i\le N’,j \le N)} A_{i,j}$表示候选之间匹配上的数量。</li>
+</ul>
+<p>最后通过Sinkhorn算法（迭代）解出最优分配矩阵。</p>
+<p>这一套流程也是借鉴了SuperGlue，这里贴出它的示意图。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428181327.png" alt=""></p>
+<h2 id="Learning-Candidate-Association"><a href="#Learning-Candidate-Association" class="headerlink" title="Learning Candidate Association"></a>Learning Candidate Association</h2><p>上述流程的训练需要知道所有候选之间的匹配关系作为标签，但跟踪数据集只有唯一目标的标注。所以作者提出了部分监督和自监督结合的方式。</p>
+<p><strong>部分监督损失：</strong>只对有标注的那对目标候选计算loss，另外为了模拟遮挡和重检测，人为地排除一些候选并将其替换为dustbin</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428182311.png"  /></p>
+<p>其中$(l’,l)=(i,j)$，$(l’,l)=(N’+1,j)$, $(l’,l)=(i,N+1)$.</p>
+<p><strong>自监督损失：</strong>自监督的一个候选$V$是由另外的候选$V’$增广变换而来的，因此它们可以构建一一对应关系$C=\{(i,i)\}^N_{i=1}$，增广策略包括随机平移位置$c_i$，增减响应得分$s_i$，以及变换图像对特征$f_i$进行变换。此外，也像上面部分监督一样模拟了遮挡和重检测。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428202146.png"  /></p>
+<p>最后将二者相加得到最终loss。</p>
+<p><strong>Data Mining:</strong> 有价值的训练样本是那些出现干扰物导致跟踪失败或者跟踪置信度很低的子序列，这样才能包含更多候选供网络学习。因此先使用base tracker跑一遍找到这些困难样本。</p>
+<p><strong>Training Details:</strong> 先训练SuperDiMP（这里不训练在线分类的参数，可能是因为想要获取更多失败的样本），跑一遍数据找到难样本。然后冻结base tracker的参数只训练后半部分网络。</p>
+<h2 id="Object-Association"><a href="#Object-Association" class="headerlink" title="Object Association"></a>Object Association</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428205314.png" alt=""></p>
+<p>在线跟踪时对所有潜在对象保持跟踪，并构建跟踪链，如图3所示。若当前的候选对象都与该对象没有关联，那么该对象就会从场景中消失。若有新的对象出现则新增链并赋予新的对象id。对于关联上的对象，将得分$s_i$添加到历史分数中。此外，当候选对应关系不确定，即分配概率小于$\tau=0.75$时，我们删除旧的对象并创建一个新的对象。</p>
+<p>这样所有候选对象都与一个已经存在的或新创建的对象相关联，若上一帧检测到的真实目标在当前帧有关联对象，则暂定该关联对象是目标。为了避免该关联对象是干扰，还需将它的历史得分与当前其他候选对象的得分进行比较，如果另一个对象在当前帧中获得的分类分数高于当前选择对象在过去获得的所有分数，我们就选择这个对象作为目标；否则还是保持当前选择对象不变。</p>
+<p>若上一帧检测到的真实目标在当前帧没有关联对象，则进行重检测，需满足：1. 分类得分最高；2. 分类得分大于阈值$\eta =0.25$。</p>
+<p>整个算法流程如下图：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429161216.png" alt=""></p>
+<center>'.' 表示访问对象的属性</center>
 
-<hr>
-<h1 id="Learning-to-Track-Any-Object"><a href="#Learning-to-Track-Any-Object" class="headerlink" title="Learning to Track Any Object"></a>Learning to Track Any Object</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426093105.png" alt=""></p>
-<center>图1 (a)从基于图像的数据集学习一个通用对象先验，(b)通过计算一个封闭形式的目标和背景之间的线性判别器使其适应于一个感兴趣的特定对象(例如左上角的总线)。这允许跟踪物体通过显著的变形，而不捕获干扰物</center>
-
-<p>本文重点在于将category-specific object detector 变成 category-agnostic, object-specific detector来做跟踪。想达到这个目的，需要处理如下两个关键的问题，如图1所示：</p>
-<ol>
-<li>如何将 category specific prior 改为 generic objectness prior？</li>
-<li>如何进一步的将这种 generic prior 改为 particular instance of interst？</li>
-</ol>
-<p>针对问题1，作者构建了 a joint model for category-specific object detection and category-agnostic tracking。和之前类似，也是添加了目标特征的检测框架（基于 Mask R-CNN）如下图2所示 。其将目标模板作为输入，计算 feature embedding。然后该模板特征与测试图像计算相似性得到attention mask。attention mask又被用于重新加权空间特征，以检测感兴趣的物体。另外这个框架可以同时用于检测、跟踪和分割。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426100348.png" alt=""></p>
-<p>针对问题 2，本文计算一个线性分类器来区分第一帧的感兴趣目标和其他目标，通过最小二乘方法得到闭式解从而可以学习到一个更关注感兴趣instance的鲁棒特征。下图3通过一个例子说明，左下是直接用feature embedding计算的attention map，右下是用线性分类器计算的attention map，显然右下效果更好。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426100433.png" alt=""></p>
-<p>最后运行速度为7FPS。</p>
-<hr>
-<h1 id="Siam-R-CNN-Visual-Tracking-by-Re-Detection"><a href="#Siam-R-CNN-Visual-Tracking-by-Re-Detection" class="headerlink" title="Siam R-CNN: Visual Tracking by Re-Detection"></a>Siam R-CNN: Visual Tracking by Re-Detection</h1><p>这个就是用重检测的思想做跟踪，也是基于RCNN框架的，同时使用Tracklet Dynamic Programming Algorithm去跟踪所有潜在的目标。</p>
-<p>具体解读见前一篇笔记</p>
-<p><a href="https://kongbia.github.io/2021/04/24/tracking/1-siamrcnn/">Siam R-CNN: Visual Tracking by Re-Detection | CV home (kongbia.github.io)</a></p>
-<hr>
-<h1 id="Tracking-by-Instance-Detection-A-Meta-Learning-Approach"><a href="#Tracking-by-Instance-Detection-A-Meta-Learning-Approach" class="headerlink" title="Tracking by Instance Detection: A Meta-Learning Approach"></a>Tracking by Instance Detection: A Meta-Learning Approach</h1><p>同样是域自适应方法将检测器转化成跟踪器，此篇更像是第一篇Bridging the Gap Between Detection and Tracking: A Unified Approach的进阶，不同的是本文没有额外添加模板引导分支，而是直接用标准的检测器通过元学习的方式做域自适应。避免了冗余结构使得速度大幅提升，达到40FPS。另外就是训练的时候加入了很多来自MAML++喝MetaSGD的技巧，效果更好。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/1-detection-in-tracking/20210426100802.png" alt=""></p>
-<p>具体的解读可以参考我b站的笔记，后续会搬运到博客。</p>
-<p><a href="https://www.bilibili.com/read/cv5521209/">[Note7] Tracking by Instance Detection: A Meta-Learning Approach - 哔哩哔哩专栏 (bilibili.com)</a></p>
-<hr>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>这几篇文章的一个共同思路都是融合了Siamese架构和目标检测框架，将目标实例信息以各种形式加入待检测图像中，从而将class-level的通用检测转变成instance-level的实例检测（跟踪）。借助目标检测对尺度，形变等复杂条件的优越性来解决跟踪中的问题，同时将跟踪转变成one-shot的检测任务也避免了更新带来的漂移（第一篇里面使用了MAML进行更新，主要原因猜测是单纯往RPN中融合目标信息还不够work，像globaltracker在head上也添加了instance，而第三篇则是构建一个分类器增强鲁棒性）。当然引入检测框架带来的计算开销也是很大的，最后一种方法避免了额外的模板分支相当于跳出了Siamese框架，给实时带来了可能。</p>
+<h2 id="Memory-Sample-Confidence"><a href="#Memory-Sample-Confidence" class="headerlink" title="Memory Sample Confidence"></a>Memory Sample Confidence</h2><p>base tracker在线更新的训练样本采用先入先出的策略进行替换，并仅基于存在的寿命时间对样本加权。本文则是将分类得分也考虑进来，计算在线优化损失时综合考虑了寿命时间和分类得分对样本进行加权：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429165636.png"  /></p>
+<p>$\alpha$ 表示样本存在的时间，越早的样本值越小；$\beta$表示分类得分。此外，训练样本更新时替换的是$\alpha \beta$最小的样本而不是简单替换最早的样本。</p>
+<p><strong>Inference details</strong></p>
+<p>base tracker搜索区域取决于当前估计的边界框大小。当目标物体被遮挡或出视野时，跟踪器通常只检测到目标的一小部分，并估计出比之前帧更小的边界框，相应的搜索区域也会变小，这对于跟踪失败后的重捕是不利的。因此，如果在目标丢失前搜索区域大幅缩小，我们将搜索区域重置为以前的大小，以便于重新检测。</p>
+<p>此外，如果只有一个高分目标出现在前一帧和当前帧中。我们选择这个候选对象作为目标，省略运行目标候选关联网络来加速跟踪。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429165050.png" alt=""></p>
+<p>memory sample confidence 在LaSOT提升比较大，NFS和UAV123没啥影响，说明它在长时跟踪中的作用更大。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429165254.png" alt=""></p>
+<p>比较了提出的部分监督损失，自监督损失和数据挖掘的作用，每一项都有提升。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429165349.png" alt=""></p>
+<p>表3分析了学习在线分类器过程中加入分类得分的影响。第一列表示增加了分类得分来考虑替换训练样本，第二列表示在计算在线损失时增加分类得分对样本加权，第三列表示在线学习时忽略了得分较低的低质量样本。</p>
+<h2 id="State-of-the-art-Comparison"><a href="#State-of-the-art-Comparison" class="headerlink" title="State-of-the-art Comparison"></a>State-of-the-art Comparison</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429172159.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429172214.png" alt=""></p>
+<p>对LaSOT数据集，$T&lt;0.7$时本文方法指标明显更高，证明其鲁棒性。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429172329.png" alt=""></p>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
       </categories>
       <tags>
-        <tag>综述</tag>
+        <tag>ICCV2021</tag>
       </tags>
   </entry>
   <entry>
@@ -368,120 +564,48 @@
         <category>目标跟踪</category>
       </categories>
       <tags>
+        <tag>CVPR2021</tag>
         <tag>综述</tag>
         <tag>transform</tag>
-        <tag>CVPR2021</tag>
       </tags>
   </entry>
   <entry>
-    <title>STMTrack: Template-free Visual Tracking with Space-time Memory Networks</title>
-    <url>/tracking/34-stmtrack/</url>
-    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427102245.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2104.00324">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>离线训练的Siamese跟踪器已经充分完全挖掘了第一帧模板信息，但它们抵抗目标外观变化的能力依然有限。现有的模板更新机制大多依赖耗时的数值优化或复杂的手工设计策略，这阻碍了它们的实时跟踪和实际应用。本文提出了一种基于时空记忆网络的跟踪框架，该框架能够充分利用与目标相关的历史信息，从而更好地适应跟踪过程中的外观变化。这样避免了模板更新，所以叫template-free。主要创新点包括：</p>
-<ul>
-<li>引入记忆机制存储目标的历史信息，引导跟踪器聚焦在当前帧中信息最丰富的区域；</li>
-<li>memory network的像素级相似度计算能够生成更精确的目标框。</li>
-</ul>
-<p>运行速度37 FPS</p>
+    <title>Updatable Siamese Tracker with Two-stage One-shot Learning</title>
+    <url>/tracking/38-siamtol/</url>
+    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510102825.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2104.15049">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文主要解决孪生跟踪器缺乏在线更新能力的问题。传统的线性模板更新难以处理目标的不规则变化和采样噪声，造成跟踪漂移；而一些像updatenet采用网络进行自适应更新的方法，其更新网络和跟踪器在结构上是分离的，不能从联合训练中受益，也不能以最佳方式合作。</p>
+<p>为了实现高质量的自适应更新，作者从 one-shot learning的角度提出一个two-stage one-shot learner，利用不同阶段的目标样本预测分类器的参数。具体来说，除了使用模板分支来学习初始目标特征，作者额外增加了一个输入分支用于捕获后续帧中的目标特征，并设计了一个残差模块来使用这些特征更新初始模板。通过残差学习融合多帧目标特征，跟踪器可以用更合适的模板跟踪当前目标。此外，还设计了一种多方面(multi-aspect)的训练损失来避免过拟合。</p>
 <span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427102842.png" alt=""></p>
-<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p>整体框架如图2所示，主要包括三部分：特征提取网络、时空记忆网络和头部预测。特征提取网络包括<font color=LightGreen>绿色</font>的记忆分支和<font color=LightBlue>蓝色</font>的查询分支。记忆分支输入多个历史帧以及对应的前背景标签，查询分支输入当前帧。特征提取后，时空记忆网络从所有记忆帧中检索与目标相关的信息，生成综合特征图进行最后的分类回归。</p>
-<h2 id="Feature-Extraction-Network"><a href="#Feature-Extraction-Network" class="headerlink" title="Feature Extraction Network"></a>Feature Extraction Network</h2><p>对memory的每个分支，特征提取为：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427104555.png" style="zoom:80%;" /></p>
-<p>$m_i$ 表示第i帧图像，$c_i$ 表示第i个前背景标签（根据gt构建的0/1 mask），$ \varphi_0^m $ 和 $g$ 将图像和标签统一到同一维度从而相加，$ h_m $ 对特征降维到512。</p>
-<p>对于query分支：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427105233.png" style="zoom:80%;" /></p>
-<p>$ \varphi^m $ 和 $ \varphi^q $ 结构一样但<strong>参数不共享</strong>。</p>
-<h2 id="Space-time-Memory-Network"><a href="#Space-time-Memory-Network" class="headerlink" title="Space-time Memory Network"></a>Space-time Memory Network</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427111921.png" alt=""></p>
-<p>首先计算memory的 $f_m $ 和 query的 $f_q $  每个像素之间的相似性 $\omega \in THW \times HW $</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427111950.png" style="zoom:80%;" /></p>
-<p>这个操作类似non-local或self-attention，相当于用query去检索历史帧中与目标相关的信息作为<strong>软权重</strong>来加权 $f_m $。最后将加权后的结果与$f_q $ 拼接起来</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427112745.png" style="zoom:80%;" /></p>
-<p>与non-local区别在于该方法采用相似性矩阵作为软权值从多个记忆帧中检索目标信息，而不是计算特征图中每个像素对的非局部自注意。</p>
-<h2 id="Head-Network"><a href="#Head-Network" class="headerlink" title="Head Network"></a>Head Network</h2><p>常规的FCOS类预测头。</p>
-<h2 id="Inference-Phase"><a href="#Inference-Phase" class="headerlink" title="Inference Phase"></a>Inference Phase</h2><p>训练和推理时记忆帧的数量是可以不一致的，因为不影响优化参数的数量。</p>
-<p>推理时的记忆帧采样策略为：首先保留最可靠的第一帧和最相似的上一帧，剩下的帧数均匀采样</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427113629.png" style="zoom:80%;" /></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p>主要分析了是否共享backbone参数，前背景标签的作用，记忆帧的数量的影响。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427114407.png" style="zoom:80%;" /></p>
-<p>加了 fb_label 之后，不共享backbone参数效果更好。可能是因为此时两个分支的特征空间已经不一样了，期望学到的东西也是不一样的。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115130.png" style="zoom:80%;" /></p>
-<p>随着记忆帧的数量增加，性能都是先增后减。</p>
-<p>训练时帧数越多，可以训练的目标模式越多，但与当前帧相似的帧也会越多。在这种情况下，网络倾向于比较最相似的图像对，而不是学习当前帧与有杂波背景或部分遮挡的帧之间的相似性。</p>
-<h2 id="Comparison-with-the-stateoftheart"><a href="#Comparison-with-the-stateoftheart" class="headerlink" title="Comparison with the stateoftheart"></a>Comparison with the stateoftheart</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115649.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115737.png" style="zoom:80%;" /></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115757.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115804.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/34-stmtrack/20210427115816.png" style="zoom:80%;" /></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>提出了一种新的基于时空记忆网络的跟踪框架。该框架摒弃了传统的基于模板的跟踪机制，使用多个记忆帧和前背景标签映射来定位查询帧中的目标。在时空记忆网络中，通过查询帧自适应地检索存储在多个记忆帧中的目标信息，使跟踪器对目标变化具有较强的自适应能力。</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>CVPR2021</tag>
-        <tag>时序</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Real-Time Visual Object Tracking via Few-Shot Learning</title>
-    <url>/tracking/35-FSL-tracking/</url>
-    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427173306.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2103.10130">论文</a></p>
-<p>跟踪可以看成是一个特殊的 few-shot learning (FSL) 问题，本文提出了一个通用的两阶段框架，它能够使用大量的FSL算法并且保持较快的速度。第一阶段通过SiamRPN生成若干潜在候选框，第二阶段通过少样本分类的思想对候选框进行分类。按照这种coarse-to-fine结构，第一阶段为第二阶段提供稀疏的样本，在第二阶段可以更方便、高效地进行多种FSL算法。作者选取了几种基于优化的少样本学习方法进行证明。此外，该框架可将大多数FSL算法直接应用到视觉跟踪中，使研究人员能够在这两个领域相互交流。</p>
-<span id="more"></span>
-<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>跟踪任务要求在有限的时间内通过少量数据学习对目标和背景的分类，这与FSL任务非常相似。在少样本学习中，我们假设训练任务和新任务之间存在共享的元知识；在视觉跟踪领域，这可以解释为模型在序列中跟踪任何未见过对象的适应性。</p>
-<p>已经有一些方法将FSL的概念引入跟踪了，比如DiMP和一些MAML的方法，它们将在线更新纳入离线训练阶段作为内环 (inner loop)，使得在线更新可以由手工设计转变成数据驱动。然而，这些方法大多局限于对<strong>整个图像</strong>的<strong>特定卷积核</strong>进行优化设计，而不是像在FSL中，使用<strong>稀疏样本</strong>进行<strong>更定制化的权值学习</strong>(例如矩阵乘法因子)，这限制了直接引入各种新的FSL算法，因为直接应用各种FSL算法，将整个图像的所有位置作为输入样本，必然会牺牲其跟踪速度，而且大量简单负样本会在学习中占主导导致模型判别力下降。</p>
-<p>因此作者提出这个通用的两阶段级联结构，在第一阶段过滤掉大量简单负样本，从而使得第二阶段可以应用各种FSL算法在信息丰富的稀疏样本上实现高效的跟踪。作者选取了几种具有不同目标函数，优化方法，或解空间的少样本学习方法进行验证，速度在40-60 FPS。</p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Cascaded-Tracking"><a href="#Cascaded-Tracking" class="headerlink" title="Cascaded Tracking"></a>Cascaded Tracking</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427203740.png" alt=""></p>
-<p>整体跟踪框架如图1所示，第一阶段利用SiamRPN++生成若干个候选框，经过ROI Align后送入第二阶段进行少样本分类。第二阶段是一个N-shot-2-way的分类任务，所有候选使用在线生成的伪标签进行标记。</p>
-<h2 id="Second-Stage-as-Few-Shot-Learning"><a href="#Second-Stage-as-Few-Shot-Learning" class="headerlink" title="Second Stage as Few-Shot Learning"></a>Second Stage as Few-Shot Learning</h2><p>首先用数学形式定义任务，公式比较多直接贴图：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427205448.png" style="zoom:80%;" /></p>
-<p>其中 $\theta$ 是meta-training stage (inner loop)中使用base loss $ L_{base} $ 优化得到的sequence-specific参数；然后用$\theta$ 去计算meta loss $ L_{meta} $，用于 meta-testing (outer loop) stage 来更新few-shot learner 的参数 $\rho$ 。而$\varphi $ 表示feature embedding的参数，就是前面一大堆特征提取之类的。</p>
-<p>这里的meta loss是用于分类，所以采用focal loss：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427211809.png" style="zoom:80%;" /></p>
-<p>其中 $\gamma$ 是可学习的缩放因子，$\theta^T$ 是前景和背景的权重。$\alpha, \beta$ 是focal loss的超参数。</p>
-<p>few-shot learner $\Lambda$ 的选择对于公式1的影响巨大，它会被用来分类第一阶段得到的稀疏候选样本，下面介绍几种常用的基于优化（optimization-based）的方法。</p>
-<h2 id="Optimization-Based-Few-Shot-Learners"><a href="#Optimization-Based-Few-Shot-Learners" class="headerlink" title="Optimization-Based Few-Shot Learners"></a>Optimization-Based Few-Shot Learners</h2><p>首先默认目标是一个线性凸优化问题。</p>
-<p><strong>RR-prim-itr</strong> 就是在原空间求解岭回归问题，base loss $ L_{base} $ 为L2 loss，可以看成MAML的一种特例。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427215927.png" style="zoom:80%;" /></p>
-<p>其中 $\omega_n$ 是每个样本的权重，为了加速优化，借鉴DiMP中的最速梯度下降：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427220212.png" style="zoom:80%;" /></p>
-<p><strong>RR-dual-itr</strong> 迭代求解对偶空间中的岭回归，$\theta$ 当成训练集的特征向量的线性组合。对偶变量 $a$ 作为权重因子。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427220526.png" style="zoom:80%;" /></p>
-<p>将公式5带入公式3，得到优化目标</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427220643.png" style="zoom:80%;" /></p>
-<p>用二次规划的方式求解对偶变量 $a$ ，同样可以利用GPU加速。此外，特征向量在训练集中进行线性组合可以缓解过拟合问题。</p>
-<p><strong>RR-dual-cls</strong> 在对偶空间中开发了岭回归的封闭解用于分类。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427221514.png" style="zoom:80%;" /></p>
-<p>优势就是把原始闭式解形式中的 $ \Phi_T\ \Phi$ 变成了 $ \Phi \Phi_T$，使得计算量由 $O(Nd^2)$ 下降到了$O(N^2d)$ ，样本量N远小于特征维数d。</p>
-<p><strong>SVM-dual-itr</strong> 在对偶空间迭代求解稀疏核用于线性分类。主要解决岭回归容易过拟合以及对噪声不鲁棒的问题。用SVM替换了最小二乘，细节不太明白，要去看原文。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427222444.png" style="zoom:80%;" /></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427222555.png" style="zoom:80%;" /></p>
-<h2 id="Online-Tracking"><a href="#Online-Tracking" class="headerlink" title="Online Tracking"></a>Online Tracking</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427230231.png" alt=""></p>
-<p><strong>Candidate Selection</strong> 候选框根据第一阶段的检测结果用阈值为0.2的NMS进行筛选，再通过ROI Align作用于第二阶段。初始化时选择24个样本，IOU最高的作为正样本，其余为负样本，并通过数据增广生成额外的8个正样本，共同用于初始化few-shot learner。跟踪过程中，选择NMS后M=8个样本送入few-shot learner进行判断输出最终结果。用融合得分（两个阶段的得分加权相加）top-k个候选框更新support set中最老的样本，其中最高的为正样本，其余为负样本，k=4。</p>
-<p><strong>Support Set Maintenance</strong> 先入先出（FIFO），对于每个样本赋予权重 $\omega$，随着与当前帧的间隔而指数衰减。原空间中的求解存储1000个样本，对偶空间只有60个，一方面是对CPU资源要求高，另外60个的性能已经很好。此外，第一帧的正样本永远会留在support set中。</p>
-<p><strong>Few-Shot Learner Update</strong> 原空间用公式4更新，对偶空间用滑动平均更新</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427231851.png" style="zoom:80%;" /></p>
-<p><strong>Stage Fusion</strong> 将两个阶段的分类和回归结果融合，第二阶段除了得到分类得分，还会进行类似RCNN的回归refine。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427232137.png" style="zoom:80%;" /></p>
-<h1 id="Implementation-Details"><a href="#Implementation-Details" class="headerlink" title="Implementation Details"></a>Implementation Details</h1><p>训练类似DiMP，每个task从一个视频中选择3个support和2个query。对于第二阶段，NMS后采样16个样本，IOU大于0.8为正，小于0.2为负。每张图片总共8个样本，其中最多两个正样本。meta-training和meta-test均按照上述准则。第一阶段的SiamRPN++用ATSS进行label assign。</p>
-<p>训练loss如下：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427233344.png" style="zoom:80%;" /></p>
-<p>两个阶段都需要分类回归，分类为focal loss，回归为L1 loss。注意这里rcnn的回归是在第一阶段的正样本基础上进行的。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427234324.png" alt=""></p>
-<p>比较了baseline（第一栏），不使用FSL的基于全连接的距离度量方法（第二栏），metric-based少样本学习方法（第三栏），以及本文使用的四种optimization-based少样本学习方法（第四栏）。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427234748.png" alt=""></p>
-<p>只用第一阶段方法，SiamRPN++远不如DiMP；加入第二阶段后，这个差距被消除了，且速度将近领先了3倍。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427234945.png" alt=""></p>
-<p>support set数量的影响，对于不同数据集最佳的数量是不一样的。但是即使是最低限度的M=40鲁棒性依然不错。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210428093340.png" alt=""></p>
-<p>最后可视化了候选框及置信度，可以看到第二阶段对于区分目标和干扰物非常有效。</p>
-<h2 id="Comparison-with-State-of-the-Arts"><a href="#Comparison-with-State-of-the-Arts" class="headerlink" title="Comparison with State-of-the-Arts"></a>Comparison with State-of-the-Arts</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427235535.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427235554.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/35-FSL-tracking/20210427235609.png" alt=""></p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>本文的创新点主要集中在两阶段和少样本学习。这两个东西单独来看都分别有人做过了，像SPM，SPLT就是先检候选框再分类的两阶段方法；而DiMP还有一些用了MAML的跟踪方法都属于少样本学习。作者将二者结合，最大的好处在于第二阶段得到的稀疏样本更适合FSL的任务设置，可以不用局限于任何特定类型的FSL算法，大幅加强了跟踪和FSL的联系。</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="One-shot-learning-formulation"><a href="#One-shot-learning-formulation" class="headerlink" title="One-shot learning formulation"></a>One-shot learning formulation</h2><p>SiamRPN指出孪生跟踪框架是一个one-shot learner，即通过初始帧的一次学习使得模型能够跟踪到后续帧中的目标，本节首先对其进行公式化定义。</p>
+<p>目标跟踪的典型框架是判别分类器$\varphi (x,W)$，目标是在训练数据集上找到能使总损失L最小化的参数W：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510115919.png" alt=""></p>
+<p>$n$表示训练样本数，$l_i$是样本$x_i$的标签。尽管分类器在目标跟踪上具有很强的竞争力，但需要大量计算量和样本在线训练学习。</p>
+<p>另外一种跟踪框架是孪生网络，目标是学习模板和搜索区域之间的相似性度量：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510152537.png" alt=""></p>
+<p>$z_i$和$x_i$分别表示模板和搜索区域，$\varphi ‘$和 $\zeta$ 分别表示特征提取网络和匹配网络。</p>
+<p>进一步分析，我们发现公式2的孪生网络模型可以被重新解释为类似公式1的one-shot分类器模型。对于分类器$\varphi (x,W)$，若仅通过一个感兴趣样本$z_i$就能学到分类器参数$W$，那么这就是一个one-shot learner。因此，孪生网络的模板分支可以看成是一个元学习函数$\omega$，它将模板特征映射成分类器参数$W$；而搜索分支和互相关就是一个检测器，整个目标函数定义如下：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510154435.png" alt=""></p>
+<p>至此，我们就把孪生框架解释为了one-shot learning，图1直观展示了这种表达方式</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510155519.png" alt=""></p>
+<h2 id="Two-stage-One-shot-learner"><a href="#Two-stage-One-shot-learner" class="headerlink" title="Two-stage One-shot learner"></a>Two-stage One-shot learner</h2><p>孪生网络框架只能在初始帧这个stage通过one-shot learning学到目标信息，因此无法在线更新。那自然会想能不能让这个learner在不同的stage（跟踪阶段）去学习目标信息呢？因此作者提出了 two-stage one-shot learner (TOL)，可以结合具有不同属性的样本来预测分类器的参数$W$。目标函数定义如下：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510160306.png" alt=""></p>
+<p>相比公式3，就是增加了一个来自后续帧中的样本$u_i$来学习$\omega$ 。</p>
+<h2 id="Updatable-Siamese-Network"><a href="#Updatable-Siamese-Network" class="headerlink" title="Updatable Siamese Network"></a>Updatable Siamese Network</h2><p>基于上述的 two-stage one-shot learner，本文提出一个可更新的孪生网络，如下图</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510162506.png" alt=""></p>
+<p>相比原始的孪生框架，增加了一个update分支，然后把两个分支的目标特征进行融合。其实抛开上面讲的那些one-shot learning也不妨碍理解这个结构，无非就是把初始帧和跟踪过程中的历史帧通过网络融合生成一个更好的模板以适应跟踪中的变化。</p>
+<p>融合模板的过程（或者说元学习函数）定义如下：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510163640.png" alt=""></p>
+<p>其中$zf$和$uf$分别表示模板和更新样本的特征，M表示特征融合网络（三层卷积）。</p>
+<p><strong>Multi-aspect loss training</strong> 训练网络时在模板和搜索图像之间的间隔图像中额外扣一个更新样本，并且计算损失分别考虑了模板样本-搜索样本，更新样本-搜索样本，融合模板样本-搜索样本三方面损失，如图3所示。这样做是因为网络包括一个基本的孪生跟踪器和一个在线调整的更新器两部分，如果直接用一个整体损失训练，网络可能难以平衡这两部分。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510164536.png" alt=""></p>
+<p><strong>Online update</strong> 在线跟踪过程中，更新样本每N=10帧更新一次，且满足置信度大于阈值0.9。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Comparison-with-the-state-of-the-arts"><a href="#Comparison-with-the-state-of-the-arts" class="headerlink" title="Comparison with the state-of-the-arts"></a>Comparison with the state-of-the-arts</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165043.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165257.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165536.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165551.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165627.png" alt=""></p>
+<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165730.png" alt=""></p>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
@@ -489,6 +613,7 @@
       <tags>
         <tag>FSL</tag>
         <tag>arxiv</tag>
+        <tag>模型更新</tag>
       </tags>
   </entry>
   <entry>
@@ -543,225 +668,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Learning Target Candidate Association to Keep Track of What Not to Track</title>
-    <url>/tracking/36-learning-target-candidate-association/</url>
-    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428110851.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2103.16556">论文</a> <a href="https://github.com/visionml/pytracking">代码</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>Martin参与的新作，出发点和之前的<a href="https://arxiv.org/abs/2003.11014">KYS</a>类似，均指出仅外观模型不足以区分目标和干扰物，因此需要对所有潜在目标保持跟踪。不同的是KYS是通过一个传播模块隐式地跟踪所有对象，最后作用于外观模型的输出来抑制干扰响应；而本文则是借助SuperGlue显式地匹配帧间所有的候选对象，构建跟踪链，有点多目标跟踪的意思，可解释性也更强。</p>
-<ul>
-<li>主流跟踪方法大多聚焦于建立强大的外观模型，然而仅依靠外观模型对于干扰物的鲁棒性较差；</li>
-<li>作者提出另一种思路，即对干扰物也保持跟踪。为此构建一个可学习的关联网络（受启发自SuperGlue），允许在帧与帧之间传播所有候选目标；</li>
-<li>针对跟踪数据集没有对干扰物标注的问题，提出了一种结合部分标注和自监督的训练策略。</li>
-</ul>
-<span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428113928.png" alt=""></p>
-<p>整体框架如上图，base tracker使用SuperDiMP预测出分数图$s$，选择高得分的几个位置用于生成目标候选 $v_i$。然后对每个候选提取一系列特征，包括分类分数$s_i$，位置$c_i$，和 backbone提取的外观模型$f_i$，将这些特征编码编码成一个单独的特征向量$z_i$。将当前帧和前一帧的所有候选送入candidate embedding network，一起处理得到每个候选对象的丰富嵌入$h_i$。最后利用这些特征来计算相似矩阵S，并使用最优匹配策略估计两个连续帧之间的候选分配矩阵A。</p>
-<p>有了这个分配概率矩阵，就可以建立当前帧的所有候选目标$O$与上一帧所有识别出来的目标$O’$之间的关联，包括消失和新出现的目标。用这种传播策略来推断当前帧中的真实目标对象$\hat{o}$。此外，在在线更新目标分类器时，通过计算目标检测置信度$\beta$来管理存储和控制样本权重。</p>
-<h2 id="Problem-Formulation"><a href="#Problem-Formulation" class="headerlink" title="Problem Formulation"></a>Problem Formulation</h2><p>首先将问题公式化，定义候选目标集合 $V = \{v_i\} _ {i=1}^N$，N为候选个数，$V’$和$V$分别表示前一帧和当前帧的候选集合。两帧的候选关联问题就是寻找$V’$和$V$之间的分配矩阵$A$。若$v’ _ {i}$和$v_{j}$关联，那么$A_{i,j}=1$，否则$A_{i,j}=0$。</p>
-<p>实际操作中，并不是每个候选都能找到相应的匹配，因此引入dustbin来处理未匹配的节点。大致的想法就是额外增加一行一列来存放未匹配的节点。比如候选$v_j$只在集合$V$中出现，则$A_{N’+1,j}=1$；类似的，若$v’ _ i$ 在集合$V$中没有匹配对象，则$A_{i,N+1}=1$。</p>
-<p>作者设计了一种可学习方法来预测这个分配矩阵A，首先需要提取候选对象的特征表示，接下来讨论。</p>
-<h2 id="Target-Candidate-Extraction"><a href="#Target-Candidate-Extraction" class="headerlink" title="Target Candidate Extraction"></a>Target Candidate Extraction</h2><p>目标候选对象需要满足两个条件，响应得分是局部最大，且要超过一定阈值。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428170210.png" style="zoom:;" /></p>
-<p>实现时使用$5 \times 5$ max-pooling找到局部极值，阈值$\tau=0.05$。</p>
-<p>接下来为目标候选构建特征编码</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428170144.png"  /></p>
-<p>包括响应得分$s_i$，位置$c_i$，和 backbone在该位置提取的外观模型$f_i$。$\psi$ 表示MLP，将 s 和 c 变换到和 f 一样的维度。</p>
-<h2 id="Candidate-Embedding-Network"><a href="#Candidate-Embedding-Network" class="headerlink" title="Candidate Embedding Network"></a>Candidate Embedding Network</h2><p>为了进一步丰富编码特征，特别是便于提取特征的同时又能识别邻近的候选特征，作者引入了候选嵌入网络。这里借鉴了SuperGlue中的self-attention和cross-attention交换不同节点的信息。最后经过一个线性变换，得到每个候选$v_i$的编码$h_i$。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428171233.png" alt=""></p>
-<h2 id="Candidate-Matching"><a href="#Candidate-Matching" class="headerlink" title="Candidate Matching"></a>Candidate Matching</h2><p>用特征点积来度量候选$v’ _ {i} \in V’$和$v_j \in V$之间的相似性，$S_{i,j}=&lt;h’_i,h_j&gt;$，h是对应的特征编码。</p>
-<p>有了相似性得分矩阵S，接下来需要构建分配矩阵A，通过最大化总体得分$\Sigma_{i,j} S_{i,j} A_{i,j} $ 可得到A，这是一个最优传输问题。</p>
-<p>在此之前，还需要考虑dustbin，它是一个虚拟概念，没有对应的特征编码h，因此不能直接预测相似性得分。只有当一个候选对象与所有其他候选对象的相似度分数足够低时，它才属于dustbin。上面得到的相似度矩阵S仅代表了不考虑dustbin的候选对象之间的初始关联预测。本文没有提及如何处理dustbin的相似性得分，参照SuperGlue是给所有dustbin赋予一个相同的可学习参数。</p>
-<p>下面就是给这个最优匹配问题设计约束条件：</p>
-<ul>
-<li>当$v’ _ i$和$v_j$匹配时，需要同时满足 $\Sigma_{i=1}^{N’} A_{i,j}=1$ 和 $\Sigma_{j=1}^{N} A_{i,j}=1$，确保一对一的匹配，即(i, j)所在行和列仅有唯一的匹配位置；</li>
-<li>所有未匹配到其他候选的候选必须匹配到dustbin，数学表达为$\Sigma_{j} A_{N’+1,j}=N-M$ 和$\Sigma_{i} A_{i,N+1}=N’-M$，其中$M = \Sigma_{(i\le N’,j \le N)} A_{i,j}$表示候选之间匹配上的数量。</li>
-</ul>
-<p>最后通过Sinkhorn算法（迭代）解出最优分配矩阵。</p>
-<p>这一套流程也是借鉴了SuperGlue，这里贴出它的示意图。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428181327.png" alt=""></p>
-<h2 id="Learning-Candidate-Association"><a href="#Learning-Candidate-Association" class="headerlink" title="Learning Candidate Association"></a>Learning Candidate Association</h2><p>上述流程的训练需要知道所有候选之间的匹配关系作为标签，但跟踪数据集只有唯一目标的标注。所以作者提出了部分监督和自监督结合的方式。</p>
-<p><strong>部分监督损失：</strong>只对有标注的那对目标候选计算loss，另外为了模拟遮挡和重检测，人为地排除一些候选并将其替换为dustbin</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428182311.png"  /></p>
-<p>其中$(l’,l)=(i,j)$，$(l’,l)=(N’+1,j)$, $(l’,l)=(i,N+1)$.</p>
-<p><strong>自监督损失：</strong>自监督的一个候选$V$是由另外的候选$V’$增广变换而来的，因此它们可以构建一一对应关系$C=\{(i,i)\}^N_{i=1}$，增广策略包括随机平移位置$c_i$，增减响应得分$s_i$，以及变换图像对特征$f_i$进行变换。此外，也像上面部分监督一样模拟了遮挡和重检测。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428202146.png"  /></p>
-<p>最后将二者相加得到最终loss。</p>
-<p><strong>Data Mining:</strong> 有价值的训练样本是那些出现干扰物导致跟踪失败或者跟踪置信度很低的子序列，这样才能包含更多候选供网络学习。因此先使用base tracker跑一遍找到这些困难样本。</p>
-<p><strong>Training Details:</strong> 先训练SuperDiMP（这里不训练在线分类的参数，可能是因为想要获取更多失败的样本），跑一遍数据找到难样本。然后冻结base tracker的参数只训练后半部分网络。</p>
-<h2 id="Object-Association"><a href="#Object-Association" class="headerlink" title="Object Association"></a>Object Association</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210428205314.png" alt=""></p>
-<p>在线跟踪时对所有潜在对象保持跟踪，并构建跟踪链，如图3所示。若当前的候选对象都与该对象没有关联，那么该对象就会从场景中消失。若有新的对象出现则新增链并赋予新的对象id。对于关联上的对象，将得分$s_i$添加到历史分数中。此外，当候选对应关系不确定，即分配概率小于$\tau=0.75$时，我们删除旧的对象并创建一个新的对象。</p>
-<p>这样所有候选对象都与一个已经存在的或新创建的对象相关联，若上一帧检测到的真实目标在当前帧有关联对象，则暂定该关联对象是目标。为了避免该关联对象是干扰，还需将它的历史得分与当前其他候选对象的得分进行比较，如果另一个对象在当前帧中获得的分类分数高于当前选择对象在过去获得的所有分数，我们就选择这个对象作为目标；否则还是保持当前选择对象不变。</p>
-<p>若上一帧检测到的真实目标在当前帧没有关联对象，则进行重检测，需满足：1. 分类得分最高；2. 分类得分大于阈值$\eta =0.25$。</p>
-<p>整个算法流程如下图：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429161216.png" alt=""></p>
-<center>'.' 表示访问对象的属性</center>
-
-<h2 id="Memory-Sample-Confidence"><a href="#Memory-Sample-Confidence" class="headerlink" title="Memory Sample Confidence"></a>Memory Sample Confidence</h2><p>base tracker在线更新的训练样本采用先入先出的策略进行替换，并仅基于存在的寿命时间对样本加权。本文则是将分类得分也考虑进来，计算在线优化损失时综合考虑了寿命时间和分类得分对样本进行加权：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429165636.png"  /></p>
-<p>$\alpha$ 表示样本存在的时间，越早的样本值越小；$\beta$表示分类得分。此外，训练样本更新时替换的是$\alpha \beta$最小的样本而不是简单替换最早的样本。</p>
-<p><strong>Inference details</strong></p>
-<p>base tracker搜索区域取决于当前估计的边界框大小。当目标物体被遮挡或出视野时，跟踪器通常只检测到目标的一小部分，并估计出比之前帧更小的边界框，相应的搜索区域也会变小，这对于跟踪失败后的重捕是不利的。因此，如果在目标丢失前搜索区域大幅缩小，我们将搜索区域重置为以前的大小，以便于重新检测。</p>
-<p>此外，如果只有一个高分目标出现在前一帧和当前帧中。我们选择这个候选对象作为目标，省略运行目标候选关联网络来加速跟踪。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429165050.png" alt=""></p>
-<p>memory sample confidence 在LaSOT提升比较大，NFS和UAV123没啥影响，说明它在长时跟踪中的作用更大。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429165254.png" alt=""></p>
-<p>比较了提出的部分监督损失，自监督损失和数据挖掘的作用，每一项都有提升。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429165349.png" alt=""></p>
-<p>表3分析了学习在线分类器过程中加入分类得分的影响。第一列表示增加了分类得分来考虑替换训练样本，第二列表示在计算在线损失时增加分类得分对样本加权，第三列表示在线学习时忽略了得分较低的低质量样本。</p>
-<h2 id="State-of-the-art-Comparison"><a href="#State-of-the-art-Comparison" class="headerlink" title="State-of-the-art Comparison"></a>State-of-the-art Comparison</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429172159.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429172214.png" alt=""></p>
-<p>对LaSOT数据集，$T&lt;0.7$时本文方法指标明显更高，证明其鲁棒性。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/36-learning-target-candidate-association/20210429172329.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>ICCV2021</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>DeepMix: Online Auto Data Augmentation for Robust Visual Object Tracking</title>
-    <url>/tracking/39-deepmix/</url>
-    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510171656.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2104.11585">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
-<li>通过历史帧样本在线更新目标模型对跟踪具有重要意义。最近的研究主要集中在构建有效的更新方法，而忽略了用于学习判别模型的训练样本；</li>
-<li>本文提出DeepMix，对历史帧样本的特征进行在线增广，从而强化模型的在线更新能力。具体包括通过object-aware filtering在线增强历史样本，以及通过离线训练的MixNet混合多个样本进行数据增强；</li>
-<li>最后通过三个典型的跟踪器DiMP, DSiam和SiamRPN++验证提出的方法。</li>
-</ul>
-<span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>首先点明数据增广对于提升模型判别能力非常重要，因此可以利用数据增广给现有的模型更新方法增加有效的训练样本。用公式表达如下：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510203101.png" alt=""></p>
-<p>其中$X_t$表示原始训练样本，$T$表示各种增广方法，$\hat {X_t}$表示增强后的样本。而现有的不管是传统还是深度学习的增广方法都不能直接适应跟踪的在线数据增强，主要包括两个原因：</p>
-<ol>
-<li>现有方法都是sample-level的，即会生成新的样本，对这些新样本需要额外花费大量时间提取它们的深度特征；</li>
-<li>现有方法都是基于退化因素(例如，噪声、模糊、雾、雨等)，这些退化因素会破坏原始样本，降低模型判别力。</li>
-</ol>
-<p>为了解决上述问题，作者提出要对训练样本的<strong>特征</strong>(embedding)进行增强。具体来说，首先提取样本$X_t$的特征embedding得到$\{\varphi(I_i) \in \mathbb{R}^{C \times W \times H} | I_i \in X_t\}$，然后将所有embedding拼接起来得到特征张量 $X_t \in \mathbb{R}^{N \times C \times W \times H} $，N是训练样本数量。之后把$X_t$通过数据增强映射到一个新的特征$\hat{X_t} \in \mathbb{R}^{K \times C \times W \times H} $ 送入更新模块以生成目标模型。</p>
-<p>在特征上进行增强比直接在样本上增强更加高效，此外，作者在混合样本特征时加入了对应跟踪结果的指导。从直观上看，在视频采集过程中，感兴趣的物体可能位于场景中的任何位置，将物体放置在可能的背景区域中来增加训练样本是合理的。因此，作者根据跟踪框将样本分为目标区域和背景区域，并把它们混合以生成新样本。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510211559.png" alt=""></p>
-<p>其中 $M_o \in \mathbb{R}^{K \times C \times W \times H} $（此处作者笔误，第一个维度为K而不是N，已向作者求证）是二值掩膜，1表示目标区域，0表示背景区域。$W_{ \{o \ or \ b\} } \in \mathbb{R}^{K \times N \times 3 \times 3} $表示卷积，K是输出样本的个数。这个卷积的目的就是混合N个原始样本生成K个新样本，其中$W_o$和$W_b$分别负责混合目标和背景区域。下一步就需要考虑如何计算$W_o$和$W_b$，作者设计了MixNet，如图2所示。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510212546.png" alt=""></p>
-<p>输入$X_t$，通过两个结构一致参数不同的卷积分支生成kernel $W_o$和$W_b$。这个网络可以预先离线训练好，在线跟踪时只需一次前向传播就可以高效地获得增强样本。</p>
-<p><strong>Implementation for SOTA Trackers</strong></p>
-<p>为了验证DeepMix的效果，作者在SiamRPN++, DSiam和DiMP三个跟踪器上进行实验。将原始样本$X_t$和增强样本$\hat {X_t}$相加后 ($\alpha_1 \hat {X_t} + \alpha_2 X_t$) 送入更新模块，$\alpha_1=0.05, \alpha_2=0.8$。<strong>注意</strong> 不是直接用生成的新样本替换原始样本，而是将两者进行混合。</p>
-<p>对于SiamRPN++和DSiam，将历史N=15帧样本混合成K=1个新样本，注意SiamRPN++虽然并没有更新模块，但是MixNet也可以混合历史样本输出一个更干净的搜索特征从而促进跟踪。而在训练时，将搜索图像随机增广成15个样本送入MixNet生成1个新样本与原始图像混合后输入到之后的模块。<strong>论文这里作者笔误写成了对模板进行增广，已向作者求证。</strong></p>
-<p>对于DiMP，则将历史N=50帧样本混合成K=N个新样本。同样将MixNet嵌入DiMP的训练中，为了与测试保持一致，将训练过程中的3个样本改成了50个。</p>
-<p>这里额外提一下关于生成样本的mask $M_o \in \mathbb{R}^{K \times C \times W \times H} $如何设置。对于SiamRPN++，K=1，mask根据上一帧的跟踪结果设置；对于DiMP，K=N，mask就直接根据这N帧跟踪结果设置。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="State-of-the-art-Comparison"><a href="#State-of-the-art-Comparison" class="headerlink" title="State-of-the-art Comparison"></a>State-of-the-art Comparison</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510214422.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510214430.png" alt=""></p>
-<p>尽管baseline比原始论文得到的要低一些，但是加入了DeepMix性能依然明显提升。</p>
-<h2 id="Ablation-study"><a href="#Ablation-study" class="headerlink" title="Ablation study"></a>Ablation study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510215021.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510215028.png" alt=""></p>
-<p>表3中DeepMix在ResNet18的提升比ResNet50大，可能是因为更强大的网络对于增广的依赖更小。</p>
-<p>表4比较了DeepMix几种不同的实现方法，-Opt表示通过梯度下降在线优化目标函数来取代所提出的MixNet，-single表示不区分目标和模板区域只用一个分支生成新样本。</p>
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>这篇工作的切入点挺新奇的，以往的模型更新都在考虑如何设计更新方法，而本文则关注样本本身，从在线数据增广的角度切入，将历史样本混合生成新的样本用于模型更新。本文灵感应该还是来自于Mix类的增广方法，那是不是意味着我们可以把其他数据增广的方法也运用进来，刚好我最近也在思考类似的问题，本文可以给到一定的启发。</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>模型更新</tag>
-        <tag>Data augmentation</tag>
-        <tag>ICME2021</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Updatable Siamese Tracker with Two-stage One-shot Learning</title>
-    <url>/tracking/38-siamtol/</url>
-    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510102825.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2104.15049">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>本文主要解决孪生跟踪器缺乏在线更新能力的问题。传统的线性模板更新难以处理目标的不规则变化和采样噪声，造成跟踪漂移；而一些像updatenet采用网络进行自适应更新的方法，其更新网络和跟踪器在结构上是分离的，不能从联合训练中受益，也不能以最佳方式合作。</p>
-<p>为了实现高质量的自适应更新，作者从 one-shot learning的角度提出一个two-stage one-shot learner，利用不同阶段的目标样本预测分类器的参数。具体来说，除了使用模板分支来学习初始目标特征，作者额外增加了一个输入分支用于捕获后续帧中的目标特征，并设计了一个残差模块来使用这些特征更新初始模板。通过残差学习融合多帧目标特征，跟踪器可以用更合适的模板跟踪当前目标。此外，还设计了一种多方面(multi-aspect)的训练损失来避免过拟合。</p>
-<span id="more"></span>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="One-shot-learning-formulation"><a href="#One-shot-learning-formulation" class="headerlink" title="One-shot learning formulation"></a>One-shot learning formulation</h2><p>SiamRPN指出孪生跟踪框架是一个one-shot learner，即通过初始帧的一次学习使得模型能够跟踪到后续帧中的目标，本节首先对其进行公式化定义。</p>
-<p>目标跟踪的典型框架是判别分类器$\varphi (x,W)$，目标是在训练数据集上找到能使总损失L最小化的参数W：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510115919.png" alt=""></p>
-<p>$n$表示训练样本数，$l_i$是样本$x_i$的标签。尽管分类器在目标跟踪上具有很强的竞争力，但需要大量计算量和样本在线训练学习。</p>
-<p>另外一种跟踪框架是孪生网络，目标是学习模板和搜索区域之间的相似性度量：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510152537.png" alt=""></p>
-<p>$z_i$和$x_i$分别表示模板和搜索区域，$\varphi ‘$和 $\zeta$ 分别表示特征提取网络和匹配网络。</p>
-<p>进一步分析，我们发现公式2的孪生网络模型可以被重新解释为类似公式1的one-shot分类器模型。对于分类器$\varphi (x,W)$，若仅通过一个感兴趣样本$z_i$就能学到分类器参数$W$，那么这就是一个one-shot learner。因此，孪生网络的模板分支可以看成是一个元学习函数$\omega$，它将模板特征映射成分类器参数$W$；而搜索分支和互相关就是一个检测器，整个目标函数定义如下：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510154435.png" alt=""></p>
-<p>至此，我们就把孪生框架解释为了one-shot learning，图1直观展示了这种表达方式</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510155519.png" alt=""></p>
-<h2 id="Two-stage-One-shot-learner"><a href="#Two-stage-One-shot-learner" class="headerlink" title="Two-stage One-shot learner"></a>Two-stage One-shot learner</h2><p>孪生网络框架只能在初始帧这个stage通过one-shot learning学到目标信息，因此无法在线更新。那自然会想能不能让这个learner在不同的stage（跟踪阶段）去学习目标信息呢？因此作者提出了 two-stage one-shot learner (TOL)，可以结合具有不同属性的样本来预测分类器的参数$W$。目标函数定义如下：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510160306.png" alt=""></p>
-<p>相比公式3，就是增加了一个来自后续帧中的样本$u_i$来学习$\omega$ 。</p>
-<h2 id="Updatable-Siamese-Network"><a href="#Updatable-Siamese-Network" class="headerlink" title="Updatable Siamese Network"></a>Updatable Siamese Network</h2><p>基于上述的 two-stage one-shot learner，本文提出一个可更新的孪生网络，如下图</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510162506.png" alt=""></p>
-<p>相比原始的孪生框架，增加了一个update分支，然后把两个分支的目标特征进行融合。其实抛开上面讲的那些one-shot learning也不妨碍理解这个结构，无非就是把初始帧和跟踪过程中的历史帧通过网络融合生成一个更好的模板以适应跟踪中的变化。</p>
-<p>融合模板的过程（或者说元学习函数）定义如下：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510163640.png" alt=""></p>
-<p>其中$zf$和$uf$分别表示模板和更新样本的特征，M表示特征融合网络（三层卷积）。</p>
-<p><strong>Multi-aspect loss training</strong> 训练网络时在模板和搜索图像之间的间隔图像中额外扣一个更新样本，并且计算损失分别考虑了模板样本-搜索样本，更新样本-搜索样本，融合模板样本-搜索样本三方面损失，如图3所示。这样做是因为网络包括一个基本的孪生跟踪器和一个在线调整的更新器两部分，如果直接用一个整体损失训练，网络可能难以平衡这两部分。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510164536.png" alt=""></p>
-<p><strong>Online update</strong> 在线跟踪过程中，更新样本每N=10帧更新一次，且满足置信度大于阈值0.9。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Comparison-with-the-state-of-the-arts"><a href="#Comparison-with-the-state-of-the-arts" class="headerlink" title="Comparison with the state-of-the-arts"></a>Comparison with the state-of-the-arts</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165043.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165257.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165536.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165551.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165627.png" alt=""></p>
-<h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/38-siamtol/20210510165730.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>FSL</tag>
-        <tag>arxiv</tag>
-        <tag>模型更新</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Deep Meta Learning for Real-Time Target-Aware Visual Tracking</title>
-    <url>/tracking/4-mlt/</url>
-    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210810211247.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/1712.09153">论文</a></p>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
-<span id="more"></span>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210810223903.png" alt=""></p>
-<p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
-<p><strong>Components</strong></p>
-<p>匹配网络是标准的孪生网络</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
-<p>其中，$x$是模板，$z$是搜索区域，$w = \{ w_1, w_2, …, w_N \}$​表示每一层卷积层的权重参数。</p>
-<p>元学习网络根据历史得到的M个context patch $z = \{z_1, z_2, …, z_M\}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
-<p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811094325.png" style="zoom:80%;" /></p>
-<p>将生成的$\omega^{target}$与原始的权重拼接起来得到新的自适应权重$w^{adapt} = \{ w_1, w_2, …, [w_N, \omega^{target}] \}$​，将其用于目标定位</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811094727.png" style="zoom:80%;" /></p>
-<p>此外，元学习网络还生成了通道注意力权重进一步调整特征表示空间。</p>
-<p><strong>Tracking algorithm</strong></p>
-<p>在跟踪过程中，会保存一个context image的集合 $z_{mem} = \{ z_1, z_2, …, z_K \}$​​​​​​ 以及对应生成的响应图$\hat{y}_{mem} = \{ \hat{y}_1, \hat{y}_2, …, \hat{y}_K \}$​​​​​​。只有当 $\hat{y}$​​​​​​ 的最大响应值大于阈值时，$z$​​​​​​才会被加入memory集合中。在更新权重时，从K个context image中选择M个来进行计算，筛选标准是$\hat{y}_{mem}$​​​​​​​的最小熵，熵越大响应图分布越杂乱，这样可以避免模糊的响应图引入false positive。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811101915.png" style="zoom:80%;" /></p>
-<p>整体跟踪流程如下：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811094851.png" style="zoom:80%;" /></p>
-<p><strong>Training</strong></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811102117.png" style="zoom: 67%;" /></p>
-<p>首先单独训练匹配网络，然后在此基础上按照图3的方式训练元学习网络。类似在线跟踪过程，从同一个视频序列中随机采样 M’ 个context patch，然后从中选取M个送入元学习网络训练（M’ ＞M），这样是为了避免过拟合。优化损失为：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811102811.png" style="zoom:80%;" /></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103012.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103215.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103248.png" alt=""></p>
-<p>消融实验，MLT-mt表示只有匹配网络，MLT-mt+ft表示对匹配网络最后一层进行在线微调更新。可以发现在线微调甚至比不进行更新效果更差，因为过拟合。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103028.png" style="zoom: 67%;" /></p>
-<p>最后可视化了target-specific特征空间的效果，可以更聚焦目标并且抑制周围的干扰。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103525.png" style="zoom:80%;" /></p>
-<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>这篇文章发表在ICCV2019，整体实验结果并没有刷得太高，但是meta learning运用在siamese跟踪中的思想无疑是优秀的。目标跟踪同样可以看做是一个few-shot learning的任务，如何运用历史跟踪的少量结果来微调模型参数，meta learning是一个不错的方案。</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>meta learning</tag>
-        <tag>ICCV2019</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Siamese Natural Language Tracker: Tracking by Natural Language Descriptions with Siamese Trackers</title>
     <url>/tracking/40-snlt/</url>
     <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/40-snlp/20210519110756.png" alt=""></p>
@@ -813,49 +719,97 @@
       </tags>
   </entry>
   <entry>
-    <title>SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</title>
-    <url>/tracking/41-siamrcr/</url>
-    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526210529.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2105.11237">论文</a></p>
-<p>本文解决的是老生常谈的分类和回归不匹配的问题。作者提出在分类和回归之间建立<strong>双向</strong>的连接，可以动态地重新加权每个正样本的损失。此外，增加了一个定位分支用于预测定位精度，可以在推理过程中替代回归辅助连接(regression assistance link)，使得训练和测试更加一致。最终运行速度为65FPS。</p>
+    <title>DeepMix: Online Auto Data Augmentation for Robust Visual Object Tracking</title>
+    <url>/tracking/39-deepmix/</url>
+    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510171656.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2104.11585">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><ul>
+<li>通过历史帧样本在线更新目标模型对跟踪具有重要意义。最近的研究主要集中在构建有效的更新方法，而忽略了用于学习判别模型的训练样本；</li>
+<li>本文提出DeepMix，对历史帧样本的特征进行在线增广，从而强化模型的在线更新能力。具体包括通过object-aware filtering在线增强历史样本，以及通过离线训练的MixNet混合多个样本进行数据增强；</li>
+<li>最后通过三个典型的跟踪器DiMP, DSiam和SiamRPN++验证提出的方法。</li>
+</ul>
 <span id="more"></span>
-<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526212918.png" alt=""></p>
-<p>首先点出问题，即孪生跟踪架构中分类和回归是分开独立优化的，导致二者不匹配。如图1所示，分类得分最高的位置生成的预测框不一定是最好的，或者预测比较好的框分类得分很低。这个图和IOUNet中的图很相似，事实上，这个问题在检测任务中已经被很多学者研究，并且有些成果也被应用到跟踪中。比如SiamFC++借鉴FCOS架构增加了一个衡量定位精度的分支，ATOM/DiMP系列使用IOUNet进行回归。作者指出这些方法仍然存在不匹配，因为并没有解决分类和回归独立优化的问题。</p>
-<p>因此，本文提出在分类和回归之间建立一个互惠关系 (reciprocal relationship)，使它们同步优化，以生成精度一致的输出。整体框架如图2所示，在分类和回归分支之间增加了两个连接 classification / regression assistance link。classification assistance 用分类置信度给回归损失加权，使得回归可以更关注高置信度的位置；regression assistance 用定位精度（预测框和gt的IOU）给分类损失加权，迫使分类分数与回归精度更加一致。</p>
-<p>而在推理阶段，gt是未知的，无法通过计算IOU得到定位精度，因此额外增加一个定位分支专门用于预测定位精度。将分类置信度与定位预测置信度相乘，在推理阶段生成新的跟踪评分/置信度图，保证了与训练过程的一致性（类似FCOS / SiamFC++）。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526221151.png" alt=""></p>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>图2整体是一个anchor-free的孪生框架，预测头部分采用的是CenterNet的中心、中心偏移量、宽高的形式。这里将中心偏移量和宽高放在同一个分支输出，所以回归分支输出维度是4  $t^<em>_{x,y} = (w^</em>, h^<em>, \Delta x^</em>, \Delta y^*)$ 。</p>
-<h2 id="Reciprocal-Classification-and-Regression"><a href="#Reciprocal-Classification-and-Regression" class="headerlink" title="Reciprocal Classification and Regression"></a>Reciprocal Classification and Regression</h2><p>下面开始介绍两种辅助连接，设计原则就是：</p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p>首先点明数据增广对于提升模型判别能力非常重要，因此可以利用数据增广给现有的模型更新方法增加有效的训练样本。用公式表达如下：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510203101.png" alt=""></p>
+<p>其中$X_t$表示原始训练样本，$T$表示各种增广方法，$\hat {X_t}$表示增强后的样本。而现有的不管是传统还是深度学习的增广方法都不能直接适应跟踪的在线数据增强，主要包括两个原因：</p>
 <ol>
-<li>当回归框的定位精度较低时，相应的分类得分不应该很高，因为如果该位置成为分类置信度的赢家，差的回归结果将导致跟踪性能较差；</li>
-<li>当回归框的分类分数较低时，提高其定位精度是没有意义的，因为这个框一定不会是最后的输出。</li>
+<li>现有方法都是sample-level的，即会生成新的样本，对这些新样本需要额外花费大量时间提取它们的深度特征；</li>
+<li>现有方法都是基于退化因素(例如，噪声、模糊、雾、雨等)，这些退化因素会破坏原始样本，降低模型判别力。</li>
 </ol>
-<p><strong>Regression Assistance Link</strong> 针对准则1，将回归分支生成的框与gt计算IOU，看成一种动态的样本重加权作用于分类损失：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526223907.png" alt=""></p>
-<p>$N_{pos}$表示正样本个数，$B,B^*$分别表示预测框和gt。</p>
-<p><strong>Classification Assistance Link</strong> 针对准则2，将分类置信度 $p^{cls}_{x,y}$ 动态地重新加权回归损失：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526225051.png" alt=""></p>
-<p><strong>Localization Score Branch</strong> 在训练时，regression assistance link使得分类分支考虑了回归精度，但这需要借助gt。而在推理阶段没有gt，为了保证训练和推理的一致性，使得推理阶段的分类分支也能考虑定位精度，作者额外增加了一个定位分支专门用于预测定位精度，作用类似FCOS / SiamFC++的centerness。其训练损失就是计算定位分支输出与IOU之间的交叉熵损失。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526225941.png" alt=""></p>
-<p>推理阶段示意图如图3，将分类分支和定位分支的得分相乘生成最后的跟踪分数图。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210527094602.png" alt=""></p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526230610.png" alt=""></p>
-<p>表1中这两个组件的性能提升几乎是正交的，联合使用的提升(5.05%)几乎等于单独使用时各自性能提升的和(3.54%+2.86%)。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234418.png" alt=""></p>
-<p>图4展示了不同方法的跟踪分数和回归框IOU之间的相关性，(a)是baseline，(b)是centerness，(c)是basline+定位分支，(d)是SiamRCR。其中(b)和(c)类似，区别是分别使用IOU和centerness来衡量定位精度。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234837.png" alt=""></p>
-<p>最后展示了划分正负样本时不同半径对结果的影响。</p>
-<h2 id="Comparison-with-the-State-of-the-Art"><a href="#Comparison-with-the-State-of-the-Art" class="headerlink" title="Comparison with the State-of-the-Art"></a>Comparison with the State-of-the-Art</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234927.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234937.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234948.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234956.png" alt=""></p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文解决了孪生跟踪框架中分类和回归不一致的问题。印象中最先研究这个问题的是检测领域的PISA (Prime Sample Attention in Object Detection)，根据IOU对样本进行排序然后选择prime sample。之后也有许多相关文章，包括本文的Regression Assistance Link也能看到一些检测里面的影子（吐槽一下我19年投了一篇文章有个点和这个一毛一样然而到现在都还没中hhh）。但目前的研究其实基本上都是在用回归矫正分类，而本文做了一个双向的矫正，（显式地）增加了用分类矫正回归的过程（为什么说是显式，因为其实只要把分类和回归乘到一起，这个作用就是相互的，比如公式2中，我可以把focal loss当成权重，IOU当成优化变量，那就变成了分类矫正回归）。这种显式的矫正似乎监督能力更强，如果有个消融实验对比一下单独使用公式3和公式4的效果就更直观了。</p>
+<p>为了解决上述问题，作者提出要对训练样本的<strong>特征</strong>(embedding)进行增强。具体来说，首先提取样本$X_t$的特征embedding得到$\{\varphi(I_i) \in \mathbb{R}^{C \times W \times H} | I_i \in X_t\}$，然后将所有embedding拼接起来得到特征张量 $X_t \in \mathbb{R}^{N \times C \times W \times H} $，N是训练样本数量。之后把$X_t$通过数据增强映射到一个新的特征$\hat{X_t} \in \mathbb{R}^{K \times C \times W \times H} $ 送入更新模块以生成目标模型。</p>
+<p>在特征上进行增强比直接在样本上增强更加高效，此外，作者在混合样本特征时加入了对应跟踪结果的指导。从直观上看，在视频采集过程中，感兴趣的物体可能位于场景中的任何位置，将物体放置在可能的背景区域中来增加训练样本是合理的。因此，作者根据跟踪框将样本分为目标区域和背景区域，并把它们混合以生成新样本。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510211559.png" alt=""></p>
+<p>其中 $M_o \in \mathbb{R}^{K \times C \times W \times H} $（此处作者笔误，第一个维度为K而不是N，已向作者求证）是二值掩膜，1表示目标区域，0表示背景区域。$W_{ \{o \ or \ b\} } \in \mathbb{R}^{K \times N \times 3 \times 3} $表示卷积，K是输出样本的个数。这个卷积的目的就是混合N个原始样本生成K个新样本，其中$W_o$和$W_b$分别负责混合目标和背景区域。下一步就需要考虑如何计算$W_o$和$W_b$，作者设计了MixNet，如图2所示。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510212546.png" alt=""></p>
+<p>输入$X_t$，通过两个结构一致参数不同的卷积分支生成kernel $W_o$和$W_b$。这个网络可以预先离线训练好，在线跟踪时只需一次前向传播就可以高效地获得增强样本。</p>
+<p><strong>Implementation for SOTA Trackers</strong></p>
+<p>为了验证DeepMix的效果，作者在SiamRPN++, DSiam和DiMP三个跟踪器上进行实验。将原始样本$X_t$和增强样本$\hat {X_t}$相加后 ($\alpha_1 \hat {X_t} + \alpha_2 X_t$) 送入更新模块，$\alpha_1=0.05, \alpha_2=0.8$。<strong>注意</strong> 不是直接用生成的新样本替换原始样本，而是将两者进行混合。</p>
+<p>对于SiamRPN++和DSiam，将历史N=15帧样本混合成K=1个新样本，注意SiamRPN++虽然并没有更新模块，但是MixNet也可以混合历史样本输出一个更干净的搜索特征从而促进跟踪。而在训练时，将搜索图像随机增广成15个样本送入MixNet生成1个新样本与原始图像混合后输入到之后的模块。<strong>论文这里作者笔误写成了对模板进行增广，已向作者求证。</strong></p>
+<p>对于DiMP，则将历史N=50帧样本混合成K=N个新样本。同样将MixNet嵌入DiMP的训练中，为了与测试保持一致，将训练过程中的3个样本改成了50个。</p>
+<p>这里额外提一下关于生成样本的mask $M_o \in \mathbb{R}^{K \times C \times W \times H} $如何设置。对于SiamRPN++，K=1，mask根据上一帧的跟踪结果设置；对于DiMP，K=N，mask就直接根据这N帧跟踪结果设置。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="State-of-the-art-Comparison"><a href="#State-of-the-art-Comparison" class="headerlink" title="State-of-the-art Comparison"></a>State-of-the-art Comparison</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510214422.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510214430.png" alt=""></p>
+<p>尽管baseline比原始论文得到的要低一些，但是加入了DeepMix性能依然明显提升。</p>
+<h2 id="Ablation-study"><a href="#Ablation-study" class="headerlink" title="Ablation study"></a>Ablation study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510215021.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/39-deepmixl/20210510215028.png" alt=""></p>
+<p>表3中DeepMix在ResNet18的提升比ResNet50大，可能是因为更强大的网络对于增广的依赖更小。</p>
+<p>表4比较了DeepMix几种不同的实现方法，-Opt表示通过梯度下降在线优化目标函数来取代所提出的MixNet，-single表示不区分目标和模板区域只用一个分支生成新样本。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>这篇工作的切入点挺新奇的，以往的模型更新都在考虑如何设计更新方法，而本文则关注样本本身，从在线数据增广的角度切入，将历史样本混合生成新的样本用于模型更新。本文灵感应该还是来自于Mix类的增广方法，那是不是意味着我们可以把其他数据增广的方法也运用进来，刚好我最近也在思考类似的问题，本文可以给到一定的启发。</p>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
       </categories>
       <tags>
-        <tag>IJCAI2021</tag>
+        <tag>模型更新</tag>
+        <tag>Data augmentation</tag>
+        <tag>ICME2021</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Deep Meta Learning for Real-Time Target-Aware Visual Tracking</title>
+    <url>/tracking/4-mlt/</url>
+    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210810211247.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/1712.09153">论文</a></p>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p>当跟踪目标外观发生变化时，需要对模型进行更新。使用传统的SGD、岭回归这些更新方法耗时且容易过拟合，因此本文提出用元学习(meta-learning)方式对模型进行更新。本文方法的motivation如图1所示，分为匹配网络和元学习网络。前者是标准的孪生网络，元学习网络接收来自匹配网络的元信息，并为匹配网络提供自适应的target-specific特征空间。而元学习网络仅需一次前向传播就可以得到target-specific特征空间的参数，实时性较好，达到了48fps。</p>
+<span id="more"></span>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210810214920.png" style="zoom:80%;" /></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210810223903.png" alt=""></p>
+<p>图2是算法整体框架，可以看到，图1中描述的匹配网络输入到元学习网络的元信息指的是训练样本的loss梯度，而元学习网络输出的target-specific信息指额外的卷积核和通道注意力。</p>
+<p><strong>Components</strong></p>
+<p>匹配网络是标准的孪生网络</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811091726.png" style="zoom:80%;" /></p>
+<p>其中，$x$是模板，$z$是搜索区域，$w = \{ w_1, w_2, …, w_N \}$​表示每一层卷积层的权重参数。</p>
+<p>元学习网络根据历史得到的M个context patch $z = \{z_1, z_2, …, z_M\}$以及target patch $x$，来计算能够适应目标变化的新增参数。首先计算损失函数对匹配网络最后一层卷积层的平均负梯度 $\delta$：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811092640.png" style="zoom:80%;" /> </p>
+<p>其中 $\widetilde{y}_i$ 表示假设目标落在正确位置时生成的<strong>二值</strong>响应图。meta-learner设计的依据是目标发生变化时 $\delta$ 也发生变化，所以将 $\delta$​​ 作为元学习网络的输入，可以生成target-specific的权重。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811094325.png" style="zoom:80%;" /></p>
+<p>将生成的$\omega^{target}$与原始的权重拼接起来得到新的自适应权重$w^{adapt} = \{ w_1, w_2, …, [w_N, \omega^{target}] \}$​，将其用于目标定位</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811094727.png" style="zoom:80%;" /></p>
+<p>此外，元学习网络还生成了通道注意力权重进一步调整特征表示空间。</p>
+<p><strong>Tracking algorithm</strong></p>
+<p>在跟踪过程中，会保存一个context image的集合 $z_{mem} = \{ z_1, z_2, …, z_K \}$​​​​​​ 以及对应生成的响应图$\hat{y}_{mem} = \{ \hat{y}_1, \hat{y}_2, …, \hat{y}_K \}$​​​​​​。只有当 $\hat{y}$​​​​​​ 的最大响应值大于阈值时，$z$​​​​​​才会被加入memory集合中。在更新权重时，从K个context image中选择M个来进行计算，筛选标准是$\hat{y}_{mem}$​​​​​​​的最小熵，熵越大响应图分布越杂乱，这样可以避免模糊的响应图引入false positive。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811101915.png" style="zoom:80%;" /></p>
+<p>整体跟踪流程如下：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811094851.png" style="zoom:80%;" /></p>
+<p><strong>Training</strong></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811102117.png" style="zoom: 67%;" /></p>
+<p>首先单独训练匹配网络，然后在此基础上按照图3的方式训练元学习网络。类似在线跟踪过程，从同一个视频序列中随机采样 M’ 个context patch，然后从中选取M个送入元学习网络训练（M’ ＞M），这样是为了避免过拟合。优化损失为：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811102811.png" style="zoom:80%;" /></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103012.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103215.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103248.png" alt=""></p>
+<p>消融实验，MLT-mt表示只有匹配网络，MLT-mt+ft表示对匹配网络最后一层进行在线微调更新。可以发现在线微调甚至比不进行更新效果更差，因为过拟合。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103028.png" style="zoom: 67%;" /></p>
+<p>最后可视化了target-specific特征空间的效果，可以更聚焦目标并且抑制周围的干扰。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/4-mlt/20210811103525.png" style="zoom:80%;" /></p>
+<h1 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h1><p>这篇文章发表在ICCV2019，整体实验结果并没有刷得太高，但是meta learning运用在siamese跟踪中的思想无疑是优秀的。目标跟踪同样可以看做是一个few-shot learning的任务，如何运用历史跟踪的少量结果来微调模型参数，meta learning是一个不错的方案。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>meta learning</tag>
+        <tag>ICCV2019</tag>
       </tags>
   </entry>
   <entry>
@@ -965,6 +919,52 @@
       <tags>
         <tag>综述</tag>
         <tag>强化学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SiamRCR: Reciprocal Classification and Regression for Visual Object Tracking</title>
+    <url>/tracking/41-siamrcr/</url>
+    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526210529.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2105.11237">论文</a></p>
+<p>本文解决的是老生常谈的分类和回归不匹配的问题。作者提出在分类和回归之间建立<strong>双向</strong>的连接，可以动态地重新加权每个正样本的损失。此外，增加了一个定位分支用于预测定位精度，可以在推理过程中替代回归辅助连接(regression assistance link)，使得训练和测试更加一致。最终运行速度为65FPS。</p>
+<span id="more"></span>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526212918.png" alt=""></p>
+<p>首先点出问题，即孪生跟踪架构中分类和回归是分开独立优化的，导致二者不匹配。如图1所示，分类得分最高的位置生成的预测框不一定是最好的，或者预测比较好的框分类得分很低。这个图和IOUNet中的图很相似，事实上，这个问题在检测任务中已经被很多学者研究，并且有些成果也被应用到跟踪中。比如SiamFC++借鉴FCOS架构增加了一个衡量定位精度的分支，ATOM/DiMP系列使用IOUNet进行回归。作者指出这些方法仍然存在不匹配，因为并没有解决分类和回归独立优化的问题。</p>
+<p>因此，本文提出在分类和回归之间建立一个互惠关系 (reciprocal relationship)，使它们同步优化，以生成精度一致的输出。整体框架如图2所示，在分类和回归分支之间增加了两个连接 classification / regression assistance link。classification assistance 用分类置信度给回归损失加权，使得回归可以更关注高置信度的位置；regression assistance 用定位精度（预测框和gt的IOU）给分类损失加权，迫使分类分数与回归精度更加一致。</p>
+<p>而在推理阶段，gt是未知的，无法通过计算IOU得到定位精度，因此额外增加一个定位分支专门用于预测定位精度。将分类置信度与定位预测置信度相乘，在推理阶段生成新的跟踪评分/置信度图，保证了与训练过程的一致性（类似FCOS / SiamFC++）。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526221151.png" alt=""></p>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h2><p>图2整体是一个anchor-free的孪生框架，预测头部分采用的是CenterNet的中心、中心偏移量、宽高的形式。这里将中心偏移量和宽高放在同一个分支输出，所以回归分支输出维度是4  $t^<em>_{x,y} = (w^</em>, h^<em>, \Delta x^</em>, \Delta y^*)$ 。</p>
+<h2 id="Reciprocal-Classification-and-Regression"><a href="#Reciprocal-Classification-and-Regression" class="headerlink" title="Reciprocal Classification and Regression"></a>Reciprocal Classification and Regression</h2><p>下面开始介绍两种辅助连接，设计原则就是：</p>
+<ol>
+<li>当回归框的定位精度较低时，相应的分类得分不应该很高，因为如果该位置成为分类置信度的赢家，差的回归结果将导致跟踪性能较差；</li>
+<li>当回归框的分类分数较低时，提高其定位精度是没有意义的，因为这个框一定不会是最后的输出。</li>
+</ol>
+<p><strong>Regression Assistance Link</strong> 针对准则1，将回归分支生成的框与gt计算IOU，看成一种动态的样本重加权作用于分类损失：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526223907.png" alt=""></p>
+<p>$N_{pos}$表示正样本个数，$B,B^*$分别表示预测框和gt。</p>
+<p><strong>Classification Assistance Link</strong> 针对准则2，将分类置信度 $p^{cls}_{x,y}$ 动态地重新加权回归损失：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526225051.png" alt=""></p>
+<p><strong>Localization Score Branch</strong> 在训练时，regression assistance link使得分类分支考虑了回归精度，但这需要借助gt。而在推理阶段没有gt，为了保证训练和推理的一致性，使得推理阶段的分类分支也能考虑定位精度，作者额外增加了一个定位分支专门用于预测定位精度，作用类似FCOS / SiamFC++的centerness。其训练损失就是计算定位分支输出与IOU之间的交叉熵损失。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526225941.png" alt=""></p>
+<p>推理阶段示意图如图3，将分类分支和定位分支的得分相乘生成最后的跟踪分数图。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210527094602.png" alt=""></p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="Ablation-Study"><a href="#Ablation-Study" class="headerlink" title="Ablation Study"></a>Ablation Study</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526230610.png" alt=""></p>
+<p>表1中这两个组件的性能提升几乎是正交的，联合使用的提升(5.05%)几乎等于单独使用时各自性能提升的和(3.54%+2.86%)。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234418.png" alt=""></p>
+<p>图4展示了不同方法的跟踪分数和回归框IOU之间的相关性，(a)是baseline，(b)是centerness，(c)是basline+定位分支，(d)是SiamRCR。其中(b)和(c)类似，区别是分别使用IOU和centerness来衡量定位精度。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234837.png" alt=""></p>
+<p>最后展示了划分正负样本时不同半径对结果的影响。</p>
+<h2 id="Comparison-with-the-State-of-the-Art"><a href="#Comparison-with-the-State-of-the-Art" class="headerlink" title="Comparison with the State-of-the-Art"></a>Comparison with the State-of-the-Art</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234927.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234937.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234948.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/41-siamrcr/20210526234956.png" alt=""></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文解决了孪生跟踪框架中分类和回归不一致的问题。印象中最先研究这个问题的是检测领域的PISA (Prime Sample Attention in Object Detection)，根据IOU对样本进行排序然后选择prime sample。之后也有许多相关文章，包括本文的Regression Assistance Link也能看到一些检测里面的影子（吐槽一下我19年投了一篇文章有个点和这个一毛一样然而到现在都还没中hhh）。但目前的研究其实基本上都是在用回归矫正分类，而本文做了一个双向的矫正，（显式地）增加了用分类矫正回归的过程（为什么说是显式，因为其实只要把分类和回归乘到一起，这个作用就是相互的，比如公式2中，我可以把focal loss当成权重，IOU当成优化变量，那就变成了分类矫正回归）。这种显式的矫正似乎监督能力更强，如果有个消融实验对比一下单独使用公式3和公式4的效果就更直观了。</p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>IJCAI2021</tag>
       </tags>
   </entry>
   <entry>
@@ -1120,8 +1120,8 @@
         <category>目标跟踪</category>
       </categories>
       <tags>
-        <tag>transform</tag>
         <tag>ICCV2021</tag>
+        <tag>transform</tag>
         <tag>UAV</tag>
       </tags>
   </entry>
@@ -1419,6 +1419,83 @@
       </tags>
   </entry>
   <entry>
+    <title>MixFormer: End-to-End Tracking with Iterative Mixed Attention</title>
+    <url>/tracking/54-mixformer/</url>
+    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524172159.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2203.11082">论文</a> <a href="https://github.com/MCG-NJU/MixFormer">代码</a></p>
+<p>核心：用transfrom架构整合特征提取和特征融合</p>
+<span id="more"></span>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524172748.png" alt=""></p>
+<p>主流的跟踪框架分三步：特征提取、特征融合、预测头分类回归</p>
+<p>其中特征融合是关键，下图展示了不同的融合方法。（摘自 <a href="https://www.bilibili.com/video/BV1L541127MD?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">【VALSE论文速览-68期】MixFormer:更加简洁的端到端单目标跟踪器</a>）</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524172920.png" alt=""></p>
+<p>最近的研究使用transformer进行融合，但仍然依赖CNN提取特征，这其中存在一些局限：</p>
+<ol>
+<li>attention只作用在高层抽象的特征表示空间，忽略了浅层特征；</li>
+<li>CNN对通用对象识别进行预训练，可能会忽略用于跟踪的更精细的结构信息；</li>
+<li>CNN的表征能力是局部的，缺乏长距离建模的能力</li>
+</ol>
+<p>解决方案：</p>
+<p>提出一个通用的transformer结构同时进行特征提取和特征融合。</p>
+<p>具有如下好处:</p>
+<ol>
+<li>使特征提取更具体到相应的跟踪目标，并捕获更多目标特定的判别特征;</li>
+<li>让目标信息更extensive的融合进搜索区域；</li>
+<li>结构更加紧凑简洁。</li>
+</ol>
+<p>主要创新点：</p>
+<ul>
+<li>提出了 MAM 模块，应用 attnetion 机制同时进行特征提取与信息交互</li>
+<li>提出SPM模块进行模板更新</li>
+</ul>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524213439.png" alt=""></p>
+<p>网络整体框架如图3所示，包括两部分：模板和搜索图像经过基于mixed attention module(MAM)的backbone进行特征提取和融合，再通过预测头输出结果。backbone部分包含3个stage，每个stage输入特征首先经过patch embedding变成一系列token，然后送入MAM模块提取并融合特征。预测头部分直接将融合后的搜索区域的token输入进行预测。</p>
+<h2 id="Mixed-Attention-Module-MAM"><a href="#Mixed-Attention-Module-MAM" class="headerlink" title="Mixed Attention Module (MAM)"></a>Mixed Attention Module (MAM)</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524220836.png" alt=""></p>
+<p>本文的核心模块MAM，目的是同时提取并融合模板和搜索图像的特征，因此设计了dual attention分别用于二者。具体来说，MAM输入模板和搜索特征拼接成的 token序列，首先会将输入分开并reshape 成二维的模板和搜索特征，经过$3\times3$ DW卷积编码局部上下文和线性映射生成q，k，v后，同时进行 self-attention和 cross-attention。</p>
+<p>注意MAM 是一个非对称的attention，删去了target-to-search的cross-attention。如图2所示，模板的q只会和模板自己的k，v计算attention（黄色虚线）；而搜索图的q会同时和模板和搜索图的k，v计算attention（蓝色虚线）。用公式表达为：</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524222647.png" alt=""></p>
+<p>这样做可以使得模板的token在跟踪过程中保持不变，避免被动态的搜索区域影响。为后续引入多个在线模板做铺垫，无需每帧重新计算模板token。</p>
+<h2 id="Localization-Head"><a href="#Localization-Head" class="headerlink" title="Localization Head"></a>Localization Head</h2><p>采用类似stark的角点预测模式。作者也额外尝试了类似detr的采用一个query进行预测的方式。均无需后处理。</p>
+<h2 id="Template-Online-Update"><a href="#Template-Online-Update" class="headerlink" title="Template Online Update"></a>Template Online Update</h2><p>在线更新模板能够很好的利用时序信息处理一些形变和外观变化，然而低质量的更新模板可能使得结果变差。本文设计了一个score prediction module (SPM)，根据预测置信度得分来选择可靠的在线模板，如图4所示。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524224125.png" alt=""></p>
+<p>SPM由两个attention和一个三层的MLP组成，该模块接在backbone最后一个stage后，和预测头是并行的。首先输入一个可学习的score token，与search ROI token计算attention，对搜索图中挖掘的目标信息进行编码。然后将score token与第一帧的模板token做attention，隐式地将挖掘的目标与初始目标进行比较。最后过一个MLP预测出置信度得分，小于0.5判断为不可靠。</p>
+<h2 id="Training-and-Inference"><a href="#Training-and-Inference" class="headerlink" title="Training and Inference"></a>Training and Inference</h2><p>作者设计了两种网络架构MixFormer 和 MixFormer-L ，分别基于CVT-21 和 CVT24-W，也就是说可以使用CVT在Imagenet上预训练的权重来初始化backbone（虽然原始的CVT并没有两个输入，计算attention的方式也不一样，但是每个block的参数是一样的）。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524225610.png" alt=""></p>
+<p>训练过程分为两步，首先用500个epoch训练backbone和head；最后用40个epoch单独训练SPM，冻结其他部分参数。这个训练流程和stark类似。</p>
+<p>推理阶段每隔200帧更新一次模板，选择区间中得分最高的模板替换先前的模板。本文的框架允许输入任意张数的模板，代码实现中只包含两张模板，一张初始模板，一张在线更新模板。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="SOTA比较"><a href="#SOTA比较" class="headerlink" title="SOTA比较"></a>SOTA比较</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524234306.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524234318.png" alt=""></p>
+<p>SOTA性能就一个字：恐怖！</p>
+<h2 id="探究实验"><a href="#探究实验" class="headerlink" title="探究实验"></a>探究实验</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524234504.png" alt=""></p>
+<ul>
+<li>1 2 3 8 统一特征提取和融合的MAM比先提特征SAM再融合CAM要好，因为耦合的方式可以互相促进。</li>
+<li>4 5 6 7 8 MAM的数量越多越好，因为这样可以获得更extensive 的目标感知特征提取和分层融合。</li>
+<li>8 9 corner head比query head效果更好</li>
+</ul>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524235111.png" alt=""></p>
+<ul>
+<li>使用非堆成结构效果略有下降，但是速度提升了</li>
+<li>从固定间隔中随机采样更新模板效果变差了，加上预测得分后才能提升效果</li>
+<li>pretrain的规模越大，对效果也是有提升的。</li>
+</ul>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524235732.png" alt=""></p>
+<p>Attention可视化</p>
+<ul>
+<li>背景中的干扰物逐层受到抑制</li>
+<li>在线模板更适应外观变化并有助于区分目标</li>
+<li>多个模板的前景可以通过交叉注意力来增强</li>
+<li>某个位置倾向于与周围的局部块相互作用。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>transform</tag>
+        <tag>CVPR2022</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>轻量化目标跟踪</title>
     <url>/tracking/51-lighttrack/</url>
     <content><![CDATA[<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>近些年的目标跟踪算法都在往做大做强的方向发展，比如更深的网络和更复杂的模块。尽管性能越刷越高，但是却很少考虑效率问题，以至于几乎无法在边缘设备上实时运行部署，实用性较低，因此研究轻量化的目标跟踪算法是非常必要的（另外一个原因也可能是做大做强上能水论文的点越来越不好找了 /狗头保命）。本篇博客总结了三篇最近研究跟踪模型轻量化的工作。</p>
@@ -1602,83 +1679,6 @@
 <p>最后提下本文方法的局限性，就是对严重遮挡或者出视野不友好，这也是所有孪生跟踪器的通病了。虽然attention的逐点匹配一定程度上可以克服遮挡，但是对于图13中这些有相似属性的遮挡物还是存在很多误判。另一个局限在于本文使用了很多快速注意力，这些并不能直接通过直接调包实现。</p>
 <p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/53-SBT/20220524171328.png" alt=""></p>
 <h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>本文首次提出了一种target-dependent的跟踪特征网络。SBT大大简化了跟踪管道，比最近基于Transformer的跟踪器收敛更快。从实验和理论两方面对SBT跟踪进行了系统的研究。此外，实现了四个版本的SBT网络，可以改进其他流行的VOT和VOS跟踪器。大量实验表明，该方法取得了良好的效果，可以作为动态特征网络应用于其他跟踪管道。</p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>transform</tag>
-        <tag>CVPR2022</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MixFormer: End-to-End Tracking with Iterative Mixed Attention</title>
-    <url>/tracking/54-mixformer/</url>
-    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524172159.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2203.11082">论文</a> <a href="https://github.com/MCG-NJU/MixFormer">代码</a></p>
-<p>核心：用transfrom架构整合特征提取和特征融合</p>
-<span id="more"></span>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524172748.png" alt=""></p>
-<p>主流的跟踪框架分三步：特征提取、特征融合、预测头分类回归</p>
-<p>其中特征融合是关键，下图展示了不同的融合方法。（摘自 <a href="https://www.bilibili.com/video/BV1L541127MD?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click">【VALSE论文速览-68期】MixFormer:更加简洁的端到端单目标跟踪器</a>）</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524172920.png" alt=""></p>
-<p>最近的研究使用transformer进行融合，但仍然依赖CNN提取特征，这其中存在一些局限：</p>
-<ol>
-<li>attention只作用在高层抽象的特征表示空间，忽略了浅层特征；</li>
-<li>CNN对通用对象识别进行预训练，可能会忽略用于跟踪的更精细的结构信息；</li>
-<li>CNN的表征能力是局部的，缺乏长距离建模的能力</li>
-</ol>
-<p>解决方案：</p>
-<p>提出一个通用的transformer结构同时进行特征提取和特征融合。</p>
-<p>具有如下好处:</p>
-<ol>
-<li>使特征提取更具体到相应的跟踪目标，并捕获更多目标特定的判别特征;</li>
-<li>让目标信息更extensive的融合进搜索区域；</li>
-<li>结构更加紧凑简洁。</li>
-</ol>
-<p>主要创新点：</p>
-<ul>
-<li>提出了 MAM 模块，应用 attnetion 机制同时进行特征提取与信息交互</li>
-<li>提出SPM模块进行模板更新</li>
-</ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524213439.png" alt=""></p>
-<p>网络整体框架如图3所示，包括两部分：模板和搜索图像经过基于mixed attention module(MAM)的backbone进行特征提取和融合，再通过预测头输出结果。backbone部分包含3个stage，每个stage输入特征首先经过patch embedding变成一系列token，然后送入MAM模块提取并融合特征。预测头部分直接将融合后的搜索区域的token输入进行预测。</p>
-<h2 id="Mixed-Attention-Module-MAM"><a href="#Mixed-Attention-Module-MAM" class="headerlink" title="Mixed Attention Module (MAM)"></a>Mixed Attention Module (MAM)</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524220836.png" alt=""></p>
-<p>本文的核心模块MAM，目的是同时提取并融合模板和搜索图像的特征，因此设计了dual attention分别用于二者。具体来说，MAM输入模板和搜索特征拼接成的 token序列，首先会将输入分开并reshape 成二维的模板和搜索特征，经过$3\times3$ DW卷积编码局部上下文和线性映射生成q，k，v后，同时进行 self-attention和 cross-attention。</p>
-<p>注意MAM 是一个非对称的attention，删去了target-to-search的cross-attention。如图2所示，模板的q只会和模板自己的k，v计算attention（黄色虚线）；而搜索图的q会同时和模板和搜索图的k，v计算attention（蓝色虚线）。用公式表达为：</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524222647.png" alt=""></p>
-<p>这样做可以使得模板的token在跟踪过程中保持不变，避免被动态的搜索区域影响。为后续引入多个在线模板做铺垫，无需每帧重新计算模板token。</p>
-<h2 id="Localization-Head"><a href="#Localization-Head" class="headerlink" title="Localization Head"></a>Localization Head</h2><p>采用类似stark的角点预测模式。作者也额外尝试了类似detr的采用一个query进行预测的方式。均无需后处理。</p>
-<h2 id="Template-Online-Update"><a href="#Template-Online-Update" class="headerlink" title="Template Online Update"></a>Template Online Update</h2><p>在线更新模板能够很好的利用时序信息处理一些形变和外观变化，然而低质量的更新模板可能使得结果变差。本文设计了一个score prediction module (SPM)，根据预测置信度得分来选择可靠的在线模板，如图4所示。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524224125.png" alt=""></p>
-<p>SPM由两个attention和一个三层的MLP组成，该模块接在backbone最后一个stage后，和预测头是并行的。首先输入一个可学习的score token，与search ROI token计算attention，对搜索图中挖掘的目标信息进行编码。然后将score token与第一帧的模板token做attention，隐式地将挖掘的目标与初始目标进行比较。最后过一个MLP预测出置信度得分，小于0.5判断为不可靠。</p>
-<h2 id="Training-and-Inference"><a href="#Training-and-Inference" class="headerlink" title="Training and Inference"></a>Training and Inference</h2><p>作者设计了两种网络架构MixFormer 和 MixFormer-L ，分别基于CVT-21 和 CVT24-W，也就是说可以使用CVT在Imagenet上预训练的权重来初始化backbone（虽然原始的CVT并没有两个输入，计算attention的方式也不一样，但是每个block的参数是一样的）。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524225610.png" alt=""></p>
-<p>训练过程分为两步，首先用500个epoch训练backbone和head；最后用40个epoch单独训练SPM，冻结其他部分参数。这个训练流程和stark类似。</p>
-<p>推理阶段每隔200帧更新一次模板，选择区间中得分最高的模板替换先前的模板。本文的框架允许输入任意张数的模板，代码实现中只包含两张模板，一张初始模板，一张在线更新模板。</p>
-<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><h2 id="SOTA比较"><a href="#SOTA比较" class="headerlink" title="SOTA比较"></a>SOTA比较</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524234306.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524234318.png" alt=""></p>
-<p>SOTA性能就一个字：恐怖！</p>
-<h2 id="探究实验"><a href="#探究实验" class="headerlink" title="探究实验"></a>探究实验</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524234504.png" alt=""></p>
-<ul>
-<li>1 2 3 8 统一特征提取和融合的MAM比先提特征SAM再融合CAM要好，因为耦合的方式可以互相促进。</li>
-<li>4 5 6 7 8 MAM的数量越多越好，因为这样可以获得更extensive 的目标感知特征提取和分层融合。</li>
-<li>8 9 corner head比query head效果更好</li>
-</ul>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524235111.png" alt=""></p>
-<ul>
-<li>使用非堆成结构效果略有下降，但是速度提升了</li>
-<li>从固定间隔中随机采样更新模板效果变差了，加上预测得分后才能提升效果</li>
-<li>pretrain的规模越大，对效果也是有提升的。</li>
-</ul>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/54-MixFormer/20220524235732.png" alt=""></p>
-<p>Attention可视化</p>
-<ul>
-<li>背景中的干扰物逐层受到抑制</li>
-<li>在线模板更适应外观变化并有助于区分目标</li>
-<li>多个模板的前景可以通过交叉注意力来增强</li>
-<li>某个位置倾向于与周围的局部块相互作用。</li>
-</ul>
 ]]></content>
       <categories>
         <category>目标跟踪</category>
@@ -1944,6 +1944,53 @@
       </tags>
   </entry>
   <entry>
+    <title>Global Tracking via Ensemble of Local Trackers</title>
+    <url>/tracking/60-GTELT/</url>
+    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610154935.png" alt=""></p>
+<p><a href="https://arxiv.org/abs/2203.16092">论文</a> <a href="https://github.com/ZikunZhou/GTELT">代码</a> 暂未开源</p>
+<p>针对长时跟踪问题，通过集成多个局部跟踪器实现全局跟踪，以全局视角跟踪目标并且利用时间上下文。</p>
+<span id="more"></span>
+<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><strong>问题：</strong>长时跟踪的难点在于出视野或遮挡导致的目标运动不连续；</p>
+<p><strong>现有方法：</strong></p>
+<ul>
+<li>局部-全局切换的策略——局部跟踪器进行平滑跟踪，目标丢失后切换到全局重检测。</li>
+</ul>
+<p>局限：难以确定切换时机，是否切换完全由局部跟踪器决定，有可能漂移到干扰物上还认为在稳定跟踪导致没有进入重捕。</p>
+<ul>
+<li>在整张图全局搜索——全局的one-shot detection，如GlobalTrack</li>
+</ul>
+<p>局限：忽视了时序上下文，对目标外观变化和背景干扰敏感</p>
+<p> <strong>本文方法：</strong>通过集成多个局部跟踪器实现全局跟踪，结合了上述方法的优点：以全局视角跟踪目标并且利用时间上下文。</p>
+<p> <strong>实现：</strong></p>
+<ul>
+<li>在整张图像不同参考位置上分别设置局部跟踪器，每个局部跟踪器在参考位置周围的局部区域内搜索目标，所有局部跟踪器的搜索区域就可以覆盖整个图像。</li>
+<li>当目标平滑移动时，一个局部跟踪器可以稳定处理；当目标丢失时，靠近目标的另一个局部跟踪器就会被激活接管跟踪，而之前的跟踪器会被重置到初始位置。</li>
+<li>局部跟踪器稳定跟踪目标期间，利用时间上下文提高局部跟踪的鲁棒性</li>
+</ul>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610155357.png" alt=""></p>
+<p><strong>创新点：</strong></p>
+<ul>
+<li>deformable attention-based local tracker 通过动态移动局部搜索区域，在全局视野中模拟局部跟踪</li>
+<li>temporal context transferring scheme 探索局部跟踪器中的时序上下文</li>
+</ul>
+<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610155457.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610155528.png" alt=""></p>
+<p>有点借鉴Deformable DETR来做跟踪的意思。设置了N个query，每个query在其参考点附近做Deformable Attention来生成一个候选目标向量，候选目标向量送入预测头生成置信度和目标框，然后通过匈牙利算法匹配真实目标计算损失。</p>
+<p>当选中一个query进行稳定跟踪后，就用跟踪结果来更新该query对应的参考点位置，不断在每一帧上进行检测，这就是一个动态变化搜索区域的局部跟踪器。同时利用图3的时域聚合模块来更新这个query。</p>
+<p>当目标丢失时，即跟踪置信度小于阈值，选择目标附近的另一个query接管跟踪，而先前的query会被重置到它的初始参考点位置。</p>
+<p>具体实现可以参考论文，挺有意思的。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610161831.png" alt=""></p>
+]]></content>
+      <categories>
+        <category>目标跟踪</category>
+      </categories>
+      <tags>
+        <tag>transform</tag>
+        <tag>CVPR2022</tag>
+        <tag>long-term</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Transformer Tracking with Cyclic Shifting Window Attention</title>
     <url>/tracking/59-CSWinTT/</url>
     <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/59-CSWinTT/20220609234559.png" alt=""></p>
@@ -2029,53 +2076,6 @@
       <tags>
         <tag>transform</tag>
         <tag>CVPR2022</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Global Tracking via Ensemble of Local Trackers</title>
-    <url>/tracking/60-GTELT/</url>
-    <content><![CDATA[<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610154935.png" alt=""></p>
-<p><a href="https://arxiv.org/abs/2203.16092">论文</a> <a href="https://github.com/ZikunZhou/GTELT">代码</a> 暂未开源</p>
-<p>针对长时跟踪问题，通过集成多个局部跟踪器实现全局跟踪，以全局视角跟踪目标并且利用时间上下文。</p>
-<span id="more"></span>
-<h1 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h1><p><strong>问题：</strong>长时跟踪的难点在于出视野或遮挡导致的目标运动不连续；</p>
-<p><strong>现有方法：</strong></p>
-<ul>
-<li>局部-全局切换的策略——局部跟踪器进行平滑跟踪，目标丢失后切换到全局重检测。</li>
-</ul>
-<p>局限：难以确定切换时机，是否切换完全由局部跟踪器决定，有可能漂移到干扰物上还认为在稳定跟踪导致没有进入重捕。</p>
-<ul>
-<li>在整张图全局搜索——全局的one-shot detection，如GlobalTrack</li>
-</ul>
-<p>局限：忽视了时序上下文，对目标外观变化和背景干扰敏感</p>
-<p> <strong>本文方法：</strong>通过集成多个局部跟踪器实现全局跟踪，结合了上述方法的优点：以全局视角跟踪目标并且利用时间上下文。</p>
-<p> <strong>实现：</strong></p>
-<ul>
-<li>在整张图像不同参考位置上分别设置局部跟踪器，每个局部跟踪器在参考位置周围的局部区域内搜索目标，所有局部跟踪器的搜索区域就可以覆盖整个图像。</li>
-<li>当目标平滑移动时，一个局部跟踪器可以稳定处理；当目标丢失时，靠近目标的另一个局部跟踪器就会被激活接管跟踪，而之前的跟踪器会被重置到初始位置。</li>
-<li>局部跟踪器稳定跟踪目标期间，利用时间上下文提高局部跟踪的鲁棒性</li>
-</ul>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610155357.png" alt=""></p>
-<p><strong>创新点：</strong></p>
-<ul>
-<li>deformable attention-based local tracker 通过动态移动局部搜索区域，在全局视野中模拟局部跟踪</li>
-<li>temporal context transferring scheme 探索局部跟踪器中的时序上下文</li>
-</ul>
-<h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610155457.png" alt=""></p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610155528.png" alt=""></p>
-<p>有点借鉴Deformable DETR来做跟踪的意思。设置了N个query，每个query在其参考点附近做Deformable Attention来生成一个候选目标向量，候选目标向量送入预测头生成置信度和目标框，然后通过匈牙利算法匹配真实目标计算损失。</p>
-<p>当选中一个query进行稳定跟踪后，就用跟踪结果来更新该query对应的参考点位置，不断在每一帧上进行检测，这就是一个动态变化搜索区域的局部跟踪器。同时利用图3的时域聚合模块来更新这个query。</p>
-<p>当目标丢失时，即跟踪置信度小于阈值，选择目标附近的另一个query接管跟踪，而先前的query会被重置到它的初始参考点位置。</p>
-<p>具体实现可以参考论文，挺有意思的。</p>
-<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/60-GTELT/20220610161831.png" alt=""></p>
-]]></content>
-      <categories>
-        <category>目标跟踪</category>
-      </categories>
-      <tags>
-        <tag>transform</tag>
-        <tag>CVPR2022</tag>
-        <tag>long-term</tag>
       </tags>
   </entry>
   <entry>
