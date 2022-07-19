@@ -2301,11 +2301,11 @@
 <ol>
 <li>提出了端到端的MOT框架。MOTR隐式地联合学习外观和运动变化，建模目标的长时变化</li>
 <li>将MOT看成一个序列预测问题，根据历史隐状态生成track query，进行迭代更新和预测</li>
-<li>提出tracklet-aware label assignment为track query和跟踪目标分配一对一的标签，使得<strong>一个query负责建模一个目标的整个轨迹</strong>。提出进出机制entrance     and exit mechanism来<strong>处理新出现和丢失的目标</strong></li>
+<li>提出tracklet-aware label assignment为track query和跟踪目标分配一对一的标签，使得<strong>一个query负责建模一个目标的整个轨迹</strong>。提出进出机制entrance and exit mechanism来<strong>处理新出现和丢失的目标</strong></li>
 <li>提出collective average loss(CAL) 和temporal aggregation network (TAN)来强化时域建模能力</li>
 </ol>
 <p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/62-motr/20220719215229.png" alt=""></p>
-<p> 图1展示了DETR和本文的MOTR的示意图，二者很相似，主要区别在于MOTR是序列预测，输入多帧，其次是track query是迭代更新的。</p>
+<p> 图1展示了DETR和本文的MOTR的示意图，二者在结构上很相似，主要区别在于MOTR是序列预测，输入多帧，其次是track query是迭代更新的。</p>
 <h1 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h1><h2 id="Detect-query-and-track-query"><a href="#Detect-query-and-track-query" class="headerlink" title="Detect query and track query"></a>Detect query and track query</h2><p>首先介绍两种不同的query，detect query就是DETR中的query。而track query是动态更新且长度可变的，一开始被初始化为空。用detect query来检测新出现的目标，被检测目标的detect query用于产生下一帧的track query。当目标消失时，track query会被删除。整个过程参考图2。</p>
 <p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/62-motr/20220719215518.png" alt=""></p>
 <h2 id="Tracklet-Aware-Label-Assignment"><a href="#Tracklet-Aware-Label-Assignment" class="headerlink" title="Tracklet-Aware Label Assignment"></a>Tracklet-Aware Label Assignment</h2><p>在MOTR中，detect query仅用于检测新出现的目标，而track query预测所有被跟踪物体。为了实现这一目的，引入了跟踪感知标签分配(TALA)。训练时输入的是序列图像。对于每一帧，detect query按照DETR的二分匹配为新出现的目标分配标签，track query为已经跟踪上的目标分配和上一帧一样的标签。</p>
