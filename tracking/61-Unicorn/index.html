@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/zjp-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/zjp-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"www.zjp97.top","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.11.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":true,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":true,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="论文 代码 首次实现了目标跟踪网络结构与学习范式的大一统，只需一套网络结构、一套模型参数即可同时完成单目标跟踪（SOT），视频目标分割（VOS），多目标跟踪（MOT），多目标跟踪与分割（MOTS）四种跟踪任务。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Towards Grand Unification of Object Tracking">
+<meta property="og:url" content="https://www.zjp97.top/tracking/61-Unicorn/index.html">
+<meta property="og:site_name" content="CV home">
+<meta property="og:description" content="论文 代码 首次实现了目标跟踪网络结构与学习范式的大一统，只需一套网络结构、一套模型参数即可同时完成单目标跟踪（SOT），视频目标分割（VOS），多目标跟踪（MOT），多目标跟踪与分割（MOTS）四种跟踪任务。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719185618.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719194151.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719200600.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719210031.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719210727.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719211039.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719211321.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213114.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213127.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213145.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213210.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213220.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213232.png">
+<meta property="og:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213252.png">
+<meta property="article:published_time" content="2022-07-19T10:54:22.000Z">
+<meta property="article:modified_time" content="2022-07-19T13:45:04.239Z">
+<meta property="article:author" content="摸鱼的SAO年">
+<meta property="article:tag" content="transform">
+<meta property="article:tag" content="ECCV2022">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719185618.png">
+
+
+<link rel="canonical" href="https://www.zjp97.top/tracking/61-Unicorn/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://www.zjp97.top/tracking/61-Unicorn/","path":"tracking/61-Unicorn/","title":"Towards Grand Unification of Object Tracking"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Towards Grand Unification of Object Tracking | CV home</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="CV home" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">CV home</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">Computer vision paper notes</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">方法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Unified-embedding"><span class="nav-number">2.1.</span> <span class="nav-text">Unified embedding</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Unified-Head"><span class="nav-number">2.2.</span> <span class="nav-text">Unified Head</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Training-and-Inference"><span class="nav-number">2.3.</span> <span class="nav-text">Training and Inference</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Experiments"><span class="nav-number">3.</span> <span class="nav-text">Experiments</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">小结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="摸鱼的SAO年"
+      src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/20220531093720.png">
+  <p class="site-author-name" itemprop="name">摸鱼的SAO年</p>
+  <div class="site-description" itemprop="description">Stay Hungry Stay Foolish</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/kongbia" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;kongbia" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:zjphust@gmail.com" title="E-Mail → mailto:zjphust@gmail.com" rel="noopener" target="_blank"><i class="fas fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/5567932/article" title="BiliBili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;5567932&#x2F;article" rel="noopener" target="_blank"><i class="fab fa-bilibili fa-fw"></i>BiliBili</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/atom.xml" title="RSS → &#x2F;atom.xml"><i class="fas fa-rss fa-fw"></i>RSS</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.zjp97.top/tracking/61-Unicorn/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/20220531093720.png">
+      <meta itemprop="name" content="摸鱼的SAO年">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CV home">
+      <meta itemprop="description" content="Stay Hungry Stay Foolish">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Towards Grand Unification of Object Tracking | CV home">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Towards Grand Unification of Object Tracking
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2022-07-19 18:54:22 / 修改时间：21:45:04" itemprop="dateCreated datePublished" datetime="2022-07-19T18:54:22+08:00">2022-07-19</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/tracking/" itemprop="url" rel="index"><span itemprop="name">目标跟踪</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719185618.png" alt=""></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2207.07078">论文</a> <a target="_blank" rel="noopener" href="https://github.com/MasterBin-IIAU/Unicorn">代码</a></p>
+<p>首次实现了目标跟踪网络结构与学习范式的大一统，只需一套网络结构、一套模型参数即可同时完成单目标跟踪（SOT），视频目标分割（VOS），多目标跟踪（MOT），多目标跟踪与分割（MOTS）四种跟踪任务。</p>
+<span id="more"></span>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719194151.png" alt=""></p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><p>针对不同的应用场景，目标跟踪目前主要分成四个领域：单目标跟踪（SOT），视频目标分割（VOS），多目标跟踪（MOT），多目标跟踪与分割（MOTS）。当前着四个方向的发展越来越割裂，带来了一些问题：</p>
+<ul>
+<li>跟踪器可能过拟合特定子任务的特性，缺乏向其他任务的泛化能力。</li>
+<li>独立的模型设计导致冗余的参数。比如都使用类似结构的backbone但参数不能复用。</li>
+</ul>
+<p>近两年整个cv界都在大一统，跟踪领域也不例外。其中主要的困难在于单目标和多目标之间的差异：</p>
+<ul>
+<li>目标特性：SOT跟踪一个给定的类别未知的实例，MOT需要跟踪多个特定类别的实例；</li>
+<li>匹配关系：SOT主要区分目标和背景，MOT需要匹配当前检测结果和历史轨迹；</li>
+<li>模型输入：SOT输入一个小的搜索区域 ，MOT输入整张图像。</li>
+</ul>
+<p>针对这些问题，本文提出两个核心设计：目标先验（target prior）和像素级关联（pixel-wise correspondence），分别解决上述问题：</p>
+<ul>
+<li>目标先验作为预测头的额外输入，对于SOT&amp;VOS，传递参考目标图，使得预测头关注特定跟踪目标；对于MOT&amp;MOTS，目标先验为零，预测头就是通常的class-specific检测器；</li>
+<li>像素级关联是指来自参考帧和当前帧的所有点对之间的相似性，SOT和MOT都可以看成像素关联的子集；</li>
+<li>有了目标先验和像素关联，SOT不再依赖小的搜索区域，SOT和MOT都可以输入整张图像</li>
+</ul>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719200600.png" alt=""></p>
+<p>整体框架主要包含三部分：(1) Unified inputs and backbone (2) Unified embedding (3) Unified head。重点在（2）和（3）。</p>
+<h2 id="Unified-embedding"><a href="#Unified-embedding" class="headerlink" title="Unified embedding"></a>Unified embedding</h2><p>参考帧和当前帧首先经过Feature Interaction来强化原始特征，特征交互通过deformable attention实现。</p>
+<p>然后建立参考帧embedding $E_{ref} \in \mathbb{R}^{hw \times c}$ 和当前帧embedding $E_{cur} \in \mathbb{R}^{hw \times c}$之间的像素级对应关系，通过矩阵相乘得到 $C_{pix} \in \mathbb{R}^{hw \times hw}$。SOT&amp;VOS就使用这个像素级关联。而对于MOT&amp;MOTS，需要构建参考帧中的M个轨迹$e_{ref} \in \mathbb{R}^{M \times c}$和当前帧N个检测目标$e_{cur} \in \mathbb{R}^{N \times c}$的实例级关联，同样是矩阵相乘$C_{inst} \in \mathbb{R}^{N \times M}$。由于instance embedding是在frame embedding上的实例位置处提取得到的，因此实例级关联可以看作是像素级关联的子集，从而实现单目标和多目标的Unified embedding。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719210031.png" alt=""></p>
+<p><strong>Loss</strong> 对于SOT&amp;VOS，我们通过像素级关联$C_{pix}$传播参考帧目标图得到当前帧目标图的估计，其中目标区域的标签为1，背景区域为0，通过Dice loss优化。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719210727.png" alt=""></p>
+<p>对于MOT&amp;MOTS，则通过对比学习优化实例间的关系，相同ID的为正样本，其余为负样本，损失为交叉熵。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719211039.png" alt=""></p>
+<h2 id="Unified-Head"><a href="#Unified-Head" class="headerlink" title="Unified Head"></a>Unified Head</h2><p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719211321.png" alt=""></p>
+<p>通过在检测头之前添加目标先验来弥补单目标和多目标之间的差异。对于单目标，将公式3中传播得到的当前帧目标图的估计$\tilde{T}_{cur}$作为目标先验叠加到原始特征中，强化跟踪目标；对于多目标，目标先验为零，就是一个普通的特定类别的检测器。这样做的好处是既可以无缝兼容四个跟踪任务，同时无需改变原始检测头的结构，可以使用预训练权重。</p>
+<h2 id="Training-and-Inference"><a href="#Training-and-Inference" class="headerlink" title="Training and Inference"></a>Training and Inference</h2><p>训练：分两阶段，第一阶段使用SOT&amp;MOT数据计算关联损失和检测损失进行端到端优化；第二阶段固定其他参数，添加掩码分支。利用VOS&amp;MOTS的数据，并根据掩码损失进行优化。</p>
+<p>测试：SOT&amp;VOS的参考目标图只在第一帧生成并保持不变，Unicorn 直接挑选置信度最高的框或掩码作为最终的跟踪结果，无需后处理。在BDD100K 和 MOT17上，多目标数据关联分别采用的是基于Embedding和运动模型的匹配策略。即MOT依然是检测+关联的模式。</p>
+<h1 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h1><p>backbone采用ConvNeXt，使用16 个NVIDIA Tesla A100 GPU，将所有BN换成了GN。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213114.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213127.png" alt=""> </p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213145.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213210.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213220.png" alt=""></p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213232.png" alt=""></p>
+<p>表7消融实验提一下single task：统一模型与独立训练的同类模型表现相同，同时参数效率更高。</p>
+<p><img src="https://hexo-zjp97-1300900922.cos.ap-nanjing.myqcloud.com/picgo/blog/61-unicorn/20220719213252.png" alt=""></p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>跟踪大一统似乎是未来的发展趋势之一。之前CVPR22的UTT也是做了类似的工作，都使用了相关性（correspondence &amp; correlation）的思想来统一单目标和多目标；针对单目标都做了额外的特殊处理，UTT是为SOT寻找搜索区域，而本文通过目标先验强化单目标特征；最后对于MOT都还需要一个额外的数据关联。未来是否可以引入一些类似centertrack或者链式跟踪的思想把MOT数据关联的尾巴去掉，似乎更统一更端到端。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/transform/" rel="tag"># transform</a>
+              <a href="/tags/ECCV2022/" rel="tag"># ECCV2022</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/tracking/60-GTELT/" rel="prev" title="Global Tracking via Ensemble of Local Trackers">
+                  <i class="fa fa-chevron-left"></i> Global Tracking via Ensemble of Local Trackers
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/tracking/62-MOTR/" rel="next" title="MOTR: End-to-End Multiple-Object Tracking with Transformer">
+                  MOTR: End-to-End Multiple-Object Tracking with Transformer <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">摸鱼的SAO年</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pangu/4.0.7/pangu.min.js" integrity="sha256-j+yj56cdEY2CwkVtGyz18fNybFGpMGJ8JxG3GSyO2+I=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.0/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js","integrity":"sha256-r+3itOMtGGjap0x+10hu6jW/gZCzxHsoKrOd7gyRSGY="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"kongbia","repo":"kongbia.github.io","client_id":"694512c561e7d642139f","client_secret":"21692914dab6aba8b9e6cd52e66eadca102266eb","admin_user":"kongbia","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","id":"location.pathname","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"f8fe2fb414a7cbb3f075899a099bf0d6"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>
